@@ -32,6 +32,8 @@ class MetricsTracker:
         self.total_input_tokens = 0
         self.total_output_tokens = 0
         self.loop_count = 0
+        self.agent_turn_count = 0
+        self.agent_tool_call_count = 0
         self.start_time = time.time()
         self.end_time = None
         self._finalized = False
@@ -48,6 +50,16 @@ class MetricsTracker:
         self.loop_count += 1
         logger.info(f"Loop {self.loop_count} completed")
 
+    def record_agent_turn(self):
+        """Record a main agent turn (excludes vote checker)."""
+        self.agent_turn_count += 1
+        logger.info(f"Agent turns: {self.agent_turn_count}")
+
+    def record_agent_tool_call(self):
+        """Record an agent-to-agent tool call."""
+        self.agent_tool_call_count += 1
+        logger.info(f"Agent tool calls: {self.agent_tool_call_count}")
+
     def end_simulation(self):
         """End simulation and log summary"""
         if self._finalized:
@@ -61,7 +73,10 @@ class MetricsTracker:
         logger.info("SIMULATION METRICS")
         logger.info("=" * 70)
         logger.info(f"Total Loops: {self.loop_count}")
-        logger.info(f"Total Messages: {self.loop_count * 4}")
+        total_messages = self.agent_turn_count + self.agent_tool_call_count
+        logger.info(f"Agent Turns (no vote checker): {self.agent_turn_count}")
+        logger.info(f"Agent Tool Calls: {self.agent_tool_call_count}")
+        logger.info(f"Total Messages (no vote checker): {total_messages}")
         logger.info(f"Input Tokens: {self.total_input_tokens}")
         logger.info(f"Output Tokens: {self.total_output_tokens}")
         logger.info(f"Total Tokens: {self.total_input_tokens + self.total_output_tokens}")
