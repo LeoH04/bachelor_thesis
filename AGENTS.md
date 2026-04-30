@@ -26,8 +26,9 @@ The system models a structured multi-agent workflow with:
 Each agent:
 - Has private knowledge
 - Maintains an internal memory (shared mental model)
-- Updates memory after each round
-- Produces both textual and structured outputs
+- Can call other agents as mediated tools during its own speaking turn
+- Produces a public message and structured vote metadata
+- Does not update memory during the speaking turn itself
 
 ## 5. Communication Structure
 
@@ -36,34 +37,50 @@ Communication is:
 - Content-decentralized (agents generate their own reasoning)
 - Execution-centralized (controlled by orchestrator)
 
-- Agents do not directly communicate with each other
-- All interaction is mediated through an orchestrator
+- Agents can request information from other agents via orchestrator-mediated tool calls
+- Tool calls are not private side channels: the question and answer are recorded in the public discussion history
+- All interaction is mediated through the orchestrator
 
 ### 5.2 Discussion Loop
 Each round follows a fixed sequence:
 1. Agent 1 speaks
-2. Agent 2 speaks
-3. Agent 3 speaks
-4. Agent 4 speaks
+2. All agent memories are updated in parallel
+3. Agent 2 speaks
+4. All agent memories are updated in parallel
+5. Agent 3 speaks
+6. All agent memories are updated in parallel
+7. Agent 4 speaks
+8. All agent memories are updated in parallel
+9. Vote checker evaluates the round
 
-During each turn, an agent:
+During each speaking turn, an agent:
 - Reads:
   - Full discussion history
   - Its internal memory
-- Updates:
-  - Internal understanding
-  - Memory state
+- May call other agents as tools
 - Produces:
-  - A message
+  - A public message
   - Structured metadata
+
+During each tool exchange:
+- The calling agent asks another agent a specific question
+- The called agent answers directly and concisely
+- The tool question and answer are appended to the public discussion history
+- No memory is updated inside the tool response itself
+
+During each memory-update phase:
+- Four passive memory-update agents run in parallel
+- Each one updates exactly one agent memory
+- Updates use the full public discussion history, including public tool exchanges
+- Memory updates are internal and are not added as public discussion messages
 
 ### 5.3 Agent Output Structure
 Each agent contribution includes:
 - Message (natural language reasoning)
 - Preferred candidate
-- Confidence level
-- Decision readiness (boolean)
-- Remaining uncertainties
+- Structured vote metadata in `METADATA_JSON`
+
+The public message may include confidence, uncertainty, and justification depending on the transparency condition.
 
 ## 6. Context Transparency Conditions
 
@@ -91,14 +108,14 @@ Includes all of the above plus:
 
 ### 7.2 Iterative Discussion Phase
 - Execute discussion rounds
-- Update agent memories continuously
+- Record public speaker messages and public tool exchanges
+- Update all agent memories after every speaker turn
 
 ### 7.3 Decision Phase
 After each round, perform a decision check.
 
 Termination Criteria:
-- At least 3 out of 4 agents agree on the same candidate, AND
-- At least 3 agents indicate readiness to decide
+- All 4 agents agree on the same candidate
 
 ### 7.4 Maximum Round Constraint
 - A maximum number of rounds is predefined
@@ -112,8 +129,10 @@ Each agent maintains an internal memory representing:
 - Shared information
 
 Memory is updated:
-- After each discussion turn
-- Based on new inputs
+- After each scheduled speaker turn
+- In parallel for all 4 agents
+- Based on the public discussion history, including tool exchanges
+- Through passive memory-update agents, not during normal speaking turns
 
 ## 9. Evaluation Metrics
 
@@ -129,6 +148,8 @@ Method:
 Measured using:
 - Number of rounds
 - Number of messages
+- Number of agent-tool calls
+- Number of memory updates
 - Token usage
 - Runtime
 
@@ -154,8 +175,10 @@ Responsible for:
   - Generates outputs
 
 ### 10.3 Interaction Model
-- No direct agent-to-agent calls
-- All communication via orchestrator
+- No unmediated agent-to-agent communication
+- Agent-to-agent tool calls are allowed
+- Tool exchanges are recorded as public discussion content
+- All communication and memory updates are mediated by the orchestrator
 
 ## 11. Implementation Options
 - Google ADK

@@ -31,6 +31,7 @@ class MetricsTracker:
         self.loop_count = 0
         self.agent_turn_count = 0
         self.agent_tool_call_count = 0
+        self.memory_update_count = 0
         self.final_candidate = None
         self.final_decision_method = None
         self.final_vote_count = {}
@@ -59,6 +60,11 @@ class MetricsTracker:
         """Record an agent-to-agent tool call."""
         self.agent_tool_call_count += 1
         logger.info(f"Agent tool calls: {self.agent_tool_call_count}")
+
+    def record_memory_update(self):
+        """Record a persisted agent memory update."""
+        self.memory_update_count += 1
+        logger.info(f"Memory updates: {self.memory_update_count}")
 
     def record_final_decision(
         self,
@@ -94,6 +100,7 @@ class MetricsTracker:
         total_messages = self.agent_turn_count + self.agent_tool_call_count
         logger.info(f"Agent Turns (no vote checker): {self.agent_turn_count}")
         logger.info(f"Agent Tool Calls: {self.agent_tool_call_count}")
+        logger.info(f"Memory Updates: {self.memory_update_count}")
         logger.info(f"Total Messages (no vote checker): {total_messages}")
         logger.info(f"Input Tokens: {self.total_input_tokens}")
         logger.info(f"Output Tokens: {self.total_output_tokens}")
@@ -111,6 +118,7 @@ class MetricsTracker:
                 "rounds": self.loop_count,
                 "agent_turns": self.agent_turn_count,
                 "agent_tool_calls": self.agent_tool_call_count,
+                "memory_updates": self.memory_update_count,
                 "total_messages": total_messages,
                 "input_tokens": self.total_input_tokens,
                 "output_tokens": self.total_output_tokens,

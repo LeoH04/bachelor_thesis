@@ -34,9 +34,3 @@ DISCUSSION_MODEL = LiteLlm(
     llm_client=TokenTrackingLiteLLMClient(),
     stream_options={"include_usage": True},
 )
-
-VOTE_MODEL = LiteLlm(
-    model=os.getenv("OPEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    api_base=os.getenv("NIM_BASE_URL"),
-)

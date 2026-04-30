@@ -8,6 +8,7 @@ from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.tool_context import ToolContext
 
 from ..config.metrics import metrics
+from ..config.simulation_context import record_public_tool_exchange
 from ..config.trace import _truncate_text, log_event
 
 
@@ -44,6 +45,13 @@ class LoggingAgentTool(AgentTool):
         )
 
         result = await super().run_async(args=args, tool_context=tool_context)
+        record_public_tool_exchange(
+            tool_context=tool_context,
+            caller_name=caller,
+            callee_name=self.agent.name,
+            args=args,
+            result=result,
+        )
 
         log_event(
             "agent_tool_call_end",

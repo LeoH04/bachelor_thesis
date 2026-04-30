@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 def _set_agent_memory(tool_context: ToolContext, agent_key: str, memory: str) -> dict:
     """Persist a full memory replacement for the selected discussion agent."""
-    metrics.record_agent_turn()
     if not memory or not memory.strip():
         logger.warning("Empty memory update for %s", agent_key)
         log_event(
@@ -23,6 +22,7 @@ def _set_agent_memory(tool_context: ToolContext, agent_key: str, memory: str) ->
         )
         return {"status": "EMPTY_MEMORY", "agent": agent_key}
 
+    metrics.record_memory_update()
     write_agent_memory(agent_key, memory)
     log_event(
         "memory_updated",
