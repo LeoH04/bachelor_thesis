@@ -1,3 +1,5 @@
+"""Check end-of-round votes and stop the discussion when a decision is reached."""
+
 import json
 import re
 from collections.abc import AsyncGenerator
@@ -10,6 +12,7 @@ from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
 from ...config.metrics import metrics
+from ...config.simulation_context import archive_agent_memories
 from ...config.trace import log_event
 
 MAX_DISCUSSION_ROUNDS = 15
@@ -20,12 +23,20 @@ def _record_final_decision(
     method: str,
     vote_count: dict[str, int],
 ) -> None:
+    """Persist and trace the first final decision selected by the simulation."""
     decision_recorded = metrics.record_final_decision(
         candidate=candidate,
         method=method,
         vote_count=vote_count,
     )
     if decision_recorded:
+        archive_dir = archive_agent_memories()
+        if archive_dir is not None:
+            log_event(
+                "agent_memories_archived",
+                directory=str(archive_dir),
+                round=metrics.loop_count,
+            )
         log_event(
             "final_decision",
             candidate=candidate,
@@ -49,6 +60,7 @@ def record_metrics(tool_context: ToolContext) -> dict:
 
 # --- vote extraction ---
 def extract_vote(text: str) -> str | None:
+    """Extract a valid candidate vote from an agent's metadata JSON block."""
     match = re.search(r"METADATA_JSON:\s*(\{.*?\})", text, re.DOTALL)
     if not match:
         return None
@@ -63,6 +75,7 @@ def extract_vote(text: str) -> str | None:
 
 # --- consensus tool ---
 def check_consensus(tool_context: ToolContext) -> dict:
+    """Count current agent votes and return whether the loop should continue."""
     votes = []
 
     for i in range(1, 5):
@@ -76,7 +89,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
     if counts:
         winner, count = counts.most_common(1)[0]
         vote_count = dict(counts)
-        if count >= 3:
+        if count >= 4:
             _record_final_decision(winner, "consensus", vote_count)
             tool_context.actions.escalate = True
             return {
@@ -101,10 +114,13 @@ def check_consensus(tool_context: ToolContext) -> dict:
 
 
 class VoteCheckerAgent(BaseAgent):
+    """ADK workflow agent that records round metrics and checks consensus."""
+
     async def _run_async_impl(
         self,
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
+        """Run the vote check and emit the result as an ADK event."""
         actions = EventActions()
         tool_context = ToolContext(ctx, event_actions=actions)
 

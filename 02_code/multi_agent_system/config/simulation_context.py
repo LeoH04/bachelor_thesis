@@ -2,13 +2,16 @@
 
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import Iterable
 
+from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 
 TASK_PATH = Path(__file__).parent / "hidden_profile_task.json"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+_AGENT_MEMORIES_ARCHIVED = False
 
 PUBLIC_DISCUSSION_STATE_KEY = "public_discussion_history"
 
@@ -30,7 +33,7 @@ def _as_bullets(items: Iterable[str]) -> str:
 
 def _agent_memory_path(agent_key: str) -> Path:
     """Return the markdown memory file path for the given agent key."""
-    return PROJECT_ROOT / "subagents" / agent_key / f"{agent_key}.md"
+    return PROJECT_ROOT / "agents" / "discussion" / f"{agent_key}.md"
 
 
 def _round_number() -> int:
@@ -147,6 +150,7 @@ def build_memory_template(agent_key: str, round_number: int | None = None) -> st
         "Leading Candidate\n- \n\n"
         "Rationale\n- \n\n"
         "Confidence (percent)\n- \n\n"
+        "Decision Readiness\n- \n\n"
         "Uncertainties\n- \n\n"
         "## Open Questions\n"
         "Missing evidence\n- \n\n"
@@ -173,6 +177,34 @@ def write_agent_memory(agent_key: str, content: str) -> None:
     """Persist a full replacement markdown memory for the given agent."""
     path = _agent_memory_path(agent_key)
     path.write_text(content.strip() + "\n", encoding="utf-8")
+
+
+def archive_agent_memories() -> Path | None:
+    """Copy final agent memory markdown files into raw shared-mental-model data."""
+    global _AGENT_MEMORIES_ARCHIVED
+
+    destination = SHARED_MENTAL_MODELS_DIR
+    if _AGENT_MEMORIES_ARCHIVED:
+        return None
+
+    destination.mkdir(parents=True, exist_ok=True)
+
+    copied_files = []
+    for agent_key in AGENT_KEYS:
+        source = _agent_memory_path(agent_key)
+        if source.exists():
+            target = destination / source.name
+            shutil.copy2(source, target)
+            copied_files.append(str(target))
+
+    _AGENT_MEMORIES_ARCHIVED = True
+    update_run_metadata(
+        {
+            "shared_mental_models_archived": True,
+            "shared_mental_model_files": copied_files,
+        }
+    )
+    return destination
 
 
 def reset_all_agent_memories(round_number: int | None = 1) -> None:

@@ -1,3 +1,5 @@
+"""AgentTool wrapper that records mediated agent-to-agent communication."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -10,6 +12,7 @@ from ..config.trace import _truncate_text, log_event
 
 
 def _preview(value: Any, limit: int = 500) -> str:
+    """Return a truncated string representation suitable for trace logs."""
     try:
         text = str(value)
     except Exception:
@@ -18,12 +21,15 @@ def _preview(value: Any, limit: int = 500) -> str:
 
 
 class LoggingAgentTool(AgentTool):
+    """ADK AgentTool variant that logs calls and updates communication metrics."""
+
     async def run_async(
         self,
         *,
         args: dict[str, Any],
         tool_context: ToolContext,
     ) -> Any:
+        """Run the wrapped agent tool while tracing caller, callee, and result."""
         metrics.record_agent_tool_call()
         caller = None
         if hasattr(tool_context, "_invocation_context"):

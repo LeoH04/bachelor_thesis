@@ -1,19 +1,23 @@
 from google.adk.agents import LoopAgent, SequentialAgent
 
 from .config.metrics import metrics
-from .subagents.agent_1.agent_1 import agent_1, agent_1_tool
-from .subagents.agent_2.agent_2 import agent_2, agent_2_tool
-from .subagents.agent_3.agent_3 import agent_3, agent_3_tool
-from .subagents.agent_4.agent_4 import agent_4, agent_4_tool
-from .subagents.memory_updater.memory_updater import (
+from .config.simulation_context import archive_agent_memories
+from .config.trace import log_event
+from .agents.control.memory_reset import memory_reset_agent
+from .agents.control.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
+from .agents.discussion.agent_1 import agent_1, agent_1_tool
+from .agents.discussion.agent_2 import agent_2, agent_2_tool
+from .agents.discussion.agent_3 import agent_3, agent_3_tool
+from .agents.discussion.agent_4 import agent_4, agent_4_tool
+from .tools.memory_tools import (
     set_agent_1_memory,
     set_agent_2_memory,
     set_agent_3_memory,
     set_agent_4_memory,
 )
-from .subagents.memory_reset.memory_reset import memory_reset_agent
-from .subagents.vote_checker.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
 from .tools.logging_agent_tool import LoggingAgentTool
+
+import atexit
 
 
 def _wire_agent_tools() -> None:
@@ -76,9 +80,12 @@ root_agent = SequentialAgent(
 )
 
 # Register cleanup on module exit
-import atexit
 
 def cleanup():
+    if metrics.loop_count or metrics.agent_turn_count or metrics.final_candidate:
+        archive_dir = archive_agent_memories()
+        if archive_dir is not None:
+            log_event("agent_memories_archived", directory=str(archive_dir))
     metrics.end_simulation()
 
 atexit.register(cleanup)

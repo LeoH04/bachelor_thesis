@@ -1,3 +1,5 @@
+"""Define Agent 2's scheduled discussion and tool-response LLM agents."""
+
 from google.adk.agents import LlmAgent
 
 from ...config.model import DISCUSSION_MODEL
@@ -9,10 +11,12 @@ from ...config.simulation_context import (
 
 
 def agent_2_instruction(_ctx) -> str:
+    """Build Agent 2's prompt for its scheduled public discussion turn."""
     return build_agent_instruction("agent_2", _ctx)
 
 
 def agent_2_tool_instruction(_ctx) -> str:
+    """Build Agent 2's prompt when it is called by another agent as a tool."""
     return build_agent_tool_instruction("agent_2", _ctx)
 
 

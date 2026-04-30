@@ -3,7 +3,7 @@
 import logging
 import time
 
-from .make_session_log import SESSION_LOG_FILE
+from .make_session_log import SESSION_LOG_FILE, update_run_metadata
 
 # Configure file-based logging for metrics in the unified session log.
 file_handler = logging.FileHandler(SESSION_LOG_FILE, mode="a")
@@ -104,6 +104,23 @@ class MetricsTracker:
             logger.info(f"Final Vote Count: {self.final_vote_count}")
         logger.info(f"Runtime: {runtime:.2f}s")
         logger.info("=" * 70)
+        update_run_metadata(
+            {
+                "status": "completed",
+                "completed_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "rounds": self.loop_count,
+                "agent_turns": self.agent_turn_count,
+                "agent_tool_calls": self.agent_tool_call_count,
+                "total_messages": total_messages,
+                "input_tokens": self.total_input_tokens,
+                "output_tokens": self.total_output_tokens,
+                "total_tokens": self.total_input_tokens + self.total_output_tokens,
+                "final_candidate": self.final_candidate,
+                "decision_method": self.final_decision_method,
+                "vote_count": self.final_vote_count,
+                "runtime_seconds": round(runtime, 4),
+            }
+        )
 
 
 metrics = MetricsTracker()

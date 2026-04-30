@@ -1,3 +1,5 @@
+"""Reset agent memories and public discussion state at simulation startup."""
+
 import json
 from collections.abc import AsyncGenerator
 
@@ -15,6 +17,7 @@ from ...config.trace import log_event
 
 
 def reset_agent_memories(tool_context: ToolContext) -> dict:
+    """Reset persisted agent memories and clear the shared discussion history."""
     reset_all_agent_memories()
     reset_public_discussion_history(tool_context.state)
     log_event("memory_reset")
@@ -22,10 +25,13 @@ def reset_agent_memories(tool_context: ToolContext) -> dict:
 
 
 class MemoryResetAgent(BaseAgent):
+    """ADK workflow agent that performs the simulation reset step."""
+
     async def _run_async_impl(
         self,
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
+        """Run the reset logic and emit a structured ADK event."""
         actions = EventActions()
         tool_context = ToolContext(ctx, event_actions=actions)
         result = reset_agent_memories(tool_context)
