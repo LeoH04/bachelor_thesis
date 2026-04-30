@@ -1,18 +1,12 @@
+"""Collect and log aggregate metrics for a simulation run."""
+
 import logging
-import os
 import time
-from pathlib import Path
 
-# Configure file-based logging for metrics
-# Path: config/metrics.py -> parent -> multi_agent_system -> parent -> 02_code
-log_dir = Path(__file__).parent.parent.parent / "metrics"
-log_dir.mkdir(parents=True, exist_ok=True)
+from .make_session_log import SESSION_LOG_FILE
 
-run_tag = os.getenv("SIM_RUN_TAG", "run")
-timestamp = time.strftime("%Y%m%d_%H%M%S")
-log_file = log_dir / f"metrics_{run_tag}_{timestamp}.log"
-
-file_handler = logging.FileHandler(log_file, mode="w")
+# Configure file-based logging for metrics in the unified session log.
+file_handler = logging.FileHandler(SESSION_LOG_FILE, mode="a")
 file_handler.setFormatter(
     logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 )
@@ -28,12 +22,18 @@ logger.addHandler(console_handler)
 
 
 class MetricsTracker:
+    """Track token usage, communication counts, decisions, and runtime."""
+
     def __init__(self):
+        """Initialize counters and timing state for one simulation run."""
         self.total_input_tokens = 0
         self.total_output_tokens = 0
         self.loop_count = 0
         self.agent_turn_count = 0
         self.agent_tool_call_count = 0
+        self.final_candidate = None
+        self.final_decision_method = None
+        self.final_vote_count = {}
         self.start_time = time.time()
         self.end_time = None
         self._finalized = False
@@ -60,6 +60,24 @@ class MetricsTracker:
         self.agent_tool_call_count += 1
         logger.info(f"Agent tool calls: {self.agent_tool_call_count}")
 
+    def record_final_decision(
+        self,
+        candidate: str,
+        method: str,
+        vote_count: dict[str, int],
+    ) -> bool:
+        """Record the final selected candidate once."""
+        if self.final_candidate is not None:
+            return False
+
+        self.final_candidate = candidate
+        self.final_decision_method = method
+        self.final_vote_count = vote_count
+        logger.info(f"Final Chosen Candidate: {candidate}")
+        logger.info(f"Final Decision Method: {method}")
+        logger.info(f"Final Vote Count: {vote_count}")
+        return True
+
     def end_simulation(self):
         """End simulation and log summary"""
         if self._finalized:
@@ -69,7 +87,7 @@ class MetricsTracker:
         self.end_time = time.time()
         runtime = self.end_time - self.start_time
         
-        logger.info("\n" + "=" * 70)
+        logger.info("=" * 70)
         logger.info("SIMULATION METRICS")
         logger.info("=" * 70)
         logger.info(f"Total Loops: {self.loop_count}")
@@ -80,8 +98,12 @@ class MetricsTracker:
         logger.info(f"Input Tokens: {self.total_input_tokens}")
         logger.info(f"Output Tokens: {self.total_output_tokens}")
         logger.info(f"Total Tokens: {self.total_input_tokens + self.total_output_tokens}")
+        logger.info(f"Final Chosen Candidate: {self.final_candidate or '(not recorded)'}")
+        if self.final_decision_method:
+            logger.info(f"Final Decision Method: {self.final_decision_method}")
+            logger.info(f"Final Vote Count: {self.final_vote_count}")
         logger.info(f"Runtime: {runtime:.2f}s")
-        logger.info("=" * 70 + "\n")
+        logger.info("=" * 70)
 
 
 metrics = MetricsTracker()

@@ -1,15 +1,38 @@
 import json
 import re
-import logging
+from collections.abc import AsyncGenerator
 from collections import Counter
 
-from google.adk.agents import LlmAgent
+from google.adk.agents import BaseAgent
+from google.adk.agents.invocation_context import InvocationContext
+from google.adk.events import Event, EventActions
 from google.adk.tools.tool_context import ToolContext
+from google.genai import types
 
-from ...config.model import VOTE_MODEL
 from ...config.metrics import metrics
+from ...config.trace import log_event
 
-logger = logging.getLogger(__name__)
+MAX_DISCUSSION_ROUNDS = 15
+
+
+def _record_final_decision(
+    candidate: str,
+    method: str,
+    vote_count: dict[str, int],
+) -> None:
+    decision_recorded = metrics.record_final_decision(
+        candidate=candidate,
+        method=method,
+        vote_count=vote_count,
+    )
+    if decision_recorded:
+        log_event(
+            "final_decision",
+            candidate=candidate,
+            method=method,
+            vote_count=vote_count,
+            round=metrics.loop_count,
+        )
 
 
 # --- metrics tool ---
@@ -52,12 +75,23 @@ def check_consensus(tool_context: ToolContext) -> dict:
 
     if counts:
         winner, count = counts.most_common(1)[0]
+        vote_count = dict(counts)
         if count >= 3:
+            _record_final_decision(winner, "consensus", vote_count)
             tool_context.actions.escalate = True
             return {
                 "status": "CONSENSUS_REACHED",
                 "winner": winner,
-                "vote_count": dict(counts),
+                "vote_count": vote_count,
+            }
+
+        if metrics.loop_count >= MAX_DISCUSSION_ROUNDS:
+            _record_final_decision(winner, "max_round_majority_vote", vote_count)
+            tool_context.actions.escalate = True
+            return {
+                "status": "MAX_ROUNDS_REACHED",
+                "winner": winner,
+                "vote_count": vote_count,
             }
 
     return {
@@ -66,22 +100,27 @@ def check_consensus(tool_context: ToolContext) -> dict:
     }
 
 
-# --- vote checker agent ---
-vote_checker = LlmAgent(
-    name="vote_checker",
-    model=VOTE_MODEL,
-    tools=[check_consensus, record_metrics],
-    instruction="""
-First, call the record_metrics tool to record loop metrics.
+class VoteCheckerAgent(BaseAgent):
+    async def _run_async_impl(
+        self,
+        ctx: InvocationContext,
+    ) -> AsyncGenerator[Event, None]:
+        actions = EventActions()
+        tool_context = ToolContext(ctx, event_actions=actions)
 
-Then call the check_consensus tool.
+        record_metrics(tool_context)
+        result = check_consensus(tool_context)
 
-Then report only the tool result.
+        yield Event(
+            invocation_id=ctx.invocation_id,
+            author=self.name,
+            branch=ctx.branch,
+            actions=actions,
+            content=types.Content(
+                role="model",
+                parts=[types.Part.from_text(text=json.dumps(result))],
+            ),
+        )
 
-If status is CONSENSUS_REACHED:
-- Announce the winner clearly.
 
-If status is CONTINUE_DISCUSSION:
-- Briefly summarize the vote count.
-""",
-)
+vote_checker = VoteCheckerAgent(name="vote_checker")

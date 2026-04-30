@@ -1,41 +1,50 @@
 from google.adk.agents import LoopAgent, SequentialAgent
 
 from .config.metrics import metrics
-from .subagents.agent_1.agent_1 import agent_1
-from .subagents.agent_2.agent_2 import agent_2
-from .subagents.agent_3.agent_3 import agent_3
-from .subagents.agent_4.agent_4 import agent_4
+from .subagents.agent_1.agent_1 import agent_1, agent_1_tool
+from .subagents.agent_2.agent_2 import agent_2, agent_2_tool
+from .subagents.agent_3.agent_3 import agent_3, agent_3_tool
+from .subagents.agent_4.agent_4 import agent_4, agent_4_tool
 from .subagents.memory_updater.memory_updater import (
-    memory_update_agent_1,
-    memory_update_agent_2,
-    memory_update_agent_3,
-    memory_update_agent_4,
+    set_agent_1_memory,
+    set_agent_2_memory,
+    set_agent_3_memory,
+    set_agent_4_memory,
 )
 from .subagents.memory_reset.memory_reset import memory_reset_agent
-from .subagents.vote_checker.vote_checker import vote_checker
+from .subagents.vote_checker.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
 from .tools.logging_agent_tool import LoggingAgentTool
 
 
 def _wire_agent_tools() -> None:
+    agent_1_tool.tools = [set_agent_1_memory]
+    agent_2_tool.tools = [set_agent_2_memory]
+    agent_3_tool.tools = [set_agent_3_memory]
+    agent_4_tool.tools = [set_agent_4_memory]
+
     agent_1.tools = [
-        LoggingAgentTool(agent=agent_2),
-        LoggingAgentTool(agent=agent_3),
-        LoggingAgentTool(agent=agent_4),
+        LoggingAgentTool(agent=agent_2_tool),
+        LoggingAgentTool(agent=agent_3_tool),
+        LoggingAgentTool(agent=agent_4_tool),
+        set_agent_1_memory,
     ]
     agent_2.tools = [
-        LoggingAgentTool(agent=agent_1),
-        LoggingAgentTool(agent=agent_3),
-        LoggingAgentTool(agent=agent_4),
+        LoggingAgentTool(agent=agent_1_tool),
+        LoggingAgentTool(agent=agent_3_tool),
+        LoggingAgentTool(agent=agent_4_tool),
+        set_agent_2_memory,
     ]
     agent_3.tools = [
-        LoggingAgentTool(agent=agent_1),
-        LoggingAgentTool(agent=agent_2),
-        LoggingAgentTool(agent=agent_4),
+        LoggingAgentTool(agent=agent_1_tool),
+        LoggingAgentTool(agent=agent_2_tool),
+        LoggingAgentTool(agent=agent_4_tool),
+        set_agent_3_memory,
     ]
     agent_4.tools = [
-        LoggingAgentTool(agent=agent_1),
-        LoggingAgentTool(agent=agent_2),
-        LoggingAgentTool(agent=agent_3),
+        LoggingAgentTool(agent=agent_1_tool),
+        LoggingAgentTool(agent=agent_2_tool),
+        LoggingAgentTool(agent=agent_3_tool),
+        set_agent_4_memory,
     ]
 
 
@@ -44,23 +53,26 @@ _wire_agent_tools()
 discussion_round = SequentialAgent(
     name="discussion_round",
     sub_agents=[
-        memory_reset_agent,
         agent_1,
-        memory_update_agent_1,
         agent_2,
-        memory_update_agent_2,
         agent_3,
-        memory_update_agent_3,
         agent_4,
-        memory_update_agent_4,
         vote_checker,
     ],
 )
 
-root_agent = LoopAgent(
+discussion_loop = LoopAgent(
     name="discussion_loop",
-    max_iterations=15,
+    max_iterations=MAX_DISCUSSION_ROUNDS,
     sub_agents=[discussion_round],
+)
+
+root_agent = SequentialAgent(
+    name="simulation",
+    sub_agents=[
+        memory_reset_agent,
+        discussion_loop,
+    ],
 )
 
 # Register cleanup on module exit

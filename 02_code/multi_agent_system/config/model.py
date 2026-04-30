@@ -1,3 +1,5 @@
+"""Configure LLM instances for discussion and vote-checking agents."""
+
 import os
 from google.adk.models.lite_llm import LiteLlm, LiteLLMClient
 
@@ -8,6 +10,7 @@ class TokenTrackingLiteLLMClient(LiteLLMClient):
     """Minimal token logging from LiteLLM responses."""
 
     async def acompletion(self, model, messages, tools=None, **kwargs):
+        """Run an async completion and record response token usage if present."""
         response = await super().acompletion(
             model=model,
             messages=messages,
