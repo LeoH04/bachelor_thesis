@@ -15,7 +15,7 @@ from ...config.metrics import metrics
 from ...config.simulation_context import archive_agent_memories, get_correct_candidate
 from ...config.trace import log_event
 
-MAX_DISCUSSION_ROUNDS = 1
+MAX_DISCUSSION_ROUNDS = 5
 
 
 def _record_final_decision(

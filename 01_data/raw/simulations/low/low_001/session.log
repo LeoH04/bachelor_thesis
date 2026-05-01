@@ -1,114 +1,41 @@
-2026-05-01 11:59:07,143 - INFO - Metrics tracker initialized
-{"id": 1, "ts": 1777629547.171683, "event": "memory_reset"}
-2026-05-01 11:59:10,072 - INFO - Tokens - Input: 877, Output: 162, Total: 1039
-2026-05-01 11:59:10,080 - INFO - Agent tool calls: 1
-{"id": 2, "ts": 1777629550.0808692, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-aa9960d2db5b56d4", "args_preview": "{'request': \"Please provide Dave's technical assessment score compared to the other candidates.\"}"}
-2026-05-01 11:59:18,046 - INFO - Tokens - Input: 678, Output: 447, Total: 1125
-{"id": 3, "ts": 1777629558.0487192, "event": "public_tool_exchange", "round": 1, "caller": "agent_1", "callee": "agent_2", "question": "request: Please provide Dave's technical assessment score compared to the other candidates.", "answer": "Dave\u2019s technical assessment is among the strongest of the group.\u202fBased on the information we have:\n* **Carol** is noted for the deepest technical expertise, so she likely scores highest on pure technical ability.\n* **Dave** \u201cperformed strongly in execution\u2011focused scenarios,\u201d indicating a very high technical competence that is just below Carol\u2019s expert depth but above the others.\n* **Eve** has relevant experience at top companies, but she showed hesitation in handling underperforming team members, suggesting a solid but slightly lower technical rating than Dave.\n* **Alice** earned the highest leadership evaluation scores, emphasizing people\u2011leadership rather than raw technical skill, so her technical score is probably modest relative to Dave\u2019s.\n* **Bob** is highlighted for communication and stakeholder work, with no specific technical highlights, implying a lower technical rating than Dave.\n**Bottom\u2011line comparison:**\n- **Technical ranking (high\u202f\u2192\u202flow):** Carol\u202f>\u202fDave\u202f>\u202fEve\u202f>\u202fAlice\u202f>\u202fBob.\nSo Dave\u2019s technical assessment score is **high and second\u2011best among the five candidates**.", "message": "Tool exchange: Agent 1 asked Agent 2.\nQuestion: request: Please provide Dave's technical assessment score compared to the other candidates.\nAnswer: Dave\u2019s technical assessment is among the strongest of the group.\u202fBased on the information we have:\n* **Carol** is noted for the deepest technical expertise, so she likely scores highest on pure technical ability.\n* **Dave** \u201cperformed strongly in execution\u2011focused scenarios,\u201d indicating a very high technical competence that is just below Carol\u2019s expert depth but above the others.\n* **Eve** has relevant experience at top companies, but she showed hesitation in handling underperforming team members, suggesting a solid but slightly lower technical rating than Dave.\n* **Alice** earned the highest leadership evaluation scores, emphasizing people\u2011leadership rather than raw technical skill, so her technical score is probably modest relative to Dave\u2019s.\n* **Bob** is highlighted for communication and stakeholder work, with no specific technical highlights, implying a lower technical rating than Dave.\n**Bottom\u2011line comparison:**\n- **Technical ranking (high\u202f\u2192\u202flow):** Carol\u202f>\u202fDave\u202f>\u202fEve\u202f>\u202fAlice\u202f>\u202fBob.\nSo Dave\u2019s technical assessment score is **high and second\u2011best among the five candidates**."}
-{"id": 4, "ts": 1777629558.048936, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-aa9960d2db5b56d4", "result_preview": "Dave\u2019s technical assessment is among the strongest of the group.\u202fBased on the information we have:\n\n* **Carol** is noted for the deepest technical expertise, so she likely scores highest on pure technical ability.  \n* **Dave** \u201cperformed strongly in execution\u2011focused scenarios,\u201d indicating a very high technical competence that is just below Carol\u2019s expert depth but above the others.  \n* **Eve** has relevant experience at top companies, but she showed hesitation in handling underperforming team m..."}
-2026-05-01 11:59:20,505 - INFO - Tokens - Input: 1435, Output: 306, Total: 1741
-{"id": 5, "ts": 1777629560.507363, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Eve stands out as the best fit: she combines the second\u2011highest technical assessment with directly relevant leadership experience at top firms, offering the right balance of technical excellence and proven reliability for immediate impact."}
-2026-05-01 11:59:20,507 - INFO - Agent turns: 1
-2026-05-01 11:59:29,939 - INFO - Tokens - Input: 1177, Output: 980, Total: 2157
-2026-05-01 11:59:29,941 - INFO - Memory updates: 1
-{"id": 6, "ts": 1777629569.94121, "event": "memory_updated", "agent": "agent_4", "round": 1}
-2026-05-01 11:59:31,562 - INFO - Tokens - Input: 1173, Output: 965, Total: 2138
-2026-05-01 11:59:31,563 - INFO - Memory updates: 2
-{"id": 7, "ts": 1777629571.563204, "event": "memory_updated", "agent": "agent_1", "round": 1}
-2026-05-01 11:59:31,573 - INFO - Tokens - Input: 1167, Output: 1271, Total: 2438
-2026-05-01 11:59:31,574 - INFO - Memory updates: 3
-{"id": 8, "ts": 1777629571.574993, "event": "memory_updated", "agent": "agent_2", "round": 1}
-2026-05-01 11:59:32,072 - INFO - Tokens - Input: 1181, Output: 1270, Total: 2451
-2026-05-01 11:59:32,073 - INFO - Memory updates: 4
-{"id": 9, "ts": 1777629572.073911, "event": "memory_updated", "agent": "agent_3", "round": 1}
-2026-05-01 11:59:34,159 - INFO - Tokens - Input: 1616, Output: 235, Total: 1851
-2026-05-01 11:59:34,166 - INFO - Agent tool calls: 2
-{"id": 10, "ts": 1777629574.1662889, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-ac2342f426299d9c", "args_preview": "{'request': 'Please give a concrete example of Eve handling an underperforming team member successfully.'}"}
-2026-05-01 11:59:39,446 - INFO - Tokens - Input: 1365, Output: 279, Total: 1644
-{"id": 11, "ts": 1777629579.447243, "event": "public_tool_exchange", "round": 1, "caller": "agent_2", "callee": "agent_3", "question": "request: Please give a concrete example of Eve handling an underperforming team member successfully.", "answer": "Based on the information we have, there isn\u2019t a documented concrete example of Eve successfully turning around an under\u2011performing team member. In fact, the available feedback notes that she showed some hesitation when dealing with such situations, rather than a clear success story.", "message": "Tool exchange: Agent 2 asked Agent 3.\nQuestion: request: Please give a concrete example of Eve handling an underperforming team member successfully.\nAnswer: Based on the information we have, there isn\u2019t a documented concrete example of Eve successfully turning around an under\u2011performing team member. In fact, the available feedback notes that she showed some hesitation when dealing with such situations, rather than a clear success story."}
-{"id": 12, "ts": 1777629579.44731, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-ac2342f426299d9c", "result_preview": "Based on the information we have, there isn\u2019t a documented concrete example of Eve successfully turning around an under\u2011performing team member. In fact, the available feedback notes that she showed some hesitation when dealing with such situations, rather than a clear success story."}
-2026-05-01 11:59:45,691 - INFO - Tokens - Input: 1817, Output: 566, Total: 2383
-{"id": 13, "ts": 1777629585.6925719, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I vote for Dave \u2013 his top\u2011tier technical execution, rapid career growth, and strong recommendations indicate he can deliver immediate, reliable impact, while his leadership potential appears less risky than Eve\u2019s noted hesitation with underperformers."}
-2026-05-01 11:59:45,692 - INFO - Agent turns: 2
-2026-05-01 11:59:52,858 - INFO - Tokens - Input: 1703, Output: 1063, Total: 2766
-2026-05-01 11:59:52,860 - INFO - Memory updates: 5
-{"id": 14, "ts": 1777629592.86078, "event": "memory_updated", "agent": "agent_3", "round": 1}
-2026-05-01 11:59:54,083 - INFO - Tokens - Input: 1593, Output: 1083, Total: 2676
-2026-05-01 11:59:54,084 - INFO - Memory updates: 6
-{"id": 15, "ts": 1777629594.084692, "event": "memory_updated", "agent": "agent_4", "round": 1}
-2026-05-01 11:59:57,468 - INFO - Tokens - Input: 1627, Output: 1038, Total: 2665
-2026-05-01 11:59:57,470 - INFO - Memory updates: 7
-{"id": 16, "ts": 1777629597.470377, "event": "memory_updated", "agent": "agent_1", "round": 1}
-2026-05-01 12:00:05,144 - INFO - Tokens - Input: 1763, Output: 1523, Total: 3286
-2026-05-01 12:00:05,146 - INFO - Memory updates: 8
-{"id": 17, "ts": 1777629605.146145, "event": "memory_updated", "agent": "agent_2", "round": 1}
-2026-05-01 12:00:06,416 - INFO - Tokens - Input: 1781, Output: 145, Total: 1926
-2026-05-01 12:00:06,420 - INFO - Agent tool calls: 3
-{"id": 18, "ts": 1777629606.420738, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8689eed80cf1bd70", "args_preview": "{'request': \"What is the expected timeline for Eve's competing offer and the probability she will accept it?\"}"}
-2026-05-01 12:00:08,734 - INFO - Tokens - Input: 1522, Output: 170, Total: 1692
-{"id": 19, "ts": 1777629608.736183, "event": "public_tool_exchange", "round": 1, "caller": "agent_3", "callee": "agent_1", "question": "request: What is the expected timeline for Eve's competing offer and the probability she will accept it?", "answer": "We don\u2019t have any information about when Eve\u2019s competing offer is expected to arrive or how likely she is to accept it. To assess the timeline and acceptance probability we would need additional data\u2014such as the recruiting schedule of the other company, any communicated deadlines, and Eve\u2019s stated preferences or past behavior in similar situations.", "message": "Tool exchange: Agent 3 asked Agent 1.\nQuestion: request: What is the expected timeline for Eve's competing offer and the probability she will accept it?\nAnswer: We don\u2019t have any information about when Eve\u2019s competing offer is expected to arrive or how likely she is to accept it. To assess the timeline and acceptance probability we would need additional data\u2014such as the recruiting schedule of the other company, any communicated deadlines, and Eve\u2019s stated preferences or past behavior in similar situations."}
-{"id": 20, "ts": 1777629608.736329, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8689eed80cf1bd70", "result_preview": "We don\u2019t have any information about when Eve\u2019s competing offer is expected to arrive or how likely she is to accept it. To assess the timeline and acceptance probability we would need additional data\u2014such as the recruiting schedule of the other company, any communicated deadlines, and Eve\u2019s stated preferences or past behavior in similar situations."}
-2026-05-01 12:00:11,023 - INFO - Tokens - Input: 2010, Output: 220, Total: 2230
-{"id": 21, "ts": 1777629611.025127, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I vote for Dave \u2013 his top\u2011tier technical execution, rapid career growth, and strong recommendations indicate he can deliver immediate, reliable impact with minimal leadership risk, especially given Eve\u2019s unclear commitment horizon and hesitation with underperformers."}
-2026-05-01 12:00:11,025 - INFO - Agent turns: 3
-2026-05-01 12:00:19,485 - INFO - Tokens - Input: 1945, Output: 1054, Total: 2999
-2026-05-01 12:00:19,487 - INFO - Memory updates: 9
-{"id": 22, "ts": 1777629619.488044, "event": "memory_updated", "agent": "agent_3", "round": 1}
-2026-05-01 12:00:23,620 - INFO - Tokens - Input: 1943, Output: 1247, Total: 3190
-2026-05-01 12:00:23,622 - INFO - Memory updates: 10
-{"id": 23, "ts": 1777629623.622978, "event": "memory_updated", "agent": "agent_4", "round": 1}
-2026-05-01 12:00:26,958 - INFO - Tokens - Input: 1875, Output: 1077, Total: 2952
-2026-05-01 12:00:26,959 - INFO - Memory updates: 11
-{"id": 24, "ts": 1777629626.9591308, "event": "memory_updated", "agent": "agent_1", "round": 1}
-2026-05-01 12:00:31,119 - INFO - Tokens - Input: 1943, Output: 1413, Total: 3356
-2026-05-01 12:00:31,121 - INFO - Memory updates: 12
-{"id": 25, "ts": 1777629631.1218472, "event": "memory_updated", "agent": "agent_2", "round": 1}
-2026-05-01 12:00:33,513 - INFO - Tokens - Input: 1988, Output: 253, Total: 2241
-2026-05-01 12:00:33,520 - INFO - Agent tool calls: 4
-{"id": 26, "ts": 1777629633.5211608, "event": "agent_tool_call_start", "caller": "agent_4", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b06d43472d248684", "args_preview": "{'request': \"Are there any documented concerns about Dave's people-management or leadership effectiveness?\"}"}
-2026-05-01 12:00:34,739 - INFO - Tokens - Input: 1597, Output: 141, Total: 1738
-{"id": 27, "ts": 1777629634.741337, "event": "public_tool_exchange", "round": 1, "caller": "agent_4", "callee": "agent_1", "question": "request: Are there any documented concerns about Dave's people-management or leadership effectiveness?", "answer": "There are no documented concerns about Dave\u2019s people\u2011management or leadership effectiveness; the available information highlights his rapid career growth, strong recommendations, and solid technical execution, but does not raise any specific issues regarding his ability to lead teams.", "message": "Tool exchange: Agent 4 asked Agent 1.\nQuestion: request: Are there any documented concerns about Dave's people-management or leadership effectiveness?\nAnswer: There are no documented concerns about Dave\u2019s people\u2011management or leadership effectiveness; the available information highlights his rapid career growth, strong recommendations, and solid technical execution, but does not raise any specific issues regarding his ability to lead teams."}
-{"id": 28, "ts": 1777629634.741516, "event": "agent_tool_call_end", "caller": "agent_4", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b06d43472d248684", "result_preview": "There are no documented concerns about Dave\u2019s people\u2011management or leadership effectiveness; the available information highlights his rapid career growth, strong recommendations, and solid technical execution, but does not raise any specific issues regarding his ability to lead teams."}
-2026-05-01 12:00:37,194 - INFO - Tokens - Input: 2173, Output: 190, Total: 2363
-{"id": 29, "ts": 1777629637.194858, "event": "public_discussion_message", "round": 1, "agent": "agent_4", "message": "Dave stands out as the optimal choice due to his strong technical execution (second\u2011best overall), rapid career growth, solid recommendations, and no documented concerns about his people\u2011management or leadership effectiveness, offering immediate and reliable impact."}
-2026-05-01 12:00:37,194 - INFO - Agent turns: 4
-2026-05-01 12:00:45,286 - INFO - Tokens - Input: 1929, Output: 1138, Total: 3067
-2026-05-01 12:00:45,288 - INFO - Memory updates: 13
-{"id": 30, "ts": 1777629645.289102, "event": "memory_updated", "agent": "agent_1", "round": 1}
-2026-05-01 12:00:47,293 - INFO - Tokens - Input: 2149, Output: 1524, Total: 3673
-2026-05-01 12:00:47,295 - INFO - Memory updates: 14
-{"id": 31, "ts": 1777629647.2953432, "event": "memory_updated", "agent": "agent_2", "round": 1}
-2026-05-01 12:00:48,665 - INFO - Tokens - Input: 2127, Output: 1062, Total: 3189
-2026-05-01 12:00:48,667 - INFO - Memory updates: 15
-{"id": 32, "ts": 1777629648.667122, "event": "memory_updated", "agent": "agent_4", "round": 1}
-2026-05-01 12:00:56,202 - INFO - Tokens - Input: 2083, Output: 1547, Total: 3630
-2026-05-01 12:00:56,204 - INFO - Memory updates: 16
-{"id": 33, "ts": 1777629656.204261, "event": "memory_updated", "agent": "agent_3", "round": 1}
-2026-05-01 12:00:56,209 - INFO - Loop 1 completed
-2026-05-01 12:00:56,210 - INFO - Final Chosen Candidate: Dave
-2026-05-01 12:00:56,210 - INFO - Final Decision Method: max_round_majority_vote
-2026-05-01 12:00:56,210 - INFO - Final Vote Count: {'Eve': 1, 'Dave': 3}
-2026-05-01 12:00:56,210 - INFO - Correct Candidate: Eve
-2026-05-01 12:00:56,210 - INFO - Decision Correct: 0
-{"id": 34, "ts": 1777629656.6568582, "event": "context_consistency_calculated", "method": "embedding_cosine", "mean_pairwise_similarity": 0.928343, "pairwise": [{"agent_a": "agent_1", "agent_b": "agent_2", "similarity": 0.941062}, {"agent_a": "agent_1", "agent_b": "agent_3", "similarity": 0.908579}, {"agent_a": "agent_1", "agent_b": "agent_4", "similarity": 0.922976}, {"agent_a": "agent_2", "agent_b": "agent_3", "similarity": 0.925916}, {"agent_a": "agent_2", "agent_b": "agent_4", "similarity": 0.939299}, {"agent_a": "agent_3", "agent_b": "agent_4", "similarity": 0.932224}]}
-{"id": 35, "ts": 1777629656.657341, "event": "agent_memories_archived", "directory": "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_001/shared_mental_models", "round": 1}
-{"id": 36, "ts": 1777629656.657448, "event": "final_decision", "candidate": "Dave", "method": "max_round_majority_vote", "vote_count": {"Eve": 1, "Dave": 3}, "correct_candidate": "Eve", "decision_correct": 0, "round": 1}
-2026-05-01 12:00:56,660 - INFO - ======================================================================
-2026-05-01 12:00:56,660 - INFO - SIMULATION METRICS
-2026-05-01 12:00:56,660 - INFO - ======================================================================
-2026-05-01 12:00:56,660 - INFO - Total Loops: 1
-2026-05-01 12:00:56,660 - INFO - Agent Turns (no vote checker): 4
-2026-05-01 12:00:56,660 - INFO - Agent Tool Calls: 4
-2026-05-01 12:00:56,660 - INFO - Agent Tool Messages: 8
-2026-05-01 12:00:56,660 - INFO - Memory Updates: 16
-2026-05-01 12:00:56,660 - INFO - Total Messages (no vote checker): 12
-2026-05-01 12:00:56,660 - INFO - Input Tokens: 46237
-2026-05-01 12:00:56,660 - INFO - Output Tokens: 22369
-2026-05-01 12:00:56,660 - INFO - Total Tokens: 68606
-2026-05-01 12:00:56,660 - INFO - Final Chosen Candidate: Dave
-2026-05-01 12:00:56,661 - INFO - Final Decision Method: max_round_majority_vote
-2026-05-01 12:00:56,661 - INFO - Final Vote Count: {'Eve': 1, 'Dave': 3}
-2026-05-01 12:00:56,661 - INFO - Correct Candidate: Eve
-2026-05-01 12:00:56,661 - INFO - Decision Correct: 0
-2026-05-01 12:00:56,661 - INFO - Runtime: 109.52s
-2026-05-01 12:00:56,661 - INFO - ======================================================================
+2026-05-01 13:21:47,719 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1777634507.73857, "event": "memory_reset"}
+2026-05-01 13:21:58,228 - INFO - Tokens - Input: 919, Output: 403, Total: 1322
+{"id": 2, "ts": 1777634518.230089, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Both Carol and Eve demonstrate strong technical ability, but Carol\u2019s mixed interpersonal feedback raises concerns about reliability and team cohesion\u2014critical for immediate impact. Alice\u2019s extensive leadership experience is offset by her below\u2011expectations system\u2011design performance, while Bob\u2019s communication strengths don\u2019t compensate for a lack of top technical scores. Dave shows promise but lacks concrete evidence of deep technical expertise. Eve, with the second\u2011highest technical assessment and proven experience in comparable high\u2011stakes roles at top companies, offers the best blend of technical excellence, reliability, and readiness to deliver impact quickly."}
+2026-05-01 13:21:58,230 - INFO - Agent turns: 1
+2026-05-01 13:22:02,099 - INFO - Tokens - Input: 1154, Output: 910, Total: 2064
+2026-05-01 13:22:02,101 - INFO - Memory updates: 1
+{"id": 3, "ts": 1777634522.1011992, "event": "memory_updated", "agent": "agent_4", "round": 1}
+2026-05-01 13:22:03,226 - INFO - Tokens - Input: 1150, Output: 872, Total: 2022
+2026-05-01 13:22:03,228 - INFO - Memory updates: 2
+{"id": 4, "ts": 1777634523.228705, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-05-01 13:22:05,167 - INFO - Tokens - Input: 1144, Output: 1041, Total: 2185
+2026-05-01 13:22:05,168 - INFO - Memory updates: 3
+{"id": 5, "ts": 1777634525.168569, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-05-01 13:22:20,017 - INFO - Tokens - Input: 1158, Output: 1162, Total: 2320
+2026-05-01 13:22:20,019 - INFO - Memory updates: 4
+{"id": 6, "ts": 1777634540.019763, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-05-01 13:22:23,190 - INFO - Tokens - Input: 1507, Output: 210, Total: 1717
+{"id": 7, "ts": 1777634543.19152, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I concur with the earlier assessment that Eve offers the strongest combination of technical expertise (second\u2011highest assessment) and relevant high\u2011stakes experience, making her the most reliable choice for immediate impact. While her hesitation with underperforming team members is a minor concern, it appears outweighed by her proven track record and overall fit for the role."}
+2026-05-01 13:22:23,191 - INFO - Agent turns: 2
+2026-05-01 13:22:27,387 - INFO - Tokens - Input: 1609, Output: 937, Total: 2546
+2026-05-01 13:22:27,389 - INFO - Memory updates: 5
+{"id": 8, "ts": 1777634547.389209, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-05-01 13:22:29,334 - INFO - Tokens - Input: 1518, Output: 922, Total: 2440
+2026-05-01 13:22:29,336 - INFO - Memory updates: 6
+{"id": 9, "ts": 1777634549.336473, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-05-01 13:22:30,655 - INFO - Tokens - Input: 1528, Output: 995, Total: 2523
+2026-05-01 13:22:30,657 - INFO - Memory updates: 7
+{"id": 10, "ts": 1777634550.657281, "event": "memory_updated", "agent": "agent_4", "round": 1}
+2026-05-01 13:22:41,314 - INFO - Tokens - Input: 1568, Output: 1043, Total: 2611
+2026-05-01 13:22:41,315 - INFO - Memory updates: 8
+{"id": 11, "ts": 1777634561.315815, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-05-01 13:22:46,032 - INFO - Tokens - Input: 1586, Output: 257, Total: 1843
+{"id": 12, "ts": 1777634566.033375, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I agree with the consensus so far\u2014Eve offers the strongest mix of technical excellence, proven high\u2011stakes experience, and the reliability needed for immediate impact. While we should still clarify her competing\u2011offer timeline to ensure long\u2011term commitment, the alternatives either lack comparable technical depth (Bob, Dave), have interpersonal reliability concerns (Carol), or show recent technical gaps despite leadership experience (Alice). Therefore, I still favor selecting Eve, pending confirmation of her commitment horizon."}
+2026-05-01 13:22:46,033 - INFO - Agent turns: 3
+2026-05-01 13:23:05,965 - INFO - Tokens - Input: 1762, Output: 1128, Total: 2890
+2026-05-01 13:23:05,966 - INFO - Memory updates: 9
+{"id": 13, "ts": 1777634585.96668, "event": "memory_updated", "agent": "agent_4", "round": 1}
+2026-05-01 13:23:11,243 - INFO - Tokens - Input: 1712, Output: 1051, Total: 2763
+2026-05-01 13:23:11,245 - INFO - Memory updates: 10
+{"id": 14, "ts": 1777634591.2456489, "event": "memory_updated", "agent": "agent_2", "round": 1}

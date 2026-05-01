@@ -112,18 +112,9 @@ def _visible_text_from_parts(parts: Iterable[object]) -> str:
     ).strip()
 
 
-def _drop_thought_parts(content: object, parts: list[object]) -> list[object]:
-    """Remove thought parts from response content when the ADK object is mutable."""
-    visible_parts = [part for part in parts if not _is_thought_part(part)]
-    if len(visible_parts) == len(parts):
-        return visible_parts
-
-    try:
-        content.parts = visible_parts
-    except Exception:
-        pass
-
-    return visible_parts
+def _drop_thought_parts(_content: object, parts: list[object]) -> list[object]:
+    """Return non-thought parts without mutating the ADK response content."""
+    return [part for part in parts if not _is_thought_part(part)]
 
 
 def _dict_part_text(part: dict) -> str:
@@ -147,27 +138,51 @@ def _serialized_parts_text(parts: object) -> str:
 
 
 def _replace_response_text(llm_response, text: str) -> None:
-    """Replace an ADK LLM response's visible text when the object is mutable."""
+    """Replace visible response text while preserving thought parts when possible."""
     content = getattr(llm_response, "content", None)
     if content is None:
         return
 
+    parts = list(getattr(content, "parts", None) or [])
+
     try:
         from google.genai import types
 
-        content.parts = [types.Part.from_text(text=text)]
+        replacement_part = types.Part.from_text(text=text)
+        if not parts:
+            content.parts = [replacement_part]
+            return
+
+        new_parts = []
+        inserted_replacement = False
+        for part in parts:
+            if _is_thought_part(part):
+                new_parts.append(part)
+            elif not inserted_replacement:
+                new_parts.append(replacement_part)
+                inserted_replacement = True
+
+        if not inserted_replacement:
+            new_parts.append(replacement_part)
+
+        content.parts = new_parts
         return
     except Exception:
         pass
 
-    parts = list(getattr(content, "parts", None) or [])
-    visible_parts = _drop_thought_parts(content, parts)
-    if not visible_parts:
-        return
-
     try:
-        visible_parts[0].text = text
-        content.parts = visible_parts[:1]
+        new_parts = []
+        inserted_replacement = False
+        for part in parts:
+            if _is_thought_part(part):
+                new_parts.append(part)
+            elif not inserted_replacement:
+                part.text = text
+                new_parts.append(part)
+                inserted_replacement = True
+
+        if inserted_replacement:
+            content.parts = new_parts
     except Exception:
         pass
 
@@ -502,6 +517,12 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
 
     return (
         f"You are {agent_key.replace('_', ' ').title()}.\n\n"
+        "You are participating in a collaborative group deliberation. "
+        "All agents should work together to identify the best candidate, not just "
+        "state isolated individual preferences. Engage with prior public messages, "
+        "compare candidate tradeoffs, share relevant evidence, ask other agents "
+        "useful questions when needed, and help the group move toward a justified "
+        "consensus.\n\n"
         "Task context (use in your reasoning):\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
@@ -509,9 +530,6 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         f"Private information:\n{_as_bullets(private_info)}\n\n"
         f"You may call other agents as tools: {', '.join(other_agents)}.\n"
         "If you have a specific question, ask it via the relevant agent tool.\n"
-        "For this test run, you must call exactly one other agent as a tool before "
-        "writing PUBLIC_MESSAGE. Ask one concise, candidate-relevant question and "
-        "use the answer when forming your public message.\n"
         "Agent-tool exchanges are public discussion messages and will be included "
         "in the shared memory updates.\n"
         "Previous internal memory:\n"
@@ -526,7 +544,8 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         "orchestrator updates all agent memories after your public message, so do "
         "not attempt to update memory during this speaking turn.\n\n"
         "PUBLIC_MESSAGE:\n"
-        "<one short public opinion with concise justification>\n\n"
+        "<one short contribution to the group deliberation: respond to prior points, "
+        "compare candidates, and state your current preferred candidate with concise justification>\n\n"
         "METADATA_JSON:\n"
         f"{{\"agent\": \"{agent_key}\", \"vote\": \"<Alice|Bob|Carol|Eve|Dave>\"}}\n"
     )
@@ -560,12 +579,14 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
         "and uncertainties unless new information contradicts them. Add only salient "
         "new information from any public discussion messages not yet reflected in "
         "your memory, including public agent-tool exchanges, plus your private "
-        "knowledge where relevant. Revise confidence and decision readiness only "
-        "when justified. Do not copy the full discussion history into memory. Do "
-        "not rewrite the memory from scratch or turn it into a fresh summary. Keep "
-        "the memory title free of round numbers, and do not include copied Round N "
-        "labels in the memory itself. Keep the memory compact, roughly the same "
-        "length as the previous memory, and do not append a running transcript.\n"
+        "knowledge where relevant. Track the evolving group deliberation, including "
+        "emerging consensus, disagreements, candidate tradeoffs, and key evidence. "
+        "Revise confidence and decision readiness only when justified. Do not copy "
+        "the full discussion history into memory. Do not rewrite the memory from "
+        "scratch or turn it into a fresh summary. Keep the memory title free of "
+        "round numbers, and do not include copied Round N labels in the memory "
+        "itself. Keep the memory compact, roughly the same length as the previous "
+        "memory, and do not append a running transcript.\n"
         "Output only the complete updated Shared Mental Model markdown. Do not call "
         "tools, do not wrap the markdown in a code fence, and do not add a public "
         "discussion contribution."
@@ -583,6 +604,8 @@ def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
 
     return (
         f"You are {agent_key.replace('_', ' ').title()} responding to another agent's question.\n\n"
+        "Answer as a cooperative member of the deliberating group. Provide information "
+        "that helps the group compare candidates and move toward the best collective choice.\n\n"
         "Task context (use in your answer):\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
