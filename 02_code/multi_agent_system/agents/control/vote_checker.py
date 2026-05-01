@@ -12,10 +12,10 @@ from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
 from ...config.metrics import metrics
-from ...config.simulation_context import archive_agent_memories
+from ...config.simulation_context import archive_agent_memories, get_correct_candidate
 from ...config.trace import log_event
 
-MAX_DISCUSSION_ROUNDS = 3
+MAX_DISCUSSION_ROUNDS = 1
 
 
 def _record_final_decision(
@@ -24,10 +24,12 @@ def _record_final_decision(
     vote_count: dict[str, int],
 ) -> None:
     """Persist and trace the first final decision selected by the simulation."""
+    correct_candidate = get_correct_candidate()
     decision_recorded = metrics.record_final_decision(
         candidate=candidate,
         method=method,
         vote_count=vote_count,
+        correct_candidate=correct_candidate,
     )
     if decision_recorded:
         archive_dir = archive_agent_memories()
@@ -42,6 +44,8 @@ def _record_final_decision(
             candidate=candidate,
             method=method,
             vote_count=vote_count,
+            correct_candidate=correct_candidate,
+            decision_correct=metrics.decision_correct,
             round=metrics.loop_count,
         )
 

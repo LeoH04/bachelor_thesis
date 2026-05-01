@@ -35,6 +35,8 @@ class MetricsTracker:
         self.final_candidate = None
         self.final_decision_method = None
         self.final_vote_count = {}
+        self.correct_candidate = None
+        self.decision_correct = None
         self.start_time = time.time()
         self.end_time = None
         self._finalized = False
@@ -71,6 +73,7 @@ class MetricsTracker:
         candidate: str,
         method: str,
         vote_count: dict[str, int],
+        correct_candidate: str | None = None,
     ) -> bool:
         """Record the final selected candidate once."""
         if self.final_candidate is not None:
@@ -79,9 +82,24 @@ class MetricsTracker:
         self.final_candidate = candidate
         self.final_decision_method = method
         self.final_vote_count = vote_count
+        self.correct_candidate = correct_candidate
+        if correct_candidate:
+            self.decision_correct = 1 if candidate == correct_candidate else 0
         logger.info(f"Final Chosen Candidate: {candidate}")
         logger.info(f"Final Decision Method: {method}")
         logger.info(f"Final Vote Count: {vote_count}")
+        if correct_candidate:
+            logger.info(f"Correct Candidate: {correct_candidate}")
+            logger.info(f"Decision Correct: {self.decision_correct}")
+        update_run_metadata(
+            {
+                "final_candidate": self.final_candidate,
+                "decision_method": self.final_decision_method,
+                "vote_count": self.final_vote_count,
+                "correct_candidate": self.correct_candidate,
+                "decision_correct": self.decision_correct,
+            }
+        )
         return True
 
     def end_simulation(self):
@@ -97,9 +115,11 @@ class MetricsTracker:
         logger.info("SIMULATION METRICS")
         logger.info("=" * 70)
         logger.info(f"Total Loops: {self.loop_count}")
-        total_messages = self.agent_turn_count + self.agent_tool_call_count
+        agent_tool_messages = self.agent_tool_call_count * 2
+        total_messages = self.agent_turn_count + agent_tool_messages
         logger.info(f"Agent Turns (no vote checker): {self.agent_turn_count}")
         logger.info(f"Agent Tool Calls: {self.agent_tool_call_count}")
+        logger.info(f"Agent Tool Messages: {agent_tool_messages}")
         logger.info(f"Memory Updates: {self.memory_update_count}")
         logger.info(f"Total Messages (no vote checker): {total_messages}")
         logger.info(f"Input Tokens: {self.total_input_tokens}")
@@ -109,6 +129,9 @@ class MetricsTracker:
         if self.final_decision_method:
             logger.info(f"Final Decision Method: {self.final_decision_method}")
             logger.info(f"Final Vote Count: {self.final_vote_count}")
+        if self.correct_candidate:
+            logger.info(f"Correct Candidate: {self.correct_candidate}")
+            logger.info(f"Decision Correct: {self.decision_correct}")
         logger.info(f"Runtime: {runtime:.2f}s")
         logger.info("=" * 70)
         update_run_metadata(
@@ -118,6 +141,7 @@ class MetricsTracker:
                 "rounds": self.loop_count,
                 "agent_turns": self.agent_turn_count,
                 "agent_tool_calls": self.agent_tool_call_count,
+                "agent_tool_messages": agent_tool_messages,
                 "memory_updates": self.memory_update_count,
                 "total_messages": total_messages,
                 "input_tokens": self.total_input_tokens,
@@ -126,6 +150,8 @@ class MetricsTracker:
                 "final_candidate": self.final_candidate,
                 "decision_method": self.final_decision_method,
                 "vote_count": self.final_vote_count,
+                "correct_candidate": self.correct_candidate,
+                "decision_correct": self.decision_correct,
                 "runtime_seconds": round(runtime, 4),
             }
         )

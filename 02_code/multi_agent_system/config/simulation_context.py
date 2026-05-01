@@ -8,6 +8,8 @@ from typing import Iterable
 
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
+from .similarity import calculate_memory_similarity
+from .trace import log_event
 
 TASK_PATH = Path(__file__).parent / "hidden_profile_task.json"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +33,14 @@ def _as_bullets(items: Iterable[str]) -> str:
     return "\n".join(f"- {item}" for item in items) if items else "- (none)"
 
 
+def get_correct_candidate() -> str | None:
+    """Return the task's ground-truth candidate when configured."""
+    candidate = TASK.get("correct_candidate") or TASK.get("optimal_candidate")
+    if candidate in TASK.get("candidates", []):
+        return str(candidate)
+    return None
+
+
 def _agent_memory_path(agent_key: str) -> Path:
     """Return the markdown memory file path for the given agent key."""
     return PROJECT_ROOT / "agents" / "discussion" / f"{agent_key}.md"
@@ -52,6 +62,7 @@ def _get_state(ctx) -> dict:
 def _clean_public_message(text: str) -> str:
     """Strip metadata and tool traces from agent text before storing it publicly."""
     text = re.sub(r"METADATA_JSON:\s*\{.*?\}\s*", "", text, flags=re.DOTALL)
+    text = re.sub(r"^\s*PUBLIC_MESSAGE:\s*", "", text, flags=re.IGNORECASE)
 
     visible_lines = []
     for line in text.splitlines():
@@ -63,6 +74,112 @@ def _clean_public_message(text: str) -> str:
         visible_lines.append(line.rstrip())
 
     return "\n".join(visible_lines).strip()
+
+
+def _extract_public_message(text: str) -> str:
+    """Extract only the explicit public answer from a scheduled agent response."""
+    match = re.search(
+        r"(?:^|\n)\s*PUBLIC_MESSAGE:\s*(.*?)(?=\n\s*METADATA_JSON:|\Z)",
+        text,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    if match:
+        return _clean_public_message(match.group(1))
+
+    cleaned = _clean_public_message(text)
+    blocks = [block.strip() for block in re.split(r"\n\s*\n", cleaned) if block.strip()]
+    if len(blocks) > 1:
+        return blocks[-1]
+
+    lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
+    if len(lines) > 1:
+        return lines[-1]
+
+    return cleaned
+
+
+def _is_thought_part(part: object) -> bool:
+    """Return whether a model response part is internal reasoning."""
+    return bool(getattr(part, "thought", False))
+
+
+def _visible_text_from_parts(parts: Iterable[object]) -> str:
+    """Join only non-thought text parts from an ADK model response."""
+    return "\n".join(
+        part.text
+        for part in parts
+        if getattr(part, "text", None) and not _is_thought_part(part)
+    ).strip()
+
+
+def _drop_thought_parts(content: object, parts: list[object]) -> list[object]:
+    """Remove thought parts from response content when the ADK object is mutable."""
+    visible_parts = [part for part in parts if not _is_thought_part(part)]
+    if len(visible_parts) == len(parts):
+        return visible_parts
+
+    try:
+        content.parts = visible_parts
+    except Exception:
+        pass
+
+    return visible_parts
+
+
+def _dict_part_text(part: dict) -> str:
+    """Return visible text from a serialized response part."""
+    if part.get("thought"):
+        return ""
+
+    return str(part.get("text", "")).strip()
+
+
+def _serialized_parts_text(parts: object) -> str:
+    """Join visible text from serialized response parts."""
+    if not isinstance(parts, list):
+        return ""
+
+    return "\n".join(
+        text
+        for text in (_dict_part_text(part) for part in parts if isinstance(part, dict))
+        if text
+    ).strip()
+
+
+def _replace_response_text(llm_response, text: str) -> None:
+    """Replace an ADK LLM response's visible text when the object is mutable."""
+    content = getattr(llm_response, "content", None)
+    if content is None:
+        return
+
+    try:
+        from google.genai import types
+
+        content.parts = [types.Part.from_text(text=text)]
+        return
+    except Exception:
+        pass
+
+    parts = list(getattr(content, "parts", None) or [])
+    visible_parts = _drop_thought_parts(content, parts)
+    if not visible_parts:
+        return
+
+    try:
+        visible_parts[0].text = text
+        content.parts = visible_parts[:1]
+    except Exception:
+        pass
+
+
+def _extract_memory_markdown(text: str) -> str:
+    """Normalize a passive memory update response to raw markdown."""
+    text = text.strip()
+    text = re.sub(r"^\s*MEMORY_MARKDOWN:\s*", "", text, flags=re.IGNORECASE)
+    fence_match = re.search(r"```(?:markdown|md)?\s*(.*?)\s*```", text, re.DOTALL)
+    if fence_match:
+        return fence_match.group(1).strip()
+    return text
 
 
 def _agent_label(agent_name: str | None) -> str:
@@ -83,7 +200,23 @@ def _agent_key(agent_name: str | None) -> str:
 
 def _public_value_text(value: object) -> str:
     """Render a tool argument or result as concise public discussion text."""
+    content = getattr(value, "content", None)
+    parts = getattr(content, "parts", None) if content is not None else None
+    parts = parts or getattr(value, "parts", None)
+    if parts:
+        return _clean_public_message(_visible_text_from_parts(parts))
+
     if isinstance(value, dict):
+        content_value = value.get("content")
+        if isinstance(content_value, dict):
+            content_text = _serialized_parts_text(content_value.get("parts"))
+            if content_text:
+                return _clean_public_message(content_text)
+
+        parts_text = _serialized_parts_text(value.get("parts"))
+        if parts_text:
+            return _clean_public_message(parts_text)
+
         parts = []
         for key, item in value.items():
             item_text = _clean_public_message(str(item))
@@ -107,30 +240,64 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
         return None
 
     content = getattr(llm_response, "content", None)
-    parts = getattr(content, "parts", None) or []
-    text = "\n".join(
-        part.text for part in parts if getattr(part, "text", None)
-    ).strip()
+    parts = list(getattr(content, "parts", None) or [])
+    visible_parts = _drop_thought_parts(content, parts)
+    text = _visible_text_from_parts(visible_parts)
 
     if "METADATA_JSON:" not in text:
-        return None
+        return llm_response
 
-    public_message = _clean_public_message(text)
+    public_message = _extract_public_message(text)
     if not public_message:
-        return None
+        return llm_response
 
     state = _get_state(callback_context)
     history = list(state.get(PUBLIC_DISCUSSION_STATE_KEY, []))
+    round_number = _round_number()
     history.append(
         {
-            "round": _round_number(),
+            "round": round_number,
             "agent": agent_name,
             "message": public_message,
         }
     )
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
+    log_event(
+        "public_discussion_message",
+        round=round_number,
+        agent=agent_name,
+        message=public_message,
+    )
     metrics.record_agent_turn()
-    return None
+    return llm_response
+
+
+def record_memory_update_response(agent_key: str, _callback_context, llm_response):
+    """Persist a passive memory update from plain markdown model output."""
+    content = getattr(llm_response, "content", None)
+    parts = list(getattr(content, "parts", None) or [])
+    visible_parts = _drop_thought_parts(content, parts)
+    text = _visible_text_from_parts(visible_parts)
+    memory = _extract_memory_markdown(text)
+
+    if not memory:
+        log_event(
+            "memory_update_missing",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+        )
+        _replace_response_text(llm_response, "MEMORY_UPDATE_EMPTY")
+        return llm_response
+
+    write_agent_memory(agent_key, memory)
+    metrics.record_memory_update()
+    log_event(
+        "memory_updated",
+        agent=agent_key,
+        round=metrics.loop_count + 1,
+    )
+    _replace_response_text(llm_response, "MEMORY_UPDATED")
+    return llm_response
 
 
 def record_public_tool_exchange(
@@ -156,16 +323,29 @@ def record_public_tool_exchange(
 
     state = _get_state(tool_context)
     history = list(state.get(PUBLIC_DISCUSSION_STATE_KEY, []))
+    round_number = _round_number()
+    callee_key = _agent_key(callee_name)
+    caller_key = _agent_key(caller_name)
+    message = "\n".join(message_parts)
     history.append(
         {
-            "round": _round_number(),
-            "agent": _agent_key(callee_name),
-            "message": "\n".join(message_parts),
+            "round": round_number,
+            "agent": callee_key,
+            "message": message,
             "source": "agent_tool_call",
-            "caller": _agent_key(caller_name),
+            "caller": caller_key,
         }
     )
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
+    log_event(
+        "public_tool_exchange",
+        round=round_number,
+        caller=caller_key,
+        callee=callee_key,
+        question=question,
+        answer=answer,
+        message=message,
+    )
     return None
 
 
@@ -205,9 +385,8 @@ def build_public_discussion_history(ctx) -> str:
     return "\n".join(lines) if lines else "- No public discussion messages yet."
 
 
-def build_memory_template(agent_key: str, round_number: int | None = None) -> str:
+def build_memory_template(agent_key: str) -> str:
     """Create the initial structured markdown memory for one agent."""
-    round_number = round_number or _round_number()
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
@@ -218,7 +397,7 @@ def build_memory_template(agent_key: str, round_number: int | None = None) -> st
     )
 
     return (
-        f"# Shared Mental Model (Agent {agent_key.split('_')[-1]}, Round {round_number})\n\n"
+        f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
         "## Task Summary\n"
         f"Goal\n{goal}\n\n"
         f"Candidates\n{_as_bullets(candidates)}\n\n"
@@ -238,19 +417,19 @@ def build_memory_template(agent_key: str, round_number: int | None = None) -> st
         "Missing evidence\n- \n\n"
         "What would change the decision\n- \n\n"
         "## Next-Step Focus\n"
-        "What to ask or look for in the next round\n- \n"
+        "What to ask or look for next\n- \n"
     )
 
 
-def read_agent_memory(agent_key: str, round_number: int | None = None) -> str:
+def read_agent_memory(agent_key: str) -> str:
     """Read an agent's memory file, falling back to a fresh template if needed."""
     path = _agent_memory_path(agent_key)
     if not path.exists():
-        return build_memory_template(agent_key, round_number)
+        return build_memory_template(agent_key)
 
     content = path.read_text(encoding="utf-8").strip()
     if not content:
-        return build_memory_template(agent_key, round_number)
+        return build_memory_template(agent_key)
 
     return content
 
@@ -272,34 +451,48 @@ def archive_agent_memories() -> Path | None:
     destination.mkdir(parents=True, exist_ok=True)
 
     copied_files = []
+    memory_texts = {}
     for agent_key in AGENT_KEYS:
         source = _agent_memory_path(agent_key)
         if source.exists():
             target = destination / source.name
             shutil.copy2(source, target)
             copied_files.append(str(target))
+            memory_texts[agent_key] = target.read_text(encoding="utf-8")
+
+    similarity = calculate_memory_similarity(memory_texts)
 
     _AGENT_MEMORIES_ARCHIVED = True
     update_run_metadata(
         {
             "shared_mental_models_archived": True,
             "shared_mental_model_files": copied_files,
+            "context_consistency": similarity,
+            "pairwise_memory_similarity": similarity.get("pairwise", []),
+            "mean_pairwise_memory_similarity": similarity.get(
+                "mean_pairwise_similarity"
+            ),
         }
+    )
+    log_event(
+        "context_consistency_calculated",
+        method=similarity.get("method"),
+        mean_pairwise_similarity=similarity.get("mean_pairwise_similarity"),
+        pairwise=similarity.get("pairwise", []),
     )
     return destination
 
 
-def reset_all_agent_memories(round_number: int | None = 1) -> None:
-    """Reset every agent memory file to a fresh template for the target round."""
+def reset_all_agent_memories() -> None:
+    """Reset every agent memory file to a fresh template."""
     for agent_key in AGENT_KEYS:
-        template = build_memory_template(agent_key, round_number)
+        template = build_memory_template(agent_key)
         write_agent_memory(agent_key, template)
 
 
 def build_agent_instruction(agent_key: str, ctx=None) -> str:
     """Build the full prompt for an agent's scheduled public discussion turn."""
-    round_number = _round_number()
-    memory = read_agent_memory(agent_key, round_number)
+    memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
@@ -316,6 +509,9 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         f"Private information:\n{_as_bullets(private_info)}\n\n"
         f"You may call other agents as tools: {', '.join(other_agents)}.\n"
         "If you have a specific question, ask it via the relevant agent tool.\n"
+        "For this test run, you must call exactly one other agent as a tool before "
+        "writing PUBLIC_MESSAGE. Ask one concise, candidate-relevant question and "
+        "use the answer when forming your public message.\n"
         "Agent-tool exchanges are public discussion messages and will be included "
         "in the shared memory updates.\n"
         "Previous internal memory:\n"
@@ -323,11 +519,14 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         "Visible discussion history (public messages, including public agent-tool "
         "exchanges; memory updates are intentionally hidden):\n"
         f"{discussion_history}\n\n"
-        "Read the visible discussion history and your previous internal memory, then "
-        "give a short public opinion. The orchestrator updates all agent memories "
-        "after your public message, so do not attempt to update memory during this "
-        "speaking turn.\n\n"
-        "End with this exact metadata format:\n\n"
+        "Read the visible discussion history and your previous internal memory. "
+        "Output only the two sections below, with no planning notes, no hidden "
+        "reasoning transcript, and no text before PUBLIC_MESSAGE. The public message "
+        "is the only visible discussion contribution that will be stored. The "
+        "orchestrator updates all agent memories after your public message, so do "
+        "not attempt to update memory during this speaking turn.\n\n"
+        "PUBLIC_MESSAGE:\n"
+        "<one short public opinion with concise justification>\n\n"
         "METADATA_JSON:\n"
         f"{{\"agent\": \"{agent_key}\", \"vote\": \"<Alice|Bob|Carol|Eve|Dave>\"}}\n"
     )
@@ -335,15 +534,13 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
 
 def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
     """Build the prompt for a passive memory update after a public message."""
-    round_number = _round_number()
-    memory = read_agent_memory(agent_key, round_number)
+    memory = read_agent_memory(agent_key)
     latest_message = build_latest_public_discussion_message(ctx)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
-    memory_tool = f"set_{agent_key}_memory"
 
     return (
         f"You are {agent_key.replace('_', ' ').title()} performing a passive memory update.\n\n"
@@ -365,18 +562,19 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
         "your memory, including public agent-tool exchanges, plus your private "
         "knowledge where relevant. Revise confidence and decision readiness only "
         "when justified. Do not copy the full discussion history into memory. Do "
-        "not rewrite the memory from scratch or turn it into a fresh summary.\n"
-        f"Call the {memory_tool} tool with the complete Shared Mental Model markdown "
-        "after these incremental revisions.\n"
-        "Do not add a new public discussion contribution. After the tool call, "
-        "respond only with: MEMORY_UPDATED"
+        "not rewrite the memory from scratch or turn it into a fresh summary. Keep "
+        "the memory title free of round numbers, and do not include copied Round N "
+        "labels in the memory itself. Keep the memory compact, roughly the same "
+        "length as the previous memory, and do not append a running transcript.\n"
+        "Output only the complete updated Shared Mental Model markdown. Do not call "
+        "tools, do not wrap the markdown in a code fence, and do not add a public "
+        "discussion contribution."
     )
 
 
 def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
     """Build the prompt for an agent answering another agent through a tool call."""
-    round_number = _round_number()
-    memory = read_agent_memory(agent_key, round_number)
+    memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
@@ -399,6 +597,8 @@ def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
         "have during a normal discussion turn. Your answer will be recorded as part "
         "of the public discussion, and the orchestrator will update all agent "
         "memories after the speaking agent's public turn.\n"
+        "Output only the direct answer; do not include planning notes, hidden "
+        "reasoning transcript, or self-instructions. "
         "Do not update memory during this tool response. Do not include metadata or "
         "special formatting in your response."
     )

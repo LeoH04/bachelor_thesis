@@ -3,20 +3,11 @@
 from google.adk.agents import LlmAgent, ParallelAgent
 
 from ...config.model import DISCUSSION_MODEL
-from ...config.simulation_context import AGENT_KEYS, build_memory_update_instruction
-from ...tools.memory_tools import (
-    set_agent_1_memory,
-    set_agent_2_memory,
-    set_agent_3_memory,
-    set_agent_4_memory,
+from ...config.simulation_context import (
+    AGENT_KEYS,
+    build_memory_update_instruction,
+    record_memory_update_response,
 )
-
-MEMORY_TOOLS = {
-    "agent_1": set_agent_1_memory,
-    "agent_2": set_agent_2_memory,
-    "agent_3": set_agent_3_memory,
-    "agent_4": set_agent_4_memory,
-}
 
 
 def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
@@ -25,12 +16,19 @@ def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
     def instruction(ctx, target_agent_key=agent_key) -> str:
         return build_memory_update_instruction(target_agent_key, ctx)
 
+    def after_model_callback(callback_context, llm_response, target_agent_key=agent_key):
+        return record_memory_update_response(
+            target_agent_key,
+            callback_context,
+            llm_response,
+        )
+
     return LlmAgent(
         name=f"{agent_key}_memory_update_after_{after_agent_key}",
         model=DISCUSSION_MODEL,
         instruction=instruction,
         include_contents="none",
-        tools=[MEMORY_TOOLS[agent_key]],
+        after_model_callback=after_model_callback,
     )
 
 

@@ -77,10 +77,16 @@ root_agent = SequentialAgent(
 # Register cleanup on module exit
 
 def cleanup():
-    if metrics.loop_count or metrics.agent_turn_count or metrics.final_candidate:
-        archive_dir = archive_agent_memories()
-        if archive_dir is not None:
-            log_event("agent_memories_archived", directory=str(archive_dir))
+    try:
+        if metrics.loop_count or metrics.agent_turn_count or metrics.final_candidate:
+            archive_dir = archive_agent_memories()
+            if archive_dir is not None:
+                log_event("agent_memories_archived", directory=str(archive_dir))
+    except Exception as exc:
+        try:
+            log_event("agent_memories_archive_failed", error=str(exc))
+        except Exception:
+            pass
     metrics.end_simulation()
 
 atexit.register(cleanup)
