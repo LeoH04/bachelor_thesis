@@ -363,23 +363,6 @@ def record_public_tool_exchange(
     )
     return None
 
-
-def build_latest_public_discussion_message(ctx) -> str:
-    """Format the latest public discussion message for passive memory updates."""
-    state = _get_state(ctx)
-    history = state.get(PUBLIC_DISCUSSION_STATE_KEY, [])
-    for item in reversed(history):
-        if not isinstance(item, dict):
-            continue
-        round_number = item.get("round", "?")
-        agent = str(item.get("agent", "unknown_agent")).replace("_", " ").title()
-        message = str(item.get("message", "")).strip()
-        if message:
-            return f"Round {round_number}, {agent}: {message}"
-
-    return "No public discussion message is available."
-
-
 def build_public_discussion_history(ctx) -> str:
     """Format the stored public discussion transcript for inclusion in prompts."""
     state = _get_state(ctx)
@@ -526,16 +509,13 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         "Task context (use in your reasoning):\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
-        f"Public information:\n{_as_bullets(public_info)}\n"
-        f"Private information:\n{_as_bullets(private_info)}\n\n"
+        f"Information:\n{_as_bullets(public_info + private_info)}\n"
         f"You may call other agents as tools: {', '.join(other_agents)}.\n"
         "If you have a specific question, ask it via the relevant agent tool.\n"
-        "Agent-tool exchanges are public discussion messages and will be included "
-        "in the shared memory updates.\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
         "Visible discussion history (public messages, including public agent-tool "
-        "exchanges; memory updates are intentionally hidden):\n"
+        "exchanges):\n"
         f"{discussion_history}\n\n"
         "Read the visible discussion history and your previous internal memory. "
         "Output only the two sections below, with no planning notes, no hidden "
@@ -554,7 +534,6 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
 def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
     """Build the prompt for a passive memory update after a public message."""
     memory = read_agent_memory(agent_key)
-    latest_message = build_latest_public_discussion_message(ctx)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
@@ -566,12 +545,9 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
         "Task context:\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
-        f"Public information:\n{_as_bullets(public_info)}\n"
-        f"Private information:\n{_as_bullets(private_info)}\n\n"
+        f"Information:\n{_as_bullets(public_info + private_info)}\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
-        "Latest public discussion message:\n"
-        f"{latest_message}\n\n"
         "Visible discussion history for context:\n"
         f"{discussion_history}\n\n"
         "Update your previous internal memory incrementally, as if revising an "
@@ -609,12 +585,11 @@ def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
         "Task context (use in your answer):\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
-        f"Public information:\n{_as_bullets(public_info)}\n"
-        f"Private information:\n{_as_bullets(private_info)}\n\n"
+        f"Information:\n{_as_bullets(public_info + private_info)}\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
         "Visible discussion history (public messages, including public agent-tool "
-        "exchanges; memory updates are intentionally hidden):\n"
+        "exchanges):\n"
         f"{discussion_history}\n\n"
         "Answer the question directly and concisely using the same context you would "
         "have during a normal discussion turn. Your answer will be recorded as part "
