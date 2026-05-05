@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 from typing import Iterable
 
-from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
+from .make_session_log import CHAT_LOG_FILE, SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 from .similarity import calculate_memory_similarity
 from .trace import log_event
@@ -60,9 +60,13 @@ def _get_state(ctx) -> dict:
 
 
 def _clean_public_message(text: str) -> str:
-    """Strip metadata and tool traces from agent text before storing it publicly."""
-    text = re.sub(r"METADATA_JSON:\s*\{.*?\}\s*", "", text, flags=re.DOTALL)
-    text = re.sub(r"^\s*PUBLIC_MESSAGE:\s*", "", text, flags=re.IGNORECASE)
+    """Strip wrapper labels and tool traces from text before storing it publicly."""
+    text = re.sub(
+        r"^\s*PUBLIC[\s_]*MESSAGE\s*:\s*",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
 
     visible_lines = []
     for line in text.splitlines():
@@ -77,9 +81,9 @@ def _clean_public_message(text: str) -> str:
 
 
 def _extract_public_message(text: str) -> str:
-    """Extract only the explicit public answer from a scheduled agent response."""
+    """Extract the public answer and vote metadata from a scheduled agent response."""
     match = re.search(
-        r"(?:^|\n)\s*PUBLIC_MESSAGE:\s*(.*?)(?=\n\s*METADATA_JSON:|\Z)",
+        r"(?:^|\n)\s*PUBLIC[\s_]*MESSAGE\s*:\s*(.*)",
         text,
         flags=re.DOTALL | re.IGNORECASE,
     )
@@ -87,6 +91,9 @@ def _extract_public_message(text: str) -> str:
         return _clean_public_message(match.group(1))
 
     cleaned = _clean_public_message(text)
+    if re.search(r"\bMETADATA[\s_]*JSON\s*:", cleaned, re.IGNORECASE):
+        return cleaned
+
     blocks = [block.strip() for block in re.split(r"\n\s*\n", cleaned) if block.strip()]
     if len(blocks) > 1:
         return blocks[-1]
@@ -96,6 +103,37 @@ def _extract_public_message(text: str) -> str:
         return lines[-1]
 
     return cleaned
+
+
+def extract_vote_from_response(text: object) -> str | None:
+    """Extract a valid vote from a scheduled agent response stored in state."""
+    if not isinstance(text, str):
+        return None
+
+    match = re.search(
+        r"\bMETADATA[\s_]*JSON\s*:\s*(\{.*?\})",
+        text,
+        re.DOTALL | re.IGNORECASE,
+    )
+    if not match:
+        return None
+
+    try:
+        data = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return None
+
+    vote = data.get("vote")
+    return str(vote) if vote in TASK.get("candidates", []) else None
+
+
+def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
+    """Return the latest recorded vote for an agent, or a placeholder."""
+    if not agent_key:
+        return "Unavailable"
+
+    response = _get_state(ctx).get(f"{agent_key}_response", "")
+    return extract_vote_from_response(response) or "Unavailable"
 
 
 def _is_thought_part(part: object) -> bool:
@@ -248,6 +286,13 @@ def reset_public_discussion_history(state: dict) -> None:
         state[PUBLIC_DISCUSSION_STATE_KEY] = []
 
 
+def _append_chat_entry(round_number: int, speaker: str, message: str) -> None:
+    """Append one public discussion entry to the human-readable chat markdown."""
+    CHAT_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with CHAT_LOG_FILE.open("a", encoding="utf-8") as f:
+        f.write(f"## Round {round_number} - {speaker}\n\n{message.strip()}\n\n")
+
+
 def record_public_discussion_response(callback_context, llm_response) -> None:
     """Append only a normal agent turn's visible final message to shared state."""
     agent_name = getattr(callback_context, "agent_name", None)
@@ -259,7 +304,7 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     visible_parts = _drop_thought_parts(content, parts)
     text = _visible_text_from_parts(visible_parts)
 
-    if "METADATA_JSON:" not in text:
+    if not re.search(r"\bMETADATA[\s_]*JSON\s*:", text, re.IGNORECASE):
         return llm_response
 
     public_message = _extract_public_message(text)
@@ -277,6 +322,7 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
         }
     )
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
+    _append_chat_entry(round_number, _agent_label(agent_name), public_message)
     log_event(
         "public_discussion_message",
         round=round_number,
@@ -352,6 +398,11 @@ def record_public_tool_exchange(
         }
     )
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
+    _append_chat_entry(
+        round_number,
+        f"Tool: {caller_label} -> {callee_label}",
+        message,
+    )
     log_event(
         "public_tool_exchange",
         round=round_number,
@@ -405,11 +456,24 @@ def build_memory_template(agent_key: str) -> str:
         "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
         "| --- | --- | --- | --- | --- |\n"
         f"{candidate_rows}\n\n"
-        "## Current Preference\n"
-        "Leading Candidate\n- \n\n"
-        "Rationale\n- \n\n"
+        "## My Position\n"
+        "My Last Public Vote\n- None\n\n"
+        "My Current Working Favorite\n- Undecided\n\n"
+        "My Rationale\n- \n\n"
+        "Evidence That Could Change My Mind\n- \n\n"
         "Confidence (percent)\n- \n\n"
         "Decision Readiness\n- \n\n"
+        "## Other Agents' Public Positions\n"
+        "| Agent | Latest Vote | Main Reason | Evidence Shared |\n"
+        "| --- | --- | --- | --- |\n"
+        "| agent_1 | Unknown |  |  |\n"
+        "| agent_2 | Unknown |  |  |\n"
+        "| agent_3 | Unknown |  |  |\n"
+        "| agent_4 | Unknown |  |  |\n\n"
+        "## Emerging Group View\n"
+        "Group-Leading Candidate\n- None\n\n"
+        "Important Agreements\n- \n\n"
+        "Important Disagreements / Tensions\n- \n\n"
         "Uncertainties\n- \n\n"
         "## Open Questions\n"
         "Missing evidence\n- \n\n"
@@ -502,27 +566,46 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
         f"You are {agent_key.replace('_', ' ').title()}.\n\n"
         "You are participating in a collaborative group deliberation. "
         "All agents should work together to identify the best candidate, not just "
-        "state isolated individual preferences. Engage with prior public messages, "
-        "compare candidate tradeoffs, share relevant evidence, ask other agents "
-        "useful questions when needed, and help the group move toward a justified "
-        "consensus.\n\n"
+        "state isolated individual preferences. Early disagreement is useful: do "
+        "not adopt another agent's recommendation merely because it appeared first "
+        "or was stated confidently. Engage with prior public messages, compare "
+        "candidate tradeoffs, share relevant evidence, ask other agents useful "
+        "questions when needed, and help the group surface the strongest evidence "
+        "before moving toward consensus.\n\n"
         "Task context (use in your reasoning):\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
+        "Grounding rule: Use only facts explicitly present in Task context or "
+        "Visible discussion history. Treat Previous internal memory as an "
+        "organizer of those facts, not as permission to add new facts. Do not "
+        "invent names, dates, numbers, scores, budgets, project details, "
+        "commitments, references, or incidents. If requested information is not "
+        "present, say it is unknown or unavailable.\n"
         f"You may call other agents as tools: {', '.join(other_agents)}.\n"
-        "If you have a specific question, ask it via the relevant agent tool.\n"
+        "If you have a specific question, ask it via the relevant agent tool. "
+        "A tool call is only an information-gathering step; it is not your final "
+        "scheduled contribution. After any tool answer, you must still produce the "
+        "final response using exactly the required PUBLIC_MESSAGE and METADATA_JSON "
+        "sections below.\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
         "Visible discussion history (public messages, including public agent-tool "
         "exchanges):\n"
         f"{discussion_history}\n\n"
         "Read the visible discussion history and your previous internal memory. "
+        "Your vote should reflect your own current assessment. If your private "
+        "evidence supports a different candidate than the current group-leading "
+        "candidate, state that disagreement clearly and vote for your own preferred "
+        "candidate. If 'My Last Public Vote' is None, treat earlier public votes as "
+        "proposals to evaluate, not as a consensus you need to join. "
         "Output only the two sections below, with no planning notes, no hidden "
-        "reasoning transcript, and no text before PUBLIC_MESSAGE. The public message "
-        "is the only visible discussion contribution that will be stored. The "
-        "orchestrator updates all agent memories after your public message, so do "
-        "not attempt to update memory during this speaking turn.\n\n"
+        "reasoning transcript, and no text before PUBLIC_MESSAGE. The public "
+        "message and METADATA_JSON are the visible discussion contribution that "
+        "will be stored. The orchestrator updates all agent memories after your "
+        "public message, so do not attempt to update memory during this speaking "
+        "turn. Never end your scheduled turn without METADATA_JSON, even if you "
+        "used a tool.\n\n"
         "PUBLIC_MESSAGE:\n"
         "<one short contribution to the group deliberation: respond to prior points, "
         "compare candidates, and state your current preferred candidate with concise justification>\n\n"
@@ -531,7 +614,11 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
     )
 
 
-def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
+def build_memory_update_instruction(
+    agent_key: str,
+    ctx=None,
+    latest_speaker_key: str | None = None,
+) -> str:
     """Build the prompt for a passive memory update after a public message."""
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
@@ -539,6 +626,13 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
+    latest_speaker = latest_speaker_key or "unknown_agent"
+    latest_vote = _latest_vote_for_agent(ctx, latest_speaker_key)
+    latest_speaker_role = (
+        "This agent was the latest scheduled speaker."
+        if latest_speaker_key == agent_key
+        else "Another agent was the latest scheduled speaker."
+    )
 
     return (
         f"You are {agent_key.replace('_', ' ').title()} performing a passive memory update.\n\n"
@@ -546,6 +640,10 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
+        "Latest scheduled speaker context:\n"
+        f"- Latest scheduled speaker: {latest_speaker}\n"
+        f"- Latest speaker vote: {latest_vote}\n"
+        f"- Relationship to this memory: {latest_speaker_role}\n\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
         "Visible discussion history for context:\n"
@@ -557,6 +655,21 @@ def build_memory_update_instruction(agent_key: str, ctx=None) -> str:
         "your memory, including public agent-tool exchanges, plus your private "
         "knowledge where relevant. Track the evolving group deliberation, including "
         "emerging consensus, disagreements, candidate tradeoffs, and key evidence. "
+        "Do not add inferred or invented facts to memory. Preserve only facts "
+        "explicitly stated in task context or public discussion. If a public "
+        "message contains unsupported extra detail, record it as an agent claim "
+        "only when useful, not as verified evidence. "
+        "Preference ownership rules: 'My Position' belongs only to this agent. If "
+        "the latest scheduled speaker is this same agent, update 'My Last Public "
+        "Vote' from the latest speaker vote and update 'My Current Working Favorite' "
+        "only to match this agent's own latest public stance. If the latest scheduled "
+        "speaker is another agent, do not change 'My Last Public Vote' or 'My Current "
+        "Working Favorite' based on that agent's recommendation, and preserve this "
+        "agent's confidence and decision readiness as self-position fields. Record "
+        "the speaker's vote under 'Other Agents' Public Positions', record any "
+        "factual evidence they shared in the candidate table, and record agreement "
+        "or disagreement under 'Emerging Group View'. Do not convert another agent's "
+        "recommendation into this agent's own preference. "
         "Revise confidence and decision readiness only when justified. Do not copy "
         "the full discussion history into memory. Do not rewrite the memory from "
         "scratch or turn it into a fresh summary. Keep the memory title free of "
@@ -586,6 +699,12 @@ def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
+        "Grounding rule: Only provide information explicitly available to this "
+        "agent in Task context, Previous internal memory, or Visible discussion "
+        "history. Do not invent names, dates, numbers, scores, budgets, project "
+        "details, commitments, references, or incidents. If the question asks for "
+        "details not present in your context, answer that the information is "
+        "unknown or unavailable.\n"
         "Previous internal memory:\n"
         f"{memory}\n\n"
         "Visible discussion history (public messages, including public agent-tool "

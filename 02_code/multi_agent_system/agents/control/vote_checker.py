@@ -1,7 +1,6 @@
 """Check end-of-round votes and stop the discussion when a decision is reached."""
 
 import json
-import re
 from collections.abc import AsyncGenerator
 from collections import Counter
 
@@ -12,7 +11,11 @@ from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
 from ...config.metrics import metrics
-from ...config.simulation_context import archive_agent_memories, get_correct_candidate
+from ...config.simulation_context import (
+    archive_agent_memories,
+    extract_vote_from_response,
+    get_correct_candidate,
+)
 from ...config.trace import log_event
 
 MAX_DISCUSSION_ROUNDS = 5
@@ -62,21 +65,6 @@ def record_metrics(tool_context: ToolContext) -> dict:
     return {"status": "metrics_recorded", "loop": metrics.loop_count}
 
 
-# --- vote extraction ---
-def extract_vote(text: str) -> str | None:
-    """Extract a valid candidate vote from an agent's metadata JSON block."""
-    match = re.search(r"METADATA_JSON:\s*(\{.*?\})", text, re.DOTALL)
-    if not match:
-        return None
-
-    try:
-        data = json.loads(match.group(1))
-        vote = data.get("vote")
-        return vote if vote in {"Alice", "Bob", "Carol", "Eve", "Dave"} else None
-    except json.JSONDecodeError:
-        return None
-
-
 # --- consensus tool ---
 def check_consensus(tool_context: ToolContext) -> dict:
     """Count current agent votes and return whether the loop should continue."""
@@ -84,7 +72,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
 
     for i in range(1, 5):
         response = tool_context.state.get(f"agent_{i}_response", "")
-        vote = extract_vote(response)
+        vote = extract_vote_from_response(response)
         if vote:
             votes.append(vote)
 

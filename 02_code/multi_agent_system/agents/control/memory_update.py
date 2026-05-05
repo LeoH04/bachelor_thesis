@@ -13,8 +13,16 @@ from ...config.simulation_context import (
 def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
     """Create one passive updater for one agent's markdown memory."""
 
-    def instruction(ctx, target_agent_key=agent_key) -> str:
-        return build_memory_update_instruction(target_agent_key, ctx)
+    def instruction(
+        ctx,
+        target_agent_key=agent_key,
+        latest_speaker_key=after_agent_key,
+    ) -> str:
+        return build_memory_update_instruction(
+            target_agent_key,
+            ctx,
+            latest_speaker_key=latest_speaker_key,
+        )
 
     def after_model_callback(callback_context, llm_response, target_agent_key=agent_key):
         return record_memory_update_response(

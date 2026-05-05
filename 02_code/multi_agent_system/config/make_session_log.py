@@ -69,6 +69,7 @@ RUN_DIR = RAW_SIMULATIONS_DIR / SIM_CONDITION / RUN_ID
 LOG_DIR = RUN_DIR
 SESSION_LOG_FILE = RUN_DIR / "session.log"
 METADATA_FILE = RUN_DIR / "metadata.json"
+CHAT_LOG_FILE = RUN_DIR / "chat.md"
 SHARED_MENTAL_MODELS_DIR = RUN_DIR / "shared_mental_models"
 
 
@@ -84,6 +85,7 @@ def _base_metadata() -> dict:
         "paths": {
             "run_dir": str(RUN_DIR),
             "session_log": str(SESSION_LOG_FILE),
+            "chat": str(CHAT_LOG_FILE),
             "shared_mental_models": str(SHARED_MENTAL_MODELS_DIR),
         },
     }
@@ -113,4 +115,5 @@ def update_run_metadata(updates: dict) -> None:
 
 RUN_DIR.mkdir(parents=True, exist_ok=True)
 SESSION_LOG_FILE.write_text("", encoding="utf-8")
+CHAT_LOG_FILE.write_text("# Public Discussion\n\n", encoding="utf-8")
 _write_metadata(_base_metadata())
