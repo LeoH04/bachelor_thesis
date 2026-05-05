@@ -1,36 +1,24 @@
 # Shared Mental Model (Agent 3)
 
 ## Task Summary
-**Goal**  
+Goal  
 Choose the best candidate for a high‑stakes technical leadership role requiring reliability, technical excellence, and immediate impact.
 
-**Candidates**  
+Candidates  
 - Alice  
 - Bob  
 - Carol  
 - Dave  
 - Eve  
 
-### Public Information
-- Alice has 15 years of experience leading large engineering organizations.  
-- Bob is a strong communicator with extensive stakeholder relationships.  
-- Carol is widely respected for hands‑on technical depth.  
-- Dave is a fast‑rising internal candidate who knows the current systems well.  
-- Eve has held similar technical leadership roles at well‑known technology companies.  
-
-### Private Information
-- Bob received the highest full‑panel leadership score and successfully mediated a high‑risk conflict between engineering, legal, and a major customer.  
-- Eve received positive team‑health feedback from direct reports, but fewer cross‑functional stakeholders were available for reference checks.  
-- Carol received repeated feedback about being dismissive toward product and site‑reliability partners during code and design reviews.  
-
 ## Candidate Summary Table
 | Candidate | Evidence For | Evidence Against | Fit for Role | Notes |
-|---|---|---|---|---|
-| Alice | 15 yr leading large orgs | Missed milestones (Agent 4 claim) |  |  |
-| Bob | Highest panel leadership score; mediated high‑risk conflict | Conflict risk noted by Agent 4 |  |  |
-| Carol | Hands‑on technical depth; respected technically | Dismissive of product & SRE partners (private); lack of demonstrated leadership at scale (Agent 4 claim) |  |  |
-| Dave | Deep knowledge of current systems; fast‑rising internal | Limited budget/headcount experience (Agent 4 claim) |  |  |
-| Eve | Positive team‑health feedback; held similar leadership roles; **No conflicts**, can start in two weeks, proven experience running reliability‑critical program through outages and audits (Agent 4 claim) |  |  |  |
+| --- | --- | --- | --- | --- |
+| Alice | Rescued a troubled platform program, delivering it six weeks early. | Recent organization missed three critical milestones after scaling beyond 80 engineers (risk to reliability). |  |  |
+| Bob | Highest full‑panel leadership score; successfully mediated a high‑risk conflict between engineering, legal, and a major customer. |  |  |  |
+| Carol | Highest technical interview score; only candidate to uncover a severe data‑consistency flaw in the proposed architecture (demonstrates reliability‑critical insight). | Repeated feedback about being dismissive toward product and site‑reliability partners during code and design reviews. |  |  |
+| Dave | Fast‑rising internal candidate; deep knowledge of current systems. |  |  |  |
+| Eve | Can start within two weeks; no known conflicts; led a comparable reliability‑critical program through outages and compliance audits (technical excellence and immediate impact). |  |  |  |
 
 ## My Position
 **My Last Public Vote**  
@@ -53,34 +41,34 @@ Choose the best candidate for a high‑stakes technical leadership role requirin
 
 ## Other Agents' Public Positions
 | Agent | Latest Vote | Main Reason | Evidence Shared |
-|---|---|---|---|
-| agent_1 | Unknown |  |  |
-| agent_2 | Unknown |  |  |
+| --- | --- | --- | --- |
+| agent_1 | Carol | Highest technical interview score; uncovered a severe data‑consistency flaw, showing reliability‑critical insight. | “Carol’s highest technical interview score and, crucially, her being the only candidate to uncover a severe data‑consistency flaw in the proposed architecture.” |
+| agent_2 | Alice | Rescue of a troubled platform program delivered six weeks early. | “Alice’s rescue of a troubled platform program, delivering it six weeks early—clearly the best deadline‑performance record among the candidates.” |
+| agent_4 | Eve | Alice’s recent reliability lapses; Eve’s readiness and proven reliability‑critical program leadership. | “Alice … missed three critical milestones after scaling beyond 80 engineers … Eve can start within two weeks, has no known conflicts, and has already led a comparable reliability‑critical program through outages and compliance audits.” |
 | agent_3 | Unknown |  |  |
-| agent_4 | Eve | Immediate, reliable leadership; no conflicts; can start quickly; reliability‑critical program experience | No conflicts, 2‑week start, reliability‑critical program experience (Eve); conflict risk (Bob); missed milestones (Alice); limited budget/headcount experience (Dave); lack of leadership at scale (Carol) |
 
 ## Emerging Group View
 **Group‑Leading Candidate**  
-- None (only one vote recorded so far)  
+- None (no consensus)
 
 **Important Agreements**  
-- Agent 4 favors Eve for immediate reliability needs.  
+- None reported.
 
 **Important Disagreements / Tensions**  
-- None recorded beyond differing candidate risk assessments.  
+- agent_2 backs Alice (delivery record).  
+- agent_4 backs Eve (reliability risk of Alice, readiness of Eve).  
+- agent_1 backs Carol (technical interview score and flaw‑discovery, rejects Alice/Eve).  
 
-**Uncertainties**  
-- Extent of Bob’s “conflict” risk vs. his proven mediation.  
-- Verification of Alice’s missed milestones.  
-- Confirmation of Dave’s budget/headcount experience.  
-- Depth of Eve’s reliability‑critical program experience beyond Agent 4’s claim.  
+## Uncertainties
+- Comparative data on reliability, technical depth, and cross‑functional impact for Bob, Carol, and Dave remain missing.
 
 ## Open Questions
-- Are the “missed milestones” for Alice documented elsewhere?  
-- How severe is the “conflict” risk associated with Bob?  
-- Can we obtain cross‑functional references for Eve to validate reliability program claims?  
+**Missing evidence**  
+- Concrete reliability metrics and stakeholder feedback for Bob, Carol, and Dave.  
+
+**What would change the decision**  
+- Strong, verifiable evidence showing superior reliability or technical excellence for any candidate other than Alice or Eve.
 
 ## Next-Step Focus
-- Seek concrete evidence on Alice’s milestone record and Dave’s budget/headcount experience.  
-- Verify Eve’s reliability‑critical program outcomes and start‑date feasibility.  
-- Clarify the nature of the “conflict” risk cited for Bob.
+**What to ask or look for next**  
+- Gather quantitative reliability outcomes and cross‑functional references for Bob, Carol, and Dave to evaluate fit against the role’s core requirements.

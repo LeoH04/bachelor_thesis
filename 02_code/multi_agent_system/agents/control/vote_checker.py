@@ -18,11 +18,11 @@ from ...config.simulation_context import (
 )
 from ...config.trace import log_event
 
-MAX_DISCUSSION_ROUNDS = 5
+MAX_DISCUSSION_ROUNDS = 3
 
 
 def _record_final_decision(
-    candidate: str,
+    candidate: str | None,
     method: str,
     vote_count: dict[str, int],
 ) -> None:
@@ -78,9 +78,10 @@ def check_consensus(tool_context: ToolContext) -> dict:
 
     counts = Counter(votes)
 
+    vote_count = dict(counts)
+
     if counts:
         winner, count = counts.most_common(1)[0]
-        vote_count = dict(counts)
         if count >= 4:
             _record_final_decision(winner, "consensus", vote_count)
             tool_context.actions.escalate = True
@@ -90,7 +91,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
                 "vote_count": vote_count,
             }
 
-        if metrics.loop_count >= MAX_DISCUSSION_ROUNDS:
+        if metrics.loop_count >= MAX_DISCUSSION_ROUNDS and count >= 3:
             _record_final_decision(winner, "max_round_majority_vote", vote_count)
             tool_context.actions.escalate = True
             return {
@@ -99,9 +100,18 @@ def check_consensus(tool_context: ToolContext) -> dict:
                 "vote_count": vote_count,
             }
 
+    if metrics.loop_count >= MAX_DISCUSSION_ROUNDS:
+        _record_final_decision(None, "max_round_no_majority", vote_count)
+        tool_context.actions.escalate = True
+        return {
+            "status": "MAX_ROUNDS_REACHED_NO_MAJORITY",
+            "winner": None,
+            "vote_count": vote_count,
+        }
+
     return {
         "status": "CONTINUE_DISCUSSION",
-        "vote_count": dict(counts),
+        "vote_count": vote_count,
     }
 
 

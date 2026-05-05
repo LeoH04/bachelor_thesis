@@ -436,8 +436,6 @@ def build_public_discussion_history(ctx) -> str:
 
 def build_memory_template(agent_key: str) -> str:
     """Create the initial structured markdown memory for one agent."""
-    public_info = TASK.get("public_information", [])
-    private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
@@ -450,8 +448,8 @@ def build_memory_template(agent_key: str) -> str:
         "## Task Summary\n"
         f"Goal\n{goal}\n\n"
         f"Candidates\n{_as_bullets(candidates)}\n\n"
-        f"Public Information\n{_as_bullets(public_info)}\n\n"
-        f"Private Information\n{_as_bullets(private_info)}\n\n"
+        "Public and private evidence facts are injected separately from "
+        "hidden_profile_task.json and are not stored in this memory.\n\n"
         "## Candidate Summary Table\n"
         "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
         "| --- | --- | --- | --- | --- |\n"
@@ -564,6 +562,7 @@ def build_agent_instruction(
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
+    current_round = _round_number()
     other_agents = [key for key in AGENT_KEYS if key != agent_key]
     agent_specific_prompt = system_prompt.strip()
     agent_specific_section = (
@@ -577,6 +576,7 @@ def build_agent_instruction(
         "Common task context:\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
+        f"Current discussion round: {current_round}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
         "Grounding rule: Use only facts explicitly present in Common task context or "
         "Visible discussion history. Treat Previous internal memory as an "
@@ -596,11 +596,25 @@ def build_agent_instruction(
         "exchanges):\n"
         f"{discussion_history}\n\n"
         "Read the visible discussion history and your previous internal memory. "
-        "Your vote should reflect your own current assessment. If your private "
-        "evidence supports a different candidate than the current group-leading "
-        "candidate, state that disagreement clearly and vote for your own preferred "
-        "candidate. If 'My Last Public Vote' is None, treat earlier public votes as "
-        "proposals to evaluate, not as a consensus you need to join. "
+        "You are a cooperative decision-maker, not an advocate for your first "
+        "candidate. Your primary goal is to help the group reach the best shared "
+        "decision by integrating your private evidence with the evidence shared by "
+        "other agents. Update your position when another agent provides stronger "
+        "or complementary evidence. Treat the single METADATA_JSON vote as the "
+        "candidate you currently support for the group decision, not as your "
+        "isolated personal favorite. "
+        "Round guidance: In Round 1, share your strongest relevant private evidence "
+        "and explain how it affects the group choice. From Round 2 onward, "
+        "prioritize convergence: identify which candidate best satisfies the "
+        "combined criteria across all agents' evidence. If your earlier preferred "
+        "candidate is unlikely to gain consensus, compare that candidate against "
+        "the strongest emerging group candidate and decide whether your evidence "
+        "is strong enough to block consensus. In late or final-round discussion, "
+        "support the strongest group candidate unless unresolved evidence makes "
+        "that unsafe. Only block an emerging consensus when you have a decisive, "
+        "evidence-based objection. "
+        "If 'My Last Public Vote' is None, treat earlier public votes as proposals "
+        "to evaluate, not as a consensus you need to join. "
         "Output only the two sections below, with no planning notes, no hidden "
         "reasoning transcript, and no text before PUBLIC_MESSAGE. The public "
         "message and METADATA_JSON are the visible discussion contribution that "
@@ -609,9 +623,12 @@ def build_agent_instruction(
         "turn. Never end your scheduled turn without METADATA_JSON, even if you "
         "used a tool.\n\n"
         "PUBLIC_MESSAGE:\n"
-        "<one short contribution to the group deliberation: respond to prior points, "
-        "compare candidates, and state your current preferred candidate with concise justification>\n\n"
+        "<one short contribution that includes: the candidate you currently support "
+        "for the group decision; the strongest evidence from another agent that "
+        "challenged or changed your view; whether you can support an emerging "
+        "consensus; and any decisive objection that still blocks consensus>\n\n"
         "METADATA_JSON:\n"
+        "<the vote is the candidate you currently support as the group decision>\n"
         f"{{\"agent\": \"{agent_key}\", \"vote\": \"<Alice|Bob|Carol|Eve|Dave>\"}}\n"
     )
 
@@ -651,16 +668,18 @@ def build_memory_update_instruction(
         "Visible discussion history for context:\n"
         f"{discussion_history}\n\n"
         "Update your previous internal memory incrementally, as if revising an "
-        "existing understanding during a meeting. Preserve prior facts, preferences, "
-        "and uncertainties unless new information contradicts them. Add only salient "
-        "new information from any public discussion messages not yet reflected in "
-        "your memory, including public agent-tool exchanges, plus your private "
-        "knowledge where relevant. Track the evolving group deliberation, including "
+        "existing understanding during a meeting. Preserve prior deliberation "
+        "state, preferences, and uncertainties unless new public discussion "
+        "contradicts them. Add only salient new information from public discussion "
+        "messages not yet reflected in your memory, including public agent-tool "
+        "exchanges. Track the evolving group deliberation, including "
         "emerging consensus, disagreements, candidate tradeoffs, and key evidence. "
-        "Do not add inferred or invented facts to memory. Preserve only facts "
-        "explicitly stated in task context or public discussion. If a public "
-        "message contains unsupported extra detail, record it as an agent claim "
-        "only when useful, not as verified evidence. "
+        "You may preserve the goal and candidate list in memory, but do not restate, "
+        "summarize, modify, or preserve public or private evidence facts injected "
+        "from hidden_profile_task.json. "
+        "Do not add inferred or invented facts to memory. If a public message "
+        "contains unsupported extra detail, record it as an agent claim only when "
+        "useful, not as verified evidence. "
         "Preference ownership rules: 'My Position' belongs only to this agent. If "
         "the latest scheduled speaker is this same agent, update 'My Last Public "
         "Vote' from the latest speaker vote and update 'My Current Working Favorite' "
@@ -668,8 +687,8 @@ def build_memory_update_instruction(
         "speaker is another agent, do not change 'My Last Public Vote' or 'My Current "
         "Working Favorite' based on that agent's recommendation, and preserve this "
         "agent's confidence and decision readiness as self-position fields. Record "
-        "the speaker's vote under 'Other Agents' Public Positions', record any "
-        "factual evidence they shared in the candidate table, and record agreement "
+        "the speaker's vote under 'Other Agents' Public Positions', record public "
+        "evidence or claims they shared in the candidate table, and record agreement "
         "or disagreement under 'Emerging Group View'. Do not convert another agent's "
         "recommendation into this agent's own preference. "
         "Revise confidence and decision readiness only when justified. Do not copy "

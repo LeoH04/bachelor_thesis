@@ -39,6 +39,7 @@ class MetricsTracker:
         self.decision_correct = None
         self.start_time = time.time()
         self.end_time = None
+        self._final_decision_recorded = False
         self._finalized = False
 
     def add_tokens(self, input_tokens: int, output_tokens: int):
@@ -70,20 +71,23 @@ class MetricsTracker:
 
     def record_final_decision(
         self,
-        candidate: str,
+        candidate: str | None,
         method: str,
         vote_count: dict[str, int],
         correct_candidate: str | None = None,
     ) -> bool:
         """Record the final selected candidate once."""
-        if self.final_candidate is not None:
+        if self._final_decision_recorded:
             return False
 
+        self._final_decision_recorded = True
         self.final_candidate = candidate
         self.final_decision_method = method
         self.final_vote_count = vote_count
         self.correct_candidate = correct_candidate
-        if correct_candidate:
+        if candidate is None:
+            self.decision_correct = 0
+        elif correct_candidate:
             self.decision_correct = 1 if candidate == correct_candidate else 0
         logger.info(f"Final Chosen Candidate: {candidate}")
         logger.info(f"Final Decision Method: {method}")
@@ -125,7 +129,8 @@ class MetricsTracker:
         logger.info(f"Input Tokens: {self.total_input_tokens}")
         logger.info(f"Output Tokens: {self.total_output_tokens}")
         logger.info(f"Total Tokens: {self.total_input_tokens + self.total_output_tokens}")
-        logger.info(f"Final Chosen Candidate: {self.final_candidate or '(not recorded)'}")
+        final_candidate = self.final_candidate if self._final_decision_recorded else "(not recorded)"
+        logger.info(f"Final Chosen Candidate: {final_candidate}")
         if self.final_decision_method:
             logger.info(f"Final Decision Method: {self.final_decision_method}")
             logger.info(f"Final Vote Count: {self.final_vote_count}")
