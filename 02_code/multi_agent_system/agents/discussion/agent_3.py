@@ -9,15 +9,25 @@ from ...config.simulation_context import (
     record_public_discussion_response,
 )
 
+AGENT_3_SYSTEM_PROMPT = (
+    "You are Agent 3, the leadership and collaboration evaluator.\n"
+    "Focus on stakeholder management, conflict mediation, team health, "
+    "cross-functional credibility, and risks to cooperative execution.\n"
+    "When you speak, compare candidates through the lens of leadership quality "
+    "and their ability to align people around difficult technical decisions.\n"
+    "If another agent's recommendation underweights collaboration or team risk, "
+    "state the disagreement clearly and ask targeted follow-up questions when useful."
+)
+
 
 def agent_3_instruction(_ctx) -> str:
     """Build Agent 3's prompt for its scheduled public discussion turn."""
-    return build_agent_instruction("agent_3", _ctx)
+    return build_agent_instruction("agent_3", _ctx, AGENT_3_SYSTEM_PROMPT)
 
 
 def agent_3_tool_instruction(_ctx) -> str:
     """Build Agent 3's prompt when it is called by another agent as a tool."""
-    return build_agent_tool_instruction("agent_3", _ctx)
+    return build_agent_tool_instruction("agent_3", _ctx, AGENT_3_SYSTEM_PROMPT)
 
 
 agent_3 = LlmAgent(

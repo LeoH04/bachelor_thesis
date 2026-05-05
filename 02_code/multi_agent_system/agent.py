@@ -1,8 +1,12 @@
-from google.adk.agents import LoopAgent, SequentialAgent
+import atexit
+import random
+from collections.abc import AsyncGenerator
 
-from .config.metrics import metrics
-from .config.simulation_context import archive_agent_memories
-from .config.trace import log_event
+from google.adk.agents import BaseAgent, LoopAgent, SequentialAgent
+from google.adk.agents.invocation_context import InvocationContext
+from google.adk.events import Event
+from google.adk.utils.context_utils import Aclosing
+
 from .agents.control.memory_reset import memory_reset_agent
 from .agents.control.memory_update import (
     memory_update_after_agent_1,
@@ -15,9 +19,10 @@ from .agents.discussion.agent_1 import agent_1, agent_1_tool
 from .agents.discussion.agent_2 import agent_2, agent_2_tool
 from .agents.discussion.agent_3 import agent_3, agent_3_tool
 from .agents.discussion.agent_4 import agent_4, agent_4_tool
+from .config.metrics import metrics
+from .config.simulation_context import archive_agent_memories
+from .config.trace import log_event
 from .tools.logging_agent_tool import LoggingAgentTool
-
-import atexit
 
 
 def _wire_agent_tools() -> None:
@@ -45,7 +50,41 @@ def _wire_agent_tools() -> None:
 
 _wire_agent_tools()
 
-discussion_round = SequentialAgent(
+
+class RandomizedDiscussionRoundAgent(BaseAgent):
+    """Run one discussion round with a freshly shuffled speaker order."""
+
+    async def _run_async_impl(
+        self,
+        ctx: InvocationContext,
+    ) -> AsyncGenerator[Event, None]:
+        speaker_update_pairs = [
+            (agent_1, memory_update_after_agent_1),
+            (agent_2, memory_update_after_agent_2),
+            (agent_3, memory_update_after_agent_3),
+            (agent_4, memory_update_after_agent_4),
+        ]
+        random.shuffle(speaker_update_pairs)
+        log_event(
+            "discussion_order",
+            round=metrics.loop_count + 1,
+            order=[speaker.name for speaker, _ in speaker_update_pairs],
+        )
+
+        for speaker, memory_update in speaker_update_pairs:
+            for sub_agent in (speaker, memory_update):
+                async with Aclosing(sub_agent.run_async(ctx)) as agen:
+                    async for event in agen:
+                        yield event
+                        if event.actions.escalate or ctx.should_pause_invocation(event):
+                            return
+
+        async with Aclosing(vote_checker.run_async(ctx)) as agen:
+            async for event in agen:
+                yield event
+
+
+discussion_round = RandomizedDiscussionRoundAgent(
     name="discussion_round",
     sub_agents=[
         agent_1,

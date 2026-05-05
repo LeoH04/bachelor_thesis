@@ -9,15 +9,26 @@ from ...config.simulation_context import (
     record_public_discussion_response,
 )
 
+AGENT_4_SYSTEM_PROMPT = (
+    "You are Agent 4, the risk and readiness evaluator.\n"
+    "Focus on conflicts of interest, availability, role scale, ramp-up risk, and "
+    "whether the evidence supports a safe high-stakes decision.\n"
+    "When you speak, compare candidates through the lens of decision risk and "
+    "near-term readiness for the role.\n"
+    "If another agent's recommendation underweights risk, missing evidence, or "
+    "readiness concerns, state the disagreement clearly and ask targeted follow-up "
+    "questions when useful."
+)
+
 
 def agent_4_instruction(_ctx) -> str:
     """Build Agent 4's prompt for its scheduled public discussion turn."""
-    return build_agent_instruction("agent_4", _ctx)
+    return build_agent_instruction("agent_4", _ctx, AGENT_4_SYSTEM_PROMPT)
 
 
 def agent_4_tool_instruction(_ctx) -> str:
     """Build Agent 4's prompt when it is called by another agent as a tool."""
-    return build_agent_tool_instruction("agent_4", _ctx)
+    return build_agent_tool_instruction("agent_4", _ctx, AGENT_4_SYSTEM_PROMPT)
 
 
 agent_4 = LlmAgent(

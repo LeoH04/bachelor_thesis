@@ -552,7 +552,11 @@ def reset_all_agent_memories() -> None:
         write_agent_memory(agent_key, template)
 
 
-def build_agent_instruction(agent_key: str, ctx=None) -> str:
+def build_agent_instruction(
+    agent_key: str,
+    ctx=None,
+    system_prompt: str = "",
+) -> str:
     """Build the full prompt for an agent's scheduled public discussion turn."""
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
@@ -561,22 +565,20 @@ def build_agent_instruction(agent_key: str, ctx=None) -> str:
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
     other_agents = [key for key in AGENT_KEYS if key != agent_key]
+    agent_specific_prompt = system_prompt.strip()
+    agent_specific_section = (
+        f"Agent-specific instructions:\n{agent_specific_prompt}\n\n"
+        if agent_specific_prompt
+        else ""
+    )
 
     return (
-        f"You are {agent_key.replace('_', ' ').title()}.\n\n"
-        "You are participating in a collaborative group deliberation. "
-        "All agents should work together to identify the best candidate, not just "
-        "state isolated individual preferences. Early disagreement is useful: do "
-        "not adopt another agent's recommendation merely because it appeared first "
-        "or was stated confidently. Engage with prior public messages, compare "
-        "candidate tradeoffs, share relevant evidence, ask other agents useful "
-        "questions when needed, and help the group surface the strongest evidence "
-        "before moving toward consensus.\n\n"
-        "Task context (use in your reasoning):\n"
+        f"{agent_specific_section}"
+        "Common task context:\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
-        "Grounding rule: Use only facts explicitly present in Task context or "
+        "Grounding rule: Use only facts explicitly present in Common task context or "
         "Visible discussion history. Treat Previous internal memory as an "
         "organizer of those facts, not as permission to add new facts. Do not "
         "invent names, dates, numbers, scores, budgets, project details, "
@@ -682,7 +684,11 @@ def build_memory_update_instruction(
     )
 
 
-def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
+def build_agent_tool_instruction(
+    agent_key: str,
+    ctx=None,
+    system_prompt: str = "",
+) -> str:
     """Build the prompt for an agent answering another agent through a tool call."""
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
@@ -690,17 +696,24 @@ def build_agent_tool_instruction(agent_key: str, ctx=None) -> str:
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
+    agent_specific_prompt = system_prompt.strip()
+    agent_specific_section = (
+        f"Agent-specific instructions:\n{agent_specific_prompt}\n\n"
+        if agent_specific_prompt
+        else ""
+    )
 
     return (
-        f"You are {agent_key.replace('_', ' ').title()} responding to another agent's question.\n\n"
-        "Answer as a cooperative member of the deliberating group. Provide information "
-        "that helps the group compare candidates and move toward the best collective choice.\n\n"
-        "Task context (use in your answer):\n"
+        f"{agent_specific_section}"
+        "You are responding to another agent's question as a cooperative member "
+        "of the deliberating group. Provide information that helps the group "
+        "compare candidates and move toward the best collective choice.\n\n"
+        "Common task context:\n"
         f"Goal: {goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
         f"Information:\n{_as_bullets(public_info + private_info)}\n"
         "Grounding rule: Only provide information explicitly available to this "
-        "agent in Task context, Previous internal memory, or Visible discussion "
+        "agent in Common task context, Previous internal memory, or Visible discussion "
         "history. Do not invent names, dates, numbers, scores, budgets, project "
         "details, commitments, references, or incidents. If the question asks for "
         "details not present in your context, answer that the information is "

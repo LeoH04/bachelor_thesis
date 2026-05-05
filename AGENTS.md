@@ -191,6 +191,22 @@ Support:
 - Conditional logic
 - State management
 
+### 11.1 Local ADK Environment
+For shell commands that need Google ADK, activate the Conda environment like this:
+
+```bash
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate adk
+```
+
+Example:
+
+```bash
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate adk
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+```
+
 ## 12. Design Rationale
 Prioritizes:
 - Control

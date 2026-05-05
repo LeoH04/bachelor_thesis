@@ -33,4 +33,5 @@ DISCUSSION_MODEL = LiteLlm(
     api_base=os.getenv("NIM_BASE_URL"),
     llm_client=TokenTrackingLiteLLMClient(),
     stream_options={"include_usage": True},
+    temperature=float(os.getenv("MODEL_TEMPERATURE"))
 )
