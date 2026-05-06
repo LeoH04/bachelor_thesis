@@ -12,5 +12,21 @@ adk run multi_agent_system --replay multi_agent_system/config/replay.json
 ps aux | grep -i adk
 kill -9 53993
 
+# Build a requirements.txt and an environment.yml
 conda env export --no-builds | sed '/^prefix:/d' > environment.yml
 python -m pip freeze > requirements.txt
+
+# Build the venv on the server
+sudo apt update
+sudo apt install -y python3.12-venv
+rm -rf adk
+python3 -m venv adk
+source adk/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# Find the running processes on the server
+ssh HohServer 'pgrep -af run_all_conditions.sh'
+
+# Kill the running processes on the server
+ssh HohServer 'pkill -f run_all_conditions.sh'
