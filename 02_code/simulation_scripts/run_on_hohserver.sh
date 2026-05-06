@@ -17,6 +17,8 @@ REMOTE_REPO="$1"
 BATCH_ID="$2"
 
 cd "$REMOTE_REPO"
+git reset --hard HEAD
+git clean -fd 01_data/raw/simulations
 git pull --ff-only
 source adk/bin/activate
 
