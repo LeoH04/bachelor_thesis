@@ -1,3 +1,16 @@
+# Run Agent Simulation with different experimental conditions
+SIM_CONDITION=high \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=moderate \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=low \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+# Kill Agent  Simulation
 ps aux | grep -i adk
 kill -9 53993
+
+conda env export --no-builds | sed '/^prefix:/d' > environment.yml
+python -m pip freeze > requirements.txt

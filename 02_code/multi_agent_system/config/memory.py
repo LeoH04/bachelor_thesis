@@ -61,7 +61,6 @@ def build_memory_template(agent_key: str) -> str:
         "My Rationale\n-\n\n"
         "Evidence That Could Change My Mind\n-\n\n"
         "Confidence (percent)\n-\n\n"
-        "Decision Readiness\n-\n\n"
         "## Other Agents' Positions\n"
         "| Agent | Latest Vote | Main Reason | Evidence Shared |\n"
         "| --- | --- | --- | --- |\n"

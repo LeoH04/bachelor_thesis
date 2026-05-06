@@ -16,6 +16,7 @@ from ...config.response_text import extract_vote_from_response
 from ...config.task import AGENT_KEYS, get_correct_candidate
 from ...config.trace import log_event
 
+MIN_CONSENSUS_ROUNDS = 2
 MAX_DISCUSSION_ROUNDS = 5
 
 
@@ -82,7 +83,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
 
     if counts:
         winner, count = counts.most_common(1)[0]
-        if count >= agent_count:
+        if count >= agent_count and metrics.loop_count >= MIN_CONSENSUS_ROUNDS:
             _record_final_decision(winner, "consensus", vote_count)
             tool_context.actions.escalate = True
             return {
