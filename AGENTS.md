@@ -21,7 +21,7 @@ The system models a structured multi-agent workflow with:
 - The optimal solution emerges only through information sharing
 
 ## 4. Agents
-- Total agents: 4
+- Total agents: 3
 
 Each agent:
 - Has private knowledge
@@ -49,9 +49,7 @@ Each round follows a fixed sequence:
 4. All agent memories are updated in parallel
 5. Agent 3 speaks
 6. All agent memories are updated in parallel
-7. Agent 4 speaks
-8. All agent memories are updated in parallel
-9. Vote checker evaluates the round
+7. Vote checker evaluates the round
 
 During each speaking turn, an agent:
 - Reads:
@@ -69,7 +67,7 @@ During each tool exchange:
 - No memory is updated inside the tool response itself
 
 During each memory-update phase:
-- Four passive memory-update agents run in parallel
+- Three passive memory-update agents run in parallel
 - Each one updates exactly one agent memory
 - Updates use the full public discussion history, including public tool exchanges
 - Memory updates are internal and are not added as public discussion messages
@@ -115,7 +113,7 @@ Includes all of the above plus:
 After each round, perform a decision check.
 
 Termination Criteria:
-- All 4 agents agree on the same candidate
+- All 3 agents agree on the same candidate
 
 ### 7.4 Maximum Round Constraint
 - A maximum number of rounds is predefined
@@ -130,7 +128,7 @@ Each agent maintains an internal memory representing:
 
 Memory is updated:
 - After each scheduled speaker turn
-- In parallel for all 4 agents
+- In parallel for all 3 agents
 - Based on the public discussion history, including tool exchanges
 - Through passive memory-update agents, not during normal speaking turns
 

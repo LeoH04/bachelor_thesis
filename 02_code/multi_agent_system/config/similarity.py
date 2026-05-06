@@ -8,6 +8,7 @@ from itertools import combinations
 from pathlib import Path
 from typing import Mapping
 
+from .env import read_env_file_value
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
@@ -26,25 +27,6 @@ def _cosine(left: list[float], right: list[float]) -> float:
     return dot / (left_norm * right_norm)
 
 
-def _read_env_file_value(path: Path, key: str) -> str | None:
-    """Read one key from a simple .env file without mutating process env."""
-    if not path.exists():
-        return None
-
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if line.startswith("export "):
-            line = line[len("export "):].strip()
-
-        name, separator, value = line.partition("=")
-        if separator and name.strip() == key:
-            return value.strip().strip("\"'")
-
-    return None
-
-
 def _config_value(key: str) -> str | None:
     """Return exactly one configured value from env or the project .env files."""
     value = os.getenv(key)
@@ -52,7 +34,7 @@ def _config_value(key: str) -> str | None:
         return value
 
     for env_file in ENV_FILES:
-        value = _read_env_file_value(env_file, key)
+        value = read_env_file_value(env_file, key)
         if value:
             return value
 

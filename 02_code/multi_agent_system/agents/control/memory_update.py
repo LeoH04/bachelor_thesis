@@ -2,12 +2,10 @@
 
 from google.adk.agents import LlmAgent, ParallelAgent
 
+from ...config.memory import record_memory_update_response
 from ...config.model import DISCUSSION_MODEL
-from ...config.simulation_context import (
-    AGENT_KEYS,
-    build_memory_update_instruction,
-    record_memory_update_response,
-)
+from ...config.prompts import build_memory_update_instruction
+from ...config.task import AGENT_KEYS
 
 
 def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
@@ -50,8 +48,7 @@ def make_memory_update_stage(after_agent_key: str) -> ParallelAgent:
         ],
     )
 
-
-memory_update_after_agent_1 = make_memory_update_stage("agent_1")
-memory_update_after_agent_2 = make_memory_update_stage("agent_2")
-memory_update_after_agent_3 = make_memory_update_stage("agent_3")
-memory_update_after_agent_4 = make_memory_update_stage("agent_4")
+MEMORY_UPDATE_STAGES = {
+    agent_key: make_memory_update_stage(agent_key)
+    for agent_key in AGENT_KEYS
+}

@@ -2,23 +2,11 @@
 
 from google.adk.agents import LlmAgent
 
+from ...config.history import record_public_discussion_response
 from ...config.model import DISCUSSION_MODEL
-from ...config.simulation_context import (
-    build_agent_instruction,
-    build_agent_tool_instruction,
-    record_public_discussion_response,
-)
+from ...config.prompts import build_agent_instruction, build_agent_tool_instruction
 
-AGENT_1_SYSTEM_PROMPT = (
-    "You are Agent 1, a cooperative decision-maker with special responsibility "
-    "for technical reliability evidence.\n"
-    "Focus on architecture risks, technical interview evidence, scaling tradeoffs, "
-    "and each candidate's ability to detect reliability-critical flaws.\n"
-    "When you speak, use technical excellence and operational reliability to help "
-    "the group identify the best shared candidate.\n"
-    "If another recommendation underweights technical risk, surface the unresolved "
-    "concern and explain whether it should block consensus or can be managed."
-)
+AGENT_1_SYSTEM_PROMPT = ()
 
 
 def agent_1_instruction(_ctx) -> str:

@@ -2,24 +2,11 @@
 
 from google.adk.agents import LlmAgent
 
+from ...config.history import record_public_discussion_response
 from ...config.model import DISCUSSION_MODEL
-from ...config.simulation_context import (
-    build_agent_instruction,
-    build_agent_tool_instruction,
-    record_public_discussion_response,
-)
+from ...config.prompts import build_agent_instruction, build_agent_tool_instruction
 
-AGENT_3_SYSTEM_PROMPT = (
-    "You are Agent 3, a cooperative decision-maker with special responsibility "
-    "for leadership and collaboration evidence.\n"
-    "Focus on stakeholder management, conflict mediation, team health, "
-    "cross-functional credibility, and risks to cooperative execution.\n"
-    "When you speak, use leadership quality and collaboration evidence to help "
-    "the group identify the best shared candidate.\n"
-    "If another recommendation underweights collaboration or team risk, surface "
-    "the unresolved concern and explain whether it should block consensus or can "
-    "be managed."
-)
+AGENT_3_SYSTEM_PROMPT = ()
 
 
 def agent_3_instruction(_ctx) -> str:

@@ -1,0 +1,81 @@
+{
+  "agent_tool_calls": 0,
+  "agent_tool_messages": 0,
+  "agent_turns": 3,
+  "completed_at": "2026-05-05T17:01:00+0200",
+  "condition": "low",
+  "context_consistency": {
+    "agent_count": 3,
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "max_pairwise_similarity": 0.935964,
+    "mean_pairwise_similarity": 0.929429,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.922836,
+    "pairwise": [
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_2",
+        "similarity": 0.935964
+      },
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_3",
+        "similarity": 0.922836
+      },
+      {
+        "agent_a": "agent_2",
+        "agent_b": "agent_3",
+        "similarity": 0.929487
+      }
+    ]
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "consensus",
+  "final_candidate": "Candidate B",
+  "input_tokens": 23854,
+  "mean_pairwise_memory_similarity": 0.929429,
+  "memory_updates": 9,
+  "output_tokens": 12696,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_2",
+      "similarity": 0.935964
+    },
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_3",
+      "similarity": 0.922836
+    },
+    {
+      "agent_a": "agent_2",
+      "agent_b": "agent_3",
+      "similarity": 0.929487
+    }
+  ],
+  "paths": {
+    "chat": "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/chat.md",
+    "run_dir": "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008",
+    "session_log": "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/session.log",
+    "shared_mental_models": "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/shared_mental_models"
+  },
+  "rounds": 1,
+  "run_id": "low_20260505_163223_008",
+  "run_tag": "batch",
+  "runtime_seconds": 409.4246,
+  "schema_version": 1,
+  "shared_mental_model_files": [
+    "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/shared_mental_models/agent_1.md",
+    "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/shared_mental_models/agent_2.md",
+    "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_20260505_163223_008/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "status": "completed",
+  "timestamp": "20260505_165410",
+  "total_messages": 3,
+  "total_tokens": 36550,
+  "vote_count": {
+    "Candidate B": 3
+  }
+}

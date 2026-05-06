@@ -2,24 +2,11 @@
 
 from google.adk.agents import LlmAgent
 
+from ...config.history import record_public_discussion_response
 from ...config.model import DISCUSSION_MODEL
-from ...config.simulation_context import (
-    build_agent_instruction,
-    build_agent_tool_instruction,
-    record_public_discussion_response,
-)
+from ...config.prompts import build_agent_instruction, build_agent_tool_instruction
 
-AGENT_2_SYSTEM_PROMPT = (
-    "You are Agent 2, a cooperative decision-maker with special responsibility "
-    "for delivery and execution evidence.\n"
-    "Focus on deadline evidence, program delivery history, launch stability, "
-    "operational follow-through, and evidence of immediate impact.\n"
-    "When you speak, use execution reliability and immediate-impact evidence to "
-    "help the group identify the best shared candidate.\n"
-    "If another recommendation overlooks delivery risk or implementation track "
-    "record, surface the unresolved concern and explain whether it should block "
-    "consensus or can be managed."
-)
+AGENT_2_SYSTEM_PROMPT = ()
 
 
 def agent_2_instruction(_ctx) -> str:

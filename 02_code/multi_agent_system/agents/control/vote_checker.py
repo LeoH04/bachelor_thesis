@@ -10,15 +10,13 @@ from google.adk.events import Event, EventActions
 from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
+from ...config.memory import archive_agent_memories
 from ...config.metrics import metrics
-from ...config.simulation_context import (
-    archive_agent_memories,
-    extract_vote_from_response,
-    get_correct_candidate,
-)
+from ...config.response_text import extract_vote_from_response
+from ...config.task import AGENT_KEYS, get_correct_candidate
 from ...config.trace import log_event
 
-MAX_DISCUSSION_ROUNDS = 3
+MAX_DISCUSSION_ROUNDS = 5
 
 
 def _record_final_decision(
@@ -70,8 +68,8 @@ def check_consensus(tool_context: ToolContext) -> dict:
     """Count current agent votes and return whether the loop should continue."""
     votes = []
 
-    for i in range(1, 5):
-        response = tool_context.state.get(f"agent_{i}_response", "")
+    for agent_key in AGENT_KEYS:
+        response = tool_context.state.get(f"{agent_key}_response", "")
         vote = extract_vote_from_response(response)
         if vote:
             votes.append(vote)
@@ -79,10 +77,12 @@ def check_consensus(tool_context: ToolContext) -> dict:
     counts = Counter(votes)
 
     vote_count = dict(counts)
+    agent_count = len(AGENT_KEYS)
+    majority_threshold = agent_count // 2 + 1
 
     if counts:
         winner, count = counts.most_common(1)[0]
-        if count >= 4:
+        if count >= agent_count:
             _record_final_decision(winner, "consensus", vote_count)
             tool_context.actions.escalate = True
             return {
@@ -91,7 +91,10 @@ def check_consensus(tool_context: ToolContext) -> dict:
                 "vote_count": vote_count,
             }
 
-        if metrics.loop_count >= MAX_DISCUSSION_ROUNDS and count >= 3:
+        if (
+            metrics.loop_count >= MAX_DISCUSSION_ROUNDS
+            and count >= majority_threshold
+        ):
             _record_final_decision(winner, "max_round_majority_vote", vote_count)
             tool_context.actions.escalate = True
             return {

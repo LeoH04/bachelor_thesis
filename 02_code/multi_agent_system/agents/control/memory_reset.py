@@ -9,10 +9,8 @@ from google.adk.events import Event, EventActions
 from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
-from ...config.simulation_context import (
-    reset_all_agent_memories,
-    reset_public_discussion_history,
-)
+from ...config.history import reset_public_discussion_history
+from ...config.memory import reset_all_agent_memories
 from ...config.trace import log_event
 
 

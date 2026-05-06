@@ -7,8 +7,8 @@ from typing import Any
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.tool_context import ToolContext
 
+from ..config.history import record_public_tool_exchange
 from ..config.metrics import metrics
-from ..config.simulation_context import record_public_tool_exchange
 from ..config.trace import _truncate_text, log_event
 
 
