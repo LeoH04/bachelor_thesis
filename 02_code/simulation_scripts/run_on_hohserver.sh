@@ -34,7 +34,7 @@ set -euo pipefail
 
 REMOTE_REPO="$1"
 BATCH_ID="$2"
-SMM_MODE="$3"
+SMM_MODE="${3:-}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
 
 cd "$REMOTE_REPO"
