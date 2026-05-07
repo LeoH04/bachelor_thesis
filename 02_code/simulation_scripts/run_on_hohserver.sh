@@ -55,7 +55,9 @@ fi
 git pull --ff-only
 source adk/bin/activate
 
-mkdir -p logs
+BATCH_LOG_DIR="01_data/raw/simulations"
+BATCH_LOG_FILE="$BATCH_LOG_DIR/simulation_${BATCH_ID}.log"
+mkdir -p "$BATCH_LOG_DIR"
 
 RUN_CMD="SIM_BATCH_ID=$BATCH_ID"
 if [[ -n "$SMM_MODE" ]]; then
@@ -64,17 +66,17 @@ fi
 RUN_CMD="$RUN_CMD ./02_code/simulation_scripts/run_all_conditions.sh"
 
 nohup bash -lc "$RUN_CMD" \
-  > "logs/simulation_${BATCH_ID}.log" 2>&1 < /dev/null &
+  > "$BATCH_LOG_FILE" 2>&1 < /dev/null &
 
 echo "Started detached remote simulation batch: $BATCH_ID ($SMM_LABEL)"
-echo "Log file: $REMOTE_REPO/logs/simulation_${BATCH_ID}.log"
+echo "Log file: $REMOTE_REPO/$BATCH_LOG_FILE"
 REMOTE
 
 echo "Remote simulation started: $BATCH_ID ($SMM_LABEL)"
 echo "Your Mac can now sleep."
 echo
 echo "Check progress with:"
-echo "ssh $SERVER 'tail -f $REMOTE_REPO/logs/simulation_${BATCH_ID}.log'"
+echo "ssh $SERVER 'tail -f $REMOTE_REPO/01_data/raw/simulations/simulation_${BATCH_ID}.log'"
 echo
 echo "Fetch results later with:"
 echo "rsync -avh --progress $SERVER:$REMOTE_REPO/01_data/raw/simulations/ \"$LOCAL_REPO/01_data/raw/simulations/\""
