@@ -55,6 +55,7 @@ def slug(value: object) -> str:
 
 
 def read_metadata(path: Path) -> dict:
+    """Read and parse one metadata.json file."""
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
@@ -62,6 +63,7 @@ def read_metadata(path: Path) -> dict:
 
 
 def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[str]]:
+    """Convert nested run metadata into one flat CSV row."""
     context = metadata.get("context_consistency") or {}
     row = {
         "run_id": metadata.get("run_id"),
@@ -114,6 +116,7 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
 
 
 def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], list[str]]:
+    """Collect metadata rows and derive the final CSV column order."""
     rows = []
     vote_columns = set()
     similarity_columns = set()
@@ -144,7 +147,26 @@ def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], 
     return rows, columns
 
 
+def infer_output_id(rows: list[dict]) -> str | None:
+    """Infer the run or batch id to include in the default output filename."""
+    run_ids = {str(row.get("run_id") or "") for row in rows if row.get("run_id")}
+    if len(run_ids) == 1:
+        return next(iter(run_ids))
+
+    batch_ids = set()
+    for run_id in run_ids:
+        match = re.fullmatch(r"(?:low|moderate|high)_(.+)_\d+", run_id)
+        if not match:
+            return None
+        batch_ids.add(match.group(1))
+
+    if len(batch_ids) == 1:
+        return next(iter(batch_ids))
+    return None
+
+
 def write_csv(output: Path, rows: list[dict], columns: list[str]) -> None:
+    """Write rows to a CSV file, creating the output directory if needed."""
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", encoding="utf-8", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=columns)
@@ -153,11 +175,12 @@ def write_csv(output: Path, rows: list[dict], columns: list[str]) -> None:
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments for the metadata table builder."""
     parser = argparse.ArgumentParser(
         description="Build a flat CSV table from simulation metadata.json files."
     )
     parser.add_argument("--input-root", type=Path, default=DEFAULT_INPUT_ROOT)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--output", type=Path)
     parser.add_argument(
         "--include-incomplete",
         action="store_true",
@@ -167,10 +190,20 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    """Build the metadata CSV and return a process exit code."""
     args = parse_args()
     rows, columns = build_rows(args.input_root, args.include_incomplete)
-    write_csv(args.output, rows, columns)
-    print(f"Wrote {len(rows)} rows and {len(columns)} columns to {args.output}")
+    output = args.output
+    if output is None:
+        output_id = infer_output_id(rows)
+        output = (
+            DEFAULT_OUTPUT.with_name(f"simulation_metrics_{output_id}.csv")
+            if output_id
+            else DEFAULT_OUTPUT
+        )
+
+    write_csv(output, rows, columns)
+    print(f"Wrote {len(rows)} rows and {len(columns)} columns to {output}")
     return 0
 
 
