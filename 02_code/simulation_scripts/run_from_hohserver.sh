@@ -14,7 +14,7 @@ REMOTE_REPO="${SIM_REMOTE_REPO:-$HOME/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 SMM_MODE="${SIM_SMM_MODE:-}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
-RESUME="${SIM_RESUME:-0}"
+RESUME="${SIM_RESUME:-1}"
 
 if [[ -n "$SMM_MODE" ]]; then
   case "$SMM_MODE" in

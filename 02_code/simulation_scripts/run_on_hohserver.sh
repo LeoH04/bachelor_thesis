@@ -15,7 +15,7 @@ REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 SMM_MODE="${SIM_SMM_MODE:-}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
-RESUME="${SIM_RESUME:-0}"
+RESUME="${SIM_RESUME:-1}"
 
 if [[ -n "$SMM_MODE" ]]; then
   case "$SMM_MODE" in
@@ -36,7 +36,7 @@ set -euo pipefail
 REMOTE_REPO="$1"
 BATCH_ID="$2"
 SMM_MODE="${3:-}"
-RESUME="${4:-0}"
+RESUME="${4:-1}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
 
 cd "$REMOTE_REPO"
