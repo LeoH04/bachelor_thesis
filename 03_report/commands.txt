@@ -33,3 +33,8 @@ ssh HohServer 'pkill -f run_all_conditions.sh'
 
 # Copy server data to laptop
 rsync -avh --progress HohServer:~/git/bachelor_thesis/01_data/raw/simulations/ "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/"
+
+# Fore pull from GitHub
+git fetch origin
+git reset --hard origin/main
+git clean -fd
