@@ -4,6 +4,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+if [[ -f "$SCRIPT_DIR/.env" ]]; then
+  set -a
+  source "$SCRIPT_DIR/.env"
+  set +a
+fi
+
 SERVER="${SIM_SERVER:-HohServer}"
 REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
