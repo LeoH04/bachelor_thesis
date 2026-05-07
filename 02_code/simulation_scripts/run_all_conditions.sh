@@ -22,6 +22,8 @@ if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then
 fi
 
 COUNT="${SIM_COUNT:-10}"
+MAX_ATTEMPTS="${SIM_MAX_ATTEMPTS:-3}"
+SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-1}"
 RUN_TAG="${SIM_RUN_TAG:-transparency_experiment}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 if [[ -n "${SIM_SMM_MODE:-}" ]]; then
@@ -49,15 +51,39 @@ for smm_mode in "${SMM_MODES[@]}"; do
 
     for i in $(seq -f "%03g" 1 "$COUNT"); do
       run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
-      echo "Starting simulation $i/$COUNT: $run_id"
+      metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
+      attempt=1
 
-      SIM_CONDITION="$condition" \
-        SIM_SMM_MODE="$smm_mode" \
-        SIM_RUN_ID="$run_id" \
-        SIM_RUN_TAG="$RUN_TAG" \
-        adk run multi_agent_system --replay multi_agent_system/config/replay.json
+      if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
+        && grep -q '"status": "completed"' "$metadata_file"; then
+        echo "Skipping completed simulation $i/$COUNT: $run_id"
+        continue
+      fi
 
-      echo "Finished simulation $i/$COUNT: $run_id"
+      while true; do
+        echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
+
+        if SIM_CONDITION="$condition" \
+          SIM_SMM_MODE="$smm_mode" \
+          SIM_RUN_ID="$run_id" \
+          SIM_RUN_TAG="$RUN_TAG" \
+          adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
+          echo "Finished simulation $i/$COUNT: $run_id"
+          break
+        else
+          status=$?
+        fi
+
+        if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
+          echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
+          exit "$status"
+        fi
+
+        sleep_seconds=$((attempt * 30))
+        echo "Simulation failed: $run_id. Retrying in ${sleep_seconds}s..." >&2
+        sleep "$sleep_seconds"
+        attempt=$((attempt + 1))
+      done
     done
 
     echo "Finished condition: $condition ($smm_mode)"

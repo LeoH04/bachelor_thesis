@@ -14,6 +14,7 @@ REMOTE_REPO="${SIM_REMOTE_REPO:-$HOME/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 SMM_MODE="${SIM_SMM_MODE:-}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
+RESUME="${SIM_RESUME:-0}"
 
 if [[ -n "$SMM_MODE" ]]; then
   case "$SMM_MODE" in
@@ -30,7 +31,11 @@ echo "Starting local simulation batch on this server: $BATCH_ID ($SMM_LABEL)"
 
 cd "$REMOTE_REPO"
 git reset --hard HEAD
-git clean -fd 01_data/raw/simulations
+if [[ "$RESUME" == "1" ]]; then
+  echo "Resume mode enabled: keeping existing simulation outputs"
+else
+  git clean -fd 01_data/raw/simulations
+fi
 git pull --ff-only
 source adk/bin/activate
 
