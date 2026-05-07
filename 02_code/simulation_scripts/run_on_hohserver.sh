@@ -15,6 +15,7 @@ REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 SMM_MODE="${SIM_SMM_MODE:-}"
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
+SMM_MODE_ARG="${SMM_MODE:-__all__}"
 RESUME="${SIM_RESUME:-1}"
 
 if [[ -n "$SMM_MODE" ]]; then
@@ -30,13 +31,18 @@ fi
 
 echo "Starting remote simulation batch on $SERVER: $BATCH_ID ($SMM_LABEL)"
 
-ssh "$SERVER" bash -s -- "$REMOTE_REPO" "$BATCH_ID" "$SMM_MODE" "$RESUME" <<'REMOTE'
+ssh "$SERVER" bash -s -- "$REMOTE_REPO" "$BATCH_ID" "$SMM_MODE_ARG" "$RESUME" <<'REMOTE'
 set -euo pipefail
 
 REMOTE_REPO="$1"
 BATCH_ID="$2"
-SMM_MODE="${3:-}"
+SMM_MODE_ARG="${3:-__all__}"
 RESUME="${4:-1}"
+if [[ "$SMM_MODE_ARG" == "__all__" ]]; then
+  SMM_MODE=""
+else
+  SMM_MODE="$SMM_MODE_ARG"
+fi
 SMM_LABEL="${SMM_MODE:-treatment+baseline}"
 
 cd "$REMOTE_REPO"
