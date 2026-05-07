@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
+REMOTE_REPO="${SIM_REMOTE_REPO:-$HOME/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 
 echo "Starting local simulation batch on this server: $BATCH_ID"
