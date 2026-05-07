@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 from .env import read_env_file_value
+from .smm import smm_metadata, smm_mode
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
@@ -41,10 +42,11 @@ SIM_CONDITION = _safe_path_part(
     _get_config_value("SIM_CONDITION", "unknown").lower(),
     "unknown",
 )
+SIM_SMM_MODE = _safe_path_part(smm_mode(), "treatment")
 DEFAULT_RUN_ID = (
-    f"{SIM_CONDITION}_{RUN_TAG}_{TIMESTAMP}"
+    f"{SIM_CONDITION}_{SIM_SMM_MODE}_{RUN_TAG}_{TIMESTAMP}"
     if RUN_TAG != "run"
-    else f"{SIM_CONDITION}_{TIMESTAMP}"
+    else f"{SIM_CONDITION}_{SIM_SMM_MODE}_{TIMESTAMP}"
 )
 RUN_ID = _safe_path_part(_get_config_value("SIM_RUN_ID", DEFAULT_RUN_ID), DEFAULT_RUN_ID)
 
@@ -63,6 +65,7 @@ def _base_metadata() -> dict:
         "status": "initialized",
         "run_id": RUN_ID,
         "condition": SIM_CONDITION,
+        **smm_metadata(),
         "run_tag": RUN_TAG,
         "timestamp": TIMESTAMP,
         "paths": {

@@ -18,6 +18,8 @@ DEFAULT_OUTPUT = REPO_ROOT / "01_data" / "processed" / "simulation_metrics.csv"
 BASE_COLUMNS = [
     "run_id",
     "condition",
+    "smm_mode",
+    "explicit_smm_memory",
     "run_tag",
     "status",
     "timestamp",
@@ -45,6 +47,7 @@ BASE_COLUMNS = [
 ]
 
 CONDITION_ORDER = {"low": 0, "moderate": 1, "high": 2}
+SMM_MODE_ORDER = {"baseline": 0, "treatment": 1}
 
 
 def slug(value: object) -> str:
@@ -68,6 +71,8 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
     row = {
         "run_id": metadata.get("run_id"),
         "condition": metadata.get("condition"),
+        "smm_mode": metadata.get("smm_mode", "treatment"),
+        "explicit_smm_memory": metadata.get("explicit_smm_memory", True),
         "run_tag": metadata.get("run_tag"),
         "status": metadata.get("status"),
         "timestamp": metadata.get("timestamp"),
@@ -141,6 +146,7 @@ def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], 
     rows.sort(
         key=lambda row: (
             CONDITION_ORDER.get(str(row.get("condition")), 99),
+            SMM_MODE_ORDER.get(str(row.get("smm_mode")), 99),
             str(row.get("run_id") or ""),
         )
     )
@@ -155,7 +161,12 @@ def infer_output_id(rows: list[dict]) -> str | None:
 
     batch_ids = set()
     for run_id in run_ids:
-        match = re.fullmatch(r"(?:low|moderate|high)_(.+)_\d+", run_id)
+        match = re.fullmatch(
+            r"(?:low|moderate|high)_(?:baseline|treatment)_(.+)_\d+",
+            run_id,
+        )
+        if not match:
+            match = re.fullmatch(r"(?:low|moderate|high)_(.+)_\d+", run_id)
         if not match:
             return None
         batch_ids.add(match.group(1))

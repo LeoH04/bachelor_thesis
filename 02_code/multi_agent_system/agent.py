@@ -15,10 +15,12 @@ from .agents.discussion.agent_2 import agent_2, agent_2_tool
 from .agents.discussion.agent_3 import agent_3, agent_3_tool
 from .config.memory import archive_agent_memories
 from .config.metrics import metrics
+from .config.smm import explicit_smm_memory_enabled
 from .config.task import AGENT_KEYS
 from .config.trace import log_event
 from .tools.logging_agent_tool import LoggingAgentTool
 
+EXPLICIT_SMM_MEMORY = explicit_smm_memory_enabled()
 
 DISCUSSION_AGENTS = {
     "agent_1": agent_1,
@@ -65,6 +67,18 @@ def _speaker_update_pairs() -> list[tuple[BaseAgent, BaseAgent]]:
     ]
 
 
+def _discussion_round_sub_agents() -> list[BaseAgent]:
+    """Return the sub-agents used by one discussion round."""
+    if EXPLICIT_SMM_MEMORY:
+        return [
+            sub_agent
+            for speaker, memory_update in _speaker_update_pairs()
+            for sub_agent in (speaker, memory_update)
+        ] + [vote_checker]
+
+    return [speaker for speaker, _ in _speaker_update_pairs()] + [vote_checker]
+
+
 class RandomizedDiscussionRoundAgent(BaseAgent):
     """Run one discussion round with a freshly shuffled speaker order."""
 
@@ -81,7 +95,12 @@ class RandomizedDiscussionRoundAgent(BaseAgent):
         )
 
         for speaker, memory_update in speaker_update_pairs:
-            for sub_agent in (speaker, memory_update):
+            sub_agents = (
+                (speaker, memory_update)
+                if EXPLICIT_SMM_MEMORY
+                else (speaker,)
+            )
+            for sub_agent in sub_agents:
                 async with Aclosing(sub_agent.run_async(ctx)) as agen:
                     async for event in agen:
                         yield event
@@ -95,11 +114,7 @@ class RandomizedDiscussionRoundAgent(BaseAgent):
 
 discussion_round = RandomizedDiscussionRoundAgent(
     name="discussion_round",
-    sub_agents=[
-        sub_agent
-        for speaker, memory_update in _speaker_update_pairs()
-        for sub_agent in (speaker, memory_update)
-    ] + [vote_checker],
+    sub_agents=_discussion_round_sub_agents(),
 )
 
 discussion_loop = LoopAgent(

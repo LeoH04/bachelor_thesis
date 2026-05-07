@@ -13,6 +13,7 @@ from .response_text import (
     _visible_text_from_parts,
 )
 from .similarity import calculate_memory_similarity
+from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, PROJECT_ROOT, TASK, _as_bullets
 from .trace import log_event
 
@@ -103,6 +104,32 @@ def archive_agent_memories() -> Path | None:
 
     destination = SHARED_MENTAL_MODELS_DIR
     if _AGENT_MEMORIES_ARCHIVED:
+        return None
+
+    if not explicit_smm_memory_enabled():
+        similarity = {
+            "method": "not_applicable",
+            "reason": "explicit_smm_memory_disabled",
+            "agent_count": 0,
+            "pairwise": [],
+            "mean_pairwise_similarity": None,
+            "min_pairwise_similarity": None,
+            "max_pairwise_similarity": None,
+        }
+        _AGENT_MEMORIES_ARCHIVED = True
+        update_run_metadata(
+            {
+                "shared_mental_models_archived": False,
+                "shared_mental_model_files": [],
+                "context_consistency": similarity,
+                "pairwise_memory_similarity": [],
+                "mean_pairwise_memory_similarity": None,
+            }
+        )
+        log_event(
+            "context_consistency_not_applicable",
+            reason=similarity["reason"],
+        )
         return None
 
     destination.mkdir(parents=True, exist_ok=True)

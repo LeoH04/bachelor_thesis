@@ -9,6 +9,7 @@ from .response_text import (
     PUBLIC_MESSAGE_LABEL,
     extract_vote_from_response,
 )
+from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, TASK, _as_bullets
 
 
@@ -157,13 +158,35 @@ def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
     return extract_vote_from_response(response) or "Unavailable"
 
 
+def _memory_context_section(agent_key: str) -> str:
+    """Return explicit SMM memory, or nothing for baseline runs."""
+    if explicit_smm_memory_enabled():
+        return (
+            "Previous internal memory:\n"
+            f"{read_agent_memory(agent_key)}\n\n"
+        )
+
+    return ""
+
+
+def _grounding_sources() -> str:
+    """Return the allowed evidence sources for the active SMM mode."""
+    if explicit_smm_memory_enabled():
+        return (
+            "candidate information, previous internal memory, or the discussion "
+            "so far"
+        )
+
+    return "candidate information or the discussion so far"
+
+
 def build_agent_instruction(
     agent_key: str,
     ctx=None,
     system_prompt: str = "",
 ) -> str:
     """Build the full prompt for an agent's scheduled public discussion turn."""
-    memory = read_agent_memory(agent_key)
+    memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
@@ -214,7 +237,7 @@ def build_agent_instruction(
     f"{transparency_section}\n\n"
 
     "Grounding rule:\n"
-    "Use only candidate attributes explicitly present in your candidate information, previous internal memory, or the discussion so far.\n"
+    f"Use only candidate attributes explicitly present in your {_grounding_sources()}.\n"
     "Do not invent candidate attributes, background details, aviation procedures, training plans, technologies, mitigation strategies, or explanations not explicitly given in the task.\n"
     "If a drawback is present, treat it as evidence to weigh, not as something you may solve by inventing a remedy.\n\n"
 
@@ -224,8 +247,7 @@ def build_agent_instruction(
     f"{PUBLIC_MESSAGE_LABEL} "
     f"and {METADATA_JSON_LABEL}.\n\n"
 
-    "Previous internal memory:\n"
-    f"{memory}\n\n"
+    f"{memory_context}"
 
     "Discussion so far:\n"
     f"{discussion_history}\n\n"
@@ -340,7 +362,7 @@ def build_agent_tool_instruction(
     system_prompt: str = "",
 ) -> str:
     """Build the prompt for an agent answering another agent through a tool call."""
-    memory = read_agent_memory(agent_key)
+    memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
@@ -369,15 +391,14 @@ def build_agent_tool_instruction(
         f"{_as_bullets(public_info + private_info)}\n\n"
 
         "Grounding rule:\n"
-        "Answer only using facts explicitly present in your candidate information, "
-        "previous internal memory, or the discussion so far. Do not invent candidate "
-        "attributes or background details. If the question asks for information you "
-        "do not have, say that you do not have that information.\n\n"
+        f"Answer only using facts explicitly present in your {_grounding_sources()}. "
+        "Do not invent candidate attributes or background details. If the question "
+        "asks for information you do not have, say that you do not have that "
+        "information.\n\n"
 
         f"{transparency_section}\n\n"
 
-        "Previous internal memory:\n"
-        f"{memory}\n\n"
+        f"{memory_context}"
 
         "Discussion so far:\n"
         f"{discussion_history}\n\n"
