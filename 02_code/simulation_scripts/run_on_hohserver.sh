@@ -13,18 +13,21 @@ fi
 SERVER="${SIM_SERVER:-HohServer}"
 REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
-SMM_MODE="${SIM_SMM_MODE:-treatment}"
+SMM_MODE="${SIM_SMM_MODE:-}"
+SMM_LABEL="${SMM_MODE:-treatment+baseline}"
 
-case "$SMM_MODE" in
-  baseline|treatment) ;;
-  *)
-    echo "Unsupported SIM_SMM_MODE: $SMM_MODE" >&2
-    echo "Expected one of: baseline, treatment" >&2
-    exit 1
-    ;;
-esac
+if [[ -n "$SMM_MODE" ]]; then
+  case "$SMM_MODE" in
+    baseline|treatment) ;;
+    *)
+      echo "Unsupported SIM_SMM_MODE: $SMM_MODE" >&2
+      echo "Expected one of: baseline, treatment" >&2
+      exit 1
+      ;;
+  esac
+fi
 
-echo "Starting remote simulation batch on $SERVER: $BATCH_ID ($SMM_MODE)"
+echo "Starting remote simulation batch on $SERVER: $BATCH_ID ($SMM_LABEL)"
 
 ssh "$SERVER" bash -s -- "$REMOTE_REPO" "$BATCH_ID" "$SMM_MODE" <<'REMOTE'
 set -euo pipefail
@@ -32,6 +35,7 @@ set -euo pipefail
 REMOTE_REPO="$1"
 BATCH_ID="$2"
 SMM_MODE="$3"
+SMM_LABEL="${SMM_MODE:-treatment+baseline}"
 
 cd "$REMOTE_REPO"
 git reset --hard HEAD
@@ -41,14 +45,20 @@ source adk/bin/activate
 
 mkdir -p logs
 
-nohup bash -lc "SIM_BATCH_ID=$BATCH_ID SIM_SMM_MODE=$SMM_MODE ./02_code/simulation_scripts/run_all_conditions.sh" \
+RUN_CMD="SIM_BATCH_ID=$BATCH_ID"
+if [[ -n "$SMM_MODE" ]]; then
+  RUN_CMD="$RUN_CMD SIM_SMM_MODE=$SMM_MODE"
+fi
+RUN_CMD="$RUN_CMD ./02_code/simulation_scripts/run_all_conditions.sh"
+
+nohup bash -lc "$RUN_CMD" \
   > "logs/simulation_${BATCH_ID}.log" 2>&1 < /dev/null &
 
-echo "Started detached remote simulation batch: $BATCH_ID ($SMM_MODE)"
+echo "Started detached remote simulation batch: $BATCH_ID ($SMM_LABEL)"
 echo "Log file: $REMOTE_REPO/logs/simulation_${BATCH_ID}.log"
 REMOTE
 
-echo "Remote simulation started: $BATCH_ID ($SMM_MODE)"
+echo "Remote simulation started: $BATCH_ID ($SMM_LABEL)"
 echo "Your Mac can now sleep."
 echo
 echo "Check progress with:"
