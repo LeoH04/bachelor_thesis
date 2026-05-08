@@ -186,6 +186,26 @@ def _similarity_summary(
     return summary
 
 
+def _gold_standard_summary(
+    method: str,
+    texts: Mapping[str, str],
+    by_agent: list[dict[str, object]],
+    **extra: object,
+) -> dict[str, object]:
+    """Return agent-to-gold-standard similarities plus aggregate fields."""
+    values = [float(item["similarity"]) for item in by_agent]
+    summary = {
+        "method": method,
+        "agent_count": len(texts),
+        "by_agent": by_agent,
+        "mean_similarity": round(sum(values) / len(values), 6) if values else None,
+        "min_similarity": min(values) if values else None,
+        "max_similarity": max(values) if values else None,
+    }
+    summary.update(extra)
+    return summary
+
+
 def calculate_memory_similarity(texts: Mapping[str, str]) -> dict[str, object]:
     """Calculate pairwise shared-mental-model similarity for a completed run."""
     non_empty_texts = {
@@ -202,5 +222,46 @@ def calculate_memory_similarity(texts: Mapping[str, str]) -> dict[str, object]:
         "embedding_cosine",
         non_empty_texts,
         _pairwise_similarity(vectors),
+        embedding_model=model,
+    )
+
+
+def calculate_gold_standard_similarity(
+    texts: Mapping[str, str],
+    gold_standard_text: str,
+) -> dict[str, object]:
+    """Calculate each shared mental model's similarity to the gold standard."""
+    non_empty_texts = {
+        agent_key: text
+        for agent_key, text in texts.items()
+        if text.strip()
+    }
+    if not non_empty_texts:
+        return _gold_standard_summary("not_enough_memories", non_empty_texts, [])
+    if not gold_standard_text.strip():
+        return _gold_standard_summary(
+            "gold_standard_empty",
+            non_empty_texts,
+            [],
+        )
+
+    gold_key = "__gold_standard__"
+    model = _embedding_model()
+    vectors = _embedding_vectors(
+        {**non_empty_texts, gold_key: gold_standard_text},
+        model,
+    )
+    gold_vector = vectors[gold_key]
+    by_agent = [
+        {
+            "agent": agent_key,
+            "similarity": round(_cosine(vectors[agent_key], gold_vector), 6),
+        }
+        for agent_key in sorted(non_empty_texts)
+    ]
+    return _gold_standard_summary(
+        "embedding_cosine",
+        non_empty_texts,
+        by_agent,
         embedding_model=model,
     )
