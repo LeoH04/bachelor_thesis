@@ -82,7 +82,12 @@ numeric_columns <- c(
   "mean_pairwise_memory_similarity",
   "min_pairwise_memory_similarity",
   "max_pairwise_memory_similarity",
-  grep("^similarity_", names(simulation_metrics), value = TRUE)
+  "mean_gold_standard_memory_similarity",
+  "min_gold_standard_memory_similarity",
+  "max_gold_standard_memory_similarity",
+  "context_alignment",
+  grep("^similarity_", names(simulation_metrics), value = TRUE),
+  grep("^gold_similarity_", names(simulation_metrics), value = TRUE)
 )
 
 simulation_metrics[numeric_columns] <- lapply(
@@ -249,6 +254,78 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
     ggsave(
       filename = paste0(path, "/03_report/graphs/", file_prefix, "semantic_similarity_overview_plot.pdf"),
       plot = semantic_similarity_overview_plot,
+      width = 7,
+      height = 5
+    )
+    
+    # ------------------------------------------------------------
+    # 4b. Overview of gold standard similarity across conditions
+    # ------------------------------------------------------------
+    gold_standard_similarity_overview <- mode_metrics %>%
+      group_by(condition) %>%
+      summarise(
+        total_runs = n(),
+        mean_gold_standard_similarity = mean(mean_gold_standard_memory_similarity, na.rm = TRUE),
+        .groups = "drop"
+      )
+    
+    print(gold_standard_similarity_overview)
+    
+    gold_standard_similarity_overview_plot <- ggplot(
+      gold_standard_similarity_overview,
+      aes(x = condition, y = mean_gold_standard_similarity, fill = condition)
+    ) +
+      geom_col() +
+      geom_text(aes(label = round(mean_gold_standard_similarity, 3)), vjust = -0.5) +
+      labs(
+        x = "Condition",
+        y = "Mean gold standard similarity",
+        title = paste0("Mean gold standard similarity by condition", title_suffix)
+      ) +
+      scale_fill_manual(values = condition_colors) +
+      plot_theme
+    
+    if (interactive()) print(gold_standard_similarity_overview_plot)
+    
+    ggsave(
+      filename = paste0(path, "/03_report/graphs/", file_prefix, "gold_standard_similarity_overview_plot.pdf"),
+      plot = gold_standard_similarity_overview_plot,
+      width = 7,
+      height = 5
+    )
+    
+    # ------------------------------------------------------------
+    # 4c. Overview of context alignment across conditions
+    # ------------------------------------------------------------
+    context_alignment_overview <- mode_metrics %>%
+      group_by(condition) %>%
+      summarise(
+        total_runs = n(),
+        mean_context_alignment = mean(context_alignment, na.rm = TRUE),
+        .groups = "drop"
+      )
+    
+    print(context_alignment_overview)
+    
+    context_alignment_overview_plot <- ggplot(
+      context_alignment_overview,
+      aes(x = condition, y = mean_context_alignment, fill = condition)
+    ) +
+      geom_col() +
+      geom_text(aes(label = round(mean_context_alignment, 3)), vjust = -0.5) +
+      labs(
+        x = "Condition",
+        y = "Mean context alignment",
+        title = paste0("Mean context alignment by condition", title_suffix)
+      ) +
+      scale_fill_manual(values = condition_colors) +
+      plot_theme
+    
+    if (interactive()) print(context_alignment_overview_plot)
+    
+    ggsave(
+      filename = paste0(path, "/03_report/graphs/", file_prefix, "context_alignment_overview_plot.pdf"),
+      plot = context_alignment_overview_plot,
       width = 7,
       height = 5
     )
