@@ -13,15 +13,21 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # ------------------------------------------------------------
 # 1. LOAD DATA
 # ------------------------------------------------------------
-simulation_metric_files <- list.files(
-  "01_data/processed",
-  pattern = "^simulation_metrics_.*\\.csv$",
-  full.names = TRUE
-)
-latest_simulation_metric_file <- sort(simulation_metric_files, decreasing = TRUE)[1]
+# simulation_metric_files <- list.files(
+#   "01_data/processed",
+#   pattern = "^simulation_metrics_.*\\.csv$",
+#   full.names = TRUE
+# )
+# latest_simulation_metric_file <- sort(simulation_metric_files, decreasing = TRUE)[1]
+# 
+# simulation_metrics <- read.csv(
+#   latest_simulation_metric_file,
+#   na.strings = c("", "NA"),
+#   stringsAsFactors = FALSE
+# )
 
 simulation_metrics <- read.csv(
-  latest_simulation_metric_file,
+  "01_data/processed/simulation_metrics_20260508_080303.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -145,7 +151,7 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
   title_suffix <- paste0(" (", smm_mode, ")")
 
   # ------------------------------------------------------------
-  # 3. Overview of correctly chosen candidates across conditions
+  # 3a. Overview of correctly chosen candidates across conditions
   # ------------------------------------------------------------
   correct_candidate_overview <- mode_metrics %>%
     group_by(condition) %>%
@@ -173,6 +179,38 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
   ggsave(
     filename = paste0(path, "/03_report/graphs/", file_prefix, "correct_candidate_overview_plot.pdf"),
     plot = correct_candidate_overview_plot,
+    width = 7,
+    height = 5
+  )
+
+  # ------------------------------------------------------------
+  # 3b. Overview of NA final candidates across conditions
+  # ------------------------------------------------------------
+  na_candidate_overview <- mode_metrics %>%
+    group_by(condition) %>%
+    summarise(
+      total_runs = n(),
+      na_candidates = sum(is.na(final_candidate)),
+      .groups = "drop"
+    )
+
+  print(na_candidate_overview)
+
+  na_candidate_overview_plot <- ggplot(na_candidate_overview, aes(x = condition, y = na_candidates, fill = condition)) +
+    geom_col() +
+    geom_text(aes(label = na_candidates), vjust = -0.5) +
+    labs(
+      x = "Condition",
+      y = "Number of runs",
+      title = paste0("Runs without a final candidate by condition", title_suffix)
+    ) +
+    scale_fill_manual(values = condition_colors) +
+    plot_theme
+  if (interactive()) print(na_candidate_overview_plot)
+
+  ggsave(
+    filename = paste0(path, "/03_report/graphs/", file_prefix, "na_candidate_overview_plot.pdf"),
+    plot = na_candidate_overview_plot,
     width = 7,
     height = 5
   )
