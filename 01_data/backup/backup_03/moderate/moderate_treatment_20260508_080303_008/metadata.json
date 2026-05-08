@@ -1,0 +1,133 @@
+{
+  "agent_tool_calls": 0,
+  "agent_tool_messages": 0,
+  "agent_turns": 15,
+  "completed_at": "2026-05-08T09:47:17+0200",
+  "condition": "moderate",
+  "context_alignment": 0.474162,
+  "context_consistency": {
+    "agent_count": 3,
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "max_pairwise_similarity": 0.898144,
+    "mean_pairwise_similarity": 0.812849,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.76538,
+    "pairwise": [
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_2",
+        "similarity": 0.898144
+      },
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_3",
+        "similarity": 0.76538
+      },
+      {
+        "agent_a": "agent_2",
+        "agent_b": "agent_3",
+        "similarity": 0.775023
+      }
+    ]
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "max_round_majority_vote",
+  "explicit_smm_memory": true,
+  "final_candidate": "Candidate B",
+  "gold_standard_alignment": [
+    {
+      "agent": "agent_1",
+      "checks": {
+        "a_risks": 1,
+        "b_risks": 1,
+        "c_attention": 1,
+        "c_calmness": 1,
+        "c_crew_fit": 1,
+        "c_reliability": 1,
+        "d_risks": 1,
+        "favorite_is_c": 1
+      },
+      "score": 1.0
+    },
+    {
+      "agent": "agent_2",
+      "checks": {
+        "a_risks": 0,
+        "b_risks": 1,
+        "c_attention": 0,
+        "c_calmness": 0,
+        "c_crew_fit": 1,
+        "c_reliability": 1,
+        "d_risks": 0,
+        "favorite_is_c": 0
+      },
+      "score": 0.375
+    },
+    {
+      "agent": "agent_3",
+      "checks": {
+        "a_risks": 0,
+        "b_risks": 1,
+        "c_attention": 0,
+        "c_calmness": 0,
+        "c_crew_fit": 1,
+        "c_reliability": 1,
+        "d_risks": 0,
+        "favorite_is_c": 0
+      },
+      "score": 0.375
+    }
+  ],
+  "gold_standard_alignment_method": "rule_based_binary_checks",
+  "input_tokens": 154281,
+  "max_gold_standard_alignment": 1.0,
+  "mean_gold_standard_alignment": 0.583333,
+  "mean_pairwise_memory_similarity": 0.812849,
+  "memory_updates": 45,
+  "min_gold_standard_alignment": 0.375,
+  "output_tokens": 53318,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_2",
+      "similarity": 0.898144
+    },
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_3",
+      "similarity": 0.76538
+    },
+    {
+      "agent_a": "agent_2",
+      "agent_b": "agent_3",
+      "similarity": 0.775023
+    }
+  ],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/shared_mental_models"
+  },
+  "rounds": 5,
+  "run_id": "moderate_treatment_20260508_080303_008",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 137.9563,
+  "schema_version": 1,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260508_080303_008/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_mode": "treatment",
+  "status": "completed",
+  "timestamp": "20260508_094459",
+  "total_messages": 15,
+  "total_tokens": 207599,
+  "vote_count": {
+    "Candidate B": 2,
+    "Candidate C": 1
+  }
+}

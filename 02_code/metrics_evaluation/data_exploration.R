@@ -82,12 +82,13 @@ numeric_columns <- c(
   "mean_pairwise_memory_similarity",
   "min_pairwise_memory_similarity",
   "max_pairwise_memory_similarity",
-  "mean_gold_standard_memory_similarity",
-  "min_gold_standard_memory_similarity",
-  "max_gold_standard_memory_similarity",
+  "mean_gold_standard_alignment",
+  "min_gold_standard_alignment",
+  "max_gold_standard_alignment",
   "context_alignment",
   grep("^similarity_", names(simulation_metrics), value = TRUE),
-  grep("^gold_similarity_", names(simulation_metrics), value = TRUE)
+  grep("^gold_alignment_", names(simulation_metrics), value = TRUE),
+  grep("^gold_check_", names(simulation_metrics), value = TRUE)
 )
 
 simulation_metrics[numeric_columns] <- lapply(
@@ -259,37 +260,37 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
     )
     
     # ------------------------------------------------------------
-    # 4b. Overview of gold standard similarity across conditions
+    # 4b. Overview of gold standard alignment across conditions
     # ------------------------------------------------------------
-    gold_standard_similarity_overview <- mode_metrics %>%
+    gold_standard_alignment_overview <- mode_metrics %>%
       group_by(condition) %>%
       summarise(
         total_runs = n(),
-        mean_gold_standard_similarity = mean(mean_gold_standard_memory_similarity, na.rm = TRUE),
+        mean_gold_standard_alignment = mean(mean_gold_standard_alignment, na.rm = TRUE),
         .groups = "drop"
       )
     
-    print(gold_standard_similarity_overview)
+    print(gold_standard_alignment_overview)
     
-    gold_standard_similarity_overview_plot <- ggplot(
-      gold_standard_similarity_overview,
-      aes(x = condition, y = mean_gold_standard_similarity, fill = condition)
+    gold_standard_alignment_overview_plot <- ggplot(
+      gold_standard_alignment_overview,
+      aes(x = condition, y = mean_gold_standard_alignment, fill = condition)
     ) +
       geom_col() +
-      geom_text(aes(label = round(mean_gold_standard_similarity, 3)), vjust = -0.5) +
+      geom_text(aes(label = round(mean_gold_standard_alignment, 3)), vjust = -0.5) +
       labs(
         x = "Condition",
-        y = "Mean gold standard similarity",
-        title = paste0("Mean gold standard similarity by condition", title_suffix)
+        y = "Mean gold standard alignment",
+        title = paste0("Mean gold standard alignment by condition", title_suffix)
       ) +
       scale_fill_manual(values = condition_colors) +
       plot_theme
     
-    if (interactive()) print(gold_standard_similarity_overview_plot)
+    if (interactive()) print(gold_standard_alignment_overview_plot)
     
     ggsave(
-      filename = paste0(path, "/03_report/graphs/", file_prefix, "gold_standard_similarity_overview_plot.pdf"),
-      plot = gold_standard_similarity_overview_plot,
+      filename = paste0(path, "/03_report/graphs/", file_prefix, "gold_standard_alignment_overview_plot.pdf"),
+      plot = gold_standard_alignment_overview_plot,
       width = 7,
       height = 5
     )

@@ -12,18 +12,13 @@ from .response_text import (
     _replace_response_text,
     _visible_text_from_parts,
 )
+from .gold_standard_alignment import calculate_gold_standard_alignment
 from .similarity import calculate_memory_similarity
-from .similarity import calculate_gold_standard_similarity
 from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, PROJECT_ROOT, TASK, _as_bullets
 from .trace import log_event
 
 _AGENT_MEMORIES_ARCHIVED = False
-REPO_ROOT = PROJECT_ROOT.parents[1]
-GOLD_STANDARD_MEMORY_PATHS = (
-    REPO_ROOT / "01_data" / "gold_standard" / "gold_standard_shared_mental_model.md",
-    REPO_ROOT / "data" / "gold_standard" / "gold_standard_shared_mental_model.md",
-)
 
 
 def _agent_memory_path(agent_key: str) -> Path:
@@ -104,53 +99,15 @@ def write_agent_memory(agent_key: str, content: str) -> None:
     path.write_text(content.strip() + "\n", encoding="utf-8")
 
 
-def _gold_standard_memory_path() -> Path:
-    """Return the configured gold-standard memory path, preferring 01_data."""
-    for path in GOLD_STANDARD_MEMORY_PATHS:
-        if path.exists():
-            return path
-    return GOLD_STANDARD_MEMORY_PATHS[0]
-
-
-def _missing_gold_standard_similarity(path: Path, reason: str) -> dict[str, object]:
-    """Return a not-applicable gold-standard similarity payload."""
-    return {
-        "method": "not_applicable",
-        "reason": reason,
-        "gold_standard_file": str(path),
-        "agent_count": 0,
-        "by_agent": [],
-        "mean_similarity": None,
-        "min_similarity": None,
-        "max_similarity": None,
-    }
-
-
-def _calculate_gold_standard_memory_similarity(
-    memory_texts: dict[str, str],
-) -> dict[str, object]:
-    """Compare archived memories to the gold-standard shared mental model."""
-    path = _gold_standard_memory_path()
-    if not path.exists():
-        return _missing_gold_standard_similarity(path, "gold_standard_missing")
-
-    similarity = calculate_gold_standard_similarity(
-        memory_texts,
-        path.read_text(encoding="utf-8"),
-    )
-    similarity["gold_standard_file"] = str(path)
-    return similarity
-
-
 def _context_alignment_score(
     mean_pairwise_similarity: object,
-    mean_gold_standard_similarity: object,
+    mean_gold_standard_alignment: object,
 ) -> float | None:
-    """Return the product of pairwise and gold-standard mean similarity."""
-    if mean_pairwise_similarity is None or mean_gold_standard_similarity is None:
+    """Return the product of pairwise similarity and gold-standard alignment."""
+    if mean_pairwise_similarity is None or mean_gold_standard_alignment is None:
         return None
     return round(
-        float(mean_pairwise_similarity) * float(mean_gold_standard_similarity),
+        float(mean_pairwise_similarity) * float(mean_gold_standard_alignment),
         6,
     )
 
@@ -181,13 +138,12 @@ def archive_agent_memories() -> Path | None:
                 "context_consistency": similarity,
                 "pairwise_memory_similarity": [],
                 "mean_pairwise_memory_similarity": None,
-                "gold_standard_memory_similarity": [],
-                "mean_gold_standard_memory_similarity": None,
-                "min_gold_standard_memory_similarity": None,
-                "max_gold_standard_memory_similarity": None,
+                "gold_standard_alignment": [],
+                "mean_gold_standard_alignment": None,
+                "min_gold_standard_alignment": None,
+                "max_gold_standard_alignment": None,
                 "context_alignment": None,
-                "gold_standard_similarity_method": "not_applicable",
-                "gold_standard_file": str(_gold_standard_memory_path()),
+                "gold_standard_alignment_method": "not_applicable",
             }
         )
         log_event(
@@ -209,9 +165,9 @@ def archive_agent_memories() -> Path | None:
             memory_texts[agent_key] = target.read_text(encoding="utf-8")
 
     similarity = calculate_memory_similarity(memory_texts)
-    gold_standard_similarity = _calculate_gold_standard_memory_similarity(memory_texts)
+    gold_standard_alignment = calculate_gold_standard_alignment(memory_texts)
     mean_pairwise_similarity = similarity.get("mean_pairwise_similarity")
-    mean_gold_standard_similarity = gold_standard_similarity.get("mean_similarity")
+    mean_gold_standard_alignment = gold_standard_alignment.get("mean_alignment")
 
     _AGENT_MEMORIES_ARCHIVED = True
     update_run_metadata(
@@ -221,23 +177,15 @@ def archive_agent_memories() -> Path | None:
             "context_consistency": similarity,
             "pairwise_memory_similarity": similarity.get("pairwise", []),
             "mean_pairwise_memory_similarity": mean_pairwise_similarity,
-            "gold_standard_memory_similarity": gold_standard_similarity.get(
-                "by_agent",
-                [],
-            ),
-            "mean_gold_standard_memory_similarity": mean_gold_standard_similarity,
-            "min_gold_standard_memory_similarity": gold_standard_similarity.get(
-                "min_similarity"
-            ),
-            "max_gold_standard_memory_similarity": gold_standard_similarity.get(
-                "max_similarity"
-            ),
+            "gold_standard_alignment": gold_standard_alignment.get("by_agent", []),
+            "mean_gold_standard_alignment": mean_gold_standard_alignment,
+            "min_gold_standard_alignment": gold_standard_alignment.get("min_alignment"),
+            "max_gold_standard_alignment": gold_standard_alignment.get("max_alignment"),
             "context_alignment": _context_alignment_score(
                 mean_pairwise_similarity,
-                mean_gold_standard_similarity,
+                mean_gold_standard_alignment,
             ),
-            "gold_standard_similarity_method": gold_standard_similarity.get("method"),
-            "gold_standard_file": gold_standard_similarity.get("gold_standard_file"),
+            "gold_standard_alignment_method": gold_standard_alignment.get("method"),
         }
     )
     log_event(
@@ -247,10 +195,10 @@ def archive_agent_memories() -> Path | None:
         pairwise=similarity.get("pairwise", []),
     )
     log_event(
-        "gold_standard_similarity_calculated",
-        method=gold_standard_similarity.get("method"),
-        mean_similarity=gold_standard_similarity.get("mean_similarity"),
-        by_agent=gold_standard_similarity.get("by_agent", []),
+        "gold_standard_alignment_calculated",
+        method=gold_standard_alignment.get("method"),
+        mean_alignment=gold_standard_alignment.get("mean_alignment"),
+        by_agent=gold_standard_alignment.get("by_agent", []),
     )
     return destination
 

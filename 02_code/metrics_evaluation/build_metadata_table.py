@@ -41,13 +41,12 @@ BASE_COLUMNS = [
     "mean_pairwise_memory_similarity",
     "min_pairwise_memory_similarity",
     "max_pairwise_memory_similarity",
-    "mean_gold_standard_memory_similarity",
-    "min_gold_standard_memory_similarity",
-    "max_gold_standard_memory_similarity",
+    "mean_gold_standard_alignment",
+    "min_gold_standard_alignment",
+    "max_gold_standard_alignment",
     "context_alignment",
     "memory_similarity_method",
-    "gold_standard_similarity_method",
-    "gold_standard_file",
+    "gold_standard_alignment_method",
     "embedding_model",
     "metadata_file",
 ]
@@ -81,15 +80,11 @@ def product_or_none(left: object, right: object) -> float | None:
 def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[str]]:
     """Convert nested run metadata into one flat CSV row."""
     context = metadata.get("context_consistency") or {}
-    gold = metadata.get("gold_standard_similarity") or {}
     mean_pairwise = metadata.get(
         "mean_pairwise_memory_similarity",
         context.get("mean_pairwise_similarity"),
     )
-    mean_gold = metadata.get(
-        "mean_gold_standard_memory_similarity",
-        gold.get("mean_similarity"),
-    )
+    mean_gold_alignment = metadata.get("mean_gold_standard_alignment")
     row = {
         "run_id": metadata.get("run_id"),
         "condition": metadata.get("condition"),
@@ -116,27 +111,16 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         "mean_pairwise_memory_similarity": mean_pairwise,
         "min_pairwise_memory_similarity": context.get("min_pairwise_similarity"),
         "max_pairwise_memory_similarity": context.get("max_pairwise_similarity"),
-        "mean_gold_standard_memory_similarity": mean_gold,
-        "min_gold_standard_memory_similarity": metadata.get(
-            "min_gold_standard_memory_similarity",
-            gold.get("min_similarity"),
-        ),
-        "max_gold_standard_memory_similarity": metadata.get(
-            "max_gold_standard_memory_similarity",
-            gold.get("max_similarity"),
-        ),
+        "mean_gold_standard_alignment": mean_gold_alignment,
+        "min_gold_standard_alignment": metadata.get("min_gold_standard_alignment"),
+        "max_gold_standard_alignment": metadata.get("max_gold_standard_alignment"),
         "context_alignment": metadata.get(
             "context_alignment",
-            product_or_none(mean_pairwise, mean_gold),
+            product_or_none(mean_pairwise, mean_gold_alignment),
         ),
         "memory_similarity_method": context.get("method"),
-        "gold_standard_similarity_method": metadata.get(
-            "gold_standard_similarity_method",
-            gold.get("method"),
-        ),
-        "gold_standard_file": metadata.get(
-            "gold_standard_file",
-            gold.get("gold_standard_file"),
+        "gold_standard_alignment_method": metadata.get(
+            "gold_standard_alignment_method"
         ),
         "embedding_model": context.get("embedding_model"),
         "metadata_file": str(path.relative_to(REPO_ROOT)),
@@ -157,11 +141,15 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         row[column] = item.get("similarity")
         similarity_columns.add(column)
 
-    for item in metadata.get("gold_standard_memory_similarity") or gold.get("by_agent") or []:
+    for item in metadata.get("gold_standard_alignment") or []:
         agent = slug(item.get("agent"))
-        column = f"gold_similarity_{agent}"
-        row[column] = item.get("similarity")
+        column = f"gold_alignment_{agent}"
+        row[column] = item.get("score")
         similarity_columns.add(column)
+        for check, value in (item.get("checks") or {}).items():
+            check_column = f"gold_check_{agent}_{slug(check)}"
+            row[check_column] = value
+            similarity_columns.add(check_column)
 
     return row, vote_columns, similarity_columns
 
