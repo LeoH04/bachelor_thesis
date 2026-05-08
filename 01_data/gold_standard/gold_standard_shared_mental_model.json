@@ -1,0 +1,420 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "gold_standard_shared_mental_model",
+  "source_task": "02_code/multi_agent_system/config/hidden_profile_task.json",
+  "state_represented": "After a perfect interaction round in which all public and private candidate information has been exchanged, attributed, integrated, and evaluated.",
+  "task": {
+    "goal": "Choose the best candidate for a long-distance pilot position at an airline.",
+    "candidates": [
+      "Candidate A",
+      "Candidate B",
+      "Candidate C",
+      "Candidate D"
+    ],
+    "ground_truth_decision": "Candidate C"
+  },
+  "role_criteria": [
+    "reliability_and_responsibility",
+    "calmness_under_pressure",
+    "technical_and_cognitive_competence",
+    "attention_and_decision_quality",
+    "cooperation_and_cockpit_teamwork",
+    "high_responsibility_long_distance_suitability"
+  ],
+  "decision": {
+    "selected_candidate": "Candidate C",
+    "confidence_percent": 90,
+    "rationale": "Candidate C is the only candidate whose complete evidence set clearly covers reliability, calmness under pressure, technical competence, attention, quick correct decisions, and crew-oriented cooperation. The public drawbacks remain relevant, but the full private evidence makes Candidate C the broadest and strongest fit."
+  },
+  "candidates": {
+    "Candidate A": {
+      "evidence_for": [
+        {
+          "text": "Candidate A can anticipate dangerous situations.",
+          "source": "public",
+          "criteria": [
+            "calmness_under_pressure",
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate A is able to see complex connections.",
+          "source": "public",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate A has excellent spatial vision.",
+          "source": "public",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate A has very good leadership qualities.",
+          "source": "public",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork",
+            "high_responsibility_long_distance_suitability"
+          ]
+        }
+      ],
+      "evidence_against": [
+        {
+          "text": "Candidate A is sometimes not good at taking criticism.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate A can be unorganized.",
+          "source": "agent_1_private",
+          "criteria": [
+            "reliability_and_responsibility"
+          ]
+        },
+        {
+          "text": "Candidate A is regarded as a show-off.",
+          "source": "agent_2_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate A is regarded as being not open to new ideas.",
+          "source": "agent_2_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork",
+            "high_responsibility_long_distance_suitability"
+          ]
+        },
+        {
+          "text": "Candidate A is unfriendly.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate A eats unhealthily.",
+          "source": "agent_3_private",
+          "criteria": [
+            "high_responsibility_long_distance_suitability"
+          ]
+        }
+      ],
+      "role_fit": "Strong cognitive, spatial, anticipation, and leadership evidence, but weak cooperation, adaptability, and organization.",
+      "assessment": "Not optimal because several agents' private information reveals direct interpersonal and adaptability concerns."
+    },
+    "Candidate B": {
+      "evidence_for": [
+        {
+          "text": "Candidate B is very conscientious.",
+          "source": "public",
+          "criteria": [
+            "reliability_and_responsibility"
+          ]
+        },
+        {
+          "text": "Candidate B handles stress very well.",
+          "source": "public",
+          "criteria": [
+            "calmness_under_pressure"
+          ]
+        },
+        {
+          "text": "Candidate B is good at assessing weather conditions.",
+          "source": "public",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate B has excellent computer skills.",
+          "source": "public",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        }
+      ],
+      "evidence_against": [
+        {
+          "text": "Candidate B can be grumpy.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate B can be uncooperative.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate B has a relatively weak memory for numbers.",
+          "source": "agent_2_private",
+          "criteria": [
+            "attention_and_decision_quality",
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate B makes nasty remarks about his colleagues.",
+          "source": "agent_2_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate B is regarded as pretentious.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate B sometimes adopts the wrong tone when communicating.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        }
+      ],
+      "role_fit": "Strong reliability, stress tolerance, weather assessment, and computer evidence, but repeated direct cooperation and communication negatives plus a numeric-memory weakness.",
+      "assessment": "Plausible from public information alone, but not optimal once private information is shared."
+    },
+    "Candidate C": {
+      "evidence_for": [
+        {
+          "text": "Candidate C can make correct decisions quickly.",
+          "source": "public",
+          "criteria": [
+            "attention_and_decision_quality",
+            "high_responsibility_long_distance_suitability"
+          ]
+        },
+        {
+          "text": "Candidate C is known to be 100% reliable.",
+          "source": "agent_1_private",
+          "criteria": [
+            "reliability_and_responsibility"
+          ]
+        },
+        {
+          "text": "Candidate C creates a positive atmosphere with his crew.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate C keeps calm in a crisis.",
+          "source": "agent_2_private",
+          "criteria": [
+            "calmness_under_pressure"
+          ]
+        },
+        {
+          "text": "Candidate C understands complicated technology.",
+          "source": "agent_2_private",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate C puts concern for others above everything.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate C has excellent attention skills.",
+          "source": "agent_3_private",
+          "criteria": [
+            "attention_and_decision_quality"
+          ]
+        }
+      ],
+      "evidence_against": [
+        {
+          "text": "Candidate C has difficulty communicating ideas.",
+          "source": "public",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate C is regarded as egocentric.",
+          "source": "public",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate C is not very willing to further his education.",
+          "source": "public",
+          "criteria": [
+            "high_responsibility_long_distance_suitability"
+          ]
+        }
+      ],
+      "role_fit": "Best balanced fit across reliability, calmness, technical understanding, attention, quick correct decisions, and crew-oriented cooperation.",
+      "assessment": "Correct candidate. Public drawbacks remain relevant, but the full group evidence gives Candidate C the broadest and strongest overall role fit."
+    },
+    "Candidate D": {
+      "evidence_for": [
+        {
+          "text": "Candidate D responds to unexpected events adequately.",
+          "source": "public",
+          "criteria": [
+            "calmness_under_pressure",
+            "high_responsibility_long_distance_suitability"
+          ]
+        },
+        {
+          "text": "Candidate D can concentrate very well.",
+          "source": "public",
+          "criteria": [
+            "attention_and_decision_quality"
+          ]
+        },
+        {
+          "text": "Candidate D solves problems extremely well.",
+          "source": "public",
+          "criteria": [
+            "technical_and_cognitive_competence"
+          ]
+        },
+        {
+          "text": "Candidate D takes responsibility seriously.",
+          "source": "public",
+          "criteria": [
+            "reliability_and_responsibility"
+          ]
+        }
+      ],
+      "evidence_against": [
+        {
+          "text": "Candidate D is regarded as arrogant.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate D has relatively weak leadership skills.",
+          "source": "agent_1_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork",
+            "high_responsibility_long_distance_suitability"
+          ]
+        },
+        {
+          "text": "Candidate D is regarded as a know-it-all.",
+          "source": "agent_2_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        },
+        {
+          "text": "Candidate D has a hot temper.",
+          "source": "agent_2_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork",
+            "calmness_under_pressure"
+          ]
+        },
+        {
+          "text": "Candidate D is considered moody.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork",
+            "calmness_under_pressure"
+          ]
+        },
+        {
+          "text": "Candidate D is regarded as a loner.",
+          "source": "agent_3_private",
+          "criteria": [
+            "cooperation_and_cockpit_teamwork"
+          ]
+        }
+      ],
+      "role_fit": "Strong concentration, problem-solving, responsibility, and response to unexpected events, but poor cooperation, weak leadership, and emotional/interpersonal risk.",
+      "assessment": "Not optimal because safety-critical teamwork evidence is substantially weaker than Candidate C's."
+    }
+  },
+  "agent_positions_after_perfect_round": {
+    "agent_1": {
+      "latest_vote": "Candidate C",
+      "main_reason": "Candidate C combines 100% reliability and positive crew atmosphere with the public evidence of quick correct decisions.",
+      "evidence_shared": [
+        "Candidate C is known to be 100% reliable.",
+        "Candidate C creates a positive atmosphere with his crew.",
+        "Candidate A is sometimes not good at taking criticism.",
+        "Candidate A can be unorganized.",
+        "Candidate B can be grumpy.",
+        "Candidate B can be uncooperative.",
+        "Candidate D is regarded as arrogant.",
+        "Candidate D has relatively weak leadership skills."
+      ]
+    },
+    "agent_2": {
+      "latest_vote": "Candidate C",
+      "main_reason": "Candidate C adds calmness in crisis and complicated-technology understanding, while B and D have serious interpersonal risks.",
+      "evidence_shared": [
+        "Candidate C keeps calm in a crisis.",
+        "Candidate C understands complicated technology.",
+        "Candidate A is regarded as a show-off.",
+        "Candidate A is regarded as being not open to new ideas.",
+        "Candidate B has a relatively weak memory for numbers.",
+        "Candidate B makes nasty remarks about his colleagues.",
+        "Candidate D is regarded as a know-it-all.",
+        "Candidate D has a hot temper."
+      ]
+    },
+    "agent_3": {
+      "latest_vote": "Candidate C",
+      "main_reason": "Candidate C adds concern for others and excellent attention, while A, B, and D have additional cooperation concerns.",
+      "evidence_shared": [
+        "Candidate C puts concern for others above everything.",
+        "Candidate C has excellent attention skills.",
+        "Candidate A is unfriendly.",
+        "Candidate A eats unhealthily.",
+        "Candidate B is regarded as pretentious.",
+        "Candidate B sometimes adopts the wrong tone when communicating.",
+        "Candidate D is considered moody.",
+        "Candidate D is regarded as a loner."
+      ]
+    }
+  },
+  "emerging_group_view": {
+    "group_leading_candidate": "Candidate C",
+    "important_agreements": [
+      "All agents should converge on Candidate C once the full hidden-profile information is shared.",
+      "Candidate C has the strongest combined evidence for reliability, calmness under pressure, technical competence, attention, correct decisions, and positive crew interaction.",
+      "Candidate B looks strong from public information but loses its advantage after private cooperation and numeric-memory concerns are integrated.",
+      "Candidate A and Candidate D have strong technical or cognitive signals, but both carry multiple safety-relevant interpersonal or adaptability drawbacks."
+    ],
+    "important_tensions": [
+      "Candidate C has public drawbacks: difficulty communicating ideas, egocentrism, and low willingness for further education.",
+      "The core evaluative tension is whether those drawbacks outweigh Candidate C's broad private strengths. In the full evidence set, they do not."
+    ],
+    "uncertainties": [
+      "No missing candidate information remains within the configured task.",
+      "Residual uncertainty is limited to weighting the known drawbacks, not to factual incompleteness."
+    ],
+    "open_questions": {
+      "missing_evidence": [],
+      "what_would_change_the_decision": [
+        "New valid task evidence showing that Candidate C's communication, egocentrism, or low willingness for further education is more safety-critical than the repeated cooperation risks of the alternatives."
+      ]
+    },
+    "next_step_focus": "No further information exchange is required after the perfect round. The appropriate next step is unanimous selection of Candidate C."
+  }
+}
