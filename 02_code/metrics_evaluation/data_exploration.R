@@ -332,40 +332,9 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
     )
   }
 
-  # ------------------------------------------------------------
-  # 5. Overview of interaction rounds across conditions
-  # ------------------------------------------------------------
-  rounds_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_rounds = mean(rounds, na.rm = TRUE),
-      .groups = "drop"
-    )
-
-  print(rounds_overview)
-
-  rounds_overview_plot <- ggplot(rounds_overview, aes(x = condition, y = mean_rounds, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_rounds, 2)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean rounds",
-      title = paste0("Mean interaction rounds by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(rounds_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "rounds_overview_plot.pdf"),
-    plot = rounds_overview_plot,
-    width = 7,
-    height = 5
-  )
 
   # ------------------------------------------------------------
-  # 6. Overview of messages across conditions
+  # 5. Overview of messages across conditions
   # ------------------------------------------------------------
   messages_overview <- mode_metrics %>%
     group_by(condition) %>%
@@ -397,7 +366,7 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
   )
 
   # ------------------------------------------------------------
-  # 7. Overview of tokens across conditions
+  # 6. Overview of tokens across conditions
   # ------------------------------------------------------------
   tokens_overview <- mode_metrics %>%
     group_by(condition) %>%
@@ -429,7 +398,7 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
   )
 
   # ------------------------------------------------------------
-  # 8. Overview of runtime across conditions
+  # 7. Overview of runtime across conditions
   # ------------------------------------------------------------
   runtime_overview <- mode_metrics %>%
     group_by(condition) %>%
