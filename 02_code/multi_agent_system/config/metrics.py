@@ -40,6 +40,7 @@ class MetricsTracker:
         self.start_time = time.time()
         self.end_time = None
         self._final_decision_recorded = False
+        self._successful_completion_recorded = False
         self._finalized = False
 
     def add_tokens(self, input_tokens: int, output_tokens: int):
@@ -106,6 +107,10 @@ class MetricsTracker:
         )
         return True
 
+    def record_successful_completion(self) -> None:
+        """Mark that final decision handling completed without downstream errors."""
+        self._successful_completion_recorded = True
+
     def end_simulation(self):
         """End simulation and log summary"""
         if self._finalized:
@@ -139,27 +144,35 @@ class MetricsTracker:
             logger.info(f"Decision Correct: {self.decision_correct}")
         logger.info(f"Runtime: {runtime:.2f}s")
         logger.info("=" * 70)
-        update_run_metadata(
-            {
-                "status": "completed",
-                "completed_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-                "rounds": self.loop_count,
-                "agent_turns": self.agent_turn_count,
-                "agent_tool_calls": self.agent_tool_call_count,
-                "agent_tool_messages": agent_tool_messages,
-                "memory_updates": self.memory_update_count,
-                "total_messages": total_messages,
-                "input_tokens": self.total_input_tokens,
-                "output_tokens": self.total_output_tokens,
-                "total_tokens": self.total_input_tokens + self.total_output_tokens,
-                "final_candidate": self.final_candidate,
-                "decision_method": self.final_decision_method,
-                "vote_count": self.final_vote_count,
-                "correct_candidate": self.correct_candidate,
-                "decision_correct": self.decision_correct,
-                "runtime_seconds": round(runtime, 4),
-            }
-        )
+        metadata_updates = {
+            "status": "completed" if self._successful_completion_recorded else "failed",
+            "rounds": self.loop_count,
+            "agent_turns": self.agent_turn_count,
+            "agent_tool_calls": self.agent_tool_call_count,
+            "agent_tool_messages": agent_tool_messages,
+            "memory_updates": self.memory_update_count,
+            "total_messages": total_messages,
+            "input_tokens": self.total_input_tokens,
+            "output_tokens": self.total_output_tokens,
+            "total_tokens": self.total_input_tokens + self.total_output_tokens,
+            "final_candidate": self.final_candidate,
+            "decision_method": self.final_decision_method,
+            "vote_count": self.final_vote_count,
+            "correct_candidate": self.correct_candidate,
+            "decision_correct": self.decision_correct,
+            "runtime_seconds": round(runtime, 4),
+        }
+        if self._successful_completion_recorded:
+            metadata_updates["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+        else:
+            metadata_updates["failed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+            metadata_updates["failure_reason"] = (
+                "simulation_finalization_failed"
+                if self._final_decision_recorded
+                else "simulation_ended_without_final_decision"
+            )
+
+        update_run_metadata(metadata_updates)
 
 
 metrics = MetricsTracker()

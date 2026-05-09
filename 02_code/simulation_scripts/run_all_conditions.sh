@@ -22,7 +22,6 @@ if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then
 fi
 
 COUNT="${SIM_COUNT:-10}"
-MAX_ATTEMPTS="${SIM_MAX_ATTEMPTS:-3}"
 SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-1}"
 RUN_TAG="${SIM_RUN_TAG:-transparency_experiment}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
@@ -52,7 +51,6 @@ for smm_mode in "${SMM_MODES[@]}"; do
     for i in $(seq -f "%03g" 1 "$COUNT"); do
       run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
       metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
-      attempt=1
 
       if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
         && grep -q '"status": "completed"' "$metadata_file"; then
@@ -60,30 +58,24 @@ for smm_mode in "${SMM_MODES[@]}"; do
         continue
       fi
 
-      while true; do
-        echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
+      echo "Starting simulation $i/$COUNT: $run_id"
 
-        if SIM_CONDITION="$condition" \
-          SIM_SMM_MODE="$smm_mode" \
-          SIM_RUN_ID="$run_id" \
-          SIM_RUN_TAG="$RUN_TAG" \
-          adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
-          echo "Finished simulation $i/$COUNT: $run_id"
-          break
-        else
-          status=$?
+      if SIM_CONDITION="$condition" \
+        SIM_SMM_MODE="$smm_mode" \
+        SIM_RUN_ID="$run_id" \
+        SIM_RUN_TAG="$RUN_TAG" \
+        adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
+        if ! grep -q '"status": "completed"' "$metadata_file"; then
+          echo "Simulation did not complete successfully: $run_id" >&2
+          exit 1
         fi
 
-        if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
-          echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
-          exit "$status"
-        fi
-
-        sleep_seconds=$((attempt * 30))
-        echo "Simulation failed: $run_id. Retrying in ${sleep_seconds}s..." >&2
-        sleep "$sleep_seconds"
-        attempt=$((attempt + 1))
-      done
+        echo "Finished simulation $i/$COUNT: $run_id"
+      else
+        status=$?
+        echo "Simulation failed: $run_id" >&2
+        exit "$status"
+      fi
     done
 
     echo "Finished condition: $condition ($smm_mode)"

@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import math
-import logging
 import os
-import time
 from itertools import combinations
 from pathlib import Path
 from typing import Mapping
@@ -15,30 +13,6 @@ from .env import read_env_file_value
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 ENV_FILES = (REPO_ROOT / ".env", PACKAGE_ROOT / ".env")
-EMBEDDING_MAX_ATTEMPTS = max(1, int(os.getenv("EMBEDDING_MAX_ATTEMPTS", "4")))
-EMBEDDING_RETRY_BASE_DELAY = float(os.getenv("EMBEDDING_RETRY_BASE_DELAY", "5"))
-logger = logging.getLogger("metrics")
-
-
-def _is_retryable_embedding_error(error: Exception) -> bool:
-    """Return True for transient provider/network errors worth retrying."""
-    error_name = error.__class__.__name__.lower()
-    error_text = str(error).lower()
-    retryable_markers = (
-        "timeout",
-        "connection",
-        "rate limit",
-        "ratelimit",
-        "429",
-        "500",
-        "502",
-        "503",
-        "504",
-        "badgateway",
-        "serviceunavailable",
-        "internalserver",
-    )
-    return any(marker in error_name or marker in error_text for marker in retryable_markers)
 
 
 def _cosine(left: list[float], right: list[float]) -> float:
@@ -116,26 +90,7 @@ def _embedding_vectors(texts: Mapping[str, str], model: str) -> dict[str, list[f
 
     agent_keys = sorted(texts)
     kwargs = _embedding_kwargs(model, [texts[key] for key in agent_keys])
-    for attempt in range(1, EMBEDDING_MAX_ATTEMPTS + 1):
-        try:
-            response = embedding(**kwargs)
-            break
-        except Exception as error:
-            if (
-                attempt >= EMBEDDING_MAX_ATTEMPTS
-                or not _is_retryable_embedding_error(error)
-            ):
-                raise
-
-            delay = EMBEDDING_RETRY_BASE_DELAY * (2 ** (attempt - 1))
-            logger.warning(
-                "Transient embedding error on attempt %s/%s; retrying in %.1fs: %s",
-                attempt,
-                EMBEDDING_MAX_ATTEMPTS,
-                delay,
-                error,
-            )
-            time.sleep(delay)
+    response = embedding(**kwargs)
 
     data = _coerce_embedding_data(response)
     vectors = {

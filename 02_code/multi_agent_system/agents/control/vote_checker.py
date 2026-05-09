@@ -50,6 +50,7 @@ def _record_final_decision(
             decision_correct=metrics.decision_correct,
             round=metrics.loop_count,
         )
+        metrics.record_successful_completion()
 
 
 # --- metrics tool ---
