@@ -1,0 +1,50 @@
+2026-05-09 02:11:23,167 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1778285483.1949325, "event": "memory_reset"}
+{"id": 2, "ts": 1778285483.198334, "event": "discussion_order", "round": 1, "order": ["agent_1", "agent_3", "agent_2"]}
+2026-05-09 02:11:31,040 - INFO - Tokens - Input: 1419, Output: 757, Total: 2176
+{"id": 3, "ts": 1778285491.0416777, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "I tentatively favor **Candidate A**. Their ability to anticipate dangerous situations, see complex connections, and excellent spatial vision give strong technical competence essential for long\u2011distance navigation, while their very good leadership qualities support crew coordination. However, their tendency to be unorganized and difficulty accepting criticism could undermine reliability and teamwork, which remains an open concern.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate A\"}"}
+2026-05-09 02:11:31,041 - INFO - Agent turns: 1
+2026-05-09 02:11:37,628 - INFO - Tokens - Input: 1589, Output: 853, Total: 2442
+{"id": 4, "ts": 1778285497.629633, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I tentatively favor **Candidate B**. Their very conscientious nature supports reliability, and they handle stress well while accurately assessing weather\u2014key for calm, safe long\u2011distance operations. However, their pretentious attitude and occasional wrong tone when communicating could undermine crew cooperation.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-09 02:11:37,629 - INFO - Agent turns: 2
+2026-05-09 02:11:46,548 - INFO - Tokens - Input: 1662, Output: 1133, Total: 2795
+{"id": 5, "ts": 1778285506.550335, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I tentatively favor **Candidate D**. Their strong sense of responsibility, excellent problem\u2011solving ability, and high concentration support reliable, safe decision\u2011making on long\u2011distance flights, while their capacity to respond adequately to unexpected events is crucial for handling in\u2011flight contingencies. However, the hot temper and \u201cknow\u2011it\u2011all\u201d reputation raise concerns about crew cooperation and interpersonal dynamics, which could undermine cockpit teamwork.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate D\"}"}
+2026-05-09 02:11:46,550 - INFO - Agent turns: 3
+2026-05-09 02:11:46,560 - INFO - Loop 1 completed
+{"id": 6, "ts": 1778285506.5660846, "event": "discussion_order", "round": 2, "order": ["agent_3", "agent_2", "agent_1"]}
+2026-05-09 02:11:53,259 - INFO - Tokens - Input: 1726, Output: 816, Total: 2542
+{"id": 7, "ts": 1778285513.2608202, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "I continue to favor **Candidate\u202fB**. Their very conscientious nature and strong stress\u2011handling ability give high reliability and calmness under pressure, while their skill in assessing weather and excellent computer abilities support the technical competence needed for long\u2011distance flights. The main uncertainty is their pretentious attitude and occasional wrong tone, which could undermine crew cooperation and the positive cockpit atmosphere.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-09 02:11:53,260 - INFO - Agent turns: 4
+2026-05-09 02:12:00,539 - INFO - Tokens - Input: 1899, Output: 944, Total: 2843
+{"id": 8, "ts": 1778285520.540446, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "I continue to favor **Candidate\u202fB**. Their very conscientious nature and strong stress\u2011handling ability give high reliability and calmness under pressure, while their skill in assessing weather and excellent computer abilities provide solid technical competence for long\u2011distance operations. The main trade\u2011off is their tendency to make nasty remarks and a pretentious attitude, which could undermine crew cooperation and cockpit atmosphere.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-09 02:12:00,540 - INFO - Agent turns: 5
+2026-05-09 02:12:05,719 - INFO - Tokens - Input: 2002, Output: 669, Total: 2671
+{"id": 9, "ts": 1778285525.7212327, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "I continue to favor **Candidate\u202fB**. Their very conscientious nature ensures high reliability, and their strong stress\u2011handling ability provides calmness under pressure\u2014both essential for long\u2011distance flights. Additionally, their skill in assessing weather and excellent computer abilities give solid technical competence for navigation and flight planning. The main trade\u2011off is their tendency toward grumpiness, pretentiousness, and making nasty remarks, which could undermine crew cooperation and the cockpit atmosphere.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-09 02:12:05,721 - INFO - Agent turns: 6
+2026-05-09 02:12:05,730 - INFO - Loop 2 completed
+2026-05-09 02:12:05,730 - INFO - Final Chosen Candidate: Candidate B
+2026-05-09 02:12:05,730 - INFO - Final Decision Method: consensus
+2026-05-09 02:12:05,730 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-09 02:12:05,730 - INFO - Correct Candidate: Candidate C
+2026-05-09 02:12:05,730 - INFO - Decision Correct: 0
+{"id": 10, "ts": 1778285525.7320747, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 11, "ts": 1778285525.7322137, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 2}
+2026-05-09 02:12:05,740 - INFO - ======================================================================
+2026-05-09 02:12:05,740 - INFO - SIMULATION METRICS
+2026-05-09 02:12:05,740 - INFO - ======================================================================
+2026-05-09 02:12:05,740 - INFO - Total Loops: 2
+2026-05-09 02:12:05,740 - INFO - Agent Turns (no vote checker): 6
+2026-05-09 02:12:05,740 - INFO - Agent Tool Calls: 0
+2026-05-09 02:12:05,740 - INFO - Agent Tool Messages: 0
+2026-05-09 02:12:05,740 - INFO - Memory Updates: 0
+2026-05-09 02:12:05,740 - INFO - Total Messages (no vote checker): 6
+2026-05-09 02:12:05,740 - INFO - Input Tokens: 10297
+2026-05-09 02:12:05,740 - INFO - Output Tokens: 5172
+2026-05-09 02:12:05,740 - INFO - Total Tokens: 15469
+2026-05-09 02:12:05,741 - INFO - Final Chosen Candidate: Candidate B
+2026-05-09 02:12:05,741 - INFO - Final Decision Method: consensus
+2026-05-09 02:12:05,741 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-09 02:12:05,741 - INFO - Correct Candidate: Candidate C
+2026-05-09 02:12:05,741 - INFO - Decision Correct: 0
+2026-05-09 02:12:05,741 - INFO - Runtime: 42.57s
+2026-05-09 02:12:05,741 - INFO - ======================================================================
