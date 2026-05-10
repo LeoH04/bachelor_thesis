@@ -1,157 +1,374 @@
-"""Rule-based gold-standard alignment checks for shared mental models."""
+"""Rule-based gold-standard fact coverage checks for shared mental models."""
 
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
 from typing import Mapping
 
-CHECK_NAMES = (
-    "favorite_is_c",
-    "c_reliability",
-    "c_calmness",
-    "c_attention",
-    "c_crew_fit",
-    "a_risks",
-    "b_risks",
-    "d_risks",
+from .task import TASK
+
+
+@dataclass(frozen=True)
+class FactSpec:
+    """One configured hidden-profile fact with curated matching patterns."""
+
+    fact_id: str
+    candidate: str
+    text: str
+    patterns: tuple[str, ...]
+
+
+FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
+    "Candidate A can anticipate dangerous situations.": (
+        r"anticipat\w*.{0,40}danger\w*",
+        r"danger\w*.{0,40}situat\w*",
+    ),
+    "Candidate A is able to see complex connections.": (
+        r"(?:see|sees|understand\w*|recogni[sz]\w*).{0,40}complex.{0,40}connection\w*",
+        r"complex.{0,20}connection\w*",
+    ),
+    "Candidate A has excellent spatial vision.": (
+        r"spatial.{0,20}vision",
+    ),
+    "Candidate A has very good leadership qualities.": (
+        r"(?:very\s+good|strong|excellent).{0,40}leadership",
+        r"leadership.{0,40}(?:qualities|strong|very\s+good|excellent)",
+    ),
+    "Candidate B is very conscientious.": (
+        r"conscientious",
+    ),
+    "Candidate B handles stress very well.": (
+        r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
+        r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
+    ),
+    "Candidate B is good at assessing weather conditions.": (
+        r"assess\w*.{0,30}weather",
+        r"weather.{0,30}(?:assess\w*|conditions?)",
+    ),
+    "Candidate B has excellent computer skills.": (
+        r"excellent.{0,30}computer",
+        r"computer.{0,30}skills?",
+    ),
+    "Candidate C can make correct decisions quickly.": (
+        r"correct.{0,30}decisions?.{0,30}quick",
+        r"quick.{0,30}correct.{0,30}decisions?",
+        r"decisions?.{0,30}quick\w*.{0,30}correct",
+    ),
+    "Candidate C has difficulty communicating ideas.": (
+        r"(?:difficult\w*|trouble|struggl\w*|problems?).{0,40}communicat\w*.{0,30}ideas?",
+        r"communicat\w*.{0,30}ideas?.{0,40}(?:difficult|trouble|struggl)",
+    ),
+    "Candidate C is regarded as egocentric.": (
+        r"egocentric",
+        r"self[- ]?cent",
+    ),
+    "Candidate C is not very willing to further his education.": (
+        r"not.{0,30}willing.{0,30}(?:further|continu\w*).{0,20}education",
+        r"low.{0,30}willingness.{0,30}(?:further|continu\w*).{0,20}education",
+        r"unwilling.{0,30}(?:further|continu\w*).{0,20}education",
+    ),
+    "Candidate D responds to unexpected events adequately.": (
+        r"respond\w*.{0,30}unexpected.{0,20}events?.{0,30}adequate",
+        r"unexpected.{0,20}events?.{0,30}(?:respond\w*|adequate)",
+    ),
+    "Candidate D can concentrate very well.": (
+        r"concentrat\w*.{0,30}(?:very\s+well|well|excellent)",
+        r"very\s+well.{0,30}concentrat",
+    ),
+    "Candidate D solves problems extremely well.": (
+        r"solv\w*.{0,30}problems?.{0,30}(?:extremely\s+well|very\s+well|well)",
+        r"problem[- ]?solv\w*.{0,30}(?:extremely|strong|excellent)",
+    ),
+    "Candidate D takes responsibility seriously.": (
+        r"takes?.{0,30}responsibilit\w*.{0,30}serious",
+        r"responsibilit\w*.{0,30}serious",
+    ),
+    "Candidate A is sometimes not good at taking criticism.": (
+        r"(?:not|poor|bad|difficulty|trouble).{0,40}(?:tak\w*|accept\w*|receiv\w*).{0,20}criticism",
+        r"criticism.{0,40}(?:poorly|badly|not\s+good)",
+    ),
+    "Candidate A can be unorganized.": (
+        r"unorganiz\w*",
+        r"disorganiz\w*",
+        r"weak.{0,30}organiz\w*",
+        r"organiz\w*.{0,30}weak",
+    ),
+    "Candidate B can be grumpy.": (
+        r"grump\w*",
+    ),
+    "Candidate B can be uncooperative.": (
+        r"uncooperat\w*",
+        r"not\s+cooperat\w*",
+    ),
+    "Candidate C is known to be 100% reliable.": (
+        r"100\s*%",
+        r"100\s*percent",
+        r"fully.{0,20}reliab\w*",
+        r"complete.{0,20}reliab\w*",
+        r"reliab\w*.{0,20}(?:100|fully|complete)",
+    ),
+    "Candidate C creates a positive atmosphere with his crew.": (
+        r"positive.{0,30}atmosphere.{0,30}crew",
+        r"crew.{0,30}positive.{0,30}atmosphere",
+        r"positive.{0,30}crew.{0,30}atmosphere",
+    ),
+    "Candidate D is regarded as arrogant.": (
+        r"arrogant",
+    ),
+    "Candidate D has relatively weak leadership skills.": (
+        r"weak.{0,30}leadership",
+        r"leadership.{0,30}weak",
+    ),
+    "Candidate A is regarded as a show-off.": (
+        r"show[- ]?off",
+        r"showbo\w*",
+        r"boast\w*",
+    ),
+    "Candidate A is regarded as being not open to new ideas.": (
+        r"not\s+open.{0,30}new\s+ideas",
+        r"closed.{0,30}new\s+ideas",
+        r"resist\w*.{0,30}new\s+ideas",
+    ),
+    "Candidate B has a relatively weak memory for numbers.": (
+        r"weak.{0,30}memory.{0,30}numbers?",
+        r"memory.{0,30}numbers?.{0,30}weak",
+        r"numeric.{0,20}memory.{0,30}weak",
+        r"weak.{0,30}numeric",
+    ),
+    "Candidate B makes nasty remarks about his colleagues.": (
+        r"nasty.{0,30}remarks?.{0,30}colleagues?",
+        r"remarks?.{0,30}colleagues?.{0,30}nasty",
+    ),
+    "Candidate C keeps calm in a crisis.": (
+        r"calm.{0,30}crisis",
+        r"crisis.{0,30}calm",
+    ),
+    "Candidate C understands complicated technology.": (
+        r"(?:understand\w*|grasp\w*).{0,40}(?:complicated|complex).{0,30}technolog\w*",
+        r"(?:understand\w*|grasp\w*).{0,20}technolog\w*",
+    ),
+    "Candidate D is regarded as a know-it-all.": (
+        r"know[- ]?it[- ]?all",
+    ),
+    "Candidate D has a hot temper.": (
+        r"hot.{0,20}temper",
+        r"temper.{0,20}hot",
+    ),
+    "Candidate A is unfriendly.": (
+        r"unfriend\w*",
+        r"not\s+friendly",
+    ),
+    "Candidate A eats unhealthily.": (
+        r"eat\w*.{0,30}unhealth\w*",
+        r"unhealth\w*.{0,30}(?:eat\w*|habits|diet)",
+    ),
+    "Candidate B is regarded as pretentious.": (
+        r"pretentious",
+    ),
+    "Candidate B sometimes adopts the wrong tone when communicating.": (
+        r"wrong.{0,30}tone",
+        r"tone.{0,30}(?:communicat\w*|wrong)",
+        r"communicat\w*.{0,30}wrong\s+tone",
+    ),
+    "Candidate C puts concern for others above everything.": (
+        r"concern.{0,30}others",
+        r"others.{0,30}above.{0,30}everything",
+        r"puts?.{0,30}others.{0,30}(?:first|above)",
+        r"care.{0,30}others",
+    ),
+    "Candidate C has excellent attention skills.": (
+        r"excellent.{0,30}attention",
+        r"attention.{0,30}skills?",
+        r"attentive",
+    ),
+    "Candidate D is considered moody.": (
+        r"moody",
+    ),
+    "Candidate D is regarded as a loner.": (
+        r"loner",
+    ),
+}
+
+_NORMALIZE_TRANSLATION = str.maketrans(
+    {
+        0x2010: "-",
+        0x2011: "-",
+        0x2012: "-",
+        0x2013: "-",
+        0x2014: "-",
+        0x2018: "'",
+        0x2019: "'",
+    }
 )
 
 
+def _agent_sort_key(agent_key: str) -> tuple[str, int | str]:
+    """Sort agent_N keys numerically while keeping a stable fallback."""
+    prefix, separator, suffix = agent_key.rpartition("_")
+    if separator:
+        try:
+            return prefix, int(suffix)
+        except ValueError:
+            pass
+    return agent_key, agent_key
+
+
+def _slug(value: object) -> str:
+    """Convert text into a stable snake_case identifier fragment."""
+    text = str(value or "").replace("%", " percent ")
+    text = re.sub(r"[^a-zA-Z0-9]+", "_", text.lower()).strip("_")
+    return text or "unknown"
+
+
 def _normalize(text: str) -> str:
-    """Lowercase and collapse whitespace for deterministic matching."""
+    """Lowercase, normalize punctuation, and collapse whitespace."""
+    text = text.translate(_NORMALIZE_TRANSLATION)
     return re.sub(r"\s+", " ", text.lower()).strip()
 
 
+def _candidate_from_fact(text: str) -> str:
+    """Return the candidate letter mentioned by a configured task fact."""
+    match = re.match(r"Candidate\s+([A-Z])\b", text)
+    if not match:
+        raise ValueError(f"Could not derive candidate from fact: {text}")
+    return match.group(1).lower()
+
+
+def _fact_id(source: str, text: str) -> str:
+    """Build a stable readable fact identifier from source and fact text."""
+    candidate = _candidate_from_fact(text)
+    core = re.sub(r"^Candidate\s+[A-Z]\s+", "", text.rstrip("."))
+    return f"{source}_candidate_{candidate}_{_slug(core)}"
+
+
+def _literal_core_pattern(text: str) -> str:
+    """Return a conservative fallback pattern for newly configured facts."""
+    core = re.sub(r"^Candidate\s+[A-Z]\s+", "", text.rstrip("."))
+    words = re.findall(r"[a-z0-9]+", core.lower().replace("%", " percent "))
+    return r".{0,20}".join(re.escape(word) for word in words)
+
+
+def _build_fact_specs() -> tuple[FactSpec, ...]:
+    """Build fact specs from the configured hidden-profile task."""
+    specs = []
+    for text in TASK.get("public_information", []):
+        fact_text = str(text)
+        patterns = FACT_PATTERNS_BY_TEXT.get(
+            fact_text,
+            (_literal_core_pattern(fact_text),),
+        )
+        specs.append(
+            FactSpec(
+                fact_id=_fact_id("public", fact_text),
+                candidate=_candidate_from_fact(fact_text),
+                text=fact_text,
+                patterns=patterns,
+            )
+        )
+
+    private_information = TASK.get("private_information", {})
+    for agent_key in sorted(private_information, key=_agent_sort_key):
+        for text in private_information[agent_key]:
+            fact_text = str(text)
+            patterns = FACT_PATTERNS_BY_TEXT.get(
+                fact_text,
+                (_literal_core_pattern(fact_text),),
+            )
+            specs.append(
+                FactSpec(
+                    fact_id=_fact_id(agent_key, fact_text),
+                    candidate=_candidate_from_fact(fact_text),
+                    text=fact_text,
+                    patterns=patterns,
+                )
+            )
+    return tuple(specs)
+
+
+FACT_SPECS = _build_fact_specs()
+CHECK_NAMES = tuple(spec.fact_id for spec in FACT_SPECS)
+
+
+def _combined_pattern(patterns: tuple[str, ...]) -> str:
+    """Join fact patterns while preserving their local grouping."""
+    return "|".join(f"(?:{pattern})" for pattern in patterns)
+
+
+def _line_mentions_candidate(line: str, candidate: str) -> bool:
+    """Return whether a normalized line explicitly references a candidate."""
+    candidate_label = rf"candidate\s+{candidate}\b"
+    short_label_at_line_start = (
+        rf"^\s*(?:[-*]\s*)?(?:\|\s*)?(?:[*_`]+\s*)?"
+        rf"{candidate}(?:\s*[*_`]+)?\s*(?:\||[-:])"
+    )
+    short_label_table_cell = (
+        rf"(?:^|\|)\s*(?:[*_`]+)?{candidate}(?:[*_`]+)?\s*(?:\||$)"
+    )
+    return bool(
+        re.search(candidate_label, line)
+        or re.search(short_label_at_line_start, line)
+        or re.search(short_label_table_cell, line)
+    )
+
+
 def _candidate_line_has(text: str, candidate: str, patterns: tuple[str, ...]) -> bool:
-    """Return whether a candidate line or local span contains any pattern."""
-    candidate_pattern = rf"candidate\s+{candidate.lower()}"
+    """Return whether a candidate line or local span contains a fact pattern."""
+    combined = _combined_pattern(patterns)
     for raw_line in text.splitlines():
         line = _normalize(raw_line)
-        if re.search(candidate_pattern, line) and any(
-            re.search(pattern, line) for pattern in patterns
-        ):
+        if _line_mentions_candidate(line, candidate) and re.search(combined, line):
             return True
 
     normalized = _normalize(text)
-    combined = "|".join(patterns)
+    candidate_label = rf"candidate\s+{candidate}\b"
     return bool(
-        re.search(rf"{candidate_pattern}.{{0,240}}(?:{combined})", normalized)
-        or re.search(rf"(?:{combined}).{{0,240}}{candidate_pattern}", normalized)
+        re.search(rf"{candidate_label}.{{0,260}}(?:{combined})", normalized)
+        or re.search(rf"(?:{combined}).{{0,260}}{candidate_label}", normalized)
     )
-
-
-def _favorite_is_c(text: str) -> bool:
-    """Return whether the memory explicitly favors Candidate C."""
-    normalized = _normalize(text)
-    patterns = (
-        r"my current working favorite\s*[-:]?\s*candidate\s+c",
-        r"my last vote\s*[-:]?\s*candidate\s+c",
-        r"group-leading candidate\s*[-:]?\s*candidate\s+c",
-        r"current position\s*[-:]?\s*candidate\s+c",
-        r"preferred candidate\s*[-:]?\s*candidate\s+c",
-        r"vote\s*[-:]?\s*candidate\s+c",
-        r"favor\w*\s+candidate\s+c",
-        r"recommend\w*\s+candidate\s+c",
-        r"candidate\s+c.{0,120}\b(best|favorite|preferred|leading|choice|recommend)",
-    )
-    return any(re.search(pattern, normalized) for pattern in patterns)
 
 
 def score_memory(text: str) -> dict[str, object]:
-    """Score one shared mental model against the rule-based gold standard."""
+    """Score one shared mental model by coverage of configured task facts."""
     checks = {
-        "favorite_is_c": _favorite_is_c(text),
-        "c_reliability": _candidate_line_has(
-            text,
-            "c",
-            (r"100\s*%", r"100\s*percent", r"reliab\w*", r"conscientious"),
-        ),
-        "c_calmness": _candidate_line_has(
-            text,
-            "c",
-            (r"calm\w*", r"crisis", r"stress"),
-        ),
-        "c_attention": _candidate_line_has(
-            text,
-            "c",
-            (r"attention", r"attentive", r"concentrat\w*"),
-        ),
-        "c_crew_fit": _candidate_line_has(
-            text,
-            "c",
-            (
-                r"positive atmosphere",
-                r"crew",
-                r"concern for others",
-                r"cooperat\w*",
-                r"team\w*",
-            ),
-        ),
-        "a_risks": _candidate_line_has(
-            text,
-            "a",
-            (
-                r"criticism",
-                r"unorganiz\w*",
-                r"show[- ]?off",
-                r"not open",
-                r"unfriendly",
-                r"unhealthy",
-            ),
-        ),
-        "b_risks": _candidate_line_has(
-            text,
-            "b",
-            (
-                r"grumpy",
-                r"uncooperative",
-                r"weak memory",
-                r"memory for numbers",
-                r"nasty remarks",
-                r"pretentious",
-                r"wrong tone",
-            ),
-        ),
-        "d_risks": _candidate_line_has(
-            text,
-            "d",
-            (
-                r"arrogant",
-                r"weak leadership",
-                r"know[- ]?it[- ]?all",
-                r"hot temper",
-                r"moody",
-                r"loner",
-            ),
-        ),
+        spec.fact_id: _candidate_line_has(text, spec.candidate, spec.patterns)
+        for spec in FACT_SPECS
     }
-    score = round(sum(checks.values()) / len(CHECK_NAMES), 6)
+    total_facts = len(FACT_SPECS)
+    matched_facts = sum(checks.values())
+    score = round(matched_facts / total_facts, 6) if total_facts else None
     return {
         "score": score,
+        "matched_facts": matched_facts,
+        "total_facts": total_facts,
         "checks": {name: int(checks[name]) for name in CHECK_NAMES},
     }
 
 
 def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, object]:
-    """Calculate rule-based gold-standard alignment for agent memories."""
+    """Calculate rule-based fact coverage for agent memories."""
     by_agent = []
     for agent_key in sorted(texts):
-        text = texts[agent_key]
-        if not text.strip():
-            continue
-        result = score_memory(text)
+        result = score_memory(texts[agent_key])
         by_agent.append(
             {
                 "agent": agent_key,
                 "score": result["score"],
+                "matched_facts": result["matched_facts"],
+                "total_facts": result["total_facts"],
                 "checks": result["checks"],
             }
         )
 
-    values = [float(item["score"]) for item in by_agent]
+    values = [
+        float(item["score"])
+        for item in by_agent
+        if item.get("score") is not None
+    ]
     return {
-        "method": "rule_based_binary_checks",
+        "method": "rule_based_fact_coverage",
         "agent_count": len(by_agent),
+        "fact_count": len(FACT_SPECS),
         "by_agent": by_agent,
         "mean_alignment": round(sum(values) / len(values), 6) if values else None,
         "min_alignment": min(values) if values else None,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Backfill rule-based gold-standard alignment into existing metadata."""
+"""Backfill rule-based gold-standard fact coverage into existing metadata."""
 
 from __future__ import annotations
 
@@ -74,11 +74,13 @@ def mean_pairwise_similarity(metadata: dict) -> object:
 
 
 def has_gold_alignment(metadata: dict) -> bool:
-    """Return whether the rule-based gold-standard alignment is already present."""
+    """Return whether current rule-based fact coverage is already present."""
     return (
         "gold_standard_alignment" in metadata
         and "mean_gold_standard_alignment" in metadata
         and "context_alignment" in metadata
+        and metadata.get("gold_standard_alignment_method")
+        == "rule_based_fact_coverage"
     )
 
 
@@ -127,7 +129,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description=(
-            "Backfill rule-based gold-standard alignment and context alignment "
+            "Backfill rule-based gold-standard fact coverage and context alignment "
             "into existing simulation metadata.json files."
         )
     )

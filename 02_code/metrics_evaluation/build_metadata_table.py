@@ -123,7 +123,7 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
             "gold_standard_alignment_method"
         ),
         "embedding_model": context.get("embedding_model"),
-        "metadata_file": str(path.relative_to(REPO_ROOT)),
+        "metadata_file": str(path.resolve().relative_to(REPO_ROOT)),
     }
 
     vote_columns = set()
