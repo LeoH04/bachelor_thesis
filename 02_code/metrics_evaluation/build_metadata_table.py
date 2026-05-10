@@ -12,8 +12,16 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PACKAGE_ROOT = REPO_ROOT / "02_code" / "multi_agent_system"
 DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
 DEFAULT_OUTPUT = REPO_ROOT / "01_data" / "processed" / "simulation_metrics.csv"
+
+sys.path.insert(0, str(PACKAGE_ROOT))
+from config.gold_standard_alignment import (  # noqa: E402
+    FACT_SOURCE_BUCKETS,
+    fact_source_summary,
+    summarize_fact_sources,
+)
 
 BASE_COLUMNS = [
     "run_id",
@@ -44,6 +52,12 @@ BASE_COLUMNS = [
     "mean_gold_standard_alignment",
     "min_gold_standard_alignment",
     "max_gold_standard_alignment",
+    "mean_public_facts",
+    "mean_public_fact_coverage",
+    "mean_own_private_facts",
+    "mean_own_private_fact_coverage",
+    "mean_other_private_facts",
+    "mean_other_private_fact_coverage",
     "context_alignment",
     "memory_similarity_method",
     "gold_standard_alignment_method",
@@ -77,9 +91,24 @@ def product_or_none(left: object, right: object) -> float | None:
     return round(float(left) * float(right), 6)
 
 
+def gold_alignment_rows_with_fact_sources(metadata: dict) -> list[dict]:
+    """Return per-agent gold rows, deriving fact-source fields if needed."""
+    rows = []
+    for item in metadata.get("gold_standard_alignment") or []:
+        row = dict(item)
+        checks = row.get("checks") or {}
+        agent = str(row.get("agent") or "")
+        if checks and "matched_other_private_facts" not in row:
+            row.update(fact_source_summary(agent, checks))
+        rows.append(row)
+    return rows
+
+
 def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[str]]:
     """Convert nested run metadata into one flat CSV row."""
     context = metadata.get("context_consistency") or {}
+    gold_alignment_rows = gold_alignment_rows_with_fact_sources(metadata)
+    source_summary = summarize_fact_sources(gold_alignment_rows)
     mean_pairwise = metadata.get(
         "mean_pairwise_memory_similarity",
         context.get("mean_pairwise_similarity"),
@@ -114,6 +143,20 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         "mean_gold_standard_alignment": mean_gold_alignment,
         "min_gold_standard_alignment": metadata.get("min_gold_standard_alignment"),
         "max_gold_standard_alignment": metadata.get("max_gold_standard_alignment"),
+        **{
+            f"mean_{bucket}_facts": metadata.get(
+                f"mean_{bucket}_facts",
+                source_summary.get(f"mean_{bucket}_facts"),
+            )
+            for bucket in FACT_SOURCE_BUCKETS
+        },
+        **{
+            f"mean_{bucket}_fact_coverage": metadata.get(
+                f"mean_{bucket}_fact_coverage",
+                source_summary.get(f"mean_{bucket}_fact_coverage"),
+            )
+            for bucket in FACT_SOURCE_BUCKETS
+        },
         "context_alignment": metadata.get(
             "context_alignment",
             product_or_none(mean_pairwise, mean_gold_alignment),
@@ -141,7 +184,7 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         row[column] = item.get("similarity")
         similarity_columns.add(column)
 
-    for item in metadata.get("gold_standard_alignment") or []:
+    for item in gold_alignment_rows:
         agent = slug(item.get("agent"))
         column = f"gold_alignment_{agent}"
         row[column] = item.get("score")
@@ -214,7 +257,7 @@ def write_csv(output: Path, rows: list[dict], columns: list[str]) -> None:
     """Write rows to a CSV file, creating the output directory if needed."""
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", encoding="utf-8", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=columns)
+        writer = csv.DictWriter(file, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

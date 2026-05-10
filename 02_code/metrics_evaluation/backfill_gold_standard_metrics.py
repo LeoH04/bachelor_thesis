@@ -14,7 +14,10 @@ PACKAGE_ROOT = REPO_ROOT / "02_code" / "multi_agent_system"
 DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
 
 sys.path.insert(0, str(PACKAGE_ROOT))
-from config.gold_standard_alignment import calculate_gold_standard_alignment  # noqa: E402
+from config.gold_standard_alignment import (  # noqa: E402
+    FACT_SOURCE_BUCKETS,
+    calculate_gold_standard_alignment,
+)
 
 
 OLD_GOLD_STANDARD_FIELDS = (
@@ -64,6 +67,17 @@ def context_alignment_score(
     )
 
 
+def fact_source_metadata(alignment: dict[str, object]) -> dict[str, object]:
+    """Return run-level fact-source metrics for metadata output."""
+    fields = {}
+    for bucket in FACT_SOURCE_BUCKETS:
+        fields[f"mean_{bucket}_facts"] = alignment.get(f"mean_{bucket}_facts")
+        fields[f"mean_{bucket}_fact_coverage"] = alignment.get(
+            f"mean_{bucket}_fact_coverage"
+        )
+    return fields
+
+
 def mean_pairwise_similarity(metadata: dict) -> object:
     """Return the stored mean pairwise similarity from old or current metadata."""
     context = metadata.get("context_consistency") or {}
@@ -78,6 +92,11 @@ def has_gold_alignment(metadata: dict) -> bool:
     return (
         "gold_standard_alignment" in metadata
         and "mean_gold_standard_alignment" in metadata
+        and all(
+            f"mean_{bucket}_facts" in metadata
+            and f"mean_{bucket}_fact_coverage" in metadata
+            for bucket in FACT_SOURCE_BUCKETS
+        )
         and "context_alignment" in metadata
         and metadata.get("gold_standard_alignment_method")
         == "rule_based_fact_coverage"
@@ -119,6 +138,7 @@ def backfill_metadata(metadata_path: Path, force: bool) -> str:
                 mean_alignment,
             ),
             "gold_standard_alignment_method": alignment.get("method"),
+            **fact_source_metadata(alignment),
         }
     )
     write_json(metadata_path, metadata)

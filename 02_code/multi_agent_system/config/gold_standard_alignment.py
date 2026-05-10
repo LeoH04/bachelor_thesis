@@ -288,6 +288,13 @@ def _build_fact_specs() -> tuple[FactSpec, ...]:
 
 FACT_SPECS = _build_fact_specs()
 CHECK_NAMES = tuple(spec.fact_id for spec in FACT_SPECS)
+PRIVATE_FACT_SOURCES = tuple(
+    sorted(
+        TASK.get("private_information", {}),
+        key=lambda source: (-len(source), source),
+    )
+)
+FACT_SOURCE_BUCKETS = ("public", "own_private", "other_private")
 
 
 def _combined_pattern(patterns: tuple[str, ...]) -> str:
@@ -345,18 +352,90 @@ def score_memory(text: str) -> dict[str, object]:
     }
 
 
+def _fact_bucket_for_memory(fact_id: str, agent_key: str) -> str | None:
+    """Classify a fact as public, own private, or other-agent private."""
+    if fact_id.startswith("public_"):
+        return "public"
+
+    for source in PRIVATE_FACT_SOURCES:
+        if fact_id.startswith(f"{source}_"):
+            return "own_private" if source == agent_key else "other_private"
+
+    return None
+
+
+def fact_source_summary(
+    agent_key: str,
+    checks: Mapping[str, object],
+) -> dict[str, object]:
+    """Summarize matched fact checks by source relative to one memory owner."""
+    matched = {bucket: 0 for bucket in FACT_SOURCE_BUCKETS}
+    totals = {bucket: 0 for bucket in FACT_SOURCE_BUCKETS}
+
+    for fact_id in CHECK_NAMES:
+        bucket = _fact_bucket_for_memory(fact_id, agent_key)
+        if bucket is None:
+            continue
+
+        totals[bucket] += 1
+        if int(checks.get(fact_id) or 0):
+            matched[bucket] += 1
+
+    summary: dict[str, object] = {}
+    for bucket in FACT_SOURCE_BUCKETS:
+        total = totals[bucket]
+        count = matched[bucket]
+        summary[f"matched_{bucket}_facts"] = count
+        summary[f"total_{bucket}_facts"] = total
+        summary[f"{bucket}_fact_coverage"] = (
+            round(count / total, 6) if total else None
+        )
+
+    return summary
+
+
+def summarize_fact_sources(by_agent: list[Mapping[str, object]]) -> dict[str, object]:
+    """Return run-level mean fact-source metrics from per-agent alignment rows."""
+    summary: dict[str, object] = {}
+    for bucket in FACT_SOURCE_BUCKETS:
+        matched_values = []
+        coverage_values = []
+        for item in by_agent:
+            matched = item.get(f"matched_{bucket}_facts")
+            coverage = item.get(f"{bucket}_fact_coverage")
+            if matched is not None:
+                matched_values.append(float(matched))
+            if coverage is not None:
+                coverage_values.append(float(coverage))
+
+        summary[f"mean_{bucket}_facts"] = (
+            round(sum(matched_values) / len(matched_values), 6)
+            if matched_values
+            else None
+        )
+        summary[f"mean_{bucket}_fact_coverage"] = (
+            round(sum(coverage_values) / len(coverage_values), 6)
+            if coverage_values
+            else None
+        )
+
+    return summary
+
+
 def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, object]:
     """Calculate rule-based fact coverage for agent memories."""
     by_agent = []
     for agent_key in sorted(texts):
         result = score_memory(texts[agent_key])
+        checks = result["checks"]
         by_agent.append(
             {
                 "agent": agent_key,
                 "score": result["score"],
                 "matched_facts": result["matched_facts"],
                 "total_facts": result["total_facts"],
-                "checks": result["checks"],
+                **fact_source_summary(agent_key, checks),
+                "checks": checks,
             }
         )
 
@@ -373,4 +452,5 @@ def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, obj
         "mean_alignment": round(sum(values) / len(values), 6) if values else None,
         "min_alignment": min(values) if values else None,
         "max_alignment": max(values) if values else None,
+        **summarize_fact_sources(by_agent),
     }

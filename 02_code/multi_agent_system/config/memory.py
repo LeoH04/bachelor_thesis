@@ -12,7 +12,10 @@ from .response_text import (
     _replace_response_text,
     _visible_text_from_parts,
 )
-from .gold_standard_alignment import calculate_gold_standard_alignment
+from .gold_standard_alignment import (
+    FACT_SOURCE_BUCKETS,
+    calculate_gold_standard_alignment,
+)
 from .similarity import calculate_memory_similarity
 from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, PROJECT_ROOT, TASK, _as_bullets
@@ -112,6 +115,17 @@ def _context_alignment_score(
     )
 
 
+def _fact_source_metadata(alignment: dict[str, object]) -> dict[str, object]:
+    """Return run-level fact-source metrics for metadata output."""
+    fields = {}
+    for bucket in FACT_SOURCE_BUCKETS:
+        fields[f"mean_{bucket}_facts"] = alignment.get(f"mean_{bucket}_facts")
+        fields[f"mean_{bucket}_fact_coverage"] = alignment.get(
+            f"mean_{bucket}_fact_coverage"
+        )
+    return fields
+
+
 def archive_agent_memories() -> Path | None:
     """Copy final agent memory markdown files into raw shared-mental-model data."""
     global _AGENT_MEMORIES_ARCHIVED
@@ -144,6 +158,7 @@ def archive_agent_memories() -> Path | None:
                 "max_gold_standard_alignment": None,
                 "context_alignment": None,
                 "gold_standard_alignment_method": "not_applicable",
+                **_fact_source_metadata({}),
             }
         )
         log_event(
@@ -186,6 +201,7 @@ def archive_agent_memories() -> Path | None:
                 mean_gold_standard_alignment,
             ),
             "gold_standard_alignment_method": gold_standard_alignment.get("method"),
+            **_fact_source_metadata(gold_standard_alignment),
         }
     )
     log_event(
