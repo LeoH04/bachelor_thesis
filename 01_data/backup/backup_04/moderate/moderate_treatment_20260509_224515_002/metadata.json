@@ -1,0 +1,133 @@
+{
+  "agent_tool_calls": 2,
+  "agent_tool_messages": 4,
+  "agent_turns": 14,
+  "completed_at": "2026-05-10T00:53:24+0200",
+  "condition": "moderate",
+  "context_alignment": 0.370587,
+  "context_consistency": {
+    "agent_count": 3,
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "max_pairwise_similarity": 0.896724,
+    "mean_pairwise_similarity": 0.808554,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.753208,
+    "pairwise": [
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_2",
+        "similarity": 0.775729
+      },
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_3",
+        "similarity": 0.896724
+      },
+      {
+        "agent_a": "agent_2",
+        "agent_b": "agent_3",
+        "similarity": 0.753208
+      }
+    ]
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "max_round_majority_vote",
+  "explicit_smm_memory": true,
+  "final_candidate": "Candidate B",
+  "gold_standard_alignment": [
+    {
+      "agent": "agent_1",
+      "checks": {
+        "a_risks": 1,
+        "b_risks": 1,
+        "c_attention": 1,
+        "c_calmness": 1,
+        "c_crew_fit": 1,
+        "c_reliability": 1,
+        "d_risks": 1,
+        "favorite_is_c": 0
+      },
+      "score": 0.875
+    },
+    {
+      "agent": "agent_2",
+      "checks": {
+        "a_risks": 1,
+        "b_risks": 1,
+        "c_attention": 0,
+        "c_calmness": 0,
+        "c_crew_fit": 0,
+        "c_reliability": 0,
+        "d_risks": 0,
+        "favorite_is_c": 0
+      },
+      "score": 0.25
+    },
+    {
+      "agent": "agent_3",
+      "checks": {
+        "a_risks": 1,
+        "b_risks": 1,
+        "c_attention": 0,
+        "c_calmness": 0,
+        "c_crew_fit": 0,
+        "c_reliability": 0,
+        "d_risks": 0,
+        "favorite_is_c": 0
+      },
+      "score": 0.25
+    }
+  ],
+  "gold_standard_alignment_method": "rule_based_binary_checks",
+  "input_tokens": 168692,
+  "max_gold_standard_alignment": 0.875,
+  "mean_gold_standard_alignment": 0.458333,
+  "mean_pairwise_memory_similarity": 0.808554,
+  "memory_updates": 45,
+  "min_gold_standard_alignment": 0.25,
+  "output_tokens": 57582,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_2",
+      "similarity": 0.775729
+    },
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_3",
+      "similarity": 0.896724
+    },
+    {
+      "agent_a": "agent_2",
+      "agent_b": "agent_3",
+      "similarity": 0.753208
+    }
+  ],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/shared_mental_models"
+  },
+  "rounds": 5,
+  "run_id": "moderate_treatment_20260509_224515_002",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 356.1311,
+  "schema_version": 1,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260509_224515_002/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_mode": "treatment",
+  "status": "completed",
+  "timestamp": "20260510_004728",
+  "total_messages": 18,
+  "total_tokens": 226274,
+  "vote_count": {
+    "Candidate A": 1,
+    "Candidate B": 2
+  }
+}
