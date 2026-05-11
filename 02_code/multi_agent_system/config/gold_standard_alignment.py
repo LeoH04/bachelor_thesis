@@ -234,7 +234,7 @@ def _fact_id(source: str, text: str) -> str:
 def _build_fact_specs() -> tuple[FactSpec, ...]:
     """Build fact specs from the configured hidden-profile task."""
     specs = []
-    for text in TASK.get("public_information", []):
+    for text in TASK["public_information"]:
         fact_text = str(text)
         patterns = FACT_PATTERNS_BY_TEXT[fact_text]
         specs.append(
@@ -246,7 +246,7 @@ def _build_fact_specs() -> tuple[FactSpec, ...]:
             )
         )
 
-    private_information = TASK.get("private_information", {})
+    private_information = TASK["private_information"]
     for agent_key in AGENT_KEYS:
         for text in private_information[agent_key]:
             fact_text = str(text)
@@ -266,7 +266,7 @@ FACT_SPECS = _build_fact_specs()
 CHECK_NAMES = tuple(spec.fact_id for spec in FACT_SPECS)
 PRIVATE_FACT_SOURCES = tuple(
     sorted(
-        TASK.get("private_information", {}),
+        TASK["private_information"],
         key=lambda source: (-len(source), source),
     )
 )

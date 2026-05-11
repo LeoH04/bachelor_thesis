@@ -9,10 +9,12 @@ from .response_text import (
     _public_value_text,
     _visible_text_from_parts,
 )
+from .run_warnings import record_run_warning
 from .task import AGENT_KEYS
 from .trace import log_event
 
 PUBLIC_DISCUSSION_STATE_KEY = "public_discussion_history"
+_MALFORMED_HISTORY_WARNING_KEYS: set[tuple[object, ...]] = set()
 
 
 def _round_number() -> int:
@@ -44,6 +46,29 @@ def _agent_key(agent_name: str | None) -> str:
     return agent_name.removesuffix("_tool")
 
 
+def _preview(value: object, limit: int = 500) -> str:
+    """Return a bounded text preview for warning details."""
+    try:
+        text = str(value)
+    except Exception:
+        text = repr(value)
+    return text[:limit]
+
+
+def _record_malformed_history_warning(
+    warning_key: tuple[object, ...],
+    code: str,
+    message: str,
+    **details: object,
+) -> None:
+    """Record one malformed-history warning once per process."""
+    if warning_key in _MALFORMED_HISTORY_WARNING_KEYS:
+        return
+
+    _MALFORMED_HISTORY_WARNING_KEYS.add(warning_key)
+    record_run_warning(code, message, **details)
+
+
 def reset_public_discussion_history(state: dict) -> None:
     """Clear the public discussion transcript stored in the simulation state."""
     if state is not None:
@@ -57,6 +82,17 @@ def _append_chat_entry(round_number: int, speaker: str, message: str) -> None:
         f.write(f"## Round {round_number} - {speaker}\n\n{message.strip()}\n\n")
 
 
+def _part_has_tool_call(part: object) -> bool:
+    """Return whether an ADK response part represents a tool interaction."""
+    if isinstance(part, dict):
+        return bool(part.get("function_call") or part.get("function_response"))
+
+    return bool(
+        getattr(part, "function_call", None)
+        or getattr(part, "function_response", None)
+    )
+
+
 def record_public_discussion_response(callback_context, llm_response) -> None:
     """Append only a normal agent turn's visible final message to shared state."""
     agent_name = getattr(callback_context, "agent_name", None)
@@ -68,11 +104,28 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     visible_parts = _drop_thought_parts(parts)
     text = _visible_text_from_parts(visible_parts)
 
+    if any(_part_has_tool_call(part) for part in visible_parts):
+        return llm_response
+
     if not METADATA_JSON_LABEL_RE.search(text):
+        record_run_warning(
+            "agent_output_missing_metadata",
+            "Scheduled agent response was not recorded because METADATA_JSON is missing.",
+            agent=agent_name,
+            round=_round_number(),
+            response_preview=_preview(text),
+        )
         return llm_response
 
     public_message = _extract_public_message(text)
     if not public_message:
+        record_run_warning(
+            "agent_output_missing_public_message",
+            "Scheduled agent response was not recorded because PUBLIC_MESSAGE is empty or missing.",
+            agent=agent_name,
+            round=_round_number(),
+            response_preview=_preview(text),
+        )
         return llm_response
 
     state = _get_state(callback_context)
@@ -108,6 +161,15 @@ def record_public_tool_exchange(
     question = _public_value_text(args)
     answer = _public_value_text(result)
     if not question and not answer:
+        record_run_warning(
+            "tool_exchange_unrecorded",
+            "Agent tool exchange could not be added to public history because no question or answer text was extracted.",
+            round=_round_number(),
+            caller=_agent_key(caller_name),
+            callee=_agent_key(callee_name),
+            args_preview=_preview(args),
+            result_preview=_preview(result),
+        )
         return None
 
     caller_label = _agent_label(caller_name)
@@ -156,15 +218,47 @@ def build_public_discussion_history(ctx) -> str:
     history = state.get(PUBLIC_DISCUSSION_STATE_KEY, [])
     if not history:
         return "- No discussion contributions yet."
+    if not isinstance(history, list):
+        _record_malformed_history_warning(
+            ("history_not_list", _preview(history)),
+            "public_history_malformed",
+            "Public discussion history was ignored because it is not a list.",
+            history_type=type(history).__name__,
+            history_preview=_preview(history),
+        )
+        return "- No discussion contributions yet."
 
     lines = []
-    for item in history:
+    for index, item in enumerate(history):
         if not isinstance(item, dict):
+            _record_malformed_history_warning(
+                ("non_dict", index, _preview(item)),
+                "public_history_item_malformed",
+                "Public discussion history item was skipped because it is not a dictionary.",
+                index=index,
+                item_type=type(item).__name__,
+                item_preview=_preview(item),
+            )
             continue
         round_number = item.get("round", "?")
         agent = str(item.get("agent", "unknown_agent")).replace("_", " ").title()
         message = str(item.get("message", "")).strip()
         if message:
             lines.append(f"- Round {round_number}, {agent}: {message}")
+        else:
+            _record_malformed_history_warning(
+                (
+                    "empty_message",
+                    index,
+                    _preview(item.get("round")),
+                    _preview(item.get("agent")),
+                ),
+                "public_history_item_missing_message",
+                "Public discussion history item was skipped because its message is empty or missing.",
+                index=index,
+                round=round_number,
+                agent=item.get("agent"),
+                item_preview=_preview(item),
+            )
 
     return "\n".join(lines) if lines else "- No discussion contributions yet."

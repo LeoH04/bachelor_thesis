@@ -12,6 +12,7 @@ from .response_text import (
     _replace_response_text,
     _visible_text_from_parts,
 )
+from .run_warnings import record_run_warning
 from .gold_standard_alignment import (
     FACT_SOURCE_BUCKETS,
     calculate_gold_standard_alignment,
@@ -41,8 +42,8 @@ def _extract_memory_markdown(text: str) -> str:
 
 def build_memory_template(agent_key: str) -> str:
     """Create the initial structured markdown memory for one agent."""
-    candidates = TASK.get("candidates", [])
-    goal = TASK.get("goal", "")
+    candidates = TASK["candidates"]
+    goal = TASK["goal"]
 
     revealed_fact_rows = "\n".join(
         f"| {key} |  |  |  |  |" for key in AGENT_KEYS
@@ -112,10 +113,31 @@ def build_memory_template(agent_key: str) -> str:
 def read_agent_memory(agent_key: str) -> str:
     """Read an agent's memory file."""
     path = _agent_memory_path(agent_key)
+    if not path.exists():
+        template = build_memory_template(agent_key)
+        write_agent_memory(agent_key, template)
+        record_run_warning(
+            "memory_file_missing_template_used",
+            "Agent memory file was missing and was replaced with a fresh template.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+            path=str(path),
+        )
+        return template
+
     content = path.read_text(encoding="utf-8").strip()
 
     if not content:
-        raise ValueError(f"Memory file for {agent_key} is empty: {path}")
+        template = build_memory_template(agent_key)
+        write_agent_memory(agent_key, template)
+        record_run_warning(
+            "memory_file_empty_template_used",
+            "Agent memory file was empty and was replaced with a fresh template.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+            path=str(path),
+        )
+        return template
 
     return content
 
@@ -195,13 +217,48 @@ def archive_agent_memories() -> Path | None:
 
     copied_files = []
     memory_texts = {}
+    missing_agents = []
+    empty_agents = []
     for agent_key in AGENT_KEYS:
         source = _agent_memory_path(agent_key)
-        if source.exists():
-            target = destination / source.name
-            shutil.copy2(source, target)
-            copied_files.append(str(target))
-            memory_texts[agent_key] = target.read_text(encoding="utf-8")
+        if not source.exists():
+            missing_agents.append(agent_key)
+            record_run_warning(
+                "memory_archive_missing_file",
+                "Agent memory file was missing during final archive.",
+                agent=agent_key,
+                round=metrics.loop_count,
+                path=str(source),
+            )
+            continue
+
+        target = destination / source.name
+        shutil.copy2(source, target)
+        copied_files.append(str(target))
+        text = target.read_text(encoding="utf-8")
+        if not text.strip():
+            empty_agents.append(agent_key)
+            record_run_warning(
+                "memory_archive_empty_file",
+                "Agent memory file was empty during final archive.",
+                agent=agent_key,
+                round=metrics.loop_count,
+                path=str(source),
+            )
+            continue
+
+        memory_texts[agent_key] = text
+
+    if len(memory_texts) < len(AGENT_KEYS):
+        record_run_warning(
+            "context_metrics_incomplete_memories",
+            "Context similarity and alignment metrics were computed with fewer memories than configured agents.",
+            round=metrics.loop_count,
+            expected_memory_count=len(AGENT_KEYS),
+            usable_memory_count=len(memory_texts),
+            missing_agents=missing_agents,
+            empty_agents=empty_agents,
+        )
 
     similarity = calculate_memory_similarity(memory_texts)
     gold_standard_alignment = calculate_gold_standard_alignment(memory_texts)
@@ -246,6 +303,24 @@ def archive_agent_memories() -> Path | None:
 def reset_all_agent_memories() -> None:
     """Reset every agent memory file to a fresh template."""
     for agent_key in AGENT_KEYS:
+        path = _agent_memory_path(agent_key)
+        if not path.exists():
+            record_run_warning(
+                "memory_reset_missing_template_used",
+                "Agent memory file was missing before reset and was replaced with a fresh template.",
+                agent=agent_key,
+                round=metrics.loop_count + 1,
+                path=str(path),
+            )
+        elif not path.read_text(encoding="utf-8").strip():
+            record_run_warning(
+                "memory_reset_empty_template_used",
+                "Agent memory file was empty before reset and was replaced with a fresh template.",
+                agent=agent_key,
+                round=metrics.loop_count + 1,
+                path=str(path),
+            )
+
         template = build_memory_template(agent_key)
         write_agent_memory(agent_key, template)
 
@@ -259,6 +334,12 @@ def record_memory_update_response(agent_key: str, _callback_context, llm_respons
     memory = _extract_memory_markdown(text)
 
     if not memory:
+        record_run_warning(
+            "memory_update_empty",
+            "Passive memory update returned no usable memory content.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+        )
         log_event(
             "memory_update_missing",
             agent=agent_key,

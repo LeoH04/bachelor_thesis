@@ -12,12 +12,67 @@ from google.genai import types
 
 from ...config.memory import archive_agent_memories
 from ...config.metrics import metrics
-from ...config.response_text import extract_vote_from_response
+from ...config.response_text import VoteParseResult, parse_vote_from_response
+from ...config.run_warnings import record_run_warning
 from ...config.task import AGENT_KEYS, get_correct_candidate
 from ...config.trace import log_event
 
 MIN_CONSENSUS_ROUNDS = 2
 MAX_DISCUSSION_ROUNDS = 5
+
+
+def _vote_warning_code(parse_result: VoteParseResult) -> str:
+    """Return the run-warning code to use for a failed vote parse."""
+    if parse_result.error_code == "agent_output_missing_metadata":
+        return "vote_missing"
+    return parse_result.error_code or "vote_missing"
+
+
+def _record_vote_warning(
+    agent_key: str,
+    parse_result: VoteParseResult,
+    response: object,
+) -> None:
+    """Record why one agent did not contribute a valid vote."""
+    code = _vote_warning_code(parse_result)
+    record_run_warning(
+        code,
+        "Agent response did not contain a valid vote for consensus checking.",
+        agent=agent_key,
+        round=metrics.loop_count,
+        parse_error_code=parse_result.error_code,
+        parse_error_message=parse_result.error_message,
+        metadata=parse_result.metadata,
+        response_present=bool(response),
+    )
+
+
+def _collect_valid_votes(tool_context: ToolContext) -> list[str]:
+    """Return valid current votes and warn about invalid or missing votes."""
+    votes = []
+    for agent_key in AGENT_KEYS:
+        response = tool_context.state.get(f"{agent_key}_response", "")
+        parse_result = parse_vote_from_response(response)
+        if parse_result.vote:
+            votes.append(parse_result.vote)
+        else:
+            _record_vote_warning(agent_key, parse_result, response)
+    return votes
+
+
+def _warn_if_max_round_partial_votes(votes: list[str], vote_count: dict[str, int]) -> None:
+    """Warn when max-round decision logic uses fewer than all expected votes."""
+    agent_count = len(AGENT_KEYS)
+    if metrics.loop_count >= MAX_DISCUSSION_ROUNDS and len(votes) < agent_count:
+        record_run_warning(
+            "max_round_partial_valid_votes",
+            "Maximum-round decision check used fewer valid votes than configured agents.",
+            round=metrics.loop_count,
+            valid_vote_count=len(votes),
+            expected_vote_count=agent_count,
+            missing_or_invalid_vote_count=agent_count - len(votes),
+            vote_count=vote_count,
+        )
 
 
 def _record_final_decision(
@@ -66,19 +121,14 @@ def record_metrics(tool_context: ToolContext) -> dict:
 
 def check_consensus(tool_context: ToolContext) -> dict:
     """Count current agent votes and return whether the loop should continue."""
-    votes = []
-
-    for agent_key in AGENT_KEYS:
-        response = tool_context.state.get(f"{agent_key}_response", "")
-        vote = extract_vote_from_response(response)
-        if vote:
-            votes.append(vote)
+    votes = _collect_valid_votes(tool_context)
 
     counts = Counter(votes)
 
     vote_count = dict(counts)
     agent_count = len(AGENT_KEYS)
     majority_threshold = agent_count // 2 + 1
+    _warn_if_max_round_partial_votes(votes, vote_count)
 
     if counts:
         winner, count = counts.most_common(1)[0]

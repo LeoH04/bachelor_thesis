@@ -2,6 +2,7 @@
 
 import json
 import re
+from dataclasses import dataclass
 from typing import Iterable
 
 from .task import TASK
@@ -31,6 +32,16 @@ MEMORY_MARKDOWN_PREFIX_RE = re.compile(
 )
 
 
+@dataclass(frozen=True)
+class VoteParseResult:
+    """Structured vote parsing result for scheduled agent responses."""
+
+    vote: str | None
+    metadata: dict[str, object] | None
+    error_code: str | None = None
+    error_message: str | None = None
+
+
 def _clean_public_message(text: str) -> str:
     """Strip wrapper labels and tool traces from text before storing it publicly."""
     text = PUBLIC_MESSAGE_PREFIX_RE.sub("", text)
@@ -56,22 +67,73 @@ def _extract_public_message(text: str) -> str:
     return ""
 
 
-def extract_vote_from_response(text: object) -> str | None:
-    """Extract a valid vote from a scheduled agent response stored in state."""
+def parse_vote_from_response(text: object) -> VoteParseResult:
+    """Parse vote metadata from a scheduled agent response."""
     if not isinstance(text, str):
-        return None
+        return VoteParseResult(
+            vote=None,
+            metadata=None,
+            error_code="vote_missing",
+            error_message="Agent response is not text.",
+        )
 
     match = METADATA_JSON_BLOCK_RE.search(text)
+    if not match and not METADATA_JSON_LABEL_RE.search(text):
+        return VoteParseResult(
+            vote=None,
+            metadata=None,
+            error_code="agent_output_missing_metadata",
+            error_message="Agent response does not contain METADATA_JSON.",
+        )
     if not match:
-        return None
+        return VoteParseResult(
+            vote=None,
+            metadata=None,
+            error_code="agent_output_metadata_malformed",
+            error_message="METADATA_JSON is present but no JSON object was found.",
+        )
 
     try:
         data = json.loads(match.group(1))
-    except json.JSONDecodeError:
-        return None
+    except json.JSONDecodeError as exc:
+        return VoteParseResult(
+            vote=None,
+            metadata=None,
+            error_code="agent_output_metadata_malformed",
+            error_message=str(exc),
+        )
+
+    if not isinstance(data, dict):
+        return VoteParseResult(
+            vote=None,
+            metadata=None,
+            error_code="agent_output_metadata_malformed",
+            error_message="METADATA_JSON must be a JSON object.",
+        )
 
     vote = data.get("vote")
-    return str(vote) if vote in TASK.get("candidates", []) else None
+    if vote is None or vote == "":
+        return VoteParseResult(
+            vote=None,
+            metadata=data,
+            error_code="vote_missing",
+            error_message="METADATA_JSON does not contain a vote.",
+        )
+
+    if vote not in TASK["candidates"]:
+        return VoteParseResult(
+            vote=None,
+            metadata=data,
+            error_code="vote_invalid_candidate",
+            error_message="Vote is not one of the configured candidates.",
+        )
+
+    return VoteParseResult(vote=str(vote), metadata=data)
+
+
+def extract_vote_from_response(text: object) -> str | None:
+    """Extract a valid vote from a scheduled agent response stored in state."""
+    return parse_vote_from_response(text).vote
 
 
 def _is_thought_part(part: object) -> bool:

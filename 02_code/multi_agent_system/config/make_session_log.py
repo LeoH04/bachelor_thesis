@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import threading
 import time
 from pathlib import Path
 
@@ -44,6 +45,7 @@ SESSION_LOG_FILE = RUN_DIR / "session.log"
 METADATA_FILE = RUN_DIR / "metadata.json"
 CHAT_LOG_FILE = RUN_DIR / "chat.md"
 SHARED_MENTAL_MODELS_DIR = RUN_DIR / "shared_mental_models"
+_METADATA_LOCK = threading.Lock()
 
 
 def _base_metadata() -> dict:
@@ -75,16 +77,33 @@ def _write_metadata(metadata: dict) -> None:
 
 def update_run_metadata(updates: dict) -> None:
     """Merge updates into metadata.json for the current run."""
-    metadata = _base_metadata()
-    if METADATA_FILE.exists():
-        try:
-            metadata.update(json.loads(METADATA_FILE.read_text(encoding="utf-8")))
-        except json.JSONDecodeError:
-            pass
+    warnings_to_log = []
+    with _METADATA_LOCK:
+        metadata = _base_metadata()
+        if METADATA_FILE.exists():
+            try:
+                metadata.update(json.loads(METADATA_FILE.read_text(encoding="utf-8")))
+            except json.JSONDecodeError as exc:
+                from .run_warnings import build_run_warning, merge_run_warning
 
-    metadata.update(_base_metadata())
-    metadata.update(updates)
-    _write_metadata(metadata)
+                warning = build_run_warning(
+                    "run_metadata_json_malformed",
+                    "Existing run metadata could not be parsed and was rebuilt.",
+                    error=str(exc),
+                    metadata_file=str(METADATA_FILE),
+                )
+                merge_run_warning(metadata, warning)
+                warnings_to_log.append(warning)
+
+        metadata.update(_base_metadata())
+        metadata.update(updates)
+        _write_metadata(metadata)
+
+    if warnings_to_log:
+        from .run_warnings import log_run_warning_event
+
+        for warning in warnings_to_log:
+            log_run_warning_event(warning)
 
 
 RUN_DIR.mkdir(parents=True, exist_ok=True)

@@ -183,13 +183,17 @@ def build_agent_instruction(
     """Build the full prompt for an agent's scheduled public discussion turn."""
     memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
-    public_info = TASK.get("public_information", [])
-    private_info = TASK.get("private_information", {}).get(agent_key, [])
-    candidates = TASK.get("candidates", [])
-    goal = TASK.get("goal", "")
+    public_info = TASK["public_information"]
+    private_info = TASK["private_information"][agent_key]
+    candidates = TASK["candidates"]
+    goal = TASK["goal"]
     current_round = _round_number()
     other_agents = [key for key in AGENT_KEYS if key != agent_key]
-    vote_options = "|".join(candidates) if candidates else "candidate"
+    other_agent_tools = [
+        f"{key}_tool ({key.replace('_', ' ').title()})"
+        for key in other_agents
+    ]
+    vote_options = "|".join(candidates)
     transparency_section = _transparency_section("discussion")
     public_message_template = _public_message_template()
 
@@ -235,9 +239,10 @@ def build_agent_instruction(
     "Do not invent candidate attributes, background details, aviation procedures, training plans, technologies, mitigation strategies, or explanations not explicitly given in the task.\n"
     "If a drawback is present, treat it as evidence to weigh, not as something you may solve by inventing a remedy.\n\n"
 
-    f"You may ask other agents specific questions as tools: {', '.join(other_agents)}.\n"
-    "A tool call is only an information-gathering step.\n"
-    "After any tool answer, you must still produce your scheduled public contribution using exactly "
+    f"You may ask other agents specific questions with these tools: {', '.join(other_agent_tools)}.\n"
+    "A tool call is only an information-gathering step, not your scheduled public contribution.\n"
+    "Tool answers intentionally do not include output sections.\n"
+    "After any tool answer, continue the same turn and produce your final scheduled response with both "
     f"{PUBLIC_MESSAGE_LABEL} "
     f"and {METADATA_JSON_LABEL}.\n\n"
 
@@ -253,8 +258,8 @@ def build_agent_instruction(
     "Round 2 and later: Update your position if the combined evidence supports a different candidate.\n"
     "Final decision: Support a unanimous decision only when the group has considered the relevant information shared across members.\n\n"
 
-    "Output only the two sections below, with no planning notes and no text "
-    f"before {PUBLIC_MESSAGE_LABEL}.\n\n"
+    "Output only the two sections below, with no planning notes, no text "
+    f"before {PUBLIC_MESSAGE_LABEL}, and no text after {METADATA_JSON_LABEL}.\n\n"
 
     f"{PUBLIC_MESSAGE_LABEL}:\n"
     f"{public_message_template}\n\n"
@@ -272,10 +277,10 @@ def build_memory_update_instruction(
     """Build the prompt for a passive memory update after a contribution."""
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
-    public_info = TASK.get("public_information", [])
-    private_info = TASK.get("private_information", {}).get(agent_key, [])
-    candidates = TASK.get("candidates", [])
-    goal = TASK.get("goal", "")
+    public_info = TASK["public_information"]
+    private_info = TASK["private_information"][agent_key]
+    candidates = TASK["candidates"]
+    goal = TASK["goal"]
     latest_speaker = latest_speaker_key or "unknown_agent"
     latest_vote = _latest_vote_for_agent(ctx, latest_speaker_key)
     latest_speaker_role = (
@@ -353,10 +358,10 @@ def build_agent_tool_instruction(
     """Build the prompt for an agent answering another agent through a tool call."""
     memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
-    public_info = TASK.get("public_information", [])
-    private_info = TASK.get("private_information", {}).get(agent_key, [])
-    candidates = TASK.get("candidates", [])
-    goal = TASK.get("goal", "")
+    public_info = TASK["public_information"]
+    private_info = TASK["private_information"][agent_key]
+    candidates = TASK["candidates"]
+    goal = TASK["goal"]
     transparency_section = _transparency_section("tool")
 
     return (
