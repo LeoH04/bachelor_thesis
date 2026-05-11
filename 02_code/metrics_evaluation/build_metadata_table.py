@@ -175,51 +175,51 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         row[column] = count
         vote_columns.add(column)
 
-    similarity_columns = set()
+    context_consistency_columns = set()
     pairwise = metadata.get("pairwise_memory_similarity") or context.get("pairwise") or []
     for item in pairwise:
         agent_a = slug(item.get("agent_a"))
         agent_b = slug(item.get("agent_b"))
         column = f"similarity_{agent_a}_{agent_b}"
         row[column] = item.get("similarity")
-        similarity_columns.add(column)
+        context_consistency_columns.add(column)
 
     for item in gold_alignment_rows:
         agent = slug(item.get("agent"))
         column = f"gold_alignment_{agent}"
         row[column] = item.get("score")
-        similarity_columns.add(column)
+        context_consistency_columns.add(column)
         for check, value in (item.get("checks") or {}).items():
             check_column = f"gold_check_{agent}_{slug(check)}"
             row[check_column] = value
-            similarity_columns.add(check_column)
+            context_consistency_columns.add(check_column)
 
-    return row, vote_columns, similarity_columns
+    return row, vote_columns, context_consistency_columns
 
 
 def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], list[str]]:
     """Collect metadata rows and derive the final CSV column order."""
     rows = []
     vote_columns = set()
-    similarity_columns = set()
+    context_consistency_columns = set()
 
     for path in sorted(input_root.glob("**/metadata.json")):
         metadata = read_metadata(path)
         if not include_incomplete and metadata.get("status") != "completed":
             continue
 
-        row, row_vote_columns, row_similarity_columns = flatten_metadata(path, metadata)
+        row, row_vote_columns, row_context_consistency_columns = flatten_metadata(path, metadata)
         rows.append(row)
         vote_columns.update(row_vote_columns)
-        similarity_columns.update(row_similarity_columns)
+        context_consistency_columns.update(row_context_consistency_columns)
 
     for row in rows:
         for column in vote_columns:
             row.setdefault(column, 0)
-        for column in similarity_columns:
+        for column in context_consistency_columns:
             row.setdefault(column, "")
 
-    columns = BASE_COLUMNS + sorted(vote_columns) + sorted(similarity_columns)
+    columns = BASE_COLUMNS + sorted(vote_columns) + sorted(context_consistency_columns)
     rows.sort(
         key=lambda row: (
             CONDITION_ORDER.get(str(row.get("condition")), 99),

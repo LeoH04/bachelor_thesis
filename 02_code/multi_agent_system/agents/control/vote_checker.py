@@ -53,7 +53,6 @@ def _record_final_decision(
         metrics.record_successful_completion()
 
 
-# --- metrics tool ---
 def record_metrics(tool_context: ToolContext) -> dict:
     """Record metrics for current execution - increment loop counter
     
@@ -65,7 +64,6 @@ def record_metrics(tool_context: ToolContext) -> dict:
     return {"status": "metrics_recorded", "loop": metrics.loop_count}
 
 
-# --- consensus tool ---
 def check_consensus(tool_context: ToolContext) -> dict:
     """Count current agent votes and return whether the loop should continue."""
     votes = []

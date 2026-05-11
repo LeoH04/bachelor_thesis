@@ -88,7 +88,7 @@ def _visible_text_from_parts(parts: Iterable[object]) -> str:
     ).strip()
 
 
-def _drop_thought_parts(_content: object, parts: list[object]) -> list[object]:
+def _drop_thought_parts(parts: list[object]) -> list[object]:
     """Return non-thought parts without mutating the ADK response content."""
     return [part for part in parts if not _is_thought_part(part)]
 

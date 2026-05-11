@@ -1,71 +1,41 @@
-# Shared Mental Model (Agent 3)
+**My Position**  
+- **My Last Vote:** Candidate B  
+- **My Current Working Favorite:** Candidate B  
+- **Confidence:** 70 %  
 
-## Task Summary
-Goal
-Choose the best candidate for a long-distance pilot position at an airline.
+**Other Agents Positions**  
+| Agent | Latest Vote | Current Favorite | Main Evidence Contributed |
+|-------|-------------|------------------|---------------------------|
+| agent_1 | Candidate A | Candidate A | A anticipates danger, sees complex connections, spatial vision, leadership, unfriendly, unhealthy diet, unorganized |
+| agent_2 | Candidate B | Candidate B | B conscientious, stress endurance, weather assessment, computer skills, pretentious, wrong tone, nasty remarks, weak numeric memory |
+| agent_3 | Candidate B | Candidate B | B stress endurance, conscientiousness, weather assessment, computer skills, communication style (pretentious, wrong tone, nasty remarks), weak numeric memory |
 
-Candidates
-- Candidate A
-- Candidate B
-- Candidate C
-- Candidate D
+**Candidate Information (as reported)**  
+| Candidate | Key Attributes (reported) |
+|-----------|---------------------------|
+| A | anticipates danger, sees complex connections, excellent spatial vision, strong leadership, unfriendly, unhealthy diet, unorganized |
+| B | conscientious, stress endurance, good weather assessment, excellent computer skills, pretentious, wrong tone, nasty remarks, weak numeric memory |
+| C | quick decisions, excellent attention, concern for others, poor communication, egocentric, unwilling to learn |
+| D | responds to unexpected events, concentrates well, solves problems, takes responsibility, moody, loner |
 
-## Candidate Summary Table
-| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |
-| --- | --- | --- | --- | --- |
-| Candidate A | Anticipates dangerous situations (Agent 1); excellent spatial vision; very good leadership qualities; sees complex connections | Unfriendly; eats unhealthily; regarded as a show-off (Agent 2) | Strong technical/flight skills; leadership present; interpersonal concerns | Two negative personality traits from own info, one from Agent 2 |
-| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Regarded as pretentious; sometimes adopts wrong tone when communicating | Strong operational and technical skills; communication concern | No info shared by others yet |
-| Candidate C | Can make correct decisions quickly; puts concern for others above everything; excellent attention skills | Difficulty communicating ideas; regarded as egocentric; not very willing to further education | Fast decision-making and attention strengths; serious communication and cooperation deficits | "Egocentric" and communication difficulty are safety-relevant |
-| Candidate D | Responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | Considered moody; regarded as a loner | Strong operational reliability and problem-solving; interpersonal/team concerns | No info shared by others yet |
+**Role Fit Mapping (ordinary meaning)**  
+| Role Criterion | A | B | C | D |
+|-----------------|---|---|---|---|
+| Safety anticipation | ✔ | | | |
+| Navigation (spatial vision) | ✔ | | | |
+| Weather assessment | | ✔ | | |
+| Endurance (stress) | | ✔ | | |
+| Teamwork/communication | | | | |
+| Computer/avionics skills | | ✔ | | |
+| Health/fitness | | | | |
+| Numeric memory | | weak | | |
 
-## My Position
-My Last Vote
-- Undecided
+**Major Disagreements**  
+- Candidate A vs Candidate B: safety anticipation and navigation strengths of A vs endurance, weather, and systems strengths of B.  
+- A’s unhealthy diet/unorganized style vs B’s interpersonal style (pretentious, nasty remarks).  
 
-My Current Working Favorite
-- Undecided
-
-My Rationale
-- Need more information from group to identify which candidate has best overall fit. Currently see strong technical profiles for A, B, and D; C has serious cooperation/communication negatives.
-
-Evidence That Could Change My Mind
-- Information about how other agents weight interpersonal negatives vs. technical positives; any additional candidate facts held by others; team dynamics information for long-distance flights
-
-Confidence (percent)
-- Low (need group input)
-
-## Other Agents' Positions
-| Agent | Latest Vote | Main Reason | Evidence Shared |
-| --- | --- | --- | --- |
-| agent_1 | Undecided | No preferred candidate | Candidate A can anticipate dangerous situations |
-| agent_2 | Undecided | No preferred candidate | Candidate A regarded as a show-off |
-
-## Emerging Group View
-Group-Leading Candidate
-- None
-
-Important Agreements
-- All agents currently undecided
-- Candidate A has notable strengths and notable weaknesses
-
-Important Disagreements / Tensions
-- None yet; insufficient information shared
-
-Uncertainties
-- Whether "show-off" (Agent 2) is same as or different from "unfriendly" (own info)
-- Whether other agents have additional facts about B, C, or D
-- How to weight interpersonal negatives against technical positives for long-distance cockpit environment
-
-## Open Questions
-Missing evidence
-- Any additional facts about Candidates B, C, D from other agents
-- Whether long-distance flights prioritize team cohesion or individual technical skill more heavily
-
-What would change the decision
-- Evidence that a candidate's weaknesses are mitigated or strengths are exceptional
-- Group consensus on relative importance of cooperation vs. technical skill
-
-## Next-Step Focus
-What to ask or look for next
-- Query other agents about Candidates B, C, and D specifically
-- Seek information about whether any candidate has both strong technical skills and acceptable interpersonal traits
+**Unresolved Issues**  
+- Long‑term impact of A’s diet and unorganized work style on endurance and crew cohesion.  
+- Long‑term impact of B’s communication style on crew cohesion and precision in weather calculations.  
+- C’s willingness to pursue further education and improve communication.  
+- D’s moodiness and loner status affecting team integration.

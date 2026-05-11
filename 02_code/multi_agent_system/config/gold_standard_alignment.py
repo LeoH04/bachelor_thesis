@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from typing import Mapping
 
-from .task import TASK
+from .task import AGENT_KEYS, TASK
 
 
 @dataclass(frozen=True)
@@ -203,17 +203,6 @@ _NORMALIZE_TRANSLATION = str.maketrans(
 )
 
 
-def _agent_sort_key(agent_key: str) -> tuple[str, int | str]:
-    """Sort agent_N keys numerically while keeping a stable fallback."""
-    prefix, separator, suffix = agent_key.rpartition("_")
-    if separator:
-        try:
-            return prefix, int(suffix)
-        except ValueError:
-            pass
-    return agent_key, agent_key
-
-
 def _slug(value: object) -> str:
     """Convert text into a stable snake_case identifier fragment."""
     text = str(value or "").replace("%", " percent ")
@@ -242,22 +231,12 @@ def _fact_id(source: str, text: str) -> str:
     return f"{source}_candidate_{candidate}_{_slug(core)}"
 
 
-def _literal_core_pattern(text: str) -> str:
-    """Return a conservative fallback pattern for newly configured facts."""
-    core = re.sub(r"^Candidate\s+[A-Z]\s+", "", text.rstrip("."))
-    words = re.findall(r"[a-z0-9]+", core.lower().replace("%", " percent "))
-    return r".{0,20}".join(re.escape(word) for word in words)
-
-
 def _build_fact_specs() -> tuple[FactSpec, ...]:
     """Build fact specs from the configured hidden-profile task."""
     specs = []
     for text in TASK.get("public_information", []):
         fact_text = str(text)
-        patterns = FACT_PATTERNS_BY_TEXT.get(
-            fact_text,
-            (_literal_core_pattern(fact_text),),
-        )
+        patterns = FACT_PATTERNS_BY_TEXT[fact_text]
         specs.append(
             FactSpec(
                 fact_id=_fact_id("public", fact_text),
@@ -268,13 +247,10 @@ def _build_fact_specs() -> tuple[FactSpec, ...]:
         )
 
     private_information = TASK.get("private_information", {})
-    for agent_key in sorted(private_information, key=_agent_sort_key):
+    for agent_key in AGENT_KEYS:
         for text in private_information[agent_key]:
             fact_text = str(text)
-            patterns = FACT_PATTERNS_BY_TEXT.get(
-                fact_text,
-                (_literal_core_pattern(fact_text),),
-            )
+            patterns = FACT_PATTERNS_BY_TEXT[fact_text]
             specs.append(
                 FactSpec(
                     fact_id=_fact_id(agent_key, fact_text),

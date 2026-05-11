@@ -16,7 +16,7 @@ from .task import AGENT_KEYS, TASK, _as_bullets
 TRANSPARENCY_POLICIES = {
     "low": {
         "discussion": (
-            "LOW context transparency means you expose mainly conclusions or "
+            "You expose mainly conclusions or "
             "isolated signals from your internal decision context.\n"
             "Public contribution rules:\n"
             "- State your current position or recommendation.\n"
@@ -32,7 +32,7 @@ TRANSPARENCY_POLICIES = {
             "one short candidate fact or concern, with no detailed comparison."
         ),
         "tool": (
-            "LOW context transparency means your public tool answer should expose "
+            "Your public tool answer should expose "
             "only the minimum useful context.\n"
             "Answer with at most one brief fact, concern, or direct statement. "
             "Do not add reasoning structure, source/provenance labels, confidence, "
@@ -47,7 +47,7 @@ TRANSPARENCY_POLICIES = {
     },
     "moderate": {
         "discussion": (
-            "MODERATE context transparency means you expose a compact, "
+            "You expose a compact, "
             "task-relevant version of your internal decision context.\n"
             "Public contribution rules:\n"
             "- State your current position or recommendation.\n"
@@ -63,7 +63,7 @@ TRANSPARENCY_POLICIES = {
             "for the pilot role, and name one comparison or unresolved issue."
         ),
         "tool": (
-            "MODERATE context transparency means your public tool answer should "
+            "Your public tool answer should "
             "provide compact, task-relevant context.\n"
             "Answer directly with one or two relevant facts or concerns. Link "
             "them to the candidate or alternative they affect, and include a short "
@@ -78,7 +78,7 @@ TRANSPARENCY_POLICIES = {
     },
     "high": {
         "discussion": (
-            "HIGH context transparency means you expose an expanded public "
+            "You expose an expanded public "
             "reasoning-context summary of your internal decision context.\n"
             "Public contribution rules:\n"
             "- State your current position or recommendation.\n"
@@ -96,7 +96,7 @@ TRANSPARENCY_POLICIES = {
             "Main tradeoff, Remaining uncertainty, and What would change my vote."
         ),
         "tool": (
-            "HIGH context transparency means your public tool answer should expose "
+            "Your public tool answer should expose "
             "a concise reasoning-context summary, not raw hidden chain-of-thought.\n"
             "Answer directly, identify whether the information comes from your own "
             "materials or the prior discussion, mention uncertainty if relevant, "
@@ -128,17 +128,12 @@ def _context_transparency_condition() -> str:
         )
     return condition
 
-
 def _transparency_section(kind: str) -> str:
-    """Build the condition-specific transparency instruction section."""
+    """Build the condition-specific communication instruction section."""
     condition = _context_transparency_condition()
     policy = TRANSPARENCY_POLICIES[condition][kind]
     return (
-        "Context transparency policy:\n"
-        "Operational definition: context transparency is the degree to which an "
-        "agent externalizes its internal decision context into the shared "
-        "communication space.\n"
-        f"Active condition: {condition}\n"
+        "Communication rules for this contribution:\n"
         f"{policy}"
     )
 
@@ -215,7 +210,7 @@ def build_agent_instruction(
     "Part of the information available to group members may be identical.\n"
     "Part of the information may differ across group members.\n"
     "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
-    "The group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+    "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
     "Information available to you:\n"
     f"{_as_bullets(public_info + private_info)}\n\n"
@@ -226,10 +221,9 @@ def build_agent_instruction(
     "Prefer sharing important private facts that have not yet appeared in the discussion over repeating facts already known to the group.\n"
     "Take into account information contributed by others.\n"
     "Do not assume your own information alone is complete.\n"
-    "Evaluate the role criteria by ordinary meaning, not only by exact keywords: conscientiousness and taking responsibility support reliability; handling stress, staying calm, and responding to unexpected events support calmness under pressure; creating a positive crew atmosphere, concern for others, and leadership support cooperation; technical understanding, attention, weather assessment, computer skills, spatial vision, and problem solving support technical competence.\n"
+    "Evaluate the role criteria by ordinary meaning, not only by exact keywords.\n"
     "A candidate with balanced evidence across the essential criteria may be better than a candidate with one very strong trait but repeated cooperation drawbacks.\n"
-    "Cooperation is safety-critical for cockpit work: repeated direct cooperation negatives such as being uncooperative, making nasty remarks, using the wrong tone, being pretentious, having a hot temper, being a loner, being unfriendly, or rejecting others' ideas must be weighed heavily. Do not select a candidate mainly because of one exceptional strength if that candidate's cooperation evidence is only negative.\n"
-    "After all agents have contributed, actively look for the candidate whose combined shared evidence covers reliability, technical competence, calmness under pressure, cooperation, and high-responsibility suitability most evenly.\n"
+    "After all agents have contributed, actively look for the candidate whose combined shared evidence is suited best.\n"
     "Do not treat an early majority preference as a final decision until the group has had a chance to discuss information about the candidates.\n"
     "Your aim is not to defend your initial preference.\n"
     "Your aim is to identify the candidate who is best suited for the long-distance pilot position based on all information available to the group.\n\n"
@@ -254,9 +248,8 @@ def build_agent_instruction(
 
     "Round behavior:\n"
     "Round 1: State a provisional preference, not a final decision.\n"
-    "Round 1: Contribute information only at the detail level allowed by the active context transparency policy.\n"
     "Round 1: Do not claim that the group is ready for a unanimous final decision unless meaningful information about the candidates has been discussed.\n"
-    "Round 2 and later: Take into account newly shared information while staying within the active context transparency policy.\n"
+    "Round 2 and later: Take into account newly shared information.\n"
     "Round 2 and later: Update your position if the combined evidence supports a different candidate.\n"
     "Final decision: Support a unanimous decision only when the group has considered the relevant information shared across members.\n\n"
 
@@ -329,11 +322,7 @@ def build_memory_update_instruction(
         "a unanimous decision.\n\n"
 
         "When summarizing role fit, map explicit facts to the role criteria by "
-        "ordinary meaning rather than exact wording. Do not say a candidate lacks "
-        "evidence for reliability, calmness, cooperation, or technical competence "
-        "when a stated fact reasonably supports that criterion. Treat repeated "
-        "direct cooperation negatives as safety-relevant drawbacks, not minor "
-        "personality details.\n\n"
+        "ordinary meaning rather than exact wording.\n\n"
 
         "Do not copy your full candidate-information sheet into memory. Do not add "
         "facts that were not in your information or in the discussion. If another "
@@ -405,8 +394,7 @@ def build_agent_tool_instruction(
 
         "Answer the other group member's question directly, as you would during "
         "the group discussion. Provide relevant candidate information you have "
-        "only at the detail level allowed by the active context transparency "
-        "policy. If the question asks about a role criterion, include explicit "
+        "only at the allowed level of detail. If the question asks about a role criterion, include explicit "
         "facts that bear on that criterion even when they use different wording. "
         "Do not update your private notes during this response.\n\n"
 

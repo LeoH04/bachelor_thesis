@@ -44,54 +44,78 @@ def build_memory_template(agent_key: str) -> str:
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
+    revealed_fact_rows = "\n".join(
+        f"| {key} |  |  |  |  |" for key in AGENT_KEYS
+    )
     candidate_rows = "\n".join(
         f"| {candidate} |  |  |  |  |" for candidate in candidates
     )
     agent_position_rows = "\n".join(
-        f"| {key} | Unknown |  |  |" for key in AGENT_KEYS
+        f"| {key} | Unknown |  |  |  |" for key in AGENT_KEYS
     )
 
     return (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
         "## Task Summary\n"
-        f"Goal\n{goal}\n\n"
-        f"Candidates\n{_as_bullets(candidates)}\n\n"
-        "## Candidate Summary Table\n"
+        "Goal\n"
+        f"{goal}\n\n"
+        "Candidates\n"
+        f"{_as_bullets(candidates)}\n\n"
+
+        "## Revealed Facts by Source\n"
+        "| Source Agent | Candidate | Revealed Fact | Supports / Hurts | Notes |\n"
+        "| --- | --- | --- | --- | --- |\n"
+        f"{revealed_fact_rows}\n\n"
+
+        "## Candidate Evaluation\n"
         "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
         "| --- | --- | --- | --- | --- |\n"
         f"{candidate_rows}\n\n"
+
         "## My Position\n"
-        "My Last Vote\n- None\n\n"
-        "My Current Working Favorite\n- Undecided\n\n"
-        "My Rationale\n-\n\n"
-        "Evidence That Could Change My Mind\n-\n\n"
-        "Confidence (percent)\n-\n\n"
+        "My Last Vote\n"
+        "- None\n\n"
+        "My Current Working Favorite\n"
+        "- Undecided\n\n"
+        "My Rationale\n"
+        "-\n\n"
+        "Evidence That Could Change My Mind\n"
+        "-\n\n"
+        "Confidence (percent)\n"
+        "-\n\n"
+
         "## Other Agents' Positions\n"
-        "| Agent | Latest Vote | Main Reason | Evidence Shared |\n"
-        "| --- | --- | --- | --- |\n"
+        "| Agent | Latest Vote | Current Favorite | Main Reason | Confidence / Uncertainty |\n"
+        "| --- | --- | --- | --- | --- |\n"
         f"{agent_position_rows}\n\n"
+
         "## Emerging Group View\n"
-        "Group-Leading Candidate\n- None\n\n"
-        "Important Agreements\n-\n\n"
-        "Important Disagreements / Tensions\n-\n\n"
-        "Uncertainties\n-\n\n"
-        "## Open Questions\n"
-        "Missing evidence\n-\n\n"
-        "What would change the decision\n-\n\n"
-        "## Next-Step Focus\n"
-        "What to ask or look for next\n-\n"
+        "Group-Leading Candidate\n"
+        "- None\n\n"
+        "Important Agreements\n"
+        "-\n\n"
+        "Important Disagreements / Tensions\n"
+        "-\n\n"
+        "Uncertainties\n"
+        "-\n\n"
+
+        "## Open Questions and Next-Step Focus\n"
+        "Missing evidence\n"
+        "-\n\n"
+        "What would change the decision\n"
+        "-\n\n"
+        "What to ask or look for next\n"
+        "-\n"
     )
 
 
 def read_agent_memory(agent_key: str) -> str:
-    """Read an agent's memory file, falling back to a fresh template if needed."""
+    """Read an agent's memory file."""
     path = _agent_memory_path(agent_key)
-    if not path.exists():
-        return build_memory_template(agent_key)
-
     content = path.read_text(encoding="utf-8").strip()
+
     if not content:
-        return build_memory_template(agent_key)
+        raise ValueError(f"Memory file for {agent_key} is empty: {path}")
 
     return content
 
@@ -230,7 +254,7 @@ def record_memory_update_response(agent_key: str, _callback_context, llm_respons
     """Persist a passive memory update from plain markdown model output."""
     content = getattr(llm_response, "content", None)
     parts = list(getattr(content, "parts", None) or [])
-    visible_parts = _drop_thought_parts(content, parts)
+    visible_parts = _drop_thought_parts(parts)
     text = _visible_text_from_parts(visible_parts)
     memory = _extract_memory_markdown(text)
 

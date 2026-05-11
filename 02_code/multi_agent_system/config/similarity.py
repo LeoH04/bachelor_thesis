@@ -5,18 +5,14 @@ from __future__ import annotations
 import math
 import os
 from itertools import combinations
-from pathlib import Path
 from typing import Mapping
-
-from .env import read_env_file_value
-
-REPO_ROOT = Path(__file__).resolve().parents[3]
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-ENV_FILES = (REPO_ROOT / ".env", PACKAGE_ROOT / ".env")
 
 
 def _cosine(left: list[float], right: list[float]) -> float:
     """Return cosine similarity for dense vectors."""
+    if len(left) != len(right):
+        raise ValueError("Cosine similarity requires vectors with the same length.")
+
     dot = sum(left_value * right_value for left_value, right_value in zip(left, right))
     left_norm = math.sqrt(sum(value * value for value in left))
     right_norm = math.sqrt(sum(value * value for value in right))
@@ -27,23 +23,9 @@ def _cosine(left: list[float], right: list[float]) -> float:
     return dot / (left_norm * right_norm)
 
 
-def _config_value(key: str) -> str | None:
-    """Return exactly one configured value from env or the project .env files."""
-    value = os.getenv(key)
-    if value:
-        return value
-
-    for env_file in ENV_FILES:
-        value = read_env_file_value(env_file, key)
-        if value:
-            return value
-
-    return None
-
-
 def _required_config_value(key: str) -> str:
     """Return a required embedding configuration value or fail clearly."""
-    value = _config_value(key)
+    value = os.getenv(key)
     if not value:
         raise RuntimeError(f"Missing required embedding configuration: {key}")
     return value

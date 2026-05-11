@@ -1,3 +1,5 @@
+"""Configure and run the ADK multi-agent discussion simulation."""
+
 import atexit
 import random
 from collections.abc import AsyncGenerator
@@ -13,7 +15,6 @@ from .agents.control.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
 from .agents.discussion.agent_1 import agent_1, agent_1_tool
 from .agents.discussion.agent_2 import agent_2, agent_2_tool
 from .agents.discussion.agent_3 import agent_3, agent_3_tool
-from .config.memory import archive_agent_memories
 from .config.metrics import metrics
 from .config.smm import explicit_smm_memory_enabled
 from .config.task import AGENT_KEYS
@@ -36,6 +37,7 @@ TOOL_AGENTS = {
 
 
 def _active_agent_items(agents: dict):
+    """Return configured agents in canonical task order."""
     missing_agent_keys = [
         agent_key for agent_key in AGENT_KEYS if agent_key not in agents
     ]
@@ -49,6 +51,7 @@ ACTIVE_TOOL_AGENTS = _active_agent_items(TOOL_AGENTS)
 
 
 def _wire_agent_tools() -> None:
+    """Attach mediated logging tools for every other active agent."""
     for agent_key, agent in ACTIVE_DISCUSSION_AGENTS:
         agent.tools = [
             LoggingAgentTool(agent=tool_agent)
@@ -61,6 +64,7 @@ _wire_agent_tools()
 
 
 def _speaker_update_pairs() -> list[tuple[BaseAgent, BaseAgent]]:
+    """Pair each active speaker with its corresponding memory updater."""
     return [
         (speaker, MEMORY_UPDATE_STAGES[agent_key])
         for agent_key, speaker in ACTIVE_DISCUSSION_AGENTS
@@ -86,6 +90,7 @@ class RandomizedDiscussionRoundAgent(BaseAgent):
         self,
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
+        """Execute a shuffled speaker sequence and finish with vote checking."""
         speaker_update_pairs = _speaker_update_pairs()
         random.shuffle(speaker_update_pairs)
         log_event(
@@ -134,16 +139,7 @@ root_agent = SequentialAgent(
 # Register cleanup on module exit
 
 def cleanup():
-    try:
-        if metrics.loop_count or metrics.agent_turn_count or metrics.final_candidate:
-            archive_dir = archive_agent_memories()
-            if archive_dir is not None:
-                log_event("agent_memories_archived", directory=str(archive_dir))
-    except Exception as exc:
-        try:
-            log_event("agent_memories_archive_failed", error=str(exc))
-        except Exception:
-            pass
+    """Close simulation metrics on process exit."""
     metrics.end_simulation()
 
 atexit.register(cleanup)

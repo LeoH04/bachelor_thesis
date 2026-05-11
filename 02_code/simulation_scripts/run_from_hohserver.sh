@@ -4,10 +4,31 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+CALLER_SIM_REMOTE_REPO="${SIM_REMOTE_REPO:-}"
+CALLER_SIM_BATCH_ID="${SIM_BATCH_ID:-}"
+CALLER_SIM_SMM_MODE="${SIM_SMM_MODE:-}"
+CALLER_SIM_RESUME="${SIM_RESUME:-}"
+
 if [[ -f "$SCRIPT_DIR/.env" ]]; then
   set -a
   source "$SCRIPT_DIR/.env"
   set +a
+fi
+
+if [[ -n "$CALLER_SIM_REMOTE_REPO" ]]; then
+  SIM_REMOTE_REPO="$CALLER_SIM_REMOTE_REPO"
+fi
+
+if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then
+  SIM_BATCH_ID="$CALLER_SIM_BATCH_ID"
+fi
+
+if [[ -n "$CALLER_SIM_SMM_MODE" ]]; then
+  SIM_SMM_MODE="$CALLER_SIM_SMM_MODE"
+fi
+
+if [[ -n "$CALLER_SIM_RESUME" ]]; then
+  SIM_RESUME="$CALLER_SIM_RESUME"
 fi
 
 REMOTE_REPO="${SIM_REMOTE_REPO:-$HOME/git/bachelor_thesis}"
@@ -31,11 +52,13 @@ echo "Starting local simulation batch on this server: $BATCH_ID ($SMM_LABEL)"
 
 cd "$REMOTE_REPO"
 git reset --hard HEAD
+
 if [[ "$RESUME" == "1" ]]; then
   echo "Resume mode enabled: keeping existing simulation outputs"
 else
   git clean -fd 01_data/raw/simulations
 fi
+
 git pull --ff-only
 source adk/bin/activate
 

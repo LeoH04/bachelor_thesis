@@ -65,7 +65,7 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
 
     content = getattr(llm_response, "content", None)
     parts = list(getattr(content, "parts", None) or [])
-    visible_parts = _drop_thought_parts(content, parts)
+    visible_parts = _drop_thought_parts(parts)
     text = _visible_text_from_parts(visible_parts)
 
     if not METADATA_JSON_LABEL_RE.search(text):

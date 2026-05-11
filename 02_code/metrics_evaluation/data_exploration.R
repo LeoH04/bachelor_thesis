@@ -39,7 +39,7 @@ simulation_metrics$condition <- factor(
 )
 simulation_metrics$smm_mode <- factor(
   simulation_metrics$smm_mode,
-  levels = c("treatment", "baseline")
+  levels = c("baseline", "treatment")
 )
 simulation_metrics$run_tag <- factor(simulation_metrics$run_tag)
 simulation_metrics$status <- factor(simulation_metrics$status)
@@ -337,7 +337,6 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       height = 5
     )
   }
-
 
   # ------------------------------------------------------------
   # 5. Overview of messages across conditions

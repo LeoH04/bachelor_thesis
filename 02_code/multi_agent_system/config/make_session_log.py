@@ -6,29 +6,17 @@ import re
 import time
 from pathlib import Path
 
-from .env import read_env_file_value
 from .smm import smm_metadata, smm_mode
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 RAW_SIMULATIONS_DIR = REPO_ROOT / "01_data" / "raw" / "simulations"
-ENV_FILES = (REPO_ROOT / ".env", PACKAGE_ROOT / ".env")
 
 TIMESTAMP = time.strftime("%Y%m%d_%H%M%S")
 
 
 def _get_config_value(key: str, default: str) -> str:
-    """Return env var value, falling back to repo/package .env files."""
-    value = os.getenv(key)
-    if value:
-        return value
-
-    for env_file in ENV_FILES:
-        value = read_env_file_value(env_file, key)
-        if value:
-            return value
-
-    return default
+    """Return a configured environment value."""
+    return os.getenv(key) or default
 
 
 def _safe_path_part(value: str, default: str) -> str:

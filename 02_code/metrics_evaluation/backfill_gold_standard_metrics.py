@@ -18,6 +18,7 @@ from config.gold_standard_alignment import (  # noqa: E402
     FACT_SOURCE_BUCKETS,
     calculate_gold_standard_alignment,
 )
+from config.task import AGENT_KEYS  # noqa: E402
 
 
 OLD_GOLD_STANDARD_FIELDS = (
@@ -46,11 +47,18 @@ def write_json(path: Path, data: dict) -> None:
 
 def read_memory_texts(run_dir: Path) -> dict[str, str]:
     """Read archived agent shared mental models for one run."""
+    expected_files = {f"{agent_key}.md" for agent_key in AGENT_KEYS}
+    memory_dir = run_dir / "shared_mental_models"
+    memory_paths = sorted(memory_dir.glob("agent_*.md"))
+    if {path.name for path in memory_paths} != expected_files:
+        return {}
+
     memory_texts = {}
-    for path in sorted((run_dir / "shared_mental_models").glob("agent_*.md")):
+    for path in memory_paths:
         text = path.read_text(encoding="utf-8")
-        if text.strip():
-            memory_texts[path.stem] = text
+        if not text.strip():
+            return {}
+        memory_texts[path.stem] = text
     return memory_texts
 
 

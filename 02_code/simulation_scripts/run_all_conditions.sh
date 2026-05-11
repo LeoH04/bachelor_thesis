@@ -4,6 +4,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CODE_DIR="$REPO_ROOT/02_code"
+
+CALLER_SIM_COUNT="${SIM_COUNT:-}"
+CALLER_SIM_SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-}"
+CALLER_SIM_RUN_TAG="${SIM_RUN_TAG:-}"
 CALLER_SIM_SMM_MODE="${SIM_SMM_MODE:-}"
 CALLER_SIM_BATCH_ID="${SIM_BATCH_ID:-}"
 
@@ -11,6 +15,18 @@ if [[ -f "$SCRIPT_DIR/.env" ]]; then
   set -a
   source "$SCRIPT_DIR/.env"
   set +a
+fi
+
+if [[ -n "$CALLER_SIM_COUNT" ]]; then
+  SIM_COUNT="$CALLER_SIM_COUNT"
+fi
+
+if [[ -n "$CALLER_SIM_SKIP_COMPLETED" ]]; then
+  SIM_SKIP_COMPLETED="$CALLER_SIM_SKIP_COMPLETED"
+fi
+
+if [[ -n "$CALLER_SIM_RUN_TAG" ]]; then
+  SIM_RUN_TAG="$CALLER_SIM_RUN_TAG"
 fi
 
 if [[ -n "$CALLER_SIM_SMM_MODE" ]]; then
@@ -25,6 +41,8 @@ COUNT="${SIM_COUNT:-10}"
 SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-1}"
 RUN_TAG="${SIM_RUN_TAG:-transparency_experiment}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
+COMPLETED_PATTERN='"status"[[:space:]]*:[[:space:]]*"completed"'
+
 if [[ -n "${SIM_SMM_MODE:-}" ]]; then
   SMM_MODES=("$SIM_SMM_MODE")
 else
@@ -53,7 +71,7 @@ for smm_mode in "${SMM_MODES[@]}"; do
       metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
 
       if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
-        && grep -q '"status": "completed"' "$metadata_file"; then
+        && grep -q "$COMPLETED_PATTERN" "$metadata_file"; then
         echo "Skipping completed simulation $i/$COUNT: $run_id"
         continue
       fi
@@ -65,7 +83,8 @@ for smm_mode in "${SMM_MODES[@]}"; do
         SIM_RUN_ID="$run_id" \
         SIM_RUN_TAG="$RUN_TAG" \
         adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
-        if ! grep -q '"status": "completed"' "$metadata_file"; then
+
+        if [[ ! -f "$metadata_file" ]] || ! grep -q "$COMPLETED_PATTERN" "$metadata_file"; then
           echo "Simulation did not complete successfully: $run_id" >&2
           exit 1
         fi

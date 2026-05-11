@@ -4,10 +4,36 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+CALLER_SIM_SERVER="${SIM_SERVER:-}"
+CALLER_SIM_REMOTE_REPO="${SIM_REMOTE_REPO:-}"
+CALLER_SIM_BATCH_ID="${SIM_BATCH_ID:-}"
+CALLER_SIM_SMM_MODE="${SIM_SMM_MODE:-}"
+CALLER_SIM_RESUME="${SIM_RESUME:-}"
+
 if [[ -f "$SCRIPT_DIR/.env" ]]; then
   set -a
   source "$SCRIPT_DIR/.env"
   set +a
+fi
+
+if [[ -n "$CALLER_SIM_SERVER" ]]; then
+  SIM_SERVER="$CALLER_SIM_SERVER"
+fi
+
+if [[ -n "$CALLER_SIM_REMOTE_REPO" ]]; then
+  SIM_REMOTE_REPO="$CALLER_SIM_REMOTE_REPO"
+fi
+
+if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then
+  SIM_BATCH_ID="$CALLER_SIM_BATCH_ID"
+fi
+
+if [[ -n "$CALLER_SIM_SMM_MODE" ]]; then
+  SIM_SMM_MODE="$CALLER_SIM_SMM_MODE"
+fi
+
+if [[ -n "$CALLER_SIM_RESUME" ]]; then
+  SIM_RESUME="$CALLER_SIM_RESUME"
 fi
 
 SERVER="${SIM_SERVER:-HohServer}"
@@ -35,9 +61,14 @@ ssh "$SERVER" bash -s -- "$REMOTE_REPO" "$BATCH_ID" "$SMM_MODE_ARG" "$RESUME" <<
 set -euo pipefail
 
 REMOTE_REPO="$1"
+case "$REMOTE_REPO" in
+  "~/"*) REMOTE_REPO="$HOME/${REMOTE_REPO#~/}" ;;
+esac
+
 BATCH_ID="$2"
 SMM_MODE_ARG="${3:-__all__}"
 RESUME="${4:-1}"
+
 if [[ "$SMM_MODE_ARG" == "__all__" ]]; then
   SMM_MODE=""
 else

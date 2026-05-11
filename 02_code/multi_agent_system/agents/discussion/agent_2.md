@@ -1,70 +1,37 @@
-# Shared Mental Model (Agent 2)
+# Shared Mental Model (Agent 2)
 
 ## Task Summary
-Goal
-Choose the best candidate for a long-distance pilot position at an airline.
+- **Goal:** Select the best candidate for a long‑distance pilot position.
 
-Candidates
-- Candidate A
-- Candidate B
-- Candidate C
-- Candidate D
+## Candidate Evaluation
 
-## Candidate Summary Table
-| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |
-| --- | --- | --- | --- | --- |
-| Candidate A | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities (Agent 3) | Regarded as a show-off; not open to new ideas; unfriendly (Agent 3) | | |
-| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Relatively weak memory for numbers; makes nasty remarks about colleagues | | |
-| Candidate C | Makes correct decisions quickly; keeps calm in a crisis; understands complicated technology | Difficulty communicating ideas; regarded as egocentric; not very willing to further education | | |
-| Candidate D | Responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | Regarded as a know-it-all; has a hot temper | | |
+| Candidate | Evidence For (role‑fit) | Evidence Against |
+|-----------|------------------------|------------------|
+| **A** | • Anticipates danger (situational awareness) <br>• Sees complex connections (navigation) <br>• Excellent spatial vision (flight‑path accuracy) <br>• Very good leadership qualities | • Unorganized work style <br>• Unhealthy eating habits (endurance risk) <br>• Show‑off, not open to new ideas (crew cohesion) |
+| **B** | • Conscientious <br>• Handles stress well (stress endurance) <br>• Good weather assessment <br>• Excellent computer skills <br>• Keeps calm in crisis <br>• Understands complicated technology | • Weak numeric memory (weather calculations) <br>• Nasty remarks, pretentious tone (crew cohesion) |
+| **C** | • Quick decisions <br>• Calm in crisis <br>• Understands complicated technology | • Poor communication <br>• Egocentric <br>• Unwilling to learn |
+| **D** | • Responds to unexpected events <br>• Excellent concentration <br>• Problem‑solving <br>• Takes responsibility seriously | • Know‑it‑all <br>• Hot temper |
 
-## My Position
-My Last Vote
-- None
+**Evidence contributed by agent_3:** stress endurance, conscientiousness, weather assessment, computer skills, communication style (pretentious, wrong tone, nasty remarks), weak numeric memory.
 
-My Current Working Favorite
-- Undecided
+## Current Positions
 
-My Rationale
-- Need more information from other agents, especially about Candidates B, C, and D. Currently weighing A's strong technical/flight skills against personality concerns, and need to assess whether other candidates have better overall profiles.
+- **My Last Vote:** Candidate B  
+- **My Current Working Favorite:** Candidate B  
+- **My Own Position (unchanged):** Candidate B  
 
-Evidence That Could Change My Mind
-- Information about B, C, D from other agents; assessment of which negatives are most problematic for long-distance flying
+## Other Agents
 
-Confidence (percent)
-- Low
+| Agent | Latest Vote | Evidence Contributed |
+|-------|-------------|----------------------|
+| **agent_1** | Candidate A | Anticipates danger, sees complex connections, excellent spatial vision, very good leadership, unorganized work style, unhealthy eating habits |
+| **agent_3** | Candidate B | Stress endurance, conscientiousness, weather assessment, computer skills, communication style (pretentious, wrong tone, nasty remarks), weak numeric memory |
 
-## Other Agents' Positions
-| Agent | Latest Vote | Main Reason | Evidence Shared |
-| --- | --- | --- | --- |
-| agent_1 | Unknown | Undecided | Candidate A: can anticipate dangerous situations |
-| agent_2 | Unknown | Undecided | Candidate A: regarded as a show-off |
-| agent_3 | Undecided | Undecided | Candidate A: excellent spatial vision, very good leadership qualities, but unfriendly |
+## Major Disagreements & Blocking Issues
 
-## Emerging Group View
-Group-Leading Candidate
-- None
-
-Important Agreements
-- All currently undecided
-- Candidate A has notable strengths but personality/concerns
-
-Important Disagreements / Tensions
-- None yet; need to discuss B, C, D
-
-Uncertainties
-- Full profiles of B, C, D not yet shared
-- Whether "unfriendly" (Agent 3) and "show-off" / "not open to new ideas" (my info) are disqualifying or manageable
-
-## Open Questions
-Missing evidence
-- Other agents' information about Candidates B, C, and D
-- Whether any candidate has a cleaner strength/weakness profile than A
-
-What would change the decision
-- Learning that another candidate combines strong technical skills with fewer personality/teamwork red flags
-
-## Next-Step Focus
-What to ask or look for next
-- Encourage discussion of B, C, D profiles
-- Assess whether any candidate emerges as clearly superior once all information is pooled
+1. **Candidate A vs. B**  
+   - *A:* Superior situational awareness & navigation; concerns: health/endurance, crew cohesion.  
+   - *B:* Superior operational & weather skills; concerns: communication style, numeric memory.  
+2. **Interpersonal Style** – Both A and B exhibit behaviors that could erode crew cohesion (A: show‑off, unorganized; B: nasty remarks, pretentious).  
+3. **Health & Endurance** – A’s unhealthy eating habits may impair long‑haul performance.  
+4. **Numeric Memory** – B’s weak numeric memory could affect precise weather calculations.
