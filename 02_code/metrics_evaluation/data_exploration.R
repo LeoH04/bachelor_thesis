@@ -402,37 +402,7 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
     height = 5
   )
 
-  # ------------------------------------------------------------
-  # 7. Overview of runtime across conditions
-  # ------------------------------------------------------------
-  runtime_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),
-      .groups = "drop"
-    )
-
-  print(runtime_overview)
-
-  runtime_overview_plot <- ggplot(runtime_overview, aes(x = condition, y = mean_runtime_seconds, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_runtime_seconds, 2)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean runtime in seconds",
-      title = paste0("Mean runtime until task completion by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(runtime_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "runtime_overview_plot.pdf"),
-    plot = runtime_overview_plot,
-    width = 7,
-    height = 5
-  )
+ 
 }
 
 for (current_smm_mode in c("treatment", "baseline")) {
