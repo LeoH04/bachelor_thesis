@@ -7,6 +7,8 @@ import os
 from itertools import combinations
 from typing import Mapping
 
+from .smm_sections import SECTION_WEIGHTS, parse_marked_sections
+
 
 def _cosine(left: list[float], right: list[float]) -> float:
     """Return cosine similarity for dense vectors."""
@@ -103,6 +105,48 @@ def _pairwise_similarity(
     return pairwise
 
 
+def _weighted_section_pairwise_similarity(
+    section_vectors: Mapping[str, Mapping[str, list[float]]],
+) -> list[dict[str, object]]:
+    """Calculate weighted section-level cosine similarity for all agent pairs."""
+    pairwise = []
+    for left_key, right_key in combinations(sorted(section_vectors), 2):
+        section_scores = []
+        weighted_sum = 0.0
+        used_weight = 0.0
+        for section_id, weight in SECTION_WEIGHTS.items():
+            if weight <= 0:
+                continue
+
+            left_vector = section_vectors[left_key].get(section_id)
+            right_vector = section_vectors[right_key].get(section_id)
+            if not left_vector or not right_vector:
+                similarity = 0.0
+            else:
+                similarity = _cosine(left_vector, right_vector)
+
+            weighted_sum += weight * similarity
+            used_weight += weight
+            section_scores.append(
+                {
+                    "section": section_id,
+                    "weight": weight,
+                    "similarity": round(similarity, 6),
+                }
+            )
+
+        similarity = weighted_sum / used_weight if used_weight else 0.0
+        pairwise.append(
+            {
+                "agent_a": left_key,
+                "agent_b": right_key,
+                "similarity": round(similarity, 6),
+                "sections": section_scores,
+            }
+        )
+    return pairwise
+
+
 def _similarity_summary(
     method: str,
     texts: Mapping[str, str],
@@ -123,6 +167,28 @@ def _similarity_summary(
     return summary
 
 
+def _section_embedding_vectors(
+    section_texts: Mapping[str, Mapping[str, str]],
+    model: str,
+) -> dict[str, dict[str, list[float]]]:
+    """Embed each available section body and return vectors by agent and section."""
+    flat_texts = {
+        f"{agent_key}::{section_id}": text
+        for agent_key, sections in section_texts.items()
+        for section_id, text in sections.items()
+        if text.strip()
+    }
+    flat_vectors = _embedding_vectors(flat_texts, model)
+
+    vectors: dict[str, dict[str, list[float]]] = {
+        agent_key: {} for agent_key in section_texts
+    }
+    for flat_key, vector in flat_vectors.items():
+        agent_key, section_id = flat_key.split("::", 1)
+        vectors[agent_key][section_id] = vector
+    return vectors
+
+
 def calculate_memory_similarity(texts: Mapping[str, str]) -> dict[str, object]:
     """Calculate pairwise shared-mental-model similarity for a completed run."""
     non_empty_texts = {
@@ -134,6 +200,20 @@ def calculate_memory_similarity(texts: Mapping[str, str]) -> dict[str, object]:
         return _similarity_summary("not_enough_memories", non_empty_texts, [])
 
     model = _embedding_model()
+    section_texts = {
+        agent_key: parse_marked_sections(text)
+        for agent_key, text in non_empty_texts.items()
+    }
+    if all(section_texts.values()):
+        vectors = _section_embedding_vectors(section_texts, model)
+        return _similarity_summary(
+            "weighted_section_embedding_cosine",
+            non_empty_texts,
+            _weighted_section_pairwise_similarity(vectors),
+            embedding_model=model,
+            section_weights=SECTION_WEIGHTS,
+        )
+
     vectors = _embedding_vectors(non_empty_texts, model)
     return _similarity_summary(
         "embedding_cosine",

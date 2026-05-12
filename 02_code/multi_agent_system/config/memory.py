@@ -19,6 +19,11 @@ from .gold_standard_alignment import (
 )
 from .similarity import calculate_memory_similarity
 from .smm import explicit_smm_memory_enabled
+from .smm_sections import (
+    SECTION_ORDER,
+    parse_marked_sections,
+    render_marked_memory,
+)
 from .task import AGENT_KEYS, PROJECT_ROOT, TASK, _as_bullets
 from .trace import log_event
 
@@ -55,59 +60,61 @@ def build_memory_template(agent_key: str) -> str:
         f"| {key} | Unknown |  |  |  |" for key in AGENT_KEYS
     )
 
-    return (
-        f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
-        "## Task Summary\n"
-        "Goal\n"
-        f"{goal}\n\n"
-        "Candidates\n"
-        f"{_as_bullets(candidates)}\n\n"
-
-        "## Revealed Facts by Source\n"
-        "| Source Agent | Candidate | Revealed Fact | Supports / Hurts | Notes |\n"
-        "| --- | --- | --- | --- | --- |\n"
-        f"{revealed_fact_rows}\n\n"
-
-        "## Candidate Evaluation\n"
-        "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
-        "| --- | --- | --- | --- | --- |\n"
-        f"{candidate_rows}\n\n"
-
-        "## My Position\n"
-        "My Last Vote\n"
-        "- None\n\n"
-        "My Current Working Favorite\n"
-        "- Undecided\n\n"
-        "My Rationale\n"
-        "-\n\n"
-        "Evidence That Could Change My Mind\n"
-        "-\n\n"
-        "Confidence (percent)\n"
-        "-\n\n"
-
-        "## Other Agents' Positions\n"
-        "| Agent | Latest Vote | Current Favorite | Main Reason | Confidence / Uncertainty |\n"
-        "| --- | --- | --- | --- | --- |\n"
-        f"{agent_position_rows}\n\n"
-
-        "## Emerging Group View\n"
-        "Group-Leading Candidate\n"
-        "- None\n\n"
-        "Important Agreements\n"
-        "-\n\n"
-        "Important Disagreements / Tensions\n"
-        "-\n\n"
-        "Uncertainties\n"
-        "-\n\n"
-
-        "## Open Questions and Next-Step Focus\n"
-        "Missing evidence\n"
-        "-\n\n"
-        "What would change the decision\n"
-        "-\n\n"
-        "What to ask or look for next\n"
-        "-\n"
-    )
+    title = f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})"
+    sections = {
+        "task_summary": (
+            "Goal\n"
+            f"{goal}\n\n"
+            "Candidates\n"
+            f"{_as_bullets(candidates)}"
+        ),
+        "revealed_facts_by_source": (
+            "| Source Agent | Candidate | Revealed Fact | Supports / Hurts | Notes |\n"
+            "| --- | --- | --- | --- | --- |\n"
+            f"{revealed_fact_rows}"
+        ),
+        "candidate_evaluation": (
+            "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
+            "| --- | --- | --- | --- | --- |\n"
+            f"{candidate_rows}"
+        ),
+        "my_position": (
+            "My Last Vote\n"
+            "- None\n\n"
+            "My Current Working Favorite\n"
+            "- Undecided\n\n"
+            "My Rationale\n"
+            "-\n\n"
+            "Evidence That Could Change My Mind\n"
+            "-\n\n"
+            "Confidence (percent)\n"
+            "-"
+        ),
+        "other_agents_positions": (
+            "| Agent | Latest Vote | Current Favorite | Main Reason | Confidence / Uncertainty |\n"
+            "| --- | --- | --- | --- | --- |\n"
+            f"{agent_position_rows}"
+        ),
+        "emerging_group_view": (
+            "Group-Leading Candidate\n"
+            "- None\n\n"
+            "Important Agreements\n"
+            "-\n\n"
+            "Important Disagreements / Tensions\n"
+            "-\n\n"
+            "Uncertainties\n"
+            "-"
+        ),
+        "open_questions_next_step_focus": (
+            "Missing evidence\n"
+            "-\n\n"
+            "What would change the decision\n"
+            "-\n\n"
+            "What to ask or look for next\n"
+            "-"
+        ),
+    }
+    return render_marked_memory(title, sections)
 
 
 def read_agent_memory(agent_key: str) -> str:
@@ -146,6 +153,56 @@ def write_agent_memory(agent_key: str, content: str) -> None:
     """Persist a full replacement markdown memory for the given agent."""
     path = _agent_memory_path(agent_key)
     path.write_text(content.strip() + "\n", encoding="utf-8")
+
+
+def _merge_marked_memory_update(agent_key: str, proposed_memory: str) -> str:
+    """Merge model-proposed section bodies into the existing marked memory file."""
+    previous_memory = read_agent_memory(agent_key)
+    previous_sections = parse_marked_sections(previous_memory)
+    proposed_sections = parse_marked_sections(proposed_memory)
+
+    if not previous_sections:
+        previous_memory = build_memory_template(agent_key)
+        previous_sections = parse_marked_sections(previous_memory)
+        record_run_warning(
+            "memory_previous_missing_markers",
+            "Existing memory had no section markers; a fresh marked template was used as the merge base.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+        )
+
+    if not proposed_sections:
+        record_run_warning(
+            "memory_update_missing_markers",
+            "Passive memory update did not include section markers; previous memory was preserved.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+        )
+        return previous_memory
+
+    missing_sections = [
+        section_id for section_id in SECTION_ORDER if section_id not in proposed_sections
+    ]
+    if missing_sections:
+        record_run_warning(
+            "memory_update_incomplete_sections",
+            "Passive memory update omitted marked sections; omitted sections were preserved from previous memory.",
+            agent=agent_key,
+            round=metrics.loop_count + 1,
+            missing_sections=missing_sections,
+        )
+
+    merged_sections = {
+        section_id: proposed_sections.get(
+            section_id,
+            previous_sections.get(section_id, ""),
+        )
+        for section_id in SECTION_ORDER
+    }
+    title = previous_memory.splitlines()[0] if previous_memory.splitlines() else (
+        f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})"
+    )
+    return render_marked_memory(title, merged_sections)
 
 
 def _context_alignment_score(
@@ -348,6 +405,7 @@ def record_memory_update_response(agent_key: str, _callback_context, llm_respons
         _replace_response_text(llm_response, "MEMORY_UPDATE_EMPTY")
         return llm_response
 
+    memory = _merge_marked_memory_update(agent_key, memory)
     write_agent_memory(agent_key, memory)
     metrics.record_memory_update()
     log_event(

@@ -8,6 +8,21 @@ adk run multi_agent_system --replay multi_agent_system/config/replay.json
 SIM_CONDITION=low \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
+# Run 15 simulations local
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate adk
+cd 02_code
+
+BATCH_ID="$(date +%Y%m%d_%H%M%S)"
+for i in $(seq -f "%03g" 1 15); do
+  SIM_CONDITION=moderate \
+  SIM_SMM_MODE=treatment \
+  SIM_RUN_ID="moderate_treatment_${BATCH_ID}_${i}" \
+  SIM_RUN_TAG=local_15 \
+  adk run multi_agent_system --replay multi_agent_system/config/replay.json || break
+done
+
+
 # Kill Agent  Simulation
 ps aux | grep -i adk
 kill -9 53993
@@ -40,4 +55,4 @@ git reset --hard origin/gold_standard
 git clean -fd
 
 # SSH tunnel to the model endpoint
-ssh -N -L 8000:144.41.15.40:31538 HohServer
+ssh -N -L 8080:144.41.15.40:31538 HohServer

@@ -225,6 +225,31 @@ def _replace_response_text(llm_response, text: str) -> None:
         pass
 
 
+def _request_part_text(part: object) -> str:
+    """Return text from a request part object or serialized part dictionary."""
+    if isinstance(part, dict):
+        return str(part.get("text") or "")
+    return str(getattr(part, "text", "") or "")
+
+
+def _is_adk_for_context_content(content: object) -> bool:
+    """Return whether a request content block is ADK's synthetic agent context."""
+    parts = getattr(content, "parts", None)
+    if isinstance(content, dict):
+        parts = content.get("parts")
+    return any(_request_part_text(part).strip() == "For context:" for part in parts or [])
+
+
+def strip_adk_for_context(callback_context, llm_request):
+    """Remove ADK's implicit last-agent-message context from model requests."""
+    llm_request.contents = [
+        content
+        for content in llm_request.contents
+        if not _is_adk_for_context_content(content)
+    ]
+    return None
+
+
 def _public_value_text(value: object) -> str:
     """Render a tool argument or result as concise public discussion text."""
     content = getattr(value, "content", None)

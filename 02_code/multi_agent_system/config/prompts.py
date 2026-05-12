@@ -128,6 +128,24 @@ def _context_transparency_condition() -> str:
         )
     return condition
 
+
+def _selection_criteria_section() -> str:
+    """Return the shared selection criteria section for prompt builders."""
+    return (
+        "Selection criteria:\n"
+        "For this long-distance pilot role, evaluate candidates holistically across these job-relevant criteria:\n"
+        "- Reliability and responsibility\n"
+        "- Technical and cognitive competence\n"
+        "- Calmness, judgment, and performance under pressure\n"
+        "- Sound and timely decision-making\n"
+        "- Teamwork, communication, and crew cooperation\n"
+        "- Professional development and long-term suitability\n"
+        "\n"
+        "Use these criteria as a common evaluation framework. Do not decide based on a single standout strength alone. "
+        "Consider whether each candidate has a balanced profile across the criteria and whether any weaknesses are serious for safe long-distance flight operations.\n\n"
+    )
+
+
 def _transparency_section(kind: str) -> str:
     """Build the condition-specific communication instruction section."""
     condition = _context_transparency_condition()
@@ -216,20 +234,19 @@ def build_agent_instruction(
     "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
     "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
+    f"{_selection_criteria_section()}"
+
     "Information available to you:\n"
     f"{_as_bullets(public_info + private_info)}\n\n"
 
     "Discussion instructions:\n"
     "Discuss the candidates naturally with the other group members.\n"
-    "Share information from your own candidate materials when it is relevant for judging a candidate's suitability.\n"
-    "Prefer sharing important private facts that have not yet appeared in the discussion over repeating facts already known to the group.\n"
-    "Take into account information contributed by others.\n"
+    "Use the selection criteria as the common basis for comparison.\n"
+    "Share decision-relevant information from your own materials, especially facts that have not yet appeared in the discussion.\n"
+    "Do not limit your contribution to facts about your current favorite; important information about any candidate may change the group decision.\n"
     "Do not assume your own information alone is complete.\n"
-    "Evaluate the role criteria by ordinary meaning, not only by exact keywords.\n"
-    "A candidate with balanced evidence across the essential criteria may be better than a candidate with one very strong trait but repeated cooperation drawbacks.\n"
-    "After all agents have contributed, actively look for the candidate whose combined shared evidence is suited best.\n"
-    "Do not treat an early majority preference as a final decision until the group has had a chance to discuss information about the candidates.\n"
-    "Your aim is not to defend your initial preference.\n"
+    "Take into account information contributed by others and update your view when the combined evidence changes the evaluation.\n"
+    "Do not treat an early majority preference as a final decision.\n"
     "Your aim is to identify the candidate who is best suited for the long-distance pilot position based on all information available to the group.\n\n"
 
     f"{transparency_section}\n\n"
@@ -252,11 +269,11 @@ def build_agent_instruction(
     f"{discussion_history}\n\n"
 
     "Round behavior:\n"
-    "Round 1: State a provisional preference, not a final decision.\n"
-    "Round 1: Do not claim that the group is ready for a unanimous final decision unless meaningful information about the candidates has been discussed.\n"
-    "Round 2 and later: Take into account newly shared information.\n"
+    "Round 1: State a provisional preference, not a final decision, and share at least one decision-relevant fact from your own materials that has not yet been mentioned.\n"
+    "Round 1: The fact may concern any candidate, not only your current favorite.\n"
+    "Round 2 and later: Take into account newly shared information and add new relevant information if the discussion is still incomplete.\n"
     "Round 2 and later: Update your position if the combined evidence supports a different candidate.\n"
-    "Final decision: Support a unanimous decision only when the group has considered the relevant information shared across members.\n\n"
+    "Final decision: Support a unanimous decision only after relevant information across the candidate pool has been considered.\n\n"
 
     "Output only the two sections below, with no planning notes, no text "
     f"before {PUBLIC_MESSAGE_LABEL}, and no text after {METADATA_JSON_LABEL}.\n\n"
@@ -300,11 +317,13 @@ def build_memory_update_instruction(
         f"Candidates: {', '.join(candidates)}\n\n"
 
         "Information structure:\n"
-        "You have received individual information about the candidates. Part of the "
-        "information available to group members may be identical, and part of it may "
-        "differ across group members. On the basis of the full information set held "
-        "within the group, one candidate is clearly the best choice. The group's task "
-        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        "You have received individual information about the candidates.\n"
+        "Part of the information available to group members may be identical.\n"
+        "Part of the information may differ across group members.\n"
+        "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
+        "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+
+        f"{_selection_criteria_section()}"
 
         "Information available to you:\n"
         f"{_as_bullets(public_info + private_info)}\n\n"
@@ -326,8 +345,10 @@ def build_memory_update_instruction(
         "supports which candidate, major disagreements, and any issues still blocking "
         "a unanimous decision.\n\n"
 
-        "When summarizing role fit, map explicit facts to the role criteria by "
-        "ordinary meaning rather than exact wording.\n\n"
+        "When summarizing role fit, use the selection criteria as the evaluation framework. "
+        "Map explicit facts to the criteria by ordinary meaning rather than exact wording. "
+        "Distinguish between isolated weaknesses and repeated or safety-relevant weaknesses. "
+        "Do not say that a candidate lacks evidence for a criterion when a stated fact reasonably bears on that criterion.\n\n"
 
         "Do not copy your full candidate-information sheet into memory. Do not add "
         "facts that were not in your information or in the discussion. If another "
@@ -346,8 +367,11 @@ def build_memory_update_instruction(
         "## Emerging Group View\n"
         "## Open Questions and Next-Step Focus\n"
         "Do not rename, merge, split, promote, demote, or omit these sections. "
-        "Do not add new section headings. If a section has no new information, "
-        "keep the existing section content and update only what is necessary.\n\n"
+        "Do not add new section headings. Preserve all HTML section markers exactly "
+        "as they appear, for example '<!-- SMM_SECTION:task_summary:start -->' "
+        "and the matching end marker. Update only the content inside marked "
+        "sections. If a section has no new information, keep the existing section "
+        "content and update only what is necessary.\n\n"
 
         "Preference ownership rules:\n"
         "If the latest scheduled speaker is this same agent, update 'My Last Vote' "
@@ -389,11 +413,13 @@ def build_agent_tool_instruction(
         f"Candidates: {', '.join(candidates)}\n\n"
 
         "Information structure:\n"
-        "You have received individual information about the candidates. Part of the "
-        "information available to group members may be identical, and part of it may "
-        "differ across group members. On the basis of the full information set held "
-        "within the group, one candidate is clearly the best choice. The group's task "
-        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        "You have received individual information about the candidates.\n"
+        "Part of the information available to group members may be identical.\n"
+        "Part of the information may differ across group members.\n"
+        "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
+        "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+
+        f"{_selection_criteria_section()}"
 
         "Information available to you:\n"
         f"{_as_bullets(public_info + private_info)}\n\n"
