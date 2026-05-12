@@ -6,6 +6,37 @@ from google.adk.models.lite_llm import LiteLlm, LiteLLMClient
 from .metrics import metrics
 from .run_warnings import record_run_warning
 
+_LITELLM_ROLES = {
+    "assistant",
+    "developer",
+    "function",
+    "system",
+    "tool",
+    "user",
+}
+
+
+def _sanitize_message_roles(messages: object) -> object:
+    """Strip GPT-OSS/Harmony channel suffixes from message roles."""
+    if not isinstance(messages, list):
+        return messages
+
+    sanitized_messages = []
+    changed = False
+    for message in messages:
+        if isinstance(message, dict):
+            role = message.get("role")
+            if isinstance(role, str) and "<|" in role:
+                base_role = role.split("<|", 1)[0]
+                if base_role in _LITELLM_ROLES:
+                    message = dict(message)
+                    message["role"] = base_role
+                    changed = True
+
+        sanitized_messages.append(message)
+
+    return sanitized_messages if changed else messages
+
 
 def _response_usage(response: object) -> object | None:
     """Extract token usage from common response shapes."""
@@ -55,6 +86,8 @@ class TokenTrackingLiteLLMClient(LiteLLMClient):
 
     async def acompletion(self, model, messages, tools=None, **kwargs):
         """Run an async completion and record response token usage if present."""
+        messages = _sanitize_message_roles(messages)
+
         response = await super().acompletion(
             model=model,
             messages=messages,

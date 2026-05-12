@@ -38,3 +38,6 @@ rsync -avh --progress HohServer:~/git/bachelor_thesis/01_data/raw/simulations/ "
 git fetch origin
 git reset --hard origin/gold_standard
 git clean -fd
+
+# SSH tunnel to the model endpoint
+ssh -N -L 8000:144.41.15.40:31538 HohServer
