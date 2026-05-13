@@ -11,7 +11,7 @@ The simulation reflects a realistic enterprise-style decision-making process.
 ## 2. System Overview
 The system models a structured multi-agent workflow with:
 - Iterative discussion rounds
-- Fixed communication order
+- Randomized communication order
 - Explicit stopping criteria
 - Controlled interaction for reproducibility and measurement
 

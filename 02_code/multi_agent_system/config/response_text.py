@@ -150,6 +150,15 @@ def _visible_text_from_parts(parts: Iterable[object]) -> str:
     ).strip()
 
 
+def _thought_text_from_parts(parts: Iterable[object]) -> str:
+    """Join only thought text parts from an ADK model response."""
+    return "\n".join(
+        part.text
+        for part in parts
+        if getattr(part, "text", None) and _is_thought_part(part)
+    ).strip()
+
+
 def _drop_thought_parts(parts: list[object]) -> list[object]:
     """Return non-thought parts without mutating the ADK response content."""
     return [part for part in parts if not _is_thought_part(part)]

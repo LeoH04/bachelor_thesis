@@ -16,103 +16,29 @@ from .task import AGENT_KEYS, TASK, _as_bullets
 TRANSPARENCY_POLICIES = {
     "low": {
         "discussion": (
-            "You expose mainly conclusions or "
-            "isolated signals from your internal decision context.\n"
-            "Public contribution rules:\n"
-            "- State your current position or recommendation.\n"
-            "- Share at most one brief supporting signal, fact, or concern.\n"
-            "- Use minimal explanation.\n"
-            "- Do not use an explicit reasoning structure.\n"
-            "- Do not provide source/provenance labels.\n"
-            "- Do not provide confidence estimates.\n"
-            "- Do not discuss detailed alternatives or comparisons.\n"
-            "- Do not explicitly reference prior shared context unless necessary "
-            "to answer a direct question.\n"
-            "Hidden-profile instantiation: state your preferred candidate and "
-            "one short candidate fact or concern, with no detailed comparison."
+            "Share at most one fact or concern. Do not explain your full reasoning."
         ),
         "tool": (
-            "Your public tool answer should expose "
-            "only the minimum useful context.\n"
-            "Answer with at most one brief fact, concern, or direct statement. "
-            "Do not add reasoning structure, source/provenance labels, confidence, "
-            "or detailed comparisons."
-        ),
-        "public_template": (
-            "<state your current preferred candidate and at most one brief "
-            "candidate fact or concern; keep the contribution sparse and do not "
-            "include detailed reasoning, comparison, confidence, sources, or "
-            "prior-discussion references>"
+            "Answer with one brief, relevant fact. Do not elaborate."
         ),
     },
     "moderate": {
         "discussion": (
-            "You expose a compact, "
-            "task-relevant version of your internal decision context.\n"
-            "Public contribution rules:\n"
-            "- State your current position or recommendation.\n"
-            "- Share one or two key reasons behind that position.\n"
-            "- Link each reason to the relevant candidate or alternative.\n"
-            "- Briefly evaluate why the reasons matter for the task goal.\n"
-            "- Include one main tradeoff, uncertainty, or decision blocker.\n"
-            "- Reference shared context only when it is useful for coordination.\n"
-            "- Do not provide exhaustive evidence lists, source-heavy reasoning, "
-            "or long recaps.\n"
-            "Hidden-profile instantiation: state your preferred candidate, give "
-            "one or two candidate-linked facts, explain briefly why they matter "
-            "for the pilot role, and name one comparison or unresolved issue."
+            "Share one or two relevant facts or concerns. You don't need to reveal "
+            "everything at once — share what seems most useful right now."
         ),
         "tool": (
-            "Your public tool answer should "
-            "provide compact, task-relevant context.\n"
-            "Answer directly with one or two relevant facts or concerns. Link "
-            "them to the candidate or alternative they affect, and include a short "
-            "evaluation only if it helps the caller use the information."
-        ),
-        "public_template": (
-            "<state your current preferred candidate; give one or two "
-            "candidate-linked reasons; briefly explain why they matter for the "
-            "role; include one main tradeoff, uncertainty, or unresolved issue; "
-            "avoid exhaustive reasoning summaries>"
+            "Answer directly with the most relevant fact or facts you have."
         ),
     },
     "high": {
         "discussion": (
-            "You expose an expanded public "
-            "reasoning-context summary of your internal decision context.\n"
-            "Public contribution rules:\n"
-            "- State your current position or recommendation.\n"
-            "- Include confidence or uncertainty.\n"
-            "- Link evidence to candidates or alternatives.\n"
-            "- Distinguish your own information from information shared by others.\n"
-            "- Reference relevant prior shared context.\n"
-            "- Compare major alternatives and tradeoffs.\n"
-            "- State assumptions and unresolved uncertainties when relevant.\n"
-            "- State what would change your decision.\n"
-            "- Do not expose raw hidden chain-of-thought. Provide only a concise, "
-            "structured public reasoning summary.\n"
-            "Hidden-profile instantiation: include the required Reasoning summary "
-            "with Key evidence used, Evidence from others, Alternatives considered, "
-            "Main tradeoff, Remaining uncertainty, and What would change my vote."
+            "Share your reasoning openly: what you know, what others have contributed, "
+            "your current assessment, and what would change your view."
         ),
         "tool": (
-            "Your public tool answer should expose "
-            "a concise reasoning-context summary, not raw hidden chain-of-thought.\n"
-            "Answer directly, identify whether the information comes from your own "
-            "materials or the prior discussion, mention uncertainty if relevant, "
-            "and briefly explain how the answer affects the decision context."
-        ),
-        "public_template": (
-            "Use this structure:\n"
-            "Current position: <preferred candidate>\n"
-            "Confidence/uncertainty: <brief estimate or qualitative uncertainty>\n"
-            "Reasoning summary:\n"
-            "- Key evidence used: <own/public evidence supporting the position>\n"
-            "- Evidence from others: <relevant information shared by other agents>\n"
-            "- Alternatives considered: <major alternatives and why they are weaker or still plausible>\n"
-            "- Main tradeoff: <central decision tradeoff>\n"
-            "- Remaining uncertainty: <main open issue>\n"
-            "- What would change my vote: <specific evidence or comparison that could change the position>"
+            "Answer directly. Mention uncertainty if relevant and briefly explain "
+            "how the information bears on the candidate comparison."
         ),
     },
 }
@@ -130,20 +56,28 @@ def _context_transparency_condition() -> str:
 
 
 def _selection_criteria_section() -> str:
-    """Return the shared selection criteria section for prompt builders."""
     return (
         "Selection criteria:\n"
-        "For this long-distance pilot role, evaluate candidates holistically across these job-relevant criteria:\n"
+        "Evaluate candidates holistically for a long-distance pilot role:\n"
         "- Reliability and responsibility\n"
         "- Technical and cognitive competence\n"
         "- Calmness, judgment, and performance under pressure\n"
         "- Sound and timely decision-making\n"
         "- Teamwork, communication, and crew cooperation\n"
-        "- Professional development and long-term suitability\n"
-        "\n"
-        "Use these criteria as a common evaluation framework. Do not decide based on a single standout strength alone. "
-        "Consider whether each candidate has a balanced profile across the criteria and whether any weaknesses are serious for safe long-distance flight operations.\n\n"
+        "- Professional development and long-term suitability\n\n"
+        "Weigh strengths and weaknesses by how serious they are for safe "
+        "long-distance flight operations. Do not decide on one standout "
+        "strength or weakness alone.\n\n"
     )
+
+
+def _grounding_sources() -> str:
+    """Return the allowed evidence sources for the active SMM mode."""
+    if explicit_smm_memory_enabled():
+        return (
+            "candidate information, previous internal memory, or the discussion so far"
+        )
+    return "candidate information or the discussion so far"
 
 
 def _transparency_section(kind: str) -> str:
@@ -151,15 +85,9 @@ def _transparency_section(kind: str) -> str:
     condition = _context_transparency_condition()
     policy = TRANSPARENCY_POLICIES[condition][kind]
     return (
-        "Communication rules for this contribution:\n"
-        f"{policy}"
+        "Communication rules:\n"
+        f"{policy}\n\n"
     )
-
-
-def _public_message_template() -> str:
-    """Return the output template for the active transparency condition."""
-    condition = _context_transparency_condition()
-    return TRANSPARENCY_POLICIES[condition]["public_template"]
 
 
 def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
@@ -178,7 +106,6 @@ def _memory_context_section(agent_key: str) -> str:
             "Previous internal memory:\n"
             f"{read_agent_memory(agent_key)}\n\n"
         )
-
     return ""
 
 
@@ -198,7 +125,6 @@ def build_agent_instruction(
     ctx=None,
     system_prompt: str = "",
 ) -> str:
-    """Build the full prompt for an agent's scheduled public discussion turn."""
     memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK["public_information"]
@@ -212,78 +138,86 @@ def build_agent_instruction(
         for key in other_agents
     ]
     vote_options = "|".join(candidates)
-    transparency_section = _transparency_section("discussion")
-    public_message_template = _public_message_template()
 
     return (
-    f"You are {agent_key.replace('_', ' ').title()}.\n\n"
+        f"You are {agent_key.replace('_', ' ').title()}.\n\n"
 
-    "You are a member of the personnel selection committee of an airline company.\n"
-    "The airline is hiring a new pilot for long-distance flights.\n"
-    "Your group must choose one of the candidates for this position.\n\n"
+        "You are a member of an airline personnel selection committee. "
+        "The airline is hiring a pilot for long-distance flights. "
+        "The group must choose one candidate.\n\n"
 
-    "Task:\n"
-    f"{goal}\n"
-    f"Candidates: {', '.join(candidates)}\n"
-    f"Current discussion round: {current_round}\n\n"
+        "Task:\n"
+        f"{goal}\n"
+        f"Candidates: {', '.join(candidates)}\n"
+        f"Current discussion round: {current_round}\n\n"
 
-    "Information structure:\n"
-    "You have received individual information about the candidates.\n"
-    "Part of the information available to group members may be identical.\n"
-    "Part of the information may differ across group members.\n"
-    "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
-    "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        "Information structure:\n"
+        "You each hold a different subset of candidate information. "
+        "No single agent has the full picture. "
+        "The group can only identify the best candidate by combining "
+        "what each of you knows through discussion.\n\n"
 
-    f"{_selection_criteria_section()}"
+        f"{_selection_criteria_section()}"
 
-    "Information available to you:\n"
-    f"{_as_bullets(public_info + private_info)}\n\n"
+        "Information available to you:\n"
+        f"{_as_bullets(public_info + private_info)}\n\n"
 
-    "Discussion instructions:\n"
-    "Discuss the candidates naturally with the other group members.\n"
-    "Use the selection criteria as the common basis for comparison.\n"
-    "Share decision-relevant information from your own materials, especially facts that have not yet appeared in the discussion.\n"
-    "Do not limit your contribution to facts about your current favorite; important information about any candidate may change the group decision.\n"
-    "Do not assume your own information alone is complete.\n"
-    "Take into account information contributed by others and update your view when the combined evidence changes the evaluation.\n"
-    "Do not treat an early majority preference as a final decision.\n"
-    "Your aim is to identify the candidate who is best suited for the long-distance pilot position based on all information available to the group.\n\n"
+        "Your information is incomplete. Others may know things you don't — "
+        "including facts that would change your current assessment. "
+        "Don't treat early consensus as final. A wrong answer is worse "
+        "than a longer discussion.\n\n"
 
-    f"{transparency_section}\n\n"
+        "Grounding rule:\n"
+        f"Use only candidate attributes explicitly present in your "
+        f"{_grounding_sources()}. Do not invent attributes, explanations, "
+        "or mitigation strategies. If a weakness is present, weigh it as "
+        "evidence rather than reasoning it away.\n\n"
 
-    "Grounding rule:\n"
-    f"Use only candidate attributes explicitly present in your {_grounding_sources()}.\n"
-    "Do not invent candidate attributes, background details, aviation procedures, training plans, technologies, mitigation strategies, or explanations not explicitly given in the task.\n"
-    "If a drawback is present, treat it as evidence to weigh, not as something you may solve by inventing a remedy.\n\n"
+        "When you find yourself leaning toward a candidate, actively look for "
+        "reasons you might be wrong. Ask other agents what they know about the "
+        "strengths of candidates you have less information on — not just whether "
+        "weaknesses have caused incidents. Absence of incident reports does not "
+        "confirm a candidate is suitable; presence of strong evidence does.\n\n"
 
-    f"You may ask other agents specific questions with these tools: {', '.join(other_agent_tools)}.\n"
-    "A tool call is only an information-gathering step, not your scheduled public contribution.\n"
-    "Tool answers intentionally do not include output sections.\n"
-    "After any tool answer, continue the same turn and produce your final scheduled response with both "
-    f"{PUBLIC_MESSAGE_LABEL} "
-    f"and {METADATA_JSON_LABEL}.\n\n"
+        "When using tools, ask about candidate strengths and attributes you "
+        "don't have — not whether weaknesses have caused incidents. Incident "
+        "reports are not available; only candidate attributes are. "
+        "Remember that each agent holds different information. "
+        "If one agent does not have the answer, the other agent might. "
+        "A 'I don't have that information' response means that agent lacks it — "
+        "not that the information doesn't exist.\n\n"
 
-    f"{memory_context}"
+        "Before settling on a preference, make sure you have asked about "
+        "every candidate. Do not drop a candidate from consideration until "
+        "you have checked whether others hold positive information about them "
+        "that you are missing.\n\n"
 
-    "Discussion so far:\n"
-    f"{discussion_history}\n\n"
+        f"{_transparency_section('discussion')}\n\n"
 
-    "Round behavior:\n"
-    "Round 1: State a provisional preference, not a final decision, and share at least one decision-relevant fact from your own materials that has not yet been mentioned.\n"
-    "Round 1: The fact may concern any candidate, not only your current favorite.\n"
-    "Round 2 and later: Take into account newly shared information and add new relevant information if the discussion is still incomplete.\n"
-    "Round 2 and later: Update your position if the combined evidence supports a different candidate.\n"
-    "Final decision: Support a unanimous decision only after relevant information across the candidate pool has been considered.\n\n"
+        f"You may ask other agents targeted questions using these tools: "
+        f"{', '.join(other_agent_tools)}. "
+        "A tool call is only an information-gathering step — after any tool "
+        "answer, continue your turn and produce your public contribution.\n\n"
 
-    "Output only the two sections below, with no planning notes, no text "
-    f"before {PUBLIC_MESSAGE_LABEL}, and no text after {METADATA_JSON_LABEL}.\n\n"
+        f"{memory_context}"
+        
+        "When reading the discussion history, if you see a question another "
+        "agent asked that you can answer from your own information, include "
+        "that answer in your public contribution — even if you were not "
+        "directly asked.\n\n"
 
-    f"{PUBLIC_MESSAGE_LABEL}:\n"
-    f"{public_message_template}\n\n"
+        "Discussion so far:\n"
+        f"{discussion_history}\n\n"
 
-    f"{METADATA_JSON_LABEL}:\n"
-    f"{{\"agent\": \"{agent_key}\", \"vote\": \"<{vote_options}>\"}}\n"
-)
+        "Output only the two sections below. Do not include planning notes "
+        "or extra text.\n\n"
+
+        f"{PUBLIC_MESSAGE_LABEL}:\n"
+        "<your contribution to the discussion>\n\n"
+
+        f"{METADATA_JSON_LABEL}:\n"
+        f"{{\"agent\": \"{agent_key}\", \"vote\": \"<{vote_options}>\"}}\n"
+    )
 
 
 def build_memory_update_instruction(
@@ -291,7 +225,6 @@ def build_memory_update_instruction(
     ctx=None,
     latest_speaker_key: str | None = None,
 ) -> str:
-    """Build the prompt for a passive memory update after a contribution."""
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK["public_information"]
@@ -308,20 +241,13 @@ def build_memory_update_instruction(
 
     return (
         f"You are {agent_key.replace('_', ' ').title()}.\n\n"
-        "You are maintaining private notes during a group discussion by an airline "
-        "personnel selection committee. The airline is hiring a new pilot for "
-        "long-distance flights. Your group must choose one candidate.\n\n"
+
+        "You are maintaining private notes during a group discussion by an "
+        "airline personnel selection committee choosing a long-distance pilot.\n\n"
 
         "Task:\n"
         f"{goal}\n"
         f"Candidates: {', '.join(candidates)}\n\n"
-
-        "Information structure:\n"
-        "You have received individual information about the candidates.\n"
-        "Part of the information available to group members may be identical.\n"
-        "Part of the information may differ across group members.\n"
-        "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
-        "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
         f"{_selection_criteria_section()}"
 
@@ -339,26 +265,19 @@ def build_memory_update_instruction(
         "Discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Update your private notes for use in later discussion turns. Preserve your "
-        "own current position unless your own latest contribution changed it. Record "
-        "important candidate information that has been mentioned in discussion, who "
-        "supports which candidate, major disagreements, and any issues still blocking "
-        "a unanimous decision.\n\n"
+        "Update your private notes. Record important candidate information "
+        "from the discussion, who supports which candidate, major disagreements, "
+        "and what is still blocking a unanimous decision.\n\n"
 
-        "When summarizing role fit, use the selection criteria as the evaluation framework. "
-        "Map explicit facts to the criteria by ordinary meaning rather than exact wording. "
-        "Distinguish between isolated weaknesses and repeated or safety-relevant weaknesses. "
-        "Do not say that a candidate lacks evidence for a criterion when a stated fact reasonably bears on that criterion.\n\n"
-
-        "Do not copy your full candidate-information sheet into memory. Do not add "
-        "facts that were not in your information or in the discussion. If another "
-        "agent states a candidate fact, record it as information reported by that "
-        "agent unless it is also present in your own materials. Do not invent or "
-        "infer additional candidate attributes.\n\n"
+        "Distinguish between isolated weaknesses and repeated or "
+        "safety-relevant ones. Do not add facts not present in your "
+        "information or the discussion. If another agent states a candidate "
+        "fact, record it as reported by that agent unless it also appears "
+        "in your own materials.\n\n"
 
         "Memory structure rules:\n"
-        "Preserve the existing Shared Mental Model title and preserve exactly these "
-        "section headings, in this order:\n"
+        "Preserve the existing Shared Mental Model title and exactly these "
+        "section headings in this order:\n"
         "## Task Summary\n"
         "## Revealed Facts by Source\n"
         "## Candidate Evaluation\n"
@@ -366,58 +285,44 @@ def build_memory_update_instruction(
         "## Other Agents' Positions\n"
         "## Emerging Group View\n"
         "## Open Questions and Next-Step Focus\n"
-        "Do not rename, merge, split, promote, demote, or omit these sections. "
-        "Do not add new section headings. Preserve all HTML section markers exactly "
-        "as they appear, for example '<!-- SMM_SECTION:task_summary:start -->' "
-        "and the matching end marker. Update only the content inside marked "
-        "sections. If a section has no new information, keep the existing section "
-        "content and update only what is necessary.\n\n"
+        "Do not rename, merge, split, or omit sections. Preserve all HTML "
+        "section markers exactly as they appear. Update only content inside "
+        "marked sections.\n\n"
 
         "Preference ownership rules:\n"
-        "If the latest scheduled speaker is this same agent, update 'My Last Vote' "
-        "from the latest speaker vote and update 'My Current Working Favorite' to "
-        "match this agent's latest stated position. If the latest scheduled speaker "
-        "is another agent, do not change 'My Last Vote' or 'My Current Working "
-        "Favorite' solely because that agent recommended a candidate. Instead, record "
-        "that agent's vote under 'Other Agents' Positions' and record any evidence "
-        "they contributed under the relevant candidate.\n\n"
+        "If the latest speaker is this agent, update 'My Last Vote' and "
+        "'My Current Working Favorite' from that vote. If the latest speaker "
+        "is another agent, do not change 'My Last Vote' or 'My Current "
+        "Working Favorite' — record their vote under 'Other Agents' Positions' "
+        "only.\n\n"
 
-        "Keep the memory compact. Do not include a transcript. Do not include round "
-        "labels. Output only the complete updated Shared Mental Model markdown. "
-        "Do not call tools, do not wrap the markdown in a code fence, and do not "
-        "add a public discussion contribution."
+        "Output only the complete updated Shared Mental Model markdown. "
+        "Do not call tools, do not wrap in a code fence, do not add a "
+        "public discussion contribution."
     )
+
 
 def build_agent_tool_instruction(
     agent_key: str,
     ctx=None,
     system_prompt: str = "",
 ) -> str:
-    """Build the prompt for an agent answering another agent through a tool call."""
     memory_context = _memory_context_section(agent_key)
     discussion_history = build_public_discussion_history(ctx)
     public_info = TASK["public_information"]
     private_info = TASK["private_information"][agent_key]
     candidates = TASK["candidates"]
     goal = TASK["goal"]
-    transparency_section = _transparency_section("tool")
 
     return (
         f"You are {agent_key.replace('_', ' ').title()}.\n\n"
-        "You are a member of the personnel selection committee of an airline company. "
-        "The airline is hiring a new pilot for long-distance flights. Another group "
-        "member has asked you a question during the discussion.\n\n"
+
+        "Another committee member has asked you a question during the "
+        "pilot-selection discussion.\n\n"
 
         "Task:\n"
         f"{goal}\n"
         f"Candidates: {', '.join(candidates)}\n\n"
-
-        "Information structure:\n"
-        "You have received individual information about the candidates.\n"
-        "Part of the information available to group members may be identical.\n"
-        "Part of the information may differ across group members.\n"
-        "On the basis of the full information set held within the group, one candidate is clearly the best choice.\n"
-        "Your group's task is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
         f"{_selection_criteria_section()}"
 
@@ -426,23 +331,15 @@ def build_agent_tool_instruction(
 
         "Grounding rule:\n"
         f"Answer only using facts explicitly present in your {_grounding_sources()}. "
-        "Do not invent candidate attributes or background details. If the question "
-        "asks for information you do not have, say that you do not have that "
-        "information.\n\n"
+        "If you do not have relevant information, say so.\n\n"
 
-        f"{transparency_section}\n\n"
+        f"{_transparency_section('tool')}"
 
         f"{memory_context}"
 
         "Discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Answer the other group member's question directly, as you would during "
-        "the group discussion. Provide relevant candidate information you have "
-        "only at the allowed level of detail. If the question asks about a role criterion, include explicit "
-        "facts that bear on that criterion even when they use different wording. "
-        "Do not update your private notes during this response.\n\n"
-
-        "Output only the direct answer. Do not include metadata, planning notes, or "
-        "special formatting."
+        "Answer the question directly. Do not include metadata or "
+        "planning notes."
     )

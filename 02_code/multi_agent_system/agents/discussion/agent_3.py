@@ -2,7 +2,10 @@
 
 from google.adk.agents import LlmAgent
 
-from ...config.history import record_public_discussion_response
+from ...config.history import (
+    record_public_discussion_response,
+    record_tool_response_thoughts,
+)
 from ...config.model import DISCUSSION_MODEL
 from ...config.prompts import build_agent_instruction, build_agent_tool_instruction
 from ...config.response_text import strip_adk_for_context
@@ -36,4 +39,5 @@ agent_3_tool = LlmAgent(
     instruction=agent_3_tool_instruction,
     include_contents="none",
     before_model_callback=strip_adk_for_context,
+    after_model_callback=record_tool_response_thoughts,
 )

@@ -3,6 +3,7 @@ SIM_CONDITION=high \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
 SIM_CONDITION=moderate \
+SIM_SMM_MODE=baseline \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
 SIM_CONDITION=low \
@@ -56,3 +57,8 @@ git clean -fd
 
 # SSH tunnel to the model endpoint
 ssh -N -L 8080:144.41.15.40:31538 HohServer
+
+SIM_CONDITION=low \
+SIM_SMM_MODE=treatment \
+SIM_RUN_ID=low_web_$(date +%Y%m%d_%H%M%S) \
+adk web 

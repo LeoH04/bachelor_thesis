@@ -1,5 +1,7 @@
 """Record and format public discussion history."""
 
+import os
+
 from .make_session_log import CHAT_LOG_FILE
 from .metrics import metrics
 from .response_text import (
@@ -7,6 +9,7 @@ from .response_text import (
     _drop_thought_parts,
     _extract_public_message,
     _public_value_text,
+    _thought_text_from_parts,
     _visible_text_from_parts,
 )
 from .run_warnings import record_run_warning
@@ -14,7 +17,13 @@ from .task import AGENT_KEYS
 from .trace import log_event
 
 PUBLIC_DISCUSSION_STATE_KEY = "public_discussion_history"
+TOOL_RESPONSE_THOUGHTS_STATE_KEY = "tool_response_thoughts"
 _MALFORMED_HISTORY_WARNING_KEYS: set[tuple[object, ...]] = set()
+
+
+def high_condition_thought_history_enabled() -> bool:
+    """Return whether high-transparency prompts should include prior thoughts."""
+    return os.getenv("SIM_CONDITION", "low").strip().lower() == "high"
 
 
 def _round_number() -> int:
@@ -78,8 +87,10 @@ def reset_public_discussion_history(state: dict) -> None:
 def _append_chat_entry(round_number: int, speaker: str, message: str) -> None:
     """Append one public discussion entry to the human-readable chat markdown."""
     CHAT_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    entry = message.strip()
+
     with CHAT_LOG_FILE.open("a", encoding="utf-8") as f:
-        f.write(f"## Round {round_number} - {speaker}\n\n{message.strip()}\n\n")
+        f.write(f"## Round {round_number} - {speaker}\n\n{entry}\n\n")
 
 
 def _part_has_tool_call(part: object) -> bool:
@@ -103,6 +114,11 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     parts = list(getattr(content, "parts", None) or [])
     visible_parts = _drop_thought_parts(parts)
     text = _visible_text_from_parts(visible_parts)
+    thoughts = (
+        _thought_text_from_parts(parts)
+        if high_condition_thought_history_enabled()
+        else ""
+    )
 
     if any(_part_has_tool_call(part) for part in visible_parts):
         return llm_response
@@ -131,23 +147,65 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     state = _get_state(callback_context)
     history = list(state.get(PUBLIC_DISCUSSION_STATE_KEY, []))
     round_number = _round_number()
-    history.append(
-        {
-            "round": round_number,
-            "agent": agent_name,
-            "message": public_message,
-        }
-    )
+    history_item = {
+        "round": round_number,
+        "agent": agent_name,
+        "message": public_message,
+    }
+    if thoughts:
+        history_item["thoughts"] = thoughts
+
+    history.append(history_item)
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
-    _append_chat_entry(round_number, _agent_label(agent_name), public_message)
-    log_event(
-        "public_discussion_message",
+    _append_chat_entry(
+        round_number,
+        _agent_label(agent_name),
+        public_message,
+    )
+    log_details = dict(
         round=round_number,
         agent=agent_name,
         message=public_message,
     )
+    if thoughts:
+        log_details["thoughts"] = thoughts
+    log_event("public_discussion_message", **log_details)
     metrics.record_agent_turn()
     return llm_response
+
+
+def record_tool_response_thoughts(callback_context, llm_response):
+    """Keep high-condition tool-agent thoughts until the tool exchange is logged."""
+    if not high_condition_thought_history_enabled():
+        return llm_response
+
+    agent_name = getattr(callback_context, "agent_name", None)
+    if not agent_name:
+        return llm_response
+
+    content = getattr(llm_response, "content", None)
+    parts = list(getattr(content, "parts", None) or [])
+    thoughts = _thought_text_from_parts(parts)
+    if not thoughts:
+        return llm_response
+
+    state = _get_state(callback_context)
+    thoughts_by_agent = dict(state.get(TOOL_RESPONSE_THOUGHTS_STATE_KEY, {}) or {})
+    thoughts_by_agent[agent_name] = thoughts
+    state[TOOL_RESPONSE_THOUGHTS_STATE_KEY] = thoughts_by_agent
+    return llm_response
+
+
+def _pop_tool_response_thoughts(ctx, callee_name: str | None) -> str:
+    """Return and clear stashed thoughts for a just-finished tool response."""
+    if not callee_name:
+        return ""
+
+    state = _get_state(ctx)
+    thoughts_by_agent = dict(state.get(TOOL_RESPONSE_THOUGHTS_STATE_KEY, {}) or {})
+    thoughts = str(thoughts_by_agent.pop(callee_name, "")).strip()
+    state[TOOL_RESPONSE_THOUGHTS_STATE_KEY] = thoughts_by_agent
+    return thoughts
 
 
 def record_public_tool_exchange(
@@ -160,6 +218,12 @@ def record_public_tool_exchange(
     """Append an agent-to-agent tool exchange to the public discussion state."""
     question = _public_value_text(args)
     answer = _public_value_text(result)
+    thoughts = ""
+    if high_condition_thought_history_enabled():
+        thoughts = _pop_tool_response_thoughts(
+            tool_context,
+            callee_name,
+        )
     if not question and not answer:
         record_run_warning(
             "tool_exchange_unrecorded",
@@ -186,23 +250,24 @@ def record_public_tool_exchange(
     callee_key = _agent_key(callee_name)
     caller_key = _agent_key(caller_name)
     message = "\n".join(message_parts)
-    history.append(
-        {
-            "round": round_number,
-            "agent": callee_key,
-            "message": message,
-            "source": "agent_tool_call",
-            "caller": caller_key,
-        }
-    )
+    history_item = {
+        "round": round_number,
+        "agent": callee_key,
+        "message": message,
+        "source": "agent_tool_call",
+        "caller": caller_key,
+    }
+    if thoughts:
+        history_item["thoughts"] = thoughts
+
+    history.append(history_item)
     state[PUBLIC_DISCUSSION_STATE_KEY] = history
     _append_chat_entry(
         round_number,
         f"Tool: {caller_label} -> {callee_label}",
         message,
     )
-    log_event(
-        "public_tool_exchange",
+    log_details = dict(
         round=round_number,
         caller=caller_key,
         callee=callee_key,
@@ -210,7 +275,16 @@ def record_public_tool_exchange(
         answer=answer,
         message=message,
     )
+    if thoughts:
+        log_details["thoughts"] = thoughts
+    log_event("public_tool_exchange", **log_details)
     return None
+
+
+def _indent_history_detail(text: str) -> str:
+    """Indent multi-line history details under a bullet."""
+    return "\n".join(f"  {line}" for line in text.strip().splitlines())
+
 
 def build_public_discussion_history(ctx) -> str:
     """Format the stored public discussion transcript for inclusion in prompts."""
@@ -229,6 +303,7 @@ def build_public_discussion_history(ctx) -> str:
         return "- No discussion contributions yet."
 
     lines = []
+    include_thoughts = high_condition_thought_history_enabled()
     for index, item in enumerate(history):
         if not isinstance(item, dict):
             _record_malformed_history_warning(
@@ -244,7 +319,17 @@ def build_public_discussion_history(ctx) -> str:
         agent = str(item.get("agent", "unknown_agent")).replace("_", " ").title()
         message = str(item.get("message", "")).strip()
         if message:
-            lines.append(f"- Round {round_number}, {agent}: {message}")
+            entry = f"- Round {round_number}, {agent}: {message}"
+            thoughts = str(item.get("thoughts", "")).strip()
+            if include_thoughts and thoughts:
+                entry = (
+                    f"- Round {round_number}, {agent}:\n"
+                    "  Model thoughts before public response:\n"
+                    f"{_indent_history_detail(thoughts)}\n"
+                    "  Public response:\n"
+                    f"{_indent_history_detail(message)}"
+                )
+            lines.append(entry)
         else:
             _record_malformed_history_warning(
                 (
