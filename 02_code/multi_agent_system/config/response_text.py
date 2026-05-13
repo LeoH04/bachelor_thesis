@@ -9,7 +9,6 @@ from .task import TASK
 
 PUBLIC_MESSAGE_LABEL = "PUBLIC_MESSAGE"
 METADATA_JSON_LABEL = "METADATA_JSON"
-MEMORY_MARKDOWN_LABEL = "MEMORY_MARKDOWN"
 PUBLIC_MESSAGE_PREFIX_RE = re.compile(
     rf"^\s*{PUBLIC_MESSAGE_LABEL}\s*:\s*",
     re.IGNORECASE,
@@ -26,11 +25,6 @@ METADATA_JSON_BLOCK_RE = re.compile(
     rf"\b{METADATA_JSON_LABEL}\s*:\s*(\{{.*?\}})",
     re.DOTALL | re.IGNORECASE,
 )
-MEMORY_MARKDOWN_PREFIX_RE = re.compile(
-    rf"^\s*{MEMORY_MARKDOWN_LABEL}\s*:\s*",
-    re.IGNORECASE,
-)
-
 
 @dataclass(frozen=True)
 class VoteParseResult:
@@ -38,6 +32,7 @@ class VoteParseResult:
 
     vote: str | None
     metadata: dict[str, object] | None
+    abstained: bool = False
     error_code: str | None = None
     error_message: str | None = None
 
@@ -112,12 +107,16 @@ def parse_vote_from_response(text: object) -> VoteParseResult:
         )
 
     vote = data.get("vote")
-    if vote is None or vote == "":
+    if vote is None:
+        return VoteParseResult(vote=None, metadata=data, abstained=True)
+
+    vote = str(vote).strip()
+    abstention_values = {"abstain", "abstention", "undecided", "none", "n/a"}
+    if vote == "" or vote.lower() in abstention_values:
         return VoteParseResult(
             vote=None,
             metadata=data,
-            error_code="vote_missing",
-            error_message="METADATA_JSON does not contain a vote.",
+            abstained=True,
         )
 
     if vote not in TASK["candidates"]:

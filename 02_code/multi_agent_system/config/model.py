@@ -88,6 +88,9 @@ class TokenTrackingLiteLLMClient(LiteLLMClient):
         """Run an async completion and record response token usage if present."""
         messages = _sanitize_message_roles(messages)
 
+        kwargs.setdefault("reasoning_effort", os.getenv("REASONING_EFFORT", "medium"))
+        kwargs.setdefault("allowed_openai_params", ["reasoning_effort"])
+
         response = await super().acompletion(
             model=model,
             messages=messages,

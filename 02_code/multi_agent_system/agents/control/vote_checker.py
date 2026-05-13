@@ -47,30 +47,40 @@ def _record_vote_warning(
     )
 
 
-def _collect_valid_votes(tool_context: ToolContext) -> list[str]:
-    """Return valid current votes and warn about invalid or missing votes."""
+def _collect_round_votes(tool_context: ToolContext) -> tuple[list[str], int, int]:
+    """Return candidate votes, abstentions, and invalid/missing vote count."""
     votes = []
+    abstention_count = 0
+    invalid_or_missing_count = 0
     for agent_key in AGENT_KEYS:
         response = tool_context.state.get(f"{agent_key}_response", "")
         parse_result = parse_vote_from_response(response)
         if parse_result.vote:
             votes.append(parse_result.vote)
+        elif parse_result.abstained:
+            abstention_count += 1
         else:
+            invalid_or_missing_count += 1
             _record_vote_warning(agent_key, parse_result, response)
-    return votes
+    return votes, abstention_count, invalid_or_missing_count
 
 
-def _warn_if_max_round_partial_votes(votes: list[str], vote_count: dict[str, int]) -> None:
-    """Warn when max-round decision logic uses fewer than all expected votes."""
-    agent_count = len(AGENT_KEYS)
-    if metrics.loop_count >= MAX_DISCUSSION_ROUNDS and len(votes) < agent_count:
+def _warn_if_max_round_partial_votes(
+    votes: list[str],
+    vote_count: dict[str, int],
+    abstention_count: int,
+    invalid_or_missing_count: int,
+) -> None:
+    """Warn when max-round decision logic ignores malformed or missing votes."""
+    if metrics.loop_count >= MAX_DISCUSSION_ROUNDS and invalid_or_missing_count:
         record_run_warning(
             "max_round_partial_valid_votes",
             "Maximum-round decision check used fewer valid votes than configured agents.",
             round=metrics.loop_count,
             valid_vote_count=len(votes),
-            expected_vote_count=agent_count,
-            missing_or_invalid_vote_count=agent_count - len(votes),
+            abstention_count=abstention_count,
+            expected_vote_count=len(AGENT_KEYS),
+            missing_or_invalid_vote_count=invalid_or_missing_count,
             vote_count=vote_count,
         )
 
@@ -121,14 +131,21 @@ def record_metrics(tool_context: ToolContext) -> dict:
 
 def check_consensus(tool_context: ToolContext) -> dict:
     """Count current agent votes and return whether the loop should continue."""
-    votes = _collect_valid_votes(tool_context)
+    votes, abstention_count, invalid_or_missing_count = _collect_round_votes(
+        tool_context
+    )
 
     counts = Counter(votes)
 
     vote_count = dict(counts)
     agent_count = len(AGENT_KEYS)
     majority_threshold = agent_count // 2 + 1
-    _warn_if_max_round_partial_votes(votes, vote_count)
+    _warn_if_max_round_partial_votes(
+        votes,
+        vote_count,
+        abstention_count,
+        invalid_or_missing_count,
+    )
 
     if counts:
         winner, count = counts.most_common(1)[0]
@@ -139,6 +156,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
                 "status": "CONSENSUS_REACHED",
                 "winner": winner,
                 "vote_count": vote_count,
+                "abstention_count": abstention_count,
             }
 
         if (
@@ -151,6 +169,7 @@ def check_consensus(tool_context: ToolContext) -> dict:
                 "status": "MAX_ROUNDS_REACHED",
                 "winner": winner,
                 "vote_count": vote_count,
+                "abstention_count": abstention_count,
             }
 
     if metrics.loop_count >= MAX_DISCUSSION_ROUNDS:
@@ -160,11 +179,13 @@ def check_consensus(tool_context: ToolContext) -> dict:
             "status": "MAX_ROUNDS_REACHED_NO_MAJORITY",
             "winner": None,
             "vote_count": vote_count,
+            "abstention_count": abstention_count,
         }
 
     return {
         "status": "CONTINUE_DISCUSSION",
         "vote_count": vote_count,
+        "abstention_count": abstention_count,
     }
 
 

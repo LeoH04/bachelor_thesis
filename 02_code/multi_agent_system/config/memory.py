@@ -1,5 +1,6 @@
 """Build, persist, reset, and archive agent memories."""
 
+import json
 import re
 import shutil
 from pathlib import Path
@@ -7,7 +8,6 @@ from pathlib import Path
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 from .response_text import (
-    MEMORY_MARKDOWN_PREFIX_RE,
     _drop_thought_parts,
     _replace_response_text,
     _visible_text_from_parts,
@@ -35,14 +35,27 @@ def _agent_memory_path(agent_key: str) -> Path:
     return PROJECT_ROOT / "agents" / "discussion" / f"{agent_key}.md"
 
 
-def _extract_memory_markdown(text: str) -> str:
-    """Normalize a passive memory update response to raw markdown."""
+def _extract_memory_sections_json(text: str) -> dict[str, str] | None:
+    """Return structured memory sections from JSON text, if present."""
     text = text.strip()
-    text = MEMORY_MARKDOWN_PREFIX_RE.sub("", text)
-    fence_match = re.search(r"```(?:markdown|md)?\s*(.*?)\s*```", text, re.DOTALL)
+    fence_match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
     if fence_match:
-        return fence_match.group(1).strip()
-    return text
+        text = fence_match.group(1).strip()
+
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+
+    if not isinstance(data, dict):
+        return None
+
+    sections = {}
+    for section_id in SECTION_ORDER:
+        value = data.get(section_id)
+        if isinstance(value, str) and value.strip():
+            sections[section_id] = value.strip()
+    return sections or None
 
 
 def build_memory_template(agent_key: str) -> str:
@@ -155,11 +168,13 @@ def write_agent_memory(agent_key: str, content: str) -> None:
     path.write_text(content.strip() + "\n", encoding="utf-8")
 
 
-def _merge_marked_memory_update(agent_key: str, proposed_memory: str) -> str:
-    """Merge model-proposed section bodies into the existing marked memory file."""
+def _merge_structured_memory_update(
+    agent_key: str,
+    proposed_sections: dict[str, str],
+) -> str:
+    """Merge structured section bodies into the existing marked memory file."""
     previous_memory = read_agent_memory(agent_key)
     previous_sections = parse_marked_sections(previous_memory)
-    proposed_sections = parse_marked_sections(proposed_memory)
 
     if not previous_sections:
         previous_memory = build_memory_template(agent_key)
@@ -171,22 +186,13 @@ def _merge_marked_memory_update(agent_key: str, proposed_memory: str) -> str:
             round=metrics.loop_count + 1,
         )
 
-    if not proposed_sections:
-        record_run_warning(
-            "memory_update_missing_markers",
-            "Passive memory update did not include section markers; previous memory was preserved.",
-            agent=agent_key,
-            round=metrics.loop_count + 1,
-        )
-        return previous_memory
-
     missing_sections = [
         section_id for section_id in SECTION_ORDER if section_id not in proposed_sections
     ]
     if missing_sections:
         record_run_warning(
             "memory_update_incomplete_sections",
-            "Passive memory update omitted marked sections; omitted sections were preserved from previous memory.",
+            "Passive memory update omitted structured sections; omitted sections were preserved from previous memory.",
             agent=agent_key,
             round=metrics.loop_count + 1,
             missing_sections=missing_sections,
@@ -383,17 +389,17 @@ def reset_all_agent_memories() -> None:
 
 
 def record_memory_update_response(agent_key: str, _callback_context, llm_response):
-    """Persist a passive memory update from plain markdown model output."""
+    """Persist a passive memory update from structured JSON section output."""
     content = getattr(llm_response, "content", None)
     parts = list(getattr(content, "parts", None) or [])
     visible_parts = _drop_thought_parts(parts)
     text = _visible_text_from_parts(visible_parts)
-    memory = _extract_memory_markdown(text)
+    memory_sections = _extract_memory_sections_json(text)
 
-    if not memory:
+    if memory_sections is None:
         record_run_warning(
-            "memory_update_empty",
-            "Passive memory update returned no usable memory content.",
+            "memory_update_invalid_json",
+            "Passive memory update did not return valid structured JSON sections.",
             agent=agent_key,
             round=metrics.loop_count + 1,
         )
@@ -402,10 +408,10 @@ def record_memory_update_response(agent_key: str, _callback_context, llm_respons
             agent=agent_key,
             round=metrics.loop_count + 1,
         )
-        _replace_response_text(llm_response, "MEMORY_UPDATE_EMPTY")
+        _replace_response_text(llm_response, "MEMORY_UPDATE_INVALID_JSON")
         return llm_response
 
-    memory = _merge_marked_memory_update(agent_key, memory)
+    memory = _merge_structured_memory_update(agent_key, memory_sections)
     write_agent_memory(agent_key, memory)
     metrics.record_memory_update()
     log_event(
