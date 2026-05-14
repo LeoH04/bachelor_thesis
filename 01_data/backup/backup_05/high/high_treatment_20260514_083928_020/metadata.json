@@ -1,0 +1,494 @@
+{
+  "agent_tool_calls": 7,
+  "agent_tool_messages": 14,
+  "agent_turns": 5,
+  "completed_at": "2026-05-14T15:31:48+0200",
+  "condition": "high",
+  "context_alignment": 0.706709,
+  "context_consistency": {
+    "agent_count": 3,
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "max_pairwise_similarity": 0.881362,
+    "mean_pairwise_similarity": 0.848051,
+    "method": "weighted_section_embedding_cosine",
+    "min_pairwise_similarity": 0.823216,
+    "pairwise": [
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_2",
+        "sections": [
+          {
+            "section": "task_summary",
+            "similarity": 0.97812,
+            "weight": 0.02
+          },
+          {
+            "section": "revealed_facts_by_source",
+            "similarity": 0.798559,
+            "weight": 0.3
+          },
+          {
+            "section": "candidate_evaluation",
+            "similarity": 0.945638,
+            "weight": 0.35
+          },
+          {
+            "section": "other_agents_positions",
+            "similarity": 0.904222,
+            "weight": 0.15
+          },
+          {
+            "section": "emerging_group_view",
+            "similarity": 0.576346,
+            "weight": 0.13
+          },
+          {
+            "section": "open_questions_next_step_focus",
+            "similarity": 0.778284,
+            "weight": 0.05
+          }
+        ],
+        "similarity": 0.839576
+      },
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_3",
+        "sections": [
+          {
+            "section": "task_summary",
+            "similarity": 0.944999,
+            "weight": 0.02
+          },
+          {
+            "section": "revealed_facts_by_source",
+            "similarity": 0.954916,
+            "weight": 0.3
+          },
+          {
+            "section": "candidate_evaluation",
+            "similarity": 0.895236,
+            "weight": 0.35
+          },
+          {
+            "section": "other_agents_positions",
+            "similarity": 0.893516,
+            "weight": 0.15
+          },
+          {
+            "section": "emerging_group_view",
+            "similarity": 0.679019,
+            "weight": 0.13
+          },
+          {
+            "section": "open_questions_next_step_focus",
+            "similarity": 0.807087,
+            "weight": 0.05
+          }
+        ],
+        "similarity": 0.881362
+      },
+      {
+        "agent_a": "agent_2",
+        "agent_b": "agent_3",
+        "sections": [
+          {
+            "section": "task_summary",
+            "similarity": 0.931988,
+            "weight": 0.02
+          },
+          {
+            "section": "revealed_facts_by_source",
+            "similarity": 0.780958,
+            "weight": 0.3
+          },
+          {
+            "section": "candidate_evaluation",
+            "similarity": 0.864661,
+            "weight": 0.35
+          },
+          {
+            "section": "other_agents_positions",
+            "similarity": 0.91,
+            "weight": 0.15
+          },
+          {
+            "section": "emerging_group_view",
+            "similarity": 0.684546,
+            "weight": 0.13
+          },
+          {
+            "section": "open_questions_next_step_focus",
+            "similarity": 0.843347,
+            "weight": 0.05
+          }
+        ],
+        "similarity": 0.823216
+      }
+    ],
+    "section_weights": {
+      "candidate_evaluation": 0.35,
+      "emerging_group_view": 0.13,
+      "my_position": 0.0,
+      "open_questions_next_step_focus": 0.05,
+      "other_agents_positions": 0.15,
+      "revealed_facts_by_source": 0.3,
+      "task_summary": 0.02
+    }
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 1,
+  "decision_method": "consensus",
+  "explicit_smm_memory": true,
+  "final_candidate": "Candidate C",
+  "gold_standard_alignment": [
+    {
+      "agent": "agent_1",
+      "checks": {
+        "agent_1_candidate_a_can_be_unorganized": 1,
+        "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 1,
+        "agent_1_candidate_b_can_be_grumpy": 1,
+        "agent_1_candidate_b_can_be_uncooperative": 1,
+        "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 0,
+        "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 0,
+        "agent_1_candidate_d_has_relatively_weak_leadership_skills": 1,
+        "agent_1_candidate_d_is_regarded_as_arrogant": 0,
+        "agent_2_candidate_a_is_regarded_as_a_show_off": 0,
+        "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 0,
+        "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 1,
+        "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1,
+        "agent_2_candidate_c_keeps_calm_in_a_crisis": 1,
+        "agent_2_candidate_c_understands_complicated_technology": 1,
+        "agent_2_candidate_d_has_a_hot_temper": 1,
+        "agent_2_candidate_d_is_regarded_as_a_know_it_all": 1,
+        "agent_3_candidate_a_eats_unhealthily": 0,
+        "agent_3_candidate_a_is_unfriendly": 1,
+        "agent_3_candidate_b_is_regarded_as_pretentious": 0,
+        "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 0,
+        "agent_3_candidate_c_has_excellent_attention_skills": 1,
+        "agent_3_candidate_c_puts_concern_for_others_above_everything": 1,
+        "agent_3_candidate_d_is_considered_moody": 1,
+        "agent_3_candidate_d_is_regarded_as_a_loner": 1,
+        "public_candidate_a_can_anticipate_dangerous_situations": 1,
+        "public_candidate_a_has_excellent_spatial_vision": 1,
+        "public_candidate_a_has_very_good_leadership_qualities": 1,
+        "public_candidate_a_is_able_to_see_complex_connections": 1,
+        "public_candidate_b_handles_stress_very_well": 1,
+        "public_candidate_b_has_excellent_computer_skills": 1,
+        "public_candidate_b_is_good_at_assessing_weather_conditions": 1,
+        "public_candidate_b_is_very_conscientious": 1,
+        "public_candidate_c_can_make_correct_decisions_quickly": 1,
+        "public_candidate_c_has_difficulty_communicating_ideas": 1,
+        "public_candidate_c_is_not_very_willing_to_further_his_education": 1,
+        "public_candidate_c_is_regarded_as_egocentric": 1,
+        "public_candidate_d_can_concentrate_very_well": 1,
+        "public_candidate_d_responds_to_unexpected_events_adequately": 1,
+        "public_candidate_d_solves_problems_extremely_well": 1,
+        "public_candidate_d_takes_responsibility_seriously": 1
+      },
+      "matched_facts": 32,
+      "matched_other_private_facts": 11,
+      "matched_own_private_facts": 5,
+      "matched_public_facts": 16,
+      "other_private_fact_coverage": 0.6875,
+      "own_private_fact_coverage": 0.625,
+      "public_fact_coverage": 1.0,
+      "score": 0.8,
+      "total_facts": 40,
+      "total_other_private_facts": 16,
+      "total_own_private_facts": 8,
+      "total_public_facts": 16
+    },
+    {
+      "agent": "agent_2",
+      "checks": {
+        "agent_1_candidate_a_can_be_unorganized": 1,
+        "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 1,
+        "agent_1_candidate_b_can_be_grumpy": 1,
+        "agent_1_candidate_b_can_be_uncooperative": 1,
+        "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 0,
+        "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 0,
+        "agent_1_candidate_d_has_relatively_weak_leadership_skills": 0,
+        "agent_1_candidate_d_is_regarded_as_arrogant": 0,
+        "agent_2_candidate_a_is_regarded_as_a_show_off": 1,
+        "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 1,
+        "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 1,
+        "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1,
+        "agent_2_candidate_c_keeps_calm_in_a_crisis": 1,
+        "agent_2_candidate_c_understands_complicated_technology": 1,
+        "agent_2_candidate_d_has_a_hot_temper": 1,
+        "agent_2_candidate_d_is_regarded_as_a_know_it_all": 1,
+        "agent_3_candidate_a_eats_unhealthily": 0,
+        "agent_3_candidate_a_is_unfriendly": 0,
+        "agent_3_candidate_b_is_regarded_as_pretentious": 0,
+        "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 0,
+        "agent_3_candidate_c_has_excellent_attention_skills": 1,
+        "agent_3_candidate_c_puts_concern_for_others_above_everything": 1,
+        "agent_3_candidate_d_is_considered_moody": 1,
+        "agent_3_candidate_d_is_regarded_as_a_loner": 1,
+        "public_candidate_a_can_anticipate_dangerous_situations": 1,
+        "public_candidate_a_has_excellent_spatial_vision": 1,
+        "public_candidate_a_has_very_good_leadership_qualities": 1,
+        "public_candidate_a_is_able_to_see_complex_connections": 1,
+        "public_candidate_b_handles_stress_very_well": 1,
+        "public_candidate_b_has_excellent_computer_skills": 1,
+        "public_candidate_b_is_good_at_assessing_weather_conditions": 1,
+        "public_candidate_b_is_very_conscientious": 1,
+        "public_candidate_c_can_make_correct_decisions_quickly": 1,
+        "public_candidate_c_has_difficulty_communicating_ideas": 1,
+        "public_candidate_c_is_not_very_willing_to_further_his_education": 1,
+        "public_candidate_c_is_regarded_as_egocentric": 1,
+        "public_candidate_d_can_concentrate_very_well": 1,
+        "public_candidate_d_responds_to_unexpected_events_adequately": 1,
+        "public_candidate_d_solves_problems_extremely_well": 1,
+        "public_candidate_d_takes_responsibility_seriously": 1
+      },
+      "matched_facts": 32,
+      "matched_other_private_facts": 8,
+      "matched_own_private_facts": 8,
+      "matched_public_facts": 16,
+      "other_private_fact_coverage": 0.5,
+      "own_private_fact_coverage": 1.0,
+      "public_fact_coverage": 1.0,
+      "score": 0.8,
+      "total_facts": 40,
+      "total_other_private_facts": 16,
+      "total_own_private_facts": 8,
+      "total_public_facts": 16
+    },
+    {
+      "agent": "agent_3",
+      "checks": {
+        "agent_1_candidate_a_can_be_unorganized": 1,
+        "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 1,
+        "agent_1_candidate_b_can_be_grumpy": 1,
+        "agent_1_candidate_b_can_be_uncooperative": 1,
+        "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 0,
+        "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 0,
+        "agent_1_candidate_d_has_relatively_weak_leadership_skills": 0,
+        "agent_1_candidate_d_is_regarded_as_arrogant": 0,
+        "agent_2_candidate_a_is_regarded_as_a_show_off": 1,
+        "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 1,
+        "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 1,
+        "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1,
+        "agent_2_candidate_c_keeps_calm_in_a_crisis": 1,
+        "agent_2_candidate_c_understands_complicated_technology": 1,
+        "agent_2_candidate_d_has_a_hot_temper": 1,
+        "agent_2_candidate_d_is_regarded_as_a_know_it_all": 1,
+        "agent_3_candidate_a_eats_unhealthily": 1,
+        "agent_3_candidate_a_is_unfriendly": 1,
+        "agent_3_candidate_b_is_regarded_as_pretentious": 1,
+        "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 1,
+        "agent_3_candidate_c_has_excellent_attention_skills": 1,
+        "agent_3_candidate_c_puts_concern_for_others_above_everything": 1,
+        "agent_3_candidate_d_is_considered_moody": 1,
+        "agent_3_candidate_d_is_regarded_as_a_loner": 1,
+        "public_candidate_a_can_anticipate_dangerous_situations": 1,
+        "public_candidate_a_has_excellent_spatial_vision": 1,
+        "public_candidate_a_has_very_good_leadership_qualities": 1,
+        "public_candidate_a_is_able_to_see_complex_connections": 1,
+        "public_candidate_b_handles_stress_very_well": 1,
+        "public_candidate_b_has_excellent_computer_skills": 1,
+        "public_candidate_b_is_good_at_assessing_weather_conditions": 1,
+        "public_candidate_b_is_very_conscientious": 1,
+        "public_candidate_c_can_make_correct_decisions_quickly": 1,
+        "public_candidate_c_has_difficulty_communicating_ideas": 1,
+        "public_candidate_c_is_not_very_willing_to_further_his_education": 1,
+        "public_candidate_c_is_regarded_as_egocentric": 1,
+        "public_candidate_d_can_concentrate_very_well": 1,
+        "public_candidate_d_responds_to_unexpected_events_adequately": 1,
+        "public_candidate_d_solves_problems_extremely_well": 1,
+        "public_candidate_d_takes_responsibility_seriously": 1
+      },
+      "matched_facts": 36,
+      "matched_other_private_facts": 12,
+      "matched_own_private_facts": 8,
+      "matched_public_facts": 16,
+      "other_private_fact_coverage": 0.75,
+      "own_private_fact_coverage": 1.0,
+      "public_fact_coverage": 1.0,
+      "score": 0.9,
+      "total_facts": 40,
+      "total_other_private_facts": 16,
+      "total_own_private_facts": 8,
+      "total_public_facts": 16
+    }
+  ],
+  "gold_standard_alignment_method": "rule_based_fact_coverage",
+  "input_tokens": 257833,
+  "max_gold_standard_alignment": 0.9,
+  "mean_gold_standard_alignment": 0.833333,
+  "mean_other_private_fact_coverage": 0.645833,
+  "mean_other_private_facts": 10.333333,
+  "mean_own_private_fact_coverage": 0.875,
+  "mean_own_private_facts": 7.0,
+  "mean_pairwise_memory_similarity": 0.848051,
+  "mean_public_fact_coverage": 1.0,
+  "mean_public_facts": 16.0,
+  "memory_updates": 18,
+  "min_gold_standard_alignment": 0.8,
+  "output_tokens": 45908,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_2",
+      "sections": [
+        {
+          "section": "task_summary",
+          "similarity": 0.97812,
+          "weight": 0.02
+        },
+        {
+          "section": "revealed_facts_by_source",
+          "similarity": 0.798559,
+          "weight": 0.3
+        },
+        {
+          "section": "candidate_evaluation",
+          "similarity": 0.945638,
+          "weight": 0.35
+        },
+        {
+          "section": "other_agents_positions",
+          "similarity": 0.904222,
+          "weight": 0.15
+        },
+        {
+          "section": "emerging_group_view",
+          "similarity": 0.576346,
+          "weight": 0.13
+        },
+        {
+          "section": "open_questions_next_step_focus",
+          "similarity": 0.778284,
+          "weight": 0.05
+        }
+      ],
+      "similarity": 0.839576
+    },
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_3",
+      "sections": [
+        {
+          "section": "task_summary",
+          "similarity": 0.944999,
+          "weight": 0.02
+        },
+        {
+          "section": "revealed_facts_by_source",
+          "similarity": 0.954916,
+          "weight": 0.3
+        },
+        {
+          "section": "candidate_evaluation",
+          "similarity": 0.895236,
+          "weight": 0.35
+        },
+        {
+          "section": "other_agents_positions",
+          "similarity": 0.893516,
+          "weight": 0.15
+        },
+        {
+          "section": "emerging_group_view",
+          "similarity": 0.679019,
+          "weight": 0.13
+        },
+        {
+          "section": "open_questions_next_step_focus",
+          "similarity": 0.807087,
+          "weight": 0.05
+        }
+      ],
+      "similarity": 0.881362
+    },
+    {
+      "agent_a": "agent_2",
+      "agent_b": "agent_3",
+      "sections": [
+        {
+          "section": "task_summary",
+          "similarity": 0.931988,
+          "weight": 0.02
+        },
+        {
+          "section": "revealed_facts_by_source",
+          "similarity": 0.780958,
+          "weight": 0.3
+        },
+        {
+          "section": "candidate_evaluation",
+          "similarity": 0.864661,
+          "weight": 0.35
+        },
+        {
+          "section": "other_agents_positions",
+          "similarity": 0.91,
+          "weight": 0.15
+        },
+        {
+          "section": "emerging_group_view",
+          "similarity": 0.684546,
+          "weight": 0.13
+        },
+        {
+          "section": "open_questions_next_step_focus",
+          "similarity": 0.843347,
+          "weight": 0.05
+        }
+      ],
+      "similarity": 0.823216
+    }
+  ],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_treatment_20260514_083928_020",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 334.8701,
+  "schema_version": 1,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260514_083928_020/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_mode": "treatment",
+  "status": "completed",
+  "timestamp": "20260514_152613",
+  "total_messages": 19,
+  "total_tokens": 303741,
+  "vote_count": {
+    "Candidate C": 3
+  },
+  "warning_count": 2,
+  "warnings": [
+    {
+      "code": "agent_output_missing_metadata",
+      "details": {
+        "agent": "agent_2",
+        "response_preview": "**Public Message**\n\nI\u2019ve compiled all the attributes we each have for the four candidates and weighed them against the selection criteria (reliability, technical competence, calmness under pressure, decision\u2011making, teamwork/communication, and long\u2011term suitability).\n\n| Candidate | Strengths (relevant to long\u2011haul piloting) | Weaknesses / Gaps |\n|-----------|-------------------------------------------|-------------------|\n| **A** | \u2022 Anticipates dangerous situations<br>\u2022 Excellent spatial vision",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because METADATA_JSON is missing.",
+      "timestamp": "2026-05-14T15:27:13+0200"
+    },
+    {
+      "code": "vote_missing",
+      "details": {
+        "agent": "agent_2",
+        "metadata": null,
+        "parse_error_code": "agent_output_missing_metadata",
+        "parse_error_message": "Agent response does not contain METADATA_JSON.",
+        "response_present": true,
+        "round": 1
+      },
+      "message": "Agent response did not contain a valid vote for consensus checking.",
+      "timestamp": "2026-05-14T15:28:54+0200"
+    }
+  ]
+}

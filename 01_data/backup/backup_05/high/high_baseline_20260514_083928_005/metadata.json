@@ -1,0 +1,95 @@
+{
+  "agent_tool_calls": 15,
+  "agent_tool_messages": 30,
+  "agent_turns": 4,
+  "completed_at": "2026-05-14T19:39:43+0200",
+  "condition": "high",
+  "context_alignment": null,
+  "context_consistency": {
+    "agent_count": 0,
+    "max_pairwise_similarity": null,
+    "mean_pairwise_similarity": null,
+    "method": "not_applicable",
+    "min_pairwise_similarity": null,
+    "pairwise": [],
+    "reason": "explicit_smm_memory_disabled"
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 1,
+  "decision_method": "consensus",
+  "explicit_smm_memory": false,
+  "final_candidate": "Candidate C",
+  "gold_standard_alignment": [],
+  "gold_standard_alignment_method": "not_applicable",
+  "input_tokens": 176131,
+  "max_gold_standard_alignment": null,
+  "mean_gold_standard_alignment": null,
+  "mean_other_private_fact_coverage": null,
+  "mean_other_private_facts": null,
+  "mean_own_private_fact_coverage": null,
+  "mean_own_private_facts": null,
+  "mean_pairwise_memory_similarity": null,
+  "mean_public_fact_coverage": null,
+  "mean_public_facts": null,
+  "memory_updates": 0,
+  "min_gold_standard_alignment": null,
+  "output_tokens": 22613,
+  "pairwise_memory_similarity": [],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_005/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_005",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_005/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_005/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_baseline_20260514_083928_005",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 200.1333,
+  "schema_version": 1,
+  "shared_mental_model_files": [],
+  "shared_mental_models_archived": false,
+  "smm_mode": "baseline",
+  "status": "completed",
+  "timestamp": "20260514_193623",
+  "total_messages": 34,
+  "total_tokens": 198744,
+  "vote_count": {
+    "Candidate C": 3
+  },
+  "warning_count": 3,
+  "warnings": [
+    {
+      "code": "agent_output_missing_metadata",
+      "details": {
+        "agent": "agent_2",
+        "response_preview": "**Public contribution**\n\nHaving gathered the missing pieces from Agents\u202f1 and\u202f3, we can now compare the four candidates across the full set of criteria.\n\n| Criterion | Candidate\u202fA | Candidate\u202fB | Candidate\u202fC | Candidate\u202fD |\n|-----------|-------------|-------------|-------------|-------------|\n| **Reliability / Responsibility** | No explicit evidence; only \u201cvery good leadership\u201d (no guarantee of reliability). | *Very conscientious* \u2192 strong sense of duty; *takes responsibility* implied. | No expl",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because METADATA_JSON is missing.",
+      "timestamp": "2026-05-14T19:37:01+0200"
+    },
+    {
+      "code": "agent_output_missing_public_message",
+      "details": {
+        "agent": "agent_3",
+        "response_preview": "**Full candidate picture (combined information)**  \n\n| Candidate | Reliability / Responsibility | Technical / Cognitive competence | Calmness & stress handling | Decision\u2011making speed | Teamwork / communication |\n|-----------|------------------------------|----------------------------------|----------------------------|-----------------------|--------------------------|\n| **A** | \u2013 No explicit reliability statement. <br>\u2013 Leadership noted, but also \u201cunfriendly\u201d, \u201cshow\u2011off\u201d, \u201cnot open to new idea",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because PUBLIC_MESSAGE is empty or missing.",
+      "timestamp": "2026-05-14T19:38:40+0200"
+    },
+    {
+      "code": "vote_missing",
+      "details": {
+        "agent": "agent_2",
+        "metadata": null,
+        "parse_error_code": "agent_output_missing_metadata",
+        "parse_error_message": "Agent response does not contain METADATA_JSON.",
+        "response_present": true,
+        "round": 1
+      },
+      "message": "Agent response did not contain a valid vote for consensus checking.",
+      "timestamp": "2026-05-14T19:38:40+0200"
+    }
+  ]
+}

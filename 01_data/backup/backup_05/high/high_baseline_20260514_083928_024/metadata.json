@@ -1,0 +1,105 @@
+{
+  "agent_tool_calls": 12,
+  "agent_tool_messages": 24,
+  "agent_turns": 3,
+  "completed_at": "2026-05-14T20:29:29+0200",
+  "condition": "high",
+  "context_alignment": null,
+  "context_consistency": {
+    "agent_count": 0,
+    "max_pairwise_similarity": null,
+    "mean_pairwise_similarity": null,
+    "method": "not_applicable",
+    "min_pairwise_similarity": null,
+    "pairwise": [],
+    "reason": "explicit_smm_memory_disabled"
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 1,
+  "decision_method": "consensus",
+  "explicit_smm_memory": false,
+  "final_candidate": "Candidate C",
+  "gold_standard_alignment": [],
+  "gold_standard_alignment_method": "not_applicable",
+  "input_tokens": 134848,
+  "max_gold_standard_alignment": null,
+  "mean_gold_standard_alignment": null,
+  "mean_other_private_fact_coverage": null,
+  "mean_other_private_facts": null,
+  "mean_own_private_fact_coverage": null,
+  "mean_own_private_facts": null,
+  "mean_pairwise_memory_similarity": null,
+  "mean_public_fact_coverage": null,
+  "mean_public_facts": null,
+  "memory_updates": 0,
+  "min_gold_standard_alignment": null,
+  "output_tokens": 27555,
+  "pairwise_memory_similarity": [],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_024/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_024",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_024/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260514_083928_024/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_baseline_20260514_083928_024",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 237.7583,
+  "schema_version": 1,
+  "shared_mental_model_files": [],
+  "shared_mental_models_archived": false,
+  "smm_mode": "baseline",
+  "status": "completed",
+  "timestamp": "20260514_202531",
+  "total_messages": 27,
+  "total_tokens": 162403,
+  "vote_count": {
+    "Candidate C": 3
+  },
+  "warning_count": 4,
+  "warnings": [
+    {
+      "code": "agent_output_missing_public_message",
+      "details": {
+        "agent": "agent_3",
+        "response_preview": "**Public_message:**  \nBased on the attributes we each have, here is a consolidated view of the four candidates with respect to the long\u2011distance pilot criteria:\n\n| Candidate | Reliability & Responsibility | Technical / Cognitive Competence | Calmness & Judgment Under Pressure | Decision\u2011making Speed | Teamwork & Communication | Professional Development |\n|-----------|------------------------------|----------------------------------|-----------------------------------|-----------------------|----",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because PUBLIC_MESSAGE is empty or missing.",
+      "timestamp": "2026-05-14T20:26:01+0200"
+    },
+    {
+      "code": "agent_output_missing_public_message",
+      "details": {
+        "agent": "agent_1",
+        "response_preview": "**Assessment of all candidates**\n\n| Candidate | Key Strengths (relevant to long\u2011distance flights) | Key Weaknesses (relevant to long\u2011distance flights) |\n|-----------|---------------------------------------------------|---------------------------------------------------|\n| **A** | \u2022 Anticipates dangerous situations<br>\u2022 Sees complex connections<br>\u2022 Excellent spatial vision<br>\u2022 Very good leadership qualities | \u2022 Not good at taking criticism<br>\u2022 Can be unorganized<br>\u2022 No explicit evidence of ca",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because PUBLIC_MESSAGE is empty or missing.",
+      "timestamp": "2026-05-14T20:26:51+0200"
+    },
+    {
+      "code": "agent_output_missing_public_message",
+      "details": {
+        "agent": "agent_2",
+        "response_preview": "**Assessment of the candidates**\n\n| Candidate | Key strengths for long\u2011distance operations | Key weaknesses / concerns |\n|-----------|--------------------------------------------|----------------------------|\n| **A** | \u2022 Anticipates dangerous situations<br>\u2022 Sees complex connections<br>\u2022 Excellent spatial vision<br>\u2022 Very good leadership qualities | \u2022 No explicit evidence of calmness under pressure or decision\u2011making speed<br>\u2022 Not open to new ideas, regarded as a show\u2011off<br>\u2022 Poor at taking cr",
+        "round": 1
+      },
+      "message": "Scheduled agent response was not recorded because PUBLIC_MESSAGE is empty or missing.",
+      "timestamp": "2026-05-14T20:27:50+0200"
+    },
+    {
+      "code": "agent_output_metadata_malformed",
+      "details": {
+        "agent": "agent_3",
+        "metadata": null,
+        "parse_error_code": "agent_output_metadata_malformed",
+        "parse_error_message": "METADATA_JSON is present but no JSON object was found.",
+        "response_present": true,
+        "round": 1
+      },
+      "message": "Agent response did not contain a valid vote for consensus checking.",
+      "timestamp": "2026-05-14T20:27:50+0200"
+    }
+  ]
+}
