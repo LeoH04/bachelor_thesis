@@ -55,7 +55,45 @@ def _extract_memory_sections_json(text: str) -> dict[str, str] | None:
         value = data.get(section_id)
         if isinstance(value, str) and value.strip():
             sections[section_id] = value.strip()
-    return sections or None
+    return sections
+
+
+def _is_markdown_table_row(line: str) -> bool:
+    stripped = line.strip()
+    return stripped.startswith("|") and stripped.endswith("|")
+
+
+def _normalized_table_row(line: str) -> tuple[str, ...]:
+    cells = line.strip().strip("|").split("|")
+    return tuple(re.sub(r"\s+", " ", cell.strip().lower()) for cell in cells)
+
+
+def _dedupe_markdown_table_rows(body: str) -> str:
+    """Remove exact duplicate markdown table rows while preserving row order."""
+    seen_rows = set()
+    deduped_lines = []
+
+    for line in body.splitlines():
+        if _is_markdown_table_row(line):
+            row_key = _normalized_table_row(line)
+            if row_key in seen_rows:
+                continue
+            seen_rows.add(row_key)
+
+        deduped_lines.append(line)
+
+    return "\n".join(deduped_lines).strip()
+
+
+def _clean_memory_section(section_id: str, body: str) -> str:
+    """Apply deterministic cleanup to memory sections before persistence."""
+    if section_id in {
+        "revealed_facts_by_source",
+        "candidate_evaluation",
+        "other_agents_positions",
+    }:
+        return _dedupe_markdown_table_rows(body)
+    return body.strip()
 
 
 def build_memory_template(agent_key: str) -> str:
@@ -186,24 +224,16 @@ def _merge_structured_memory_update(
             round=metrics.loop_count + 1,
         )
 
-    missing_sections = [
-        section_id for section_id in SECTION_ORDER if section_id not in proposed_sections
-    ]
-    if missing_sections:
-        record_run_warning(
-            "memory_update_incomplete_sections",
-            "Passive memory update omitted structured sections; omitted sections were preserved from previous memory.",
-            agent=agent_key,
-            round=metrics.loop_count + 1,
-            missing_sections=missing_sections,
-        )
-
     merged_sections = {
         section_id: proposed_sections.get(
             section_id,
             previous_sections.get(section_id, ""),
         )
         for section_id in SECTION_ORDER
+    }
+    merged_sections = {
+        section_id: _clean_memory_section(section_id, body)
+        for section_id, body in merged_sections.items()
     }
     title = previous_memory.splitlines()[0] if previous_memory.splitlines() else (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})"
