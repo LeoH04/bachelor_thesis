@@ -58,6 +58,7 @@ git clean -fd
 # SSH tunnel to the model endpoint
 ssh -N -L 8080:144.41.15.40:31538 HohServer
 
+# Run an adk web simulation
 SIM_CONDITION=low \
 SIM_SMM_MODE=treatment \
 SIM_RUN_ID=low_web_$(date +%Y%m%d_%H%M%S) \
