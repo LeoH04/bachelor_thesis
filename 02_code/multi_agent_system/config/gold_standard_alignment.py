@@ -35,12 +35,16 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"(?:very\s+good|strong|excellent).{0,40}leadership",
         r"leadership.{0,40}(?:qualities|strong|very\s+good|excellent)",
     ),
-    "Candidate B is very conscientious.": (
-        r"conscientious",
+    "Candidate B keeps calm in a crisis.": (
+        r"calm.{0,30}crisis",
+        r"crisis.{0,30}calm",
     ),
-    "Candidate B handles stress very well.": (
-        r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
-        r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
+    "Candidate B is known to be 100% reliable.": (
+        r"100\s*%",
+        r"100\s*percent",
+        r"fully.{0,20}reliab\w*",
+        r"complete.{0,20}reliab\w*",
+        r"reliab\w*.{0,20}(?:100|fully|complete)",
     ),
     "Candidate B is good at assessing weather conditions.": (
         r"assess\w*.{0,30}weather",
@@ -101,12 +105,9 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"uncooperat\w*",
         r"not\s+cooperat\w*",
     ),
-    "Candidate C is known to be 100% reliable.": (
-        r"100\s*%",
-        r"100\s*percent",
-        r"fully.{0,20}reliab\w*",
-        r"complete.{0,20}reliab\w*",
-        r"reliab\w*.{0,20}(?:100|fully|complete)",
+    "Candidate C handles stress very well.": (
+        r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
+        r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
     ),
     "Candidate C creates a positive atmosphere with his crew.": (
         r"positive.{0,30}atmosphere.{0,30}crew",
@@ -140,9 +141,8 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"nasty.{0,30}remarks?.{0,30}colleagues?",
         r"remarks?.{0,30}colleagues?.{0,30}nasty",
     ),
-    "Candidate C keeps calm in a crisis.": (
-        r"calm.{0,30}crisis",
-        r"crisis.{0,30}calm",
+    "Candidate C is very conscientious.": (
+        r"conscientious",
     ),
     "Candidate C understands complicated technology.": (
         r"(?:understand\w*|grasp\w*).{0,40}(?:complicated|complex).{0,30}technolog\w*",
