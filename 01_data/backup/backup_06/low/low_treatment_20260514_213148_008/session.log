@@ -1,0 +1,136 @@
+2026-05-14 22:19:23,299 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1778789963.32835, "event": "memory_reset"}
+{"id": 2, "ts": 1778789963.3316772, "event": "discussion_order", "round": 1, "order": ["agent_3", "agent_1", "agent_2"]}
+2026-05-14 22:19:27,703 - INFO - Tokens - Input: 1509, Output: 304, Total: 1813
+{"id": 3, "ts": 1778789967.7042875, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I am concerned that Candidate A is unfriendly, which may impact crew cooperation.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-14 22:19:27,704 - INFO - Agent turns: 1
+2026-05-14 22:19:35,815 - INFO - Tokens - Input: 1435, Output: 620, Total: 2055
+2026-05-14 22:19:35,821 - INFO - Memory updates: 1
+{"id": 4, "ts": 1778789975.8215277, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-05-14 22:19:39,737 - INFO - Tokens - Input: 1438, Output: 1037, Total: 2475
+2026-05-14 22:19:39,739 - INFO - Memory updates: 2
+{"id": 5, "ts": 1778789979.7393322, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-05-14 22:19:41,388 - INFO - Tokens - Input: 1430, Output: 1246, Total: 2676
+2026-05-14 22:19:41,391 - INFO - Memory updates: 3
+{"id": 6, "ts": 1778789981.3913343, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-05-14 22:19:45,810 - INFO - Tokens - Input: 1529, Output: 541, Total: 2070
+{"id": 7, "ts": 1778789985.8117979, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Candidate C is known to be 100% reliable and creates a positive atmosphere with his crew.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-14 22:19:45,811 - INFO - Agent turns: 2
+2026-05-14 22:19:52,441 - INFO - Tokens - Input: 1459, Output: 477, Total: 1936
+2026-05-14 22:19:52,443 - INFO - Memory updates: 4
+{"id": 8, "ts": 1778789992.4433162, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-05-14 22:19:56,732 - INFO - Tokens - Input: 1534, Output: 926, Total: 2460
+2026-05-14 22:19:56,735 - INFO - Memory updates: 5
+{"id": 9, "ts": 1778789996.735142, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-05-14 22:19:59,322 - INFO - Tokens - Input: 1596, Output: 1250, Total: 2846
+2026-05-14 22:19:59,324 - INFO - Memory updates: 6
+{"id": 10, "ts": 1778789999.3245628, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-05-14 22:20:04,095 - INFO - Tokens - Input: 1697, Output: 561, Total: 2258
+2026-05-14 22:20:04,105 - INFO - Agent tool calls: 1
+{"id": 11, "ts": 1778790004.105954, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-922cffd022af67a3", "args_preview": "{'request': \"Please provide details on Candidate C's communication style and ability to work with crew, especially any strengths or weaknesses.\"}"}
+2026-05-14 22:20:05,863 - INFO - Tokens - Input: 1151, Output: 193, Total: 1344
+{"id": 12, "ts": 1778790005.8653202, "event": "public_tool_exchange", "round": 1, "caller": "agent_2", "callee": "agent_1", "question": "request: Please provide details on Candidate C's communication style and ability to work with crew, especially any strengths or weaknesses.", "answer": "Candidate\u202fC has difficulty communicating ideas yet is known to create a positive atmosphere with his crew.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Please provide details on Candidate C's communication style and ability to work with crew, especially any strengths or weaknesses.\nAnswer: Candidate\u202fC has difficulty communicating ideas yet is known to create a positive atmosphere with his crew."}
+{"id": 13, "ts": 1778790005.865469, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-922cffd022af67a3", "result_preview": "Candidate\u202fC has difficulty communicating ideas yet is known to create a positive atmosphere with his crew."}
+2026-05-14 22:20:11,669 - INFO - Tokens - Input: 1831, Output: 726, Total: 2557
+2026-05-14 22:20:11,679 - INFO - Agent tool calls: 2
+{"id": 14, "ts": 1778790011.6799397, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-9f357fd5a18ba9b5", "args_preview": "{'request': \"Please provide any information you have about Candidate A's teamwork, communication, and crew cooperation strengths or weaknesses.\"}"}
+2026-05-14 22:20:13,550 - INFO - Tokens - Input: 1336, Output: 215, Total: 1551
+{"id": 15, "ts": 1778790013.5530221, "event": "public_tool_exchange", "round": 1, "caller": "agent_2", "callee": "agent_3", "question": "request: Please provide any information you have about Candidate A's teamwork, communication, and crew cooperation strengths or weaknesses.", "answer": "Candidate\u202fA is unfriendly, which may hinder crew cooperation.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Please provide any information you have about Candidate A's teamwork, communication, and crew cooperation strengths or weaknesses.\nAnswer: Candidate\u202fA is unfriendly, which may hinder crew cooperation."}
+{"id": 16, "ts": 1778790013.553212, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-9f357fd5a18ba9b5", "result_preview": "Candidate\u202fA is unfriendly, which may hinder crew cooperation."}
+2026-05-14 22:20:19,853 - INFO - Tokens - Input: 1965, Output: 802, Total: 2767
+{"id": 17, "ts": 1778790019.8548129, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "Candidate D has a hot temper, which could affect performance under pressure.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate C\"}"}
+2026-05-14 22:20:19,854 - INFO - Agent turns: 3
+2026-05-14 22:20:32,608 - INFO - Tokens - Input: 1630, Output: 946, Total: 2576
+2026-05-14 22:20:32,610 - INFO - Memory updates: 7
+{"id": 18, "ts": 1778790032.6110802, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-05-14 22:20:33,314 - INFO - Tokens - Input: 1748, Output: 1018, Total: 2766
+2026-05-14 22:20:33,316 - INFO - Memory updates: 8
+{"id": 19, "ts": 1778790033.3164952, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-05-14 22:20:35,701 - INFO - Tokens - Input: 1751, Output: 1319, Total: 3070
+2026-05-14 22:20:35,703 - INFO - Memory updates: 9
+{"id": 20, "ts": 1778790035.7040124, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-05-14 22:20:35,713 - INFO - Loop 1 completed
+{"id": 21, "ts": 1778790035.7222328, "event": "discussion_order", "round": 2, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-14 22:20:38,260 - INFO - Tokens - Input: 1809, Output: 277, Total: 2086
+2026-05-14 22:20:38,271 - INFO - Agent tool calls: 3
+{"id": 22, "ts": 1778790038.2713532, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-ba37413a3972641e", "args_preview": "{'request': \"Please provide any information you have about Candidate B's teamwork, communication, and crew cooperation strengths or weaknesses.\"}"}
+2026-05-14 22:20:39,976 - INFO - Tokens - Input: 1475, Output: 182, Total: 1657
+{"id": 23, "ts": 1778790039.9789517, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_2", "question": "request: Please provide any information you have about Candidate B's teamwork, communication, and crew cooperation strengths or weaknesses.", "answer": "Candidate\u202fB makes nasty remarks about his colleagues, which could hinder teamwork and crew cooperation.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Please provide any information you have about Candidate B's teamwork, communication, and crew cooperation strengths or weaknesses.\nAnswer: Candidate\u202fB makes nasty remarks about his colleagues, which could hinder teamwork and crew cooperation."}
+{"id": 24, "ts": 1778790039.979118, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-ba37413a3972641e", "result_preview": "Candidate\u202fB makes nasty remarks about his colleagues, which could hinder teamwork and crew cooperation."}
+2026-05-14 22:20:43,831 - INFO - Tokens - Input: 1939, Output: 481, Total: 2420
+2026-05-14 22:20:43,839 - INFO - Agent tool calls: 4
+{"id": 25, "ts": 1778790043.8397264, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a92c98c7f6caa58e", "args_preview": "{'request': \"Please provide any information you have about Candidate C's teamwork, communication, and crew cooperation strengths or weaknesses, specifically regarding his egocentric behavior.\"}"}
+2026-05-14 22:20:45,686 - INFO - Tokens - Input: 1559, Output: 233, Total: 1792
+{"id": 26, "ts": 1778790045.6882489, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_3", "question": "request: Please provide any information you have about Candidate C's teamwork, communication, and crew cooperation strengths or weaknesses, specifically regarding his egocentric behavior.", "answer": "Candidate\u202fC is regarded as egocentric, which can be a weakness for teamwork and communication, though he is also noted for creating a positive crew atmosphere and putting concern for others above everything.", "message": "Question and answer: Agent 1 asked Agent 3.\nQuestion: request: Please provide any information you have about Candidate C's teamwork, communication, and crew cooperation strengths or weaknesses, specifically regarding his egocentric behavior.\nAnswer: Candidate\u202fC is regarded as egocentric, which can be a weakness for teamwork and communication, though he is also noted for creating a positive crew atmosphere and putting concern for others above everything."}
+{"id": 27, "ts": 1778790045.6883943, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a92c98c7f6caa58e", "result_preview": "Candidate\u202fC is regarded as egocentric, which can be a weakness for teamwork and communication, though he is also noted for creating a positive crew atmosphere and putting concern for others above everything."}
+2026-05-14 22:20:51,974 - INFO - Tokens - Input: 2141, Output: 771, Total: 2912
+{"id": 28, "ts": 1778790051.9764898, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "Candidate\u202fC is known to be 100% reliable.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-14 22:20:51,976 - INFO - Agent turns: 4
+2026-05-14 22:20:57,424 - INFO - Tokens - Input: 1995, Output: 351, Total: 2346
+2026-05-14 22:20:57,427 - INFO - Memory updates: 10
+{"id": 29, "ts": 1778790057.4271429, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-05-14 22:20:58,542 - INFO - Tokens - Input: 1985, Output: 469, Total: 2454
+2026-05-14 22:20:58,544 - INFO - Memory updates: 11
+{"id": 30, "ts": 1778790058.5448706, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-05-14 22:21:09,888 - INFO - Tokens - Input: 1893, Output: 1912, Total: 3805
+2026-05-14 22:21:09,890 - INFO - Memory updates: 12
+{"id": 31, "ts": 1778790069.8907866, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-05-14 22:21:14,603 - INFO - Tokens - Input: 2102, Output: 580, Total: 2682
+{"id": 32, "ts": 1778790074.6046722, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "Candidate C is regarded as egocentric, which may affect teamwork and communication.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate C\"}"}
+2026-05-14 22:21:14,604 - INFO - Agent turns: 5
+2026-05-14 22:21:30,233 - INFO - Tokens - Input: 2170, Output: 1155, Total: 3325
+2026-05-14 22:21:30,236 - INFO - Memory updates: 13
+{"id": 33, "ts": 1778790090.236323, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-05-14 22:21:32,173 - INFO - Tokens - Input: 2039, Output: 1353, Total: 3392
+2026-05-14 22:21:32,176 - INFO - Memory updates: 14
+{"id": 34, "ts": 1778790092.1761959, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-05-14 22:21:34,506 - INFO - Tokens - Input: 2029, Output: 1643, Total: 3672
+2026-05-14 22:21:34,509 - INFO - Memory updates: 15
+{"id": 35, "ts": 1778790094.5094287, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-05-14 22:21:38,219 - INFO - Tokens - Input: 2212, Output: 411, Total: 2623
+2026-05-14 22:21:38,230 - INFO - Agent tool calls: 5
+{"id": 36, "ts": 1778790098.2302706, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b8512f111e30c9bd", "args_preview": "{'request': \"Please provide any information you have about Candidate D's teamwork, communication, and crew cooperation strengths or weaknesses.\"}"}
+2026-05-14 22:21:40,543 - INFO - Tokens - Input: 1914, Output: 251, Total: 2165
+{"id": 37, "ts": 1778790100.5454633, "event": "public_tool_exchange", "round": 2, "caller": "agent_3", "callee": "agent_1", "question": "request: Please provide any information you have about Candidate D's teamwork, communication, and crew cooperation strengths or weaknesses.", "answer": "Candidate\u202fD is regarded as arrogant and has relatively weak leadership skills, which may hinder teamwork and crew communication.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Please provide any information you have about Candidate D's teamwork, communication, and crew cooperation strengths or weaknesses.\nAnswer: Candidate\u202fD is regarded as arrogant and has relatively weak leadership skills, which may hinder teamwork and crew communication."}
+{"id": 38, "ts": 1778790100.5456345, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b8512f111e30c9bd", "result_preview": "Candidate\u202fD is regarded as arrogant and has relatively weak leadership skills, which may hinder teamwork and crew communication."}
+2026-05-14 22:21:45,879 - INFO - Tokens - Input: 2350, Output: 650, Total: 3000
+{"id": 39, "ts": 1778790105.8807108, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "Candidate\u202fD is regarded as arrogant and has relatively weak leadership skills, which may hinder teamwork and crew communication.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate C\"}"}
+2026-05-14 22:21:45,880 - INFO - Agent turns: 6
+2026-05-14 22:22:05,611 - INFO - Tokens - Input: 2343, Output: 1425, Total: 3768
+2026-05-14 22:22:05,614 - INFO - Memory updates: 16
+{"id": 40, "ts": 1778790125.614369, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-05-14 22:22:10,464 - INFO - Tokens - Input: 2215, Output: 1916, Total: 4131
+2026-05-14 22:22:10,467 - INFO - Memory updates: 17
+{"id": 41, "ts": 1778790130.4673305, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-05-14 22:22:12,962 - INFO - Tokens - Input: 2415, Output: 2218, Total: 4633
+2026-05-14 22:22:12,965 - INFO - Memory updates: 18
+{"id": 42, "ts": 1778790132.9657614, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-05-14 22:22:12,975 - INFO - Loop 2 completed
+2026-05-14 22:22:12,976 - INFO - Final Chosen Candidate: Candidate C
+2026-05-14 22:22:12,976 - INFO - Final Decision Method: consensus
+2026-05-14 22:22:12,976 - INFO - Final Vote Count: {'Candidate C': 3}
+2026-05-14 22:22:12,976 - INFO - Correct Candidate: Candidate C
+2026-05-14 22:22:12,976 - INFO - Decision Correct: 1
+{"id": 43, "ts": 1778790133.6233518, "event": "context_consistency_calculated", "method": "weighted_section_embedding_cosine", "mean_pairwise_similarity": 0.866129, "pairwise": [{"agent_a": "agent_1", "agent_b": "agent_2", "similarity": 0.847332, "sections": [{"section": "task_summary", "weight": 0.02, "similarity": 1.0}, {"section": "revealed_facts_by_source", "weight": 0.3, "similarity": 0.938075}, {"section": "candidate_evaluation", "weight": 0.35, "similarity": 0.94663}, {"section": "other_agents_positions", "weight": 0.15, "similarity": 0.882276}, {"section": "emerging_group_view", "weight": 0.13, "similarity": 0.445521}, {"section": "open_questions_next_step_focus", "weight": 0.05, "similarity": 0.486595}]}, {"agent_a": "agent_1", "agent_b": "agent_3", "similarity": 0.892102, "sections": [{"section": "task_summary", "weight": 0.02, "similarity": 1.0}, {"section": "revealed_facts_by_source", "weight": 0.3, "similarity": 0.938534}, {"section": "candidate_evaluation", "weight": 0.35, "similarity": 0.936777}, {"section": "other_agents_positions", "weight": 0.15, "similarity": 0.900983}, {"section": "emerging_group_view", "weight": 0.13, "similarity": 0.596329}, {"section": "open_questions_next_step_focus", "weight": 0.05, "similarity": 1.0}]}, {"agent_a": "agent_2", "agent_b": "agent_3", "similarity": 0.858953, "sections": [{"section": "task_summary", "weight": 0.02, "similarity": 1.0}, {"section": "revealed_facts_by_source", "weight": 0.3, "similarity": 0.964155}, {"section": "candidate_evaluation", "weight": 0.35, "similarity": 0.926971}, {"section": "other_agents_positions", "weight": 0.15, "similarity": 0.943844}, {"section": "emerging_group_view", "weight": 0.13, "similarity": 0.456621}, {"section": "open_questions_next_step_focus", "weight": 0.05, "similarity": 0.486595}]}]}
+{"id": 44, "ts": 1778790133.623513, "event": "gold_standard_alignment_calculated", "method": "rule_based_fact_coverage", "mean_alignment": 0.675, "by_agent": [{"agent": "agent_1", "score": 0.65, "matched_facts": 26, "total_facts": 40, "matched_public_facts": 15, "total_public_facts": 16, "public_fact_coverage": 0.9375, "matched_own_private_facts": 8, "total_own_private_facts": 8, "own_private_fact_coverage": 1.0, "matched_other_private_facts": 3, "total_other_private_facts": 16, "other_private_fact_coverage": 0.1875, "checks": {"public_candidate_a_can_anticipate_dangerous_situations": 1, "public_candidate_a_is_able_to_see_complex_connections": 1, "public_candidate_a_has_excellent_spatial_vision": 1, "public_candidate_a_has_very_good_leadership_qualities": 1, "public_candidate_b_is_very_conscientious": 1, "public_candidate_b_handles_stress_very_well": 1, "public_candidate_b_is_good_at_assessing_weather_conditions": 1, "public_candidate_b_has_excellent_computer_skills": 1, "public_candidate_c_can_make_correct_decisions_quickly": 1, "public_candidate_c_has_difficulty_communicating_ideas": 1, "public_candidate_c_is_regarded_as_egocentric": 1, "public_candidate_c_is_not_very_willing_to_further_his_education": 1, "public_candidate_d_responds_to_unexpected_events_adequately": 0, "public_candidate_d_can_concentrate_very_well": 1, "public_candidate_d_solves_problems_extremely_well": 1, "public_candidate_d_takes_responsibility_seriously": 1, "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 1, "agent_1_candidate_a_can_be_unorganized": 1, "agent_1_candidate_b_can_be_grumpy": 1, "agent_1_candidate_b_can_be_uncooperative": 1, "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 1, "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 1, "agent_1_candidate_d_is_regarded_as_arrogant": 1, "agent_1_candidate_d_has_relatively_weak_leadership_skills": 1, "agent_2_candidate_a_is_regarded_as_a_show_off": 0, "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 0, "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 0, "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1, "agent_2_candidate_c_keeps_calm_in_a_crisis": 0, "agent_2_candidate_c_understands_complicated_technology": 0, "agent_2_candidate_d_is_regarded_as_a_know_it_all": 0, "agent_2_candidate_d_has_a_hot_temper": 1, "agent_3_candidate_a_is_unfriendly": 1, "agent_3_candidate_a_eats_unhealthily": 0, "agent_3_candidate_b_is_regarded_as_pretentious": 0, "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 0, "agent_3_candidate_c_puts_concern_for_others_above_everything": 0, "agent_3_candidate_c_has_excellent_attention_skills": 0, "agent_3_candidate_d_is_considered_moody": 0, "agent_3_candidate_d_is_regarded_as_a_loner": 0}}, {"agent": "agent_2", "score": 0.675, "matched_facts": 27, "total_facts": 40, "matched_public_facts": 15, "total_public_facts": 16, "public_fact_coverage": 0.9375, "matched_own_private_facts": 7, "total_own_private_facts": 8, "own_private_fact_coverage": 0.875, "matched_other_private_facts": 5, "total_other_private_facts": 16, "other_private_fact_coverage": 0.3125, "checks": {"public_candidate_a_can_anticipate_dangerous_situations": 1, "public_candidate_a_is_able_to_see_complex_connections": 1, "public_candidate_a_has_excellent_spatial_vision": 1, "public_candidate_a_has_very_good_leadership_qualities": 1, "public_candidate_b_is_very_conscientious": 1, "public_candidate_b_handles_stress_very_well": 1, "public_candidate_b_is_good_at_assessing_weather_conditions": 1, "public_candidate_b_has_excellent_computer_skills": 1, "public_candidate_c_can_make_correct_decisions_quickly": 1, "public_candidate_c_has_difficulty_communicating_ideas": 1, "public_candidate_c_is_regarded_as_egocentric": 1, "public_candidate_c_is_not_very_willing_to_further_his_education": 1, "public_candidate_d_responds_to_unexpected_events_adequately": 0, "public_candidate_d_can_concentrate_very_well": 1, "public_candidate_d_solves_problems_extremely_well": 1, "public_candidate_d_takes_responsibility_seriously": 1, "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 0, "agent_1_candidate_a_can_be_unorganized": 0, "agent_1_candidate_b_can_be_grumpy": 0, "agent_1_candidate_b_can_be_uncooperative": 0, "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 1, "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 1, "agent_1_candidate_d_is_regarded_as_arrogant": 1, "agent_1_candidate_d_has_relatively_weak_leadership_skills": 1, "agent_2_candidate_a_is_regarded_as_a_show_off": 1, "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 1, "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 1, "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1, "agent_2_candidate_c_keeps_calm_in_a_crisis": 1, "agent_2_candidate_c_understands_complicated_technology": 1, "agent_2_candidate_d_is_regarded_as_a_know_it_all": 0, "agent_2_candidate_d_has_a_hot_temper": 1, "agent_3_candidate_a_is_unfriendly": 1, "agent_3_candidate_a_eats_unhealthily": 0, "agent_3_candidate_b_is_regarded_as_pretentious": 0, "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 0, "agent_3_candidate_c_puts_concern_for_others_above_everything": 0, "agent_3_candidate_c_has_excellent_attention_skills": 0, "agent_3_candidate_d_is_considered_moody": 0, "agent_3_candidate_d_is_regarded_as_a_loner": 0}}, {"agent": "agent_3", "score": 0.7, "matched_facts": 28, "total_facts": 40, "matched_public_facts": 16, "total_public_facts": 16, "public_fact_coverage": 1.0, "matched_own_private_facts": 6, "total_own_private_facts": 8, "own_private_fact_coverage": 0.75, "matched_other_private_facts": 6, "total_other_private_facts": 16, "other_private_fact_coverage": 0.375, "checks": {"public_candidate_a_can_anticipate_dangerous_situations": 1, "public_candidate_a_is_able_to_see_complex_connections": 1, "public_candidate_a_has_excellent_spatial_vision": 1, "public_candidate_a_has_very_good_leadership_qualities": 1, "public_candidate_b_is_very_conscientious": 1, "public_candidate_b_handles_stress_very_well": 1, "public_candidate_b_is_good_at_assessing_weather_conditions": 1, "public_candidate_b_has_excellent_computer_skills": 1, "public_candidate_c_can_make_correct_decisions_quickly": 1, "public_candidate_c_has_difficulty_communicating_ideas": 1, "public_candidate_c_is_regarded_as_egocentric": 1, "public_candidate_c_is_not_very_willing_to_further_his_education": 1, "public_candidate_d_responds_to_unexpected_events_adequately": 1, "public_candidate_d_can_concentrate_very_well": 1, "public_candidate_d_solves_problems_extremely_well": 1, "public_candidate_d_takes_responsibility_seriously": 1, "agent_1_candidate_a_is_sometimes_not_good_at_taking_criticism": 0, "agent_1_candidate_a_can_be_unorganized": 0, "agent_1_candidate_b_can_be_grumpy": 0, "agent_1_candidate_b_can_be_uncooperative": 0, "agent_1_candidate_c_is_known_to_be_100_percent_reliable": 1, "agent_1_candidate_c_creates_a_positive_atmosphere_with_his_crew": 1, "agent_1_candidate_d_is_regarded_as_arrogant": 1, "agent_1_candidate_d_has_relatively_weak_leadership_skills": 1, "agent_2_candidate_a_is_regarded_as_a_show_off": 0, "agent_2_candidate_a_is_regarded_as_being_not_open_to_new_ideas": 0, "agent_2_candidate_b_has_a_relatively_weak_memory_for_numbers": 0, "agent_2_candidate_b_makes_nasty_remarks_about_his_colleagues": 1, "agent_2_candidate_c_keeps_calm_in_a_crisis": 0, "agent_2_candidate_c_understands_complicated_technology": 0, "agent_2_candidate_d_is_regarded_as_a_know_it_all": 0, "agent_2_candidate_d_has_a_hot_temper": 1, "agent_3_candidate_a_is_unfriendly": 1, "agent_3_candidate_a_eats_unhealthily": 1, "agent_3_candidate_b_is_regarded_as_pretentious": 0, "agent_3_candidate_b_sometimes_adopts_the_wrong_tone_when_communicating": 0, "agent_3_candidate_c_puts_concern_for_others_above_everything": 1, "agent_3_candidate_c_has_excellent_attention_skills": 1, "agent_3_candidate_d_is_considered_moody": 1, "agent_3_candidate_d_is_regarded_as_a_loner": 1}}]}
+{"id": 45, "ts": 1778790133.6236215, "event": "agent_memories_archived", "directory": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260514_213148_008/shared_mental_models", "round": 2}
+{"id": 46, "ts": 1778790133.623658, "event": "final_decision", "candidate": "Candidate C", "method": "consensus", "vote_count": {"Candidate C": 3}, "correct_candidate": "Candidate C", "decision_correct": 1, "round": 2}
+2026-05-14 22:22:13,631 - INFO - ======================================================================
+2026-05-14 22:22:13,631 - INFO - SIMULATION METRICS
+2026-05-14 22:22:13,631 - INFO - ======================================================================
+2026-05-14 22:22:13,631 - INFO - Total Loops: 2
+2026-05-14 22:22:13,631 - INFO - Agent Turns (no vote checker): 6
+2026-05-14 22:22:13,631 - INFO - Agent Tool Calls: 5
+2026-05-14 22:22:13,631 - INFO - Agent Tool Messages: 10
+2026-05-14 22:22:13,631 - INFO - Memory Updates: 18
+2026-05-14 22:22:13,631 - INFO - Total Messages (no vote checker): 16
+2026-05-14 22:22:13,631 - INFO - Input Tokens: 61624
+2026-05-14 22:22:13,631 - INFO - Output Tokens: 28459
+2026-05-14 22:22:13,631 - INFO - Total Tokens: 90083
+2026-05-14 22:22:13,631 - INFO - Final Chosen Candidate: Candidate C
+2026-05-14 22:22:13,631 - INFO - Final Decision Method: consensus
+2026-05-14 22:22:13,631 - INFO - Final Vote Count: {'Candidate C': 3}
+2026-05-14 22:22:13,631 - INFO - Correct Candidate: Candidate C
+2026-05-14 22:22:13,631 - INFO - Decision Correct: 1
+2026-05-14 22:22:13,631 - INFO - Runtime: 170.33s
+2026-05-14 22:22:13,631 - INFO - ======================================================================
