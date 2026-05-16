@@ -19,6 +19,177 @@ class FactSpec:
     patterns: tuple[str, ...]
 
 
+# FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
+#     "Candidate A can anticipate dangerous situations.": (
+#         r"anticipat\w*.{0,40}danger\w*",
+#         r"danger\w*.{0,40}situat\w*",
+#     ),
+#     "Candidate A is able to see complex connections.": (
+#         r"(?:see|sees|understand\w*|recogni[sz]\w*).{0,40}complex.{0,40}connection\w*",
+#         r"complex.{0,20}connection\w*",
+#     ),
+#     "Candidate A has excellent spatial vision.": (
+#         r"spatial.{0,20}vision",
+#     ),
+#     "Candidate A has very good leadership qualities.": (
+#         r"(?:very\s+good|strong|excellent).{0,40}leadership",
+#         r"leadership.{0,40}(?:qualities|strong|very\s+good|excellent)",
+#     ),
+#     "Candidate B keeps calm in a crisis.": (
+#         r"calm.{0,30}crisis",
+#         r"crisis.{0,30}calm",
+#     ),
+#     "Candidate B is known to be 100% reliable.": (
+#         r"100\s*%",
+#         r"100\s*percent",
+#         r"fully.{0,20}reliab\w*",
+#         r"complete.{0,20}reliab\w*",
+#         r"reliab\w*.{0,20}(?:100|fully|complete)",
+#     ),
+#     "Candidate B is good at assessing weather conditions.": (
+#         r"assess\w*.{0,30}weather",
+#         r"weather.{0,30}(?:assess\w*|conditions?)",
+#     ),
+#     "Candidate B has excellent computer skills.": (
+#         r"excellent.{0,30}computer",
+#         r"computer.{0,30}skills?",
+#     ),
+#     "Candidate C can make correct decisions quickly.": (
+#         r"correct.{0,30}decisions?.{0,30}quick",
+#         r"quick.{0,30}correct.{0,30}decisions?",
+#         r"decisions?.{0,30}quick\w*.{0,30}correct",
+#     ),
+#     "Candidate C has difficulty communicating ideas.": (
+#         r"(?:difficult\w*|trouble|struggl\w*|problems?).{0,40}communicat\w*.{0,30}ideas?",
+#         r"communicat\w*.{0,30}ideas?.{0,40}(?:difficult|trouble|struggl)",
+#     ),
+#     "Candidate C is regarded as egocentric.": (
+#         r"egocentric",
+#         r"self[- ]?cent",
+#     ),
+#     "Candidate C is not very willing to further his education.": (
+#         r"not.{0,30}willing.{0,30}(?:further|continu\w*).{0,20}education",
+#         r"low.{0,30}willingness.{0,30}(?:further|continu\w*).{0,20}education",
+#         r"unwilling.{0,30}(?:further|continu\w*).{0,20}education",
+#     ),
+#     "Candidate D responds to unexpected events adequately.": (
+#         r"respond\w*.{0,30}unexpected.{0,20}events?.{0,30}adequate",
+#         r"unexpected.{0,20}events?.{0,30}(?:respond\w*|adequate)",
+#     ),
+#     "Candidate D can concentrate very well.": (
+#         r"concentrat\w*.{0,30}(?:very\s+well|well|excellent)",
+#         r"very\s+well.{0,30}concentrat",
+#     ),
+#     "Candidate D solves problems extremely well.": (
+#         r"solv\w*.{0,30}problems?.{0,30}(?:extremely\s+well|very\s+well|well)",
+#         r"problem[- ]?solv\w*.{0,30}(?:extremely|strong|excellent)",
+#     ),
+#     "Candidate D takes responsibility seriously.": (
+#         r"takes?.{0,30}responsibilit\w*.{0,30}serious",
+#         r"responsibilit\w*.{0,30}serious",
+#     ),
+#     "Candidate A is sometimes not good at taking criticism.": (
+#         r"(?:not|poor|bad|difficulty|trouble).{0,40}(?:tak\w*|accept\w*|receiv\w*).{0,20}criticism",
+#         r"criticism.{0,40}(?:poorly|badly|not\s+good)",
+#     ),
+#     "Candidate A can be unorganized.": (
+#         r"unorganiz\w*",
+#         r"disorganiz\w*",
+#         r"weak.{0,30}organiz\w*",
+#         r"organiz\w*.{0,30}weak",
+#     ),
+#     "Candidate B can be grumpy.": (
+#         r"grump\w*",
+#     ),
+#     "Candidate B can be uncooperative.": (
+#         r"uncooperat\w*",
+#         r"not\s+cooperat\w*",
+#     ),
+#     "Candidate C handles stress very well.": (
+#         r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
+#         r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
+#     ),
+#     "Candidate C creates a positive atmosphere with his crew.": (
+#         r"positive.{0,30}atmosphere.{0,30}crew",
+#         r"crew.{0,30}positive.{0,30}atmosphere",
+#         r"positive.{0,30}crew.{0,30}atmosphere",
+#     ),
+#     "Candidate D is regarded as arrogant.": (
+#         r"arrogant",
+#     ),
+#     "Candidate D has relatively weak leadership skills.": (
+#         r"weak.{0,30}leadership",
+#         r"leadership.{0,30}weak",
+#     ),
+#     "Candidate A is regarded as a show-off.": (
+#         r"show[- ]?off",
+#         r"showbo\w*",
+#         r"boast\w*",
+#     ),
+#     "Candidate A is regarded as being not open to new ideas.": (
+#         r"not\s+open.{0,30}new\s+ideas",
+#         r"closed.{0,30}new\s+ideas",
+#         r"resist\w*.{0,30}new\s+ideas",
+#     ),
+#     "Candidate B has a relatively weak memory for numbers.": (
+#         r"weak.{0,30}memory.{0,30}numbers?",
+#         r"memory.{0,30}numbers?.{0,30}weak",
+#         r"numeric.{0,20}memory.{0,30}weak",
+#         r"weak.{0,30}numeric",
+#     ),
+#     "Candidate B makes nasty remarks about his colleagues.": (
+#         r"nasty.{0,30}remarks?.{0,30}colleagues?",
+#         r"remarks?.{0,30}colleagues?.{0,30}nasty",
+#     ),
+#     "Candidate C is very conscientious.": (
+#         r"conscientious",
+#     ),
+#     "Candidate C understands complicated technology.": (
+#         r"(?:understand\w*|grasp\w*).{0,40}(?:complicated|complex).{0,30}technolog\w*",
+#         r"(?:understand\w*|grasp\w*).{0,20}technolog\w*",
+#     ),
+#     "Candidate D is regarded as a know-it-all.": (
+#         r"know[- ]?it[- ]?all",
+#     ),
+#     "Candidate D has a hot temper.": (
+#         r"hot.{0,20}temper",
+#         r"temper.{0,20}hot",
+#     ),
+#     "Candidate A is unfriendly.": (
+#         r"unfriend\w*",
+#         r"not\s+friendly",
+#     ),
+#     "Candidate A eats unhealthily.": (
+#         r"eat\w*.{0,30}unhealth\w*",
+#         r"unhealth\w*.{0,30}(?:eat\w*|habits|diet)",
+#     ),
+#     "Candidate B is regarded as pretentious.": (
+#         r"pretentious",
+#     ),
+#     "Candidate B sometimes adopts the wrong tone when communicating.": (
+#         r"wrong.{0,30}tone",
+#         r"tone.{0,30}(?:communicat\w*|wrong)",
+#         r"communicat\w*.{0,30}wrong\s+tone",
+#     ),
+#     "Candidate C puts concern for others above everything.": (
+#         r"concern.{0,30}others",
+#         r"others.{0,30}above.{0,30}everything",
+#         r"puts?.{0,30}others.{0,30}(?:first|above)",
+#         r"care.{0,30}others",
+#     ),
+#     "Candidate C has excellent attention skills.": (
+#         r"excellent.{0,30}attention",
+#         r"attention.{0,30}skills?",
+#         r"attentive",
+#     ),
+#     "Candidate D is considered moody.": (
+#         r"moody",
+#     ),
+#     "Candidate D is regarded as a loner.": (
+#         r"loner",
+#     ),
+# }
+
 FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
     "Candidate A can anticipate dangerous situations.": (
         r"anticipat\w*.{0,40}danger\w*",
@@ -35,16 +206,12 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"(?:very\s+good|strong|excellent).{0,40}leadership",
         r"leadership.{0,40}(?:qualities|strong|very\s+good|excellent)",
     ),
-    "Candidate B keeps calm in a crisis.": (
-        r"calm.{0,30}crisis",
-        r"crisis.{0,30}calm",
+    "Candidate B is very conscientious.": (
+        r"conscientious",
     ),
-    "Candidate B is known to be 100% reliable.": (
-        r"100\s*%",
-        r"100\s*percent",
-        r"fully.{0,20}reliab\w*",
-        r"complete.{0,20}reliab\w*",
-        r"reliab\w*.{0,20}(?:100|fully|complete)",
+    "Candidate B handles stress very well.": (
+        r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
+        r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
     ),
     "Candidate B is good at assessing weather conditions.": (
         r"assess\w*.{0,30}weather",
@@ -105,9 +272,12 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"uncooperat\w*",
         r"not\s+cooperat\w*",
     ),
-    "Candidate C handles stress very well.": (
-        r"(?:handle\w*|manage\w*|cope\w*).{0,30}stress.{0,30}(?:very\s+well|well)",
-        r"stress.{0,30}(?:very\s+well|well|handling|toleran\w*)",
+    "Candidate C is known to be 100% reliable.": (
+        r"100\s*%",
+        r"100\s*percent",
+        r"fully.{0,20}reliab\w*",
+        r"complete.{0,20}reliab\w*",
+        r"reliab\w*.{0,20}(?:100|fully|complete)",
     ),
     "Candidate C creates a positive atmosphere with his crew.": (
         r"positive.{0,30}atmosphere.{0,30}crew",
@@ -141,8 +311,9 @@ FACT_PATTERNS_BY_TEXT: dict[str, tuple[str, ...]] = {
         r"nasty.{0,30}remarks?.{0,30}colleagues?",
         r"remarks?.{0,30}colleagues?.{0,30}nasty",
     ),
-    "Candidate C is very conscientious.": (
-        r"conscientious",
+    "Candidate C keeps calm in a crisis.": (
+        r"calm.{0,30}crisis",
+        r"crisis.{0,30}calm",
     ),
     "Candidate C understands complicated technology.": (
         r"(?:understand\w*|grasp\w*).{0,40}(?:complicated|complex).{0,30}technolog\w*",

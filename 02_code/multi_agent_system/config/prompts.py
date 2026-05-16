@@ -128,7 +128,7 @@ def build_agent_instruction(
         f"{key}_tool ({key.replace('_', ' ').title()})"
         for key in other_agents
     ]
-    vote_options = "|".join(candidates)
+    vote_options = "|".join(candidates + ["Undecided"])
 
     return (
         f"You are {agent_key.replace('_', ' ').title()}.\n\n"
@@ -195,6 +195,9 @@ def build_agent_instruction(
         "candidate. Do not drop a candidate from consideration until you have "
         "checked whether others hold positive information about them that you "
         "are missing.\n\n"
+
+        "If you cannot yet choose a candidate based on the available evidence, "
+        "vote Undecided.\n\n"
 
         f"{_transparency_section('discussion')}\n\n"
 
