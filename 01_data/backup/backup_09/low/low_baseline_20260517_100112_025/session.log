@@ -1,0 +1,179 @@
+2026-05-17 18:17:26,366 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779034646.396462, "event": "memory_reset"}
+{"id": 2, "ts": 1779034646.4006054, "event": "discussion_order", "round": 1, "order": ["agent_2", "agent_1", "agent_3"]}
+2026-05-17 18:17:32,734 - INFO - Tokens - Input: 1209, Output: 660, Total: 1869
+{"id": 3, "ts": 1779034652.7372143, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "Prefer Candidate A \u2013 noted as a show\u2011off, which may affect crew cooperation.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-17 18:17:32,737 - INFO - Agent turns: 1
+2026-05-17 18:17:38,259 - INFO - Tokens - Input: 1245, Output: 735, Total: 1980
+{"id": 4, "ts": 1779034658.261086, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Prefer Candidate B \u2013 handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:17:38,261 - INFO - Agent turns: 2
+2026-05-17 18:17:42,660 - INFO - Tokens - Input: 1276, Output: 576, Total: 1852
+{"id": 5, "ts": 1779034662.6623988, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "Prefer Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:17:42,662 - INFO - Agent turns: 3
+2026-05-17 18:17:42,672 - INFO - Loop 1 completed
+{"id": 6, "ts": 1779034662.6779783, "event": "discussion_order", "round": 2, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-17 18:17:48,295 - INFO - Tokens - Input: 1318, Output: 736, Total: 2054
+2026-05-17 18:17:48,305 - INFO - Agent tool calls: 1
+{"id": 7, "ts": 1779034668.3060067, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-bd57410e6af047af", "args_preview": "{'request': \"Do you have any information on Candidate B's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:17:49,412 - INFO - Tokens - Input: 691, Output: 141, Total: 832
+{"id": 8, "ts": 1779034669.4146404, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_2", "question": "request: Do you have any information on Candidate B's reliability or decision-making under pressure?", "answer": "Candidate\u202fB is very conscientious and handles stress very well.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Do you have any information on Candidate B's reliability or decision-making under pressure?\nAnswer: Candidate\u202fB is very conscientious and handles stress very well."}
+{"id": 9, "ts": 1779034669.414778, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-bd57410e6af047af", "result_preview": "Candidate\u202fB is very conscientious and handles stress very well."}
+2026-05-17 18:17:54,793 - INFO - Tokens - Input: 1426, Output: 681, Total: 2107
+{"id": 10, "ts": 1779034674.7953918, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "Prefer Candidate C \u2013 100% reliable.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:17:54,795 - INFO - Agent turns: 4
+2026-05-17 18:18:01,821 - INFO - Tokens - Input: 1413, Output: 900, Total: 2313
+2026-05-17 18:18:01,831 - INFO - Agent tool calls: 2
+{"id": 11, "ts": 1779034681.8314514, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b4842c65a242231e", "args_preview": "{'request': \"Do you have any information on Candidate A's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:18:03,421 - INFO - Tokens - Input: 780, Output: 200, Total: 980
+{"id": 12, "ts": 1779034683.4235973, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any information on Candidate A's reliability or decision-making under pressure?", "answer": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any information on Candidate A's reliability or decision-making under pressure?\nAnswer: I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+{"id": 13, "ts": 1779034683.4237645, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b4842c65a242231e", "result_preview": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+2026-05-17 18:18:05,883 - INFO - Tokens - Input: 1531, Output: 300, Total: 1831
+2026-05-17 18:18:05,892 - INFO - Agent tool calls: 3
+{"id": 14, "ts": 1779034685.8930793, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-9510cb7f476d2fdf", "args_preview": "{'request': \"Do you have any information on Candidate D's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:18:07,372 - INFO - Tokens - Input: 834, Output: 179, Total: 1013
+{"id": 15, "ts": 1779034687.374569, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any information on Candidate D's reliability or decision-making under pressure?", "answer": "Candidate\u202fD takes responsibility seriously and responds adequately to unexpected events.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any information on Candidate D's reliability or decision-making under pressure?\nAnswer: Candidate\u202fD takes responsibility seriously and responds adequately to unexpected events."}
+{"id": 16, "ts": 1779034687.3747125, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-9510cb7f476d2fdf", "result_preview": "Candidate\u202fD takes responsibility seriously and responds adequately to unexpected events."}
+2026-05-17 18:18:13,260 - INFO - Tokens - Input: 1655, Output: 756, Total: 2411
+2026-05-17 18:18:13,270 - INFO - Agent tool calls: 4
+{"id": 17, "ts": 1779034693.2702456, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a7fa169764353b86", "args_preview": "{'request': \"Do you have any information on Candidate B's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:18:14,651 - INFO - Tokens - Input: 895, Output: 181, Total: 1076
+{"id": 18, "ts": 1779034694.654038, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any information on Candidate B's reliability or decision-making under pressure?", "answer": "Candidate\u202fB is very conscientious and handles stress very well.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any information on Candidate B's reliability or decision-making under pressure?\nAnswer: Candidate\u202fB is very conscientious and handles stress very well."}
+{"id": 19, "ts": 1779034694.6542525, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a7fa169764353b86", "result_preview": "Candidate\u202fB is very conscientious and handles stress very well."}
+2026-05-17 18:18:19,704 - INFO - Tokens - Input: 1777, Output: 647, Total: 2424
+{"id": 20, "ts": 1779034699.705944, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "Prefer Candidate B \u2013 very conscientious (reliable).\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:18:19,706 - INFO - Agent turns: 5
+2026-05-17 18:18:23,624 - INFO - Tokens - Input: 1614, Output: 514, Total: 2128
+{"id": 21, "ts": 1779034703.6259727, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "Prefer Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:18:23,626 - INFO - Agent turns: 6
+2026-05-17 18:18:23,634 - INFO - Loop 2 completed
+{"id": 22, "ts": 1779034703.6407757, "event": "discussion_order", "round": 3, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-17 18:18:28,962 - INFO - Tokens - Input: 1656, Output: 682, Total: 2338
+{"id": 23, "ts": 1779034708.9638512, "event": "public_discussion_message", "round": 3, "agent": "agent_1", "message": "Prefer Candidate C \u2013 100% reliable.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:18:28,964 - INFO - Agent turns: 7
+2026-05-17 18:18:35,401 - INFO - Tokens - Input: 1696, Output: 831, Total: 2527
+2026-05-17 18:18:35,410 - INFO - Agent tool calls: 5
+{"id": 24, "ts": 1779034715.4107587, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9ed69e08a9c82ca8", "args_preview": "{'request': \"Do you have any information on Candidate D's teamwork or communication skills?\"}"}
+2026-05-17 18:18:36,313 - INFO - Tokens - Input: 1061, Output: 106, Total: 1167
+{"id": 25, "ts": 1779034716.315524, "event": "public_tool_exchange", "round": 3, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any information on Candidate D's teamwork or communication skills?", "answer": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any information on Candidate D's teamwork or communication skills?\nAnswer: I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+{"id": 26, "ts": 1779034716.3156962, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9ed69e08a9c82ca8", "result_preview": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+2026-05-17 18:18:40,220 - INFO - Tokens - Input: 1804, Output: 490, Total: 2294
+2026-05-17 18:18:40,229 - INFO - Agent tool calls: 6
+{"id": 27, "ts": 1779034720.230076, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a06fa9bad5f58fed", "args_preview": "{'request': \"Do you have any information on Candidate A's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:18:41,426 - INFO - Tokens - Input: 1112, Output: 145, Total: 1257
+{"id": 28, "ts": 1779034721.428314, "event": "public_tool_exchange", "round": 3, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any information on Candidate A's reliability or decision-making under pressure?", "answer": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any information on Candidate A's reliability or decision-making under pressure?\nAnswer: I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+{"id": 29, "ts": 1779034721.4284744, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a06fa9bad5f58fed", "result_preview": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+2026-05-17 18:18:45,560 - INFO - Tokens - Input: 1936, Output: 520, Total: 2456
+2026-05-17 18:18:45,569 - INFO - Agent tool calls: 7
+{"id": 30, "ts": 1779034725.5701938, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a2865b5ba3ea9874", "args_preview": "{'request': \"Do you have any information on Candidate D's teamwork or communication skills?\"}"}
+2026-05-17 18:18:46,803 - INFO - Tokens - Input: 1170, Output: 158, Total: 1328
+{"id": 31, "ts": 1779034726.805732, "event": "public_tool_exchange", "round": 3, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any information on Candidate D's teamwork or communication skills?", "answer": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any information on Candidate D's teamwork or communication skills?\nAnswer: I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+{"id": 32, "ts": 1779034726.8059053, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a2865b5ba3ea9874", "result_preview": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+2026-05-17 18:18:56,626 - INFO - Tokens - Input: 2058, Output: 1275, Total: 3333
+{"id": 33, "ts": 1779034736.6280227, "event": "public_discussion_message", "round": 3, "agent": "agent_2", "message": "Prefer Candidate B \u2013 very conscientious and handles stress well, but makes nasty remarks about colleagues\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:18:56,628 - INFO - Agent turns: 8
+2026-05-17 18:19:01,854 - INFO - Tokens - Input: 1904, Output: 633, Total: 2537
+2026-05-17 18:19:01,864 - INFO - Agent tool calls: 8
+{"id": 34, "ts": 1779034741.8644562, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-ad6cc26e09ccdce8", "args_preview": "{'request': \"Do you have any information on Candidate A's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:19:03,120 - INFO - Tokens - Input: 1279, Output: 147, Total: 1426
+{"id": 35, "ts": 1779034743.122494, "event": "public_tool_exchange", "round": 3, "caller": "agent_3", "callee": "agent_1", "question": "request: Do you have any information on Candidate A's reliability or decision-making under pressure?", "answer": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Do you have any information on Candidate A's reliability or decision-making under pressure?\nAnswer: I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+{"id": 36, "ts": 1779034743.122638, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-ad6cc26e09ccdce8", "result_preview": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+2026-05-17 18:19:05,746 - INFO - Tokens - Input: 2022, Output: 335, Total: 2357
+2026-05-17 18:19:05,755 - INFO - Agent tool calls: 9
+{"id": 37, "ts": 1779034745.755788, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-8233fe9815dfbf67", "args_preview": "{'request': \"Do you have any information on Candidate C's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:19:07,634 - INFO - Tokens - Input: 1341, Output: 225, Total: 1566
+{"id": 38, "ts": 1779034747.6361868, "event": "public_tool_exchange", "round": 3, "caller": "agent_3", "callee": "agent_2", "question": "request: Do you have any information on Candidate C's reliability or decision-making under pressure?", "answer": "Candidate\u202fC keeps calm in a crisis and can make correct decisions quickly.", "message": "Question and answer: Agent 3 asked Agent 2.\nQuestion: request: Do you have any information on Candidate C's reliability or decision-making under pressure?\nAnswer: Candidate\u202fC keeps calm in a crisis and can make correct decisions quickly."}
+{"id": 39, "ts": 1779034747.6363251, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-8233fe9815dfbf67", "result_preview": "Candidate\u202fC keeps calm in a crisis and can make correct decisions quickly."}
+2026-05-17 18:19:13,712 - INFO - Tokens - Input: 2150, Output: 764, Total: 2914
+{"id": 40, "ts": 1779034753.7140896, "event": "public_discussion_message", "round": 3, "agent": "agent_3", "message": "Prefer Candidate B \u2013 very conscientious and handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:19:13,714 - INFO - Agent turns: 9
+2026-05-17 18:19:13,722 - INFO - Loop 3 completed
+{"id": 41, "ts": 1779034753.7282872, "event": "discussion_order", "round": 4, "order": ["agent_3", "agent_2", "agent_1"]}
+2026-05-17 18:19:18,270 - INFO - Tokens - Input: 2061, Output: 547, Total: 2608
+2026-05-17 18:19:18,279 - INFO - Agent tool calls: 10
+{"id": 42, "ts": 1779034758.2796953, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-87c78122aac524c4", "args_preview": "{'request': \"Do you have any information on Candidate D's teamwork or communication skills?\"}"}
+2026-05-17 18:19:19,401 - INFO - Tokens - Input: 1437, Output: 137, Total: 1574
+{"id": 43, "ts": 1779034759.403713, "event": "public_tool_exchange", "round": 4, "caller": "agent_3", "callee": "agent_2", "question": "request: Do you have any information on Candidate D's teamwork or communication skills?", "answer": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills.", "message": "Question and answer: Agent 3 asked Agent 2.\nQuestion: request: Do you have any information on Candidate D's teamwork or communication skills?\nAnswer: I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+{"id": 44, "ts": 1779034759.403854, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-87c78122aac524c4", "result_preview": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+2026-05-17 18:19:22,925 - INFO - Tokens - Input: 2169, Output: 435, Total: 2604
+2026-05-17 18:19:22,935 - INFO - Agent tool calls: 11
+{"id": 45, "ts": 1779034762.9353588, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-aab6d2342908799b", "args_preview": "{'request': \"Do you have any information on Candidate B's decision-making under pressure?\"}"}
+2026-05-17 18:19:24,106 - INFO - Tokens - Input: 1488, Output: 140, Total: 1628
+{"id": 46, "ts": 1779034764.1085045, "event": "public_tool_exchange", "round": 4, "caller": "agent_3", "callee": "agent_1", "question": "request: Do you have any information on Candidate B's decision-making under pressure?", "answer": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Do you have any information on Candidate B's decision-making under pressure?\nAnswer: I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+{"id": 47, "ts": 1779034764.1086452, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-aab6d2342908799b", "result_preview": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+2026-05-17 18:19:28,853 - INFO - Tokens - Input: 2293, Output: 594, Total: 2887
+{"id": 48, "ts": 1779034768.8549376, "event": "public_discussion_message", "round": 4, "agent": "agent_3", "message": "Prefer Candidate B \u2013 very conscientious and handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:19:28,855 - INFO - Agent turns: 10
+2026-05-17 18:19:35,126 - INFO - Tokens - Input: 2219, Output: 782, Total: 3001
+2026-05-17 18:19:35,137 - INFO - Agent tool calls: 12
+{"id": 49, "ts": 1779034775.1375341, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a6ad5bda0093333a", "args_preview": "{'request': \"Do you have any information on Candidate D's teamwork or communication skills?\"}"}
+2026-05-17 18:19:36,037 - INFO - Tokens - Input: 1584, Output: 105, Total: 1689
+{"id": 50, "ts": 1779034776.046187, "event": "public_tool_exchange", "round": 4, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any information on Candidate D's teamwork or communication skills?", "answer": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any information on Candidate D's teamwork or communication skills?\nAnswer: I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+{"id": 51, "ts": 1779034776.0464857, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a6ad5bda0093333a", "result_preview": "I have no information on Candidate\u202fD\u2019s teamwork or communication skills."}
+2026-05-17 18:19:40,168 - INFO - Tokens - Input: 2327, Output: 520, Total: 2847
+2026-05-17 18:19:40,179 - INFO - Agent tool calls: 13
+{"id": 52, "ts": 1779034780.1795726, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-bf1a244329118f82", "args_preview": "{'request': \"Do you have any information on Candidate A's reliability or decision-making under pressure?\"}"}
+2026-05-17 18:19:41,195 - INFO - Tokens - Input: 1635, Output: 121, Total: 1756
+{"id": 53, "ts": 1779034781.1978288, "event": "public_tool_exchange", "round": 4, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any information on Candidate A's reliability or decision-making under pressure?", "answer": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any information on Candidate A's reliability or decision-making under pressure?\nAnswer: I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+{"id": 54, "ts": 1779034781.1979828, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-bf1a244329118f82", "result_preview": "I have no information on Candidate\u202fA\u2019s reliability or decision\u2011making under pressure."}
+2026-05-17 18:19:47,800 - INFO - Tokens - Input: 2459, Output: 852, Total: 3311
+2026-05-17 18:19:47,808 - INFO - Agent tool calls: 14
+{"id": 55, "ts": 1779034787.8088171, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9a04727c29409720", "args_preview": "{'request': \"Do you have any information on Candidate B's decision-making under pressure?\"}"}
+2026-05-17 18:19:48,740 - INFO - Tokens - Input: 1698, Output: 113, Total: 1811
+{"id": 56, "ts": 1779034788.7424064, "event": "public_tool_exchange", "round": 4, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any information on Candidate B's decision-making under pressure?", "answer": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any information on Candidate B's decision-making under pressure?\nAnswer: I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+{"id": 57, "ts": 1779034788.7425454, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9a04727c29409720", "result_preview": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+2026-05-17 18:19:55,619 - INFO - Tokens - Input: 2583, Output: 857, Total: 3440
+{"id": 58, "ts": 1779034795.620978, "event": "public_discussion_message", "round": 4, "agent": "agent_2", "message": "Prefer Candidate C \u2013 makes correct decisions quickly but has difficulty communicating ideas.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:19:55,621 - INFO - Agent turns: 11
+2026-05-17 18:20:00,998 - INFO - Tokens - Input: 2429, Output: 649, Total: 3078
+{"id": 59, "ts": 1779034800.9999547, "event": "public_discussion_message", "round": 4, "agent": "agent_1", "message": "Prefer Candidate C \u2013 known to be 100% reliable.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:20:01,000 - INFO - Agent turns: 12
+2026-05-17 18:20:01,009 - INFO - Loop 4 completed
+{"id": 60, "ts": 1779034801.016015, "event": "discussion_order", "round": 5, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-17 18:20:08,449 - INFO - Tokens - Input: 2469, Output: 926, Total: 3395
+2026-05-17 18:20:08,459 - INFO - Agent tool calls: 15
+{"id": 61, "ts": 1779034808.4593225, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-9b0aee4823cf553a", "args_preview": "{'request': \"Do you have any information on Candidate B's decision-making under pressure?\"}"}
+2026-05-17 18:20:09,586 - INFO - Tokens - Input: 1840, Output: 139, Total: 1979
+{"id": 62, "ts": 1779034809.5890894, "event": "public_tool_exchange", "round": 5, "caller": "agent_1", "callee": "agent_2", "question": "request: Do you have any information on Candidate B's decision-making under pressure?", "answer": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Do you have any information on Candidate B's decision-making under pressure?\nAnswer: I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+{"id": 63, "ts": 1779034809.5892255, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-9b0aee4823cf553a", "result_preview": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+2026-05-17 18:20:14,929 - INFO - Tokens - Input: 2579, Output: 695, Total: 3274
+{"id": 64, "ts": 1779034814.9305375, "event": "public_discussion_message", "round": 5, "agent": "agent_1", "message": "Prefer Candidate C \u2013 known to be 100% reliable.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:20:14,930 - INFO - Agent turns: 13
+2026-05-17 18:20:22,804 - INFO - Tokens - Input: 2568, Output: 964, Total: 3532
+2026-05-17 18:20:22,812 - INFO - Agent tool calls: 16
+{"id": 65, "ts": 1779034822.812861, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-965f0c7f3ad43c8b", "args_preview": "{'request': \"Do you have any information on Candidate B's decision-making under pressure?\"}"}
+2026-05-17 18:20:23,869 - INFO - Tokens - Input: 1928, Output: 118, Total: 2046
+{"id": 66, "ts": 1779034823.871479, "event": "public_tool_exchange", "round": 5, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any information on Candidate B's decision-making under pressure?", "answer": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any information on Candidate B's decision-making under pressure?\nAnswer: I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+{"id": 67, "ts": 1779034823.8716178, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-965f0c7f3ad43c8b", "result_preview": "I have no information on Candidate\u202fB\u2019s decision\u2011making under pressure."}
+2026-05-17 18:20:30,820 - INFO - Tokens - Input: 2678, Output: 875, Total: 3553
+{"id": 68, "ts": 1779034830.8222744, "event": "public_discussion_message", "round": 5, "agent": "agent_2", "message": "Prefer Candidate C \u2013 makes correct decisions quickly and stays calm in a crisis.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate C\"}"}
+2026-05-17 18:20:30,822 - INFO - Agent turns: 14
+2026-05-17 18:20:35,742 - INFO - Tokens - Input: 2659, Output: 592, Total: 3251
+{"id": 69, "ts": 1779034835.7437587, "event": "public_discussion_message", "round": 5, "agent": "agent_3", "message": "Prefer Candidate B \u2013 very conscientious and handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:20:35,743 - INFO - Agent turns: 15
+2026-05-17 18:20:35,755 - INFO - Loop 5 completed
+2026-05-17 18:20:35,755 - INFO - Final Chosen Candidate: Candidate C
+2026-05-17 18:20:35,755 - INFO - Final Decision Method: max_round_majority_vote
+2026-05-17 18:20:35,755 - INFO - Final Vote Count: {'Candidate C': 2, 'Candidate B': 1}
+2026-05-17 18:20:35,755 - INFO - Correct Candidate: Candidate C
+2026-05-17 18:20:35,755 - INFO - Decision Correct: 1
+{"id": 70, "ts": 1779034835.757696, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 71, "ts": 1779034835.7578304, "event": "final_decision", "candidate": "Candidate C", "method": "max_round_majority_vote", "vote_count": {"Candidate C": 2, "Candidate B": 1}, "correct_candidate": "Candidate C", "decision_correct": 1, "round": 5}
+2026-05-17 18:20:35,769 - INFO - ======================================================================
+2026-05-17 18:20:35,769 - INFO - SIMULATION METRICS
+2026-05-17 18:20:35,769 - INFO - ======================================================================
+2026-05-17 18:20:35,769 - INFO - Total Loops: 5
+2026-05-17 18:20:35,769 - INFO - Agent Turns (no vote checker): 15
+2026-05-17 18:20:35,770 - INFO - Agent Tool Calls: 16
+2026-05-17 18:20:35,770 - INFO - Agent Tool Messages: 32
+2026-05-17 18:20:35,770 - INFO - Memory Updates: 0
+2026-05-17 18:20:35,770 - INFO - Total Messages (no vote checker): 47
+2026-05-17 18:20:35,770 - INFO - Input Tokens: 81956
+2026-05-17 18:20:35,770 - INFO - Output Tokens: 23678
+2026-05-17 18:20:35,770 - INFO - Total Tokens: 105634
+2026-05-17 18:20:35,770 - INFO - Final Chosen Candidate: Candidate C
+2026-05-17 18:20:35,770 - INFO - Final Decision Method: max_round_majority_vote
+2026-05-17 18:20:35,770 - INFO - Final Vote Count: {'Candidate C': 2, 'Candidate B': 1}
+2026-05-17 18:20:35,770 - INFO - Correct Candidate: Candidate C
+2026-05-17 18:20:35,770 - INFO - Decision Correct: 1
+2026-05-17 18:20:35,770 - INFO - Runtime: 189.40s
+2026-05-17 18:20:35,770 - INFO - ======================================================================

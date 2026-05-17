@@ -1,0 +1,50 @@
+2026-05-17 18:43:20,761 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779036200.79371, "event": "memory_reset"}
+{"id": 2, "ts": 1779036200.7977173, "event": "discussion_order", "round": 1, "order": ["agent_2", "agent_1", "agent_3"]}
+2026-05-17 18:43:27,771 - INFO - Tokens - Input: 1244, Output: 734, Total: 1978
+{"id": 3, "ts": 1779036207.7724538, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I provisionally favor **Candidate A**. Their ability to anticipate dangerous situations, see complex connections, and excellent spatial vision give strong technical and judgment capabilities essential for long\u2011distance flights, and their very good leadership supports crew coordination. The main trade\u2011off is their reputation as a show\u2011off and being not open to new ideas, which could hinder teamwork and adaptability to evolving procedures.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-17 18:43:27,772 - INFO - Agent turns: 1
+2026-05-17 18:43:33,233 - INFO - Tokens - Input: 1340, Output: 715, Total: 2055
+{"id": 4, "ts": 1779036213.234748, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "I provisionally favor **Candidate A**. Their ability to anticipate dangerous situations, see complex connections, and excellent spatial vision give strong technical and judgment capabilities essential for long\u2011distance flights, and their very good leadership supports crew coordination. The main trade\u2011off is their tendency to be unorganized and resistant to criticism, which could hinder meticulous planning and teamwork on extended routes.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate A\"}"}
+2026-05-17 18:43:33,234 - INFO - Agent turns: 2
+2026-05-17 18:43:39,858 - INFO - Tokens - Input: 1437, Output: 856, Total: 2293
+{"id": 5, "ts": 1779036219.8597476, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I provisionally favor **Candidate\u202fB**. Their very conscientious nature and strong stress\u2011handling ability are crucial for the reliability and calm decision\u2011making required on long\u2011distance flights, and their skill in assessing weather conditions directly supports safe route planning. The main uncertainty is their tendency to be pretentious and sometimes adopt the wrong tone, which could hinder crew communication and cooperation.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:43:39,859 - INFO - Agent turns: 3
+2026-05-17 18:43:39,869 - INFO - Loop 1 completed
+{"id": 6, "ts": 1779036219.8766062, "event": "discussion_order", "round": 2, "order": ["agent_1", "agent_3", "agent_2"]}
+2026-05-17 18:43:46,717 - INFO - Tokens - Input: 1545, Output: 896, Total: 2441
+{"id": 7, "ts": 1779036226.7186062, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "I currently favor **Candidate\u202fB**. Their very conscientious nature and strong stress\u2011handling ability support the reliability and calm decision\u2011making essential for long\u2011distance flights, and their skill in assessing weather conditions directly contributes to safe route planning. The main uncertainty is their tendency to be grumpy and uncooperative, which could hinder crew communication and teamwork.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:43:46,718 - INFO - Agent turns: 4
+2026-05-17 18:43:51,433 - INFO - Tokens - Input: 1639, Output: 619, Total: 2258
+{"id": 8, "ts": 1779036231.4352894, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "I currently favor **Candidate\u202fB**. Their very conscientious nature and strong ability to handle stress are essential for the reliability and calm decision\u2011making required on long\u2011distance flights, and their skill in assessing weather conditions directly supports safe route planning. The main uncertainty is their tendency to be pretentious and sometimes adopt the wrong tone, which could impair crew communication and teamwork.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:43:51,435 - INFO - Agent turns: 5
+2026-05-17 18:43:56,816 - INFO - Tokens - Input: 1749, Output: 690, Total: 2439
+{"id": 9, "ts": 1779036236.818145, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "I now favor **Candidate\u202fB**. Their very conscientious nature and strong ability to handle stress give the reliability and calm decision\u2011making essential for long\u2011distance flights, and their skill in assessing weather conditions directly supports safe route planning. The main uncertainty is their tendency to make nasty remarks toward colleagues and a weak memory for numbers, which could undermine crew communication and precise calculations.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-17 18:43:56,818 - INFO - Agent turns: 6
+2026-05-17 18:43:56,828 - INFO - Loop 2 completed
+2026-05-17 18:43:56,828 - INFO - Final Chosen Candidate: Candidate B
+2026-05-17 18:43:56,828 - INFO - Final Decision Method: consensus
+2026-05-17 18:43:56,828 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-17 18:43:56,828 - INFO - Correct Candidate: Candidate C
+2026-05-17 18:43:56,828 - INFO - Decision Correct: 0
+{"id": 10, "ts": 1779036236.8302617, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 11, "ts": 1779036236.830413, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 2}
+2026-05-17 18:43:56,839 - INFO - ======================================================================
+2026-05-17 18:43:56,839 - INFO - SIMULATION METRICS
+2026-05-17 18:43:56,839 - INFO - ======================================================================
+2026-05-17 18:43:56,839 - INFO - Total Loops: 2
+2026-05-17 18:43:56,839 - INFO - Agent Turns (no vote checker): 6
+2026-05-17 18:43:56,839 - INFO - Agent Tool Calls: 0
+2026-05-17 18:43:56,839 - INFO - Agent Tool Messages: 0
+2026-05-17 18:43:56,840 - INFO - Memory Updates: 0
+2026-05-17 18:43:56,840 - INFO - Total Messages (no vote checker): 6
+2026-05-17 18:43:56,840 - INFO - Input Tokens: 8954
+2026-05-17 18:43:56,840 - INFO - Output Tokens: 4510
+2026-05-17 18:43:56,840 - INFO - Total Tokens: 13464
+2026-05-17 18:43:56,840 - INFO - Final Chosen Candidate: Candidate B
+2026-05-17 18:43:56,840 - INFO - Final Decision Method: consensus
+2026-05-17 18:43:56,840 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-17 18:43:56,840 - INFO - Correct Candidate: Candidate C
+2026-05-17 18:43:56,840 - INFO - Decision Correct: 0
+2026-05-17 18:43:56,840 - INFO - Runtime: 36.08s
+2026-05-17 18:43:56,840 - INFO - ======================================================================
