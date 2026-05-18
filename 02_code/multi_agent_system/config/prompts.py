@@ -282,8 +282,6 @@ def build_memory_update_instruction(
 ) -> str:
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
-    public_info = TASK["public_information"]
-    private_info = TASK["private_information"][agent_key]
     candidates = TASK["candidates"]
     goal = TASK["goal"]
     latest_speaker = latest_speaker_key or "unknown_agent"
@@ -306,9 +304,6 @@ def build_memory_update_instruction(
 
         f"{_selection_criteria_section()}"
 
-        "Information available to you:\n"
-        f"{_as_bullets(public_info + private_info)}\n\n"
-
         "Latest scheduled speaker context:\n"
         f"- Latest scheduled speaker: {latest_speaker}\n"
         f"- Latest speaker vote: {latest_vote}\n"
@@ -321,23 +316,32 @@ def build_memory_update_instruction(
         f"{discussion_history}\n\n"
 
         "Update your private notes. Record important candidate information "
-        "from the discussion, who supports which candidate, major disagreements, "
-        "and what is still blocking a unanimous decision.\n\n"
+        "from the previous memory and public discussion, who supports which "
+        "candidate, major disagreements, and what is still blocking a unanimous "
+        "decision.\n\n"
 
         "Distinguish between isolated weaknesses and repeated or "
-        "safety-relevant ones. Do not copy your full candidate-information sheet into memory. Do not add "
-        "facts that were not in your information or in the discussion. If another "
-        "agent states a candidate fact, record it as information reported by that "
-        "agent unless it is also present in your own materials. Do not invent or "
-        "infer additional candidate attributes.\n\n"
+        "safety-relevant ones. Do not add facts that are not already in the "
+        "previous memory or explicitly stated in the public discussion history. "
+        "If another agent states a candidate fact, record it as information "
+        "reported by that agent. Do not invent or infer additional candidate "
+        "attributes.\n\n"
 
         "Memory output rules:\n"
-        "Return a JSON object matching the configured schema. Include only "
-        "sections that need changes after the latest scheduled speaker turn. "
-        "Omit unchanged sections. If no memory changes are needed, return "
-        "an empty JSON object: {}.\n\n"
+        "Return a JSON object matching the configured schema. Always include "
+        "these checkpoint sections after every scheduled speaker turn, even "
+        "if their content did not change:\n"
+        "- revealed_facts_by_source\n"
+        "- candidate_evaluation\n"
+        "- other_agents_positions\n"
+        "- emerging_group_view\n\n"
+        "Do not return an empty JSON object. You may omit only these optional "
+        "sections when unchanged:\n"
+        "- task_summary\n"
+        "- my_position\n"
+        "- open_questions_next_step_focus\n\n"
 
-        "Each included value replaces the full body of that section, so do "
+        "Each returned value replaces the full body of that section, so do "
         "not return a line-level diff or a single new row by itself. Each "
         "value must contain only the markdown body for that section, without "
         "section headings or HTML markers. Use only these keys:\n"
@@ -352,8 +356,22 @@ def build_memory_update_instruction(
         "existing content and append or integrate the new information into the full "
         "section body. Do not create duplicate facts, table rows, or bullets. If a "
         "section already contains duplicates, rewrite the full section with duplicates "
-        "removed. For table sections, keep at most one row for each unique combination "
+        "removed. For revealed facts, keep at most one row for each unique combination "
         "of source agent, candidate, and fact.\n\n"
+
+        "Checkpoint section requirements:\n"
+        "- revealed_facts_by_source must include every candidate fact explicitly "
+        "stated in the public discussion so far, grouped by the agent who "
+        "reported it.\n"
+        "- candidate_evaluation must always be a markdown table with exactly one "
+        "row for each candidate: Candidate A, Candidate B, Candidate C, and "
+        "Candidate D. Integrate all currently known evidence from the previous "
+        "memory and public discussion into the Evidence For, Evidence Against, "
+        "Fit for Role, and Notes columns.\n"
+        "- other_agents_positions must reflect the latest known vote or favorite "
+        "for each agent based on the previous memory and public discussion.\n"
+        "- emerging_group_view must be recomputed from the latest known votes "
+        "and must not contradict other_agents_positions.\n\n"
 
         "Preference ownership rules:\n"
         "If the latest speaker is this agent, update 'My Last Vote' and "

@@ -28,7 +28,7 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260517_214240.csv",
+  "01_data/processed/simulation_metrics_20260518_074706.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -157,6 +157,11 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
     y_max <- 1
   }
   
+  present_modes <- intersect(
+    c("baseline", "treatment"),
+    unique(as.character(plot_data$smm_mode))
+  )
+  
   comparison_plot <- ggplot(
     plot_data,
     aes(x = condition, y = .data[[y_var]], fill = smm_mode)
@@ -176,11 +181,12 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
         "baseline" = "grey70",
         "treatment" = "grey35"
       ),
-      name = NULL,
+      breaks = present_modes,
       labels = c(
-        "Baseline",
-        "Treatment"
-      )
+        "baseline" = "Baseline",
+        "treatment" = "Treatment"
+      )[present_modes],
+      name = NULL
     ) +
     scale_y_continuous(
       limits = c(0, y_max * 1.15),
@@ -189,7 +195,7 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
     labs(
       x = "Condition",
       y = y_label,
-      title = title,
+      title = title
     ) +
     plot_theme +
     theme(

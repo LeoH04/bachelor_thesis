@@ -11,16 +11,16 @@ from ...config.task import AGENT_KEYS
 
 
 class MemoryUpdateSections(BaseModel):
-    """Optional section bodies for one Shared Mental Model update."""
+    """Section bodies for one Shared Mental Model update."""
 
     model_config = ConfigDict(extra="forbid")
 
     task_summary: str | None = None
-    revealed_facts_by_source: str | None = None
-    candidate_evaluation: str | None = None
+    revealed_facts_by_source: str
+    candidate_evaluation: str
     my_position: str | None = None
-    other_agents_positions: str | None = None
-    emerging_group_view: str | None = None
+    other_agents_positions: str
+    emerging_group_view: str
     open_questions_next_step_focus: str | None = None
 
 
