@@ -1,0 +1,93 @@
+# Shared Mental Model (Agent 2)
+
+## Task Summary
+<!-- SMM_SECTION:task_summary:start -->
+Goal
+Choose the best candidate for a long-distance pilot position at an airline.
+
+Candidates
+- Candidate A
+- Candidate B
+- Candidate C
+- Candidate D
+<!-- SMM_SECTION:task_summary:end -->
+
+## Revealed Facts by Source
+<!-- SMM_SECTION:revealed_facts_by_source:start -->
+| Source Agent | Candidate | Revealed Fact | Supports / Hurts | Notes |
+| --- | --- | --- | --- | --- |
+| agent_1 | Candidate B | can be uncooperative | Hurts | |
+| agent_2 | Candidate B | no positive teamwork or crew‑cooperation strengths reported | Hurts | |
+<!-- SMM_SECTION:revealed_facts_by_source:end -->
+
+## Candidate Evaluation
+<!-- SMM_SECTION:candidate_evaluation:start -->
+| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |
+| --- | --- | --- | --- | --- |
+| Candidate A | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Regarded as a show‑off; not open to new ideas; unfriendly demeanor | Strong technical competence and leadership, but concerns about teamwork and adaptability | |
+| Candidate B | Very conscientious; handles stress well; good at assessing weather conditions; excellent computer skills | Weak memory for numbers; makes nasty remarks about colleagues; regarded as uncooperative; no positive teamwork strengths | Reliable and technically capable, but significant teamwork and communication issues | |
+| Candidate C | Can make correct decisions quickly; keeps calm in a crisis; understands complicated technology | Difficulty communicating ideas; regarded as egocentric; not willing to further his education | Good decision‑making under pressure, but poor communication and limited professional development | |
+| Candidate D | Responds to unexpected events adequately; concentrates very well; solves problems extremely well; takes responsibility seriously | Regarded as a know‑it‑all; has a hot temper | Excellent problem‑solving and responsibility, but temperament may affect crew dynamics | |
+<!-- SMM_SECTION:candidate_evaluation:end -->
+
+## My Position
+<!-- SMM_SECTION:my_position:start -->
+| My Last Vote |
+| --- |
+| Candidate A |
+
+| My Current Working Favorite |
+| --- |
+| Candidate A |
+
+| Rationale |
+- Candidate A can anticipate dangerous situations, has excellent spatial vision, and strong leadership, which are crucial for long‑distance flights.
+- Concerns remain about a show‑off attitude and reluctance to embrace new ideas, which could affect teamwork and adaptability.
+
+| Evidence That Could Change My Mind |
+- Demonstrated openness to new procedures or feedback.
+- Evidence of collaborative behavior outweighing show‑off perception.
+
+| Confidence (percent) |
+- 70 |
+<!-- SMM_SECTION:my_position:end -->
+
+## Other Agents' Positions
+<!-- SMM_SECTION:other_agents_positions:start -->
+| Agent | Latest Vote | Current Favorite | Main Reason | Confidence / Uncertainty |
+| --- | --- | --- | --- | --- |
+| agent_1 | Candidate A | Candidate A | Provisional favoring due to ability to anticipate dangerous situations, excellent spatial vision, very good leadership; concern about unfriendly demeanor and difficulty accepting criticism. | |
+| agent_2 | Candidate A | Candidate A | Leaning toward Candidate A because of anticipation of dangerous situations, excellent spatial vision, strong leadership; uncertainty about show‑off demeanor and reluctance to new ideas. | |
+| agent_3 | Candidate A | Candidate A | Favoring Candidate A for anticipation of danger, spatial vision, leadership; concern about unfriendly demeanor affecting crew cooperation. | |
+<!-- SMM_SECTION:other_agents_positions:end -->
+
+## Emerging Group View
+<!-- SMM_SECTION:emerging_group_view:start -->
+| Group-Leading Candidate |
+| --- |
+| None |
+
+| Important Agreements |
+| --- |
+| All agents currently favor Candidate A despite concerns. |
+
+| Important Disagreements / Tensions |
+| --- |
+| Concerns about Candidate A's unfriendly demeanor and resistance to new ideas; differing views on the severity of these issues. |
+
+| Uncertainties |
+| --- |
+| Whether Candidate A's attitude will impact crew cooperation on long‑haul flights; how Candidate B's teamwork deficits, Candidate C's communication gaps, and Candidate D's temper will affect overall safety. |
+<!-- SMM_SECTION:emerging_group_view:end -->
+
+## Open Questions and Next-Step Focus
+<!-- SMM_SECTION:open_questions_next_step_focus:start -->
+Missing evidence
+-
+
+What would change the decision
+-
+
+What to ask or look for next
+-
+<!-- SMM_SECTION:open_questions_next_step_focus:end -->
