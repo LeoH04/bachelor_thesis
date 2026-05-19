@@ -321,11 +321,12 @@ def build_memory_update_instruction(
         "decision.\n\n"
 
         "Distinguish between isolated weaknesses and repeated or "
-        "safety-relevant ones. Do not add facts that are not already in the "
-        "previous memory or explicitly stated in the public discussion history. "
-        "If another agent states a candidate fact, record it as information "
-        "reported by that agent. Do not invent or infer additional candidate "
-        "attributes.\n\n"
+        "safety-relevant ones. Distinguish between isolated weaknesses and repeated or "
+        "safety-relevant ones. Preserve relevant candidate facts already in the "
+        "previous memory, and add new candidate facts explicitly stated in the "
+        "public discussion history. If another agent states a candidate fact, "
+        "record it as information reported by that agent. Do not invent or infer "
+        "additional candidate attributes.\n\n"
 
         "Memory output rules:\n"
         "Return a JSON object matching the configured schema. Always include "

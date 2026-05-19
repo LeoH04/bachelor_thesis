@@ -262,6 +262,12 @@ def _fact_source_metadata(alignment: dict[str, object]) -> dict[str, object]:
         fields[f"mean_{bucket}_fact_coverage"] = alignment.get(
             f"mean_{bucket}_fact_coverage"
         )
+    fields["mean_private_c_advantage_facts"] = alignment.get(
+        "mean_private_c_advantage_facts"
+    )
+    fields["mean_private_c_advantage_fact_coverage"] = alignment.get(
+        "mean_private_c_advantage_fact_coverage"
+    )
     return fields
 
 

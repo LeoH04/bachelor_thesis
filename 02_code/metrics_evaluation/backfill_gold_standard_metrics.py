@@ -83,6 +83,12 @@ def fact_source_metadata(alignment: dict[str, object]) -> dict[str, object]:
         fields[f"mean_{bucket}_fact_coverage"] = alignment.get(
             f"mean_{bucket}_fact_coverage"
         )
+    fields["mean_private_c_advantage_facts"] = alignment.get(
+        "mean_private_c_advantage_facts"
+    )
+    fields["mean_private_c_advantage_fact_coverage"] = alignment.get(
+        "mean_private_c_advantage_fact_coverage"
+    )
     return fields
 
 
@@ -105,6 +111,8 @@ def has_gold_alignment(metadata: dict) -> bool:
             and f"mean_{bucket}_fact_coverage" in metadata
             for bucket in FACT_SOURCE_BUCKETS
         )
+        and "mean_private_c_advantage_facts" in metadata
+        and "mean_private_c_advantage_fact_coverage" in metadata
         and "context_alignment" in metadata
         and metadata.get("gold_standard_alignment_method")
         == "rule_based_fact_coverage"

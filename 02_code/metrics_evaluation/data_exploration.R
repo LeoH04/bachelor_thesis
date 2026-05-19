@@ -28,7 +28,7 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260518_074706.csv",
+  "01_data/processed/simulation_metrics_20260519_074043.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -95,6 +95,7 @@ numeric_columns <- c(
   "mean_own_private_fact_coverage",
   "mean_other_private_facts",
   "mean_other_private_fact_coverage",
+  "mean_private_c_advantage_fact_coverage",
   "context_alignment",
   grep("^similarity_", names(simulation_metrics), value = TRUE),
   grep("^gold_alignment_", names(simulation_metrics), value = TRUE),
@@ -372,7 +373,59 @@ if (nrow(treatment_metrics) > 0) {
   )
   
   # ------------------------------------------------------------
-  # 4c. Context alignment across conditions
+  # 4c. Candidate C fact coverage across conditions
+  # ------------------------------------------------------------
+  candidate_c_fact_coverage_overview <- treatment_metrics %>%
+    group_by(condition) %>%
+    summarise(
+      total_runs = n(),
+      mean_candidate_c_fact_coverage = mean(
+        mean_private_c_advantage_fact_coverage,
+        na.rm = TRUE
+      ),
+      .groups = "drop"
+    )
+  
+  print(candidate_c_fact_coverage_overview)
+  
+  save_single_mode_plot(
+    plot_data = candidate_c_fact_coverage_overview,
+    y_var = "mean_candidate_c_fact_coverage",
+    y_label = "Mean Candidate C fact coverage",
+    title = "Mean Candidate C fact coverage by condition",
+    filename = "candidate_c_fact_coverage_overview_plot.pdf",
+    digits = 3,
+    y_limits = c(0, 1)
+  )
+  
+  # ------------------------------------------------------------
+  # 4d. Other private fact coverage across conditions
+  # ------------------------------------------------------------
+  other_private_fact_coverage_overview <- treatment_metrics %>%
+    group_by(condition) %>%
+    summarise(
+      total_runs = n(),
+      mean_other_private_fact_coverage = mean(
+        mean_other_private_fact_coverage,
+        na.rm = TRUE
+      ),
+      .groups = "drop"
+    )
+  
+  print(other_private_fact_coverage_overview)
+  
+  save_single_mode_plot(
+    plot_data = other_private_fact_coverage_overview,
+    y_var = "mean_other_private_fact_coverage",
+    y_label = "Mean other private fact coverage",
+    title = "Mean other private fact coverage by condition",
+    filename = "other_private_fact_coverage_overview_plot.pdf",
+    digits = 3,
+    y_limits = c(0, 1)
+  )
+  
+  # ------------------------------------------------------------
+  # 4e. Context alignment across conditions
   # ------------------------------------------------------------
   context_alignment_overview <- treatment_metrics %>%
     group_by(condition) %>%

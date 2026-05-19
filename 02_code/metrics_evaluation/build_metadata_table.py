@@ -58,6 +58,8 @@ BASE_COLUMNS = [
     "mean_own_private_fact_coverage",
     "mean_other_private_facts",
     "mean_other_private_fact_coverage",
+    "mean_private_c_advantage_facts",
+    "mean_private_c_advantage_fact_coverage",
     "context_alignment",
     "memory_similarity_method",
     "gold_standard_alignment_method",
@@ -157,6 +159,12 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
             )
             for bucket in FACT_SOURCE_BUCKETS
         },
+        "mean_private_c_advantage_facts": metadata.get(
+            "mean_private_c_advantage_facts"
+        ),
+        "mean_private_c_advantage_fact_coverage": metadata.get(
+            "mean_private_c_advantage_fact_coverage"
+        ),
         "context_alignment": metadata.get(
             "context_alignment",
             product_or_none(mean_pairwise, mean_gold_alignment),

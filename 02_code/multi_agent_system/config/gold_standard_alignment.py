@@ -442,6 +442,11 @@ PRIVATE_FACT_SOURCES = tuple(
     )
 )
 FACT_SOURCE_BUCKETS = ("public", "own_private", "other_private")
+PRIVATE_C_ADVANTAGE_FACT_IDS = tuple(
+    spec.fact_id
+    for spec in FACT_SPECS
+    if spec.fact_id.startswith("agent_") and "_candidate_c_" in spec.fact_id
+)
 
 
 def _combined_pattern(patterns: tuple[str, ...]) -> str:
@@ -569,6 +574,50 @@ def summarize_fact_sources(by_agent: list[Mapping[str, object]]) -> dict[str, ob
     return summary
 
 
+def private_c_advantage_summary(checks: Mapping[str, object]) -> dict[str, object]:
+    """Summarize private Candidate C advantage facts in one memory."""
+    matched = sum(
+        int(checks.get(fact_id) or 0)
+        for fact_id in PRIVATE_C_ADVANTAGE_FACT_IDS
+    )
+    total = len(PRIVATE_C_ADVANTAGE_FACT_IDS)
+    return {
+        "private_c_advantage_facts": matched,
+        "total_private_c_advantage_facts": total,
+        "private_c_advantage_fact_coverage": (
+            round(matched / total, 6) if total else None
+        ),
+    }
+
+
+def summarize_private_c_advantages(
+    by_agent: list[Mapping[str, object]],
+) -> dict[str, object]:
+    """Return run-level mean private Candidate C advantage metrics."""
+    fact_values = []
+    coverage_values = []
+    for item in by_agent:
+        facts = item.get("private_c_advantage_facts")
+        coverage = item.get("private_c_advantage_fact_coverage")
+        if facts is not None:
+            fact_values.append(float(facts))
+        if coverage is not None:
+            coverage_values.append(float(coverage))
+
+    return {
+        "mean_private_c_advantage_facts": (
+            round(sum(fact_values) / len(fact_values), 6)
+            if fact_values
+            else None
+        ),
+        "mean_private_c_advantage_fact_coverage": (
+            round(sum(coverage_values) / len(coverage_values), 6)
+            if coverage_values
+            else None
+        ),
+    }
+
+
 def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, object]:
     """Calculate rule-based fact coverage for agent memories."""
     by_agent = []
@@ -582,6 +631,7 @@ def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, obj
                 "matched_facts": result["matched_facts"],
                 "total_facts": result["total_facts"],
                 **fact_source_summary(agent_key, checks),
+                **private_c_advantage_summary(checks),
                 "checks": checks,
             }
         )
@@ -600,4 +650,5 @@ def calculate_gold_standard_alignment(texts: Mapping[str, str]) -> dict[str, obj
         "min_alignment": min(values) if values else None,
         "max_alignment": max(values) if values else None,
         **summarize_fact_sources(by_agent),
+        **summarize_private_c_advantages(by_agent),
     }
