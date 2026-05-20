@@ -22,8 +22,7 @@ _MALFORMED_HISTORY_WARNING_KEYS: set[tuple[object, ...]] = set()
 
 
 def high_condition_thought_history_enabled() -> bool:
-    """Return whether high-transparency prompts should include prior thoughts."""
-    return os.getenv("SIM_CONDITION", "low").strip().lower() == "high"
+    return False
 
 
 def _round_number() -> int:
