@@ -1,0 +1,87 @@
+{
+  "agent_tool_calls": 11,
+  "agent_tool_messages": 22,
+  "agent_turns": 8,
+  "completed_at": "2026-05-20T22:23:00+0200",
+  "condition": "high",
+  "context_alignment": null,
+  "context_consistency": {
+    "agent_count": 0,
+    "max_pairwise_similarity": null,
+    "mean_pairwise_similarity": null,
+    "method": "not_applicable",
+    "min_pairwise_similarity": null,
+    "pairwise": [],
+    "reason": "explicit_smm_memory_disabled"
+  },
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "consensus",
+  "explicit_smm_memory": false,
+  "final_candidate": "Candidate B",
+  "gold_standard_alignment": [],
+  "gold_standard_alignment_method": "not_applicable",
+  "input_tokens": 111433,
+  "max_gold_standard_alignment": null,
+  "mean_gold_standard_alignment": null,
+  "mean_other_private_fact_coverage": null,
+  "mean_other_private_facts": null,
+  "mean_own_private_fact_coverage": null,
+  "mean_own_private_facts": null,
+  "mean_pairwise_memory_similarity": null,
+  "mean_private_c_advantage_fact_coverage": null,
+  "mean_private_c_advantage_facts": null,
+  "mean_public_fact_coverage": null,
+  "mean_public_facts": null,
+  "memory_updates": 0,
+  "min_gold_standard_alignment": null,
+  "output_tokens": 23612,
+  "pairwise_memory_similarity": [],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260520_083953_013/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260520_083953_013",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260520_083953_013/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_baseline_20260520_083953_013/shared_mental_models"
+  },
+  "rounds": 3,
+  "run_id": "high_baseline_20260520_083953_013",
+  "run_tag": "transparency_experiment",
+  "runtime_seconds": 196.2185,
+  "schema_version": 1,
+  "shared_mental_model_files": [],
+  "shared_mental_models_archived": false,
+  "smm_mode": "baseline",
+  "status": "completed",
+  "timestamp": "20260520_221944",
+  "total_messages": 30,
+  "total_tokens": 135045,
+  "vote_count": {
+    "Candidate B": 3
+  },
+  "warning_count": 2,
+  "warnings": [
+    {
+      "code": "agent_output_missing_metadata",
+      "details": {
+        "agent": "agent_1",
+        "response_preview": "PUBLIC_MESSAGE:\nI now favor **Candidate\u202fB** for the long\u2011distance pilot role.\n\n**Key evidence supporting B (from the shared data):**\n- **Reliability & responsibility:** described as *very conscientious*.\n- **Calmness under pressure:** explicitly *handles stress very well* and, per the discussion, \u201cstays calm in crises.\u201d\n- **Technical competence:** *good at assessing weather conditions* and *excellent computer skills* \u2013 both critical for long\u2011haul navigation and modern avionics.\n- **Decision\u2011maki",
+        "round": 2
+      },
+      "message": "Scheduled agent response was not recorded because METADATA_JSON is missing.",
+      "timestamp": "2026-05-20T22:22:08+0200"
+    },
+    {
+      "code": "vote_missing",
+      "details": {
+        "agent": "agent_1",
+        "metadata": null,
+        "parse_error_code": "agent_output_missing_metadata",
+        "parse_error_message": "Agent response does not contain METADATA_JSON.",
+        "response_present": true,
+        "round": 2
+      },
+      "message": "Agent response did not contain a valid vote for consensus checking.",
+      "timestamp": "2026-05-20T22:22:08+0200"
+    }
+  ]
+}

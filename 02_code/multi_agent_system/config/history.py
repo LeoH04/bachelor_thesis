@@ -22,7 +22,7 @@ _MALFORMED_HISTORY_WARNING_KEYS: set[tuple[object, ...]] = set()
 
 
 def high_condition_thought_history_enabled() -> bool:
-    return False
+    return os.getenv("SIM_CONDITION", "low").strip().lower() == "high"
 
 
 def _round_number() -> int:

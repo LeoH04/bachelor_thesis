@@ -1,0 +1,92 @@
+2026-05-20 21:18:34,844 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779304714.8757393, "event": "memory_reset"}
+{"id": 2, "ts": 1779304714.8797867, "event": "discussion_order", "round": 1, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-20 21:18:40,875 - INFO - Tokens - Input: 1241, Output: 602, Total: 1843
+{"id": 3, "ts": 1779304720.8768196, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "I provisionally favor **Candidate\u202fB**. Their strong stress tolerance, conscientiousness, and ability to assess weather conditions are directly relevant to the safety and reliability required for long\u2011distance flights, while excellent computer skills support modern avionics and flight\u2011planning tasks. The main uncertainty is B\u2019s tendency to be grumpy and uncooperative, which could hinder crew teamwork and communication\u2014key factors for safe operations.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 21:18:40,876 - INFO - Agent turns: 1
+2026-05-20 21:18:44,979 - INFO - Tokens - Input: 1349, Output: 531, Total: 1880
+2026-05-20 21:18:44,989 - INFO - Agent tool calls: 1
+{"id": 4, "ts": 1779304724.9896681, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8245517ebb97de0b", "args_preview": "{'request': 'Does Candidate D have any strengths in teamwork or communication?'}"}
+2026-05-20 21:18:45,881 - INFO - Tokens - Input: 680, Output: 105, Total: 785
+{"id": 5, "ts": 1779304725.8833833, "event": "public_tool_exchange", "round": 1, "caller": "agent_2", "callee": "agent_1", "question": "request: Does Candidate D have any strengths in teamwork or communication?", "answer": "There is no information indicating that Candidate\u202fD has strengths in teamwork or communication.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Does Candidate D have any strengths in teamwork or communication?\nAnswer: There is no information indicating that Candidate\u202fD has strengths in teamwork or communication."}
+{"id": 6, "ts": 1779304725.8835278, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8245517ebb97de0b", "result_preview": "There is no information indicating that Candidate\u202fD has strengths in teamwork or communication."}
+2026-05-20 21:18:51,402 - INFO - Tokens - Input: 1455, Output: 721, Total: 2176
+{"id": 7, "ts": 1779304731.4036252, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I provisionally favor **Candidate\u202fA**. Their ability to anticipate dangerous situations, see complex connections, and excellent spatial vision give strong technical and situational awareness, while very good leadership qualities support crew coordination on long flights. The main trade\u2011off is their reputation as a show\u2011off and reluctance to embrace new ideas, which could hinder teamwork and ongoing professional development.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 21:18:51,403 - INFO - Agent turns: 2
+2026-05-20 21:18:56,896 - INFO - Tokens - Input: 1498, Output: 709, Total: 2207
+2026-05-20 21:18:56,906 - INFO - Agent tool calls: 2
+{"id": 8, "ts": 1779304736.907004, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-9cad446817b7d309", "args_preview": "{'request': 'Does Candidate A have any strengths in stress tolerance or handling pressure?'}"}
+2026-05-20 21:18:57,811 - INFO - Tokens - Input: 842, Output: 104, Total: 946
+{"id": 9, "ts": 1779304737.8139691, "event": "public_tool_exchange", "round": 1, "caller": "agent_3", "callee": "agent_2", "question": "request: Does Candidate A have any strengths in stress tolerance or handling pressure?", "answer": "There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure.", "message": "Question and answer: Agent 3 asked Agent 2.\nQuestion: request: Does Candidate A have any strengths in stress tolerance or handling pressure?\nAnswer: There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure."}
+{"id": 10, "ts": 1779304737.8141396, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-9cad446817b7d309", "result_preview": "There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure."}
+2026-05-20 21:19:02,547 - INFO - Tokens - Input: 1612, Output: 632, Total: 2244
+2026-05-20 21:19:02,557 - INFO - Agent tool calls: 3
+{"id": 11, "ts": 1779304742.5581787, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-83de04b0779092aa", "args_preview": "{'request': 'Does Candidate C have any strengths in stress tolerance or handling pressure?'}"}
+2026-05-20 21:19:03,507 - INFO - Tokens - Input: 896, Output: 119, Total: 1015
+{"id": 12, "ts": 1779304743.5092087, "event": "public_tool_exchange", "round": 1, "caller": "agent_3", "callee": "agent_1", "question": "request: Does Candidate C have any strengths in stress tolerance or handling pressure?", "answer": "There is no information indicating that Candidate\u202fC has strengths in stress tolerance or handling pressure.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Does Candidate C have any strengths in stress tolerance or handling pressure?\nAnswer: There is no information indicating that Candidate\u202fC has strengths in stress tolerance or handling pressure."}
+{"id": 13, "ts": 1779304743.5093775, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-83de04b0779092aa", "result_preview": "There is no information indicating that Candidate\u202fC has strengths in stress tolerance or handling pressure."}
+2026-05-20 21:19:08,467 - INFO - Tokens - Input: 1740, Output: 621, Total: 2361
+{"id": 14, "ts": 1779304748.46927, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I provisionally favor **Candidate\u202fB**. Their strong stress tolerance, conscientiousness, and ability to assess weather conditions directly support safe, reliable long\u2011distance operations, while excellent computer skills aid modern avionics and flight\u2011planning tasks. The main trade\u2011off is their pretentious demeanor and occasional inappropriate tone, which could hinder crew teamwork and communication.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 21:19:08,469 - INFO - Agent turns: 3
+2026-05-20 21:19:08,486 - INFO - Loop 1 completed
+{"id": 15, "ts": 1779304748.4923792, "event": "discussion_order", "round": 2, "order": ["agent_3", "agent_1", "agent_2"]}
+2026-05-20 21:19:14,249 - INFO - Tokens - Input: 1713, Output: 721, Total: 2434
+{"id": 16, "ts": 1779304754.2508686, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "I continue to favor **Candidate\u202fB**. Their proven ability to handle stress, strong conscientiousness, and skill in assessing weather conditions directly support the reliability, safety, and technical competence needed for long\u2011distance flights. The main uncertainty is their pretentious demeanor and occasional inappropriate tone, which could undermine crew teamwork and communication.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 21:19:14,251 - INFO - Agent turns: 4
+2026-05-20 21:19:19,488 - INFO - Tokens - Input: 1811, Output: 661, Total: 2472
+2026-05-20 21:19:19,499 - INFO - Agent tool calls: 4
+{"id": 17, "ts": 1779304759.4993458, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-aac73a0bed3503ac", "args_preview": "{'request': 'Does Candidate C have any strengths in stress tolerance or handling pressure?'}"}
+2026-05-20 21:19:20,614 - INFO - Tokens - Input: 1150, Output: 136, Total: 1286
+{"id": 18, "ts": 1779304760.6165485, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_2", "question": "request: Does Candidate C have any strengths in stress tolerance or handling pressure?", "answer": "Yes.\u202fCandidate\u202fC \u201ckeeps calm in a crisis,\u201d which indicates a strength in stress tolerance and handling pressure.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Does Candidate C have any strengths in stress tolerance or handling pressure?\nAnswer: Yes.\u202fCandidate\u202fC \u201ckeeps calm in a crisis,\u201d which indicates a strength in stress tolerance and handling pressure."}
+{"id": 19, "ts": 1779304760.6167243, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-aac73a0bed3503ac", "result_preview": "Yes.\u202fCandidate\u202fC \u201ckeeps calm in a crisis,\u201d which indicates a strength in stress tolerance and handling pressure."}
+2026-05-20 21:19:25,618 - INFO - Tokens - Input: 1939, Output: 638, Total: 2577
+2026-05-20 21:19:25,628 - INFO - Agent tool calls: 5
+{"id": 20, "ts": 1779304765.6285074, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a4645723fcd1035d", "args_preview": "{'request': 'Does Candidate A have any strengths in stress tolerance or handling pressure?'}"}
+2026-05-20 21:19:26,536 - INFO - Tokens - Input: 1206, Output: 97, Total: 1303
+{"id": 21, "ts": 1779304766.540002, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_3", "question": "request: Does Candidate A have any strengths in stress tolerance or handling pressure?", "answer": "There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure.", "message": "Question and answer: Agent 1 asked Agent 3.\nQuestion: request: Does Candidate A have any strengths in stress tolerance or handling pressure?\nAnswer: There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure."}
+{"id": 22, "ts": 1779304766.5401528, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a4645723fcd1035d", "result_preview": "There is no information indicating that Candidate\u202fA has strengths in stress tolerance or handling pressure."}
+2026-05-20 21:19:32,512 - INFO - Tokens - Input: 2067, Output: 775, Total: 2842
+{"id": 23, "ts": 1779304772.5138578, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "I continue to favor **Candidate\u202fB**. Their proven ability to handle stress, strong conscientiousness, and skill in assessing weather conditions directly support the reliability, safety, and technical competence required for long\u2011distance flights; excellent computer skills further aid modern avionics and flight\u2011planning. The main uncertainty is their grumpy, uncooperative demeanor, which could impair crew teamwork and communication.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 21:19:32,514 - INFO - Agent turns: 5
+2026-05-20 21:19:40,032 - INFO - Tokens - Input: 2043, Output: 966, Total: 3009
+2026-05-20 21:19:40,042 - INFO - Agent tool calls: 6
+{"id": 24, "ts": 1779304780.0422428, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b310cea5b7d055ae", "args_preview": "{'request': 'Does Candidate D have any strengths in stress tolerance or handling pressure?'}"}
+2026-05-20 21:19:41,112 - INFO - Tokens - Input: 1376, Output: 129, Total: 1505
+{"id": 25, "ts": 1779304781.115049, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_1", "question": "request: Does Candidate D have any strengths in stress tolerance or handling pressure?", "answer": "There is no information indicating that Candidate\u202fD has strengths in stress tolerance or handling pressure.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Does Candidate D have any strengths in stress tolerance or handling pressure?\nAnswer: There is no information indicating that Candidate\u202fD has strengths in stress tolerance or handling pressure."}
+{"id": 26, "ts": 1779304781.1151998, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-b310cea5b7d055ae", "result_preview": "There is no information indicating that Candidate\u202fD has strengths in stress tolerance or handling pressure."}
+2026-05-20 21:19:45,989 - INFO - Tokens - Input: 2157, Output: 612, Total: 2769
+2026-05-20 21:19:45,999 - INFO - Agent tool calls: 7
+{"id": 27, "ts": 1779304785.9998732, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-ae5a528fc052d76f", "args_preview": "{'request': 'Does Candidate B have any strengths in teamwork or communication?'}"}
+2026-05-20 21:19:46,959 - INFO - Tokens - Input: 1431, Output: 113, Total: 1544
+{"id": 28, "ts": 1779304786.9652433, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_1", "question": "request: Does Candidate B have any strengths in teamwork or communication?", "answer": "There is no information indicating that Candidate\u202fB has strengths in teamwork or communication.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Does Candidate B have any strengths in teamwork or communication?\nAnswer: There is no information indicating that Candidate\u202fB has strengths in teamwork or communication."}
+{"id": 29, "ts": 1779304786.965457, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-ae5a528fc052d76f", "result_preview": "There is no information indicating that Candidate\u202fB has strengths in teamwork or communication."}
+2026-05-20 21:19:54,494 - INFO - Tokens - Input: 2277, Output: 980, Total: 3257
+{"id": 30, "ts": 1779304794.4958372, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "I continue to favor **Candidate\u202fB**. Their proven ability to handle stress, strong conscientiousness, and skill in assessing weather conditions directly support the reliability, safety, and technical competence essential for long\u2011distance flights. The main uncertainty is the lack of any known strengths in teamwork or communication and their tendency to make nasty remarks, which could undermine crew cooperation.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-20 21:19:54,496 - INFO - Agent turns: 6
+2026-05-20 21:19:54,506 - INFO - Loop 2 completed
+2026-05-20 21:19:54,506 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 21:19:54,506 - INFO - Final Decision Method: consensus
+2026-05-20 21:19:54,507 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 21:19:54,507 - INFO - Correct Candidate: Candidate C
+2026-05-20 21:19:54,507 - INFO - Decision Correct: 0
+{"id": 31, "ts": 1779304794.5086317, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 32, "ts": 1779304794.5087705, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 2}
+2026-05-20 21:19:54,518 - INFO - ======================================================================
+2026-05-20 21:19:54,518 - INFO - SIMULATION METRICS
+2026-05-20 21:19:54,518 - INFO - ======================================================================
+2026-05-20 21:19:54,518 - INFO - Total Loops: 2
+2026-05-20 21:19:54,518 - INFO - Agent Turns (no vote checker): 6
+2026-05-20 21:19:54,518 - INFO - Agent Tool Calls: 7
+2026-05-20 21:19:54,518 - INFO - Agent Tool Messages: 14
+2026-05-20 21:19:54,518 - INFO - Memory Updates: 0
+2026-05-20 21:19:54,518 - INFO - Total Messages (no vote checker): 20
+2026-05-20 21:19:54,519 - INFO - Input Tokens: 30483
+2026-05-20 21:19:54,519 - INFO - Output Tokens: 9972
+2026-05-20 21:19:54,519 - INFO - Total Tokens: 40455
+2026-05-20 21:19:54,519 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 21:19:54,519 - INFO - Final Decision Method: consensus
+2026-05-20 21:19:54,519 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 21:19:54,519 - INFO - Correct Candidate: Candidate C
+2026-05-20 21:19:54,519 - INFO - Decision Correct: 0
+2026-05-20 21:19:54,519 - INFO - Runtime: 79.67s
+2026-05-20 21:19:54,519 - INFO - ======================================================================

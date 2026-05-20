@@ -36,58 +36,129 @@ TRANSPARENCY_POLICIES = {
             "<state your current preferred candidate and at most one brief "
             "candidate fact or concern>"
         ),
+        "memory": (
+            "LOW transparency memory construction keeps the shared mental model "
+            "sparse, literal, and fragmented.\n"
+            "Memory update rules:\n"
+            "- Record only facts explicitly stated in the public discussion or "
+            "already preserved in the previous memory.\n"
+            "- Keep candidate evaluation minimal; avoid rich synthesis, candidate "
+            "comparison, and group-view interpretation.\n"
+            "- Track latest votes or favorites, but describe the group view as "
+            "tentative when evidence is thin.\n"
+            "- Use 'insufficient evidence' for candidates or criteria with little "
+            "shared information.\n"
+            "- Do not enrich sparse public statements with inferred links, "
+            "confidence estimates, provenance beyond the reporting agent, or "
+            "extra rationale."
+        ),
     },
 
     "moderate": {
         "discussion": (
             "MODERATE context transparency means you expose a compact, "
-            "task-relevant version of your internal decision context.\n"
+            "decision-diagnostic version of your internal decision context.\n"
             "Public contribution rules:\n"
             "- State your current position or recommendation.\n"
-            "- Share one or two key reasons behind that position.\n"
+            "- Select the most decision-relevant candidate evidence behind "
+            "that position.\n"
+            "- Share a small number of candidate-linked reasons, usually one "
+            "or two.\n"
             "- Link each reason to the relevant candidate or alternative.\n"
-            "- Briefly explain why the reasons matter for the task goal.\n"
+            "- Briefly explain why the selected reasons matter for the task goal.\n"
             "- Include one main tradeoff, uncertainty, or unresolved issue.\n"
-            "- Do not provide exhaustive evidence lists, source-heavy reasoning, "
-            "or long recaps."
+            "- Do not list every known candidate fact, provide source-heavy "
+            "reasoning, or give long recaps."
         ),
         "tool": (
-            "Answer directly with one or two relevant facts or concerns. "
-            "Link them to the candidate or alternative they affect, and include "
-            "a short evaluation only if it helps the caller use the information."
+            "Answer directly with one or two of the most relevant facts or "
+            "concerns. Link them to the candidate or alternative they affect, "
+            "and include a short evaluation only if it helps the caller use the "
+            "information. Do not turn the answer into an exhaustive candidate "
+            "profile or broad comparison."
         ),
         "public_template": (
             "<state your current preferred candidate; give one or two "
-            "candidate-linked reasons; briefly explain why they matter; include "
-            "one main tradeoff, uncertainty, or unresolved issue>"
+            "selected candidate-linked reasons; briefly explain why they matter; "
+            "include one main tradeoff, uncertainty, or unresolved issue>"
+        ),
+        "memory": (
+            "MODERATE transparency memory construction creates the cleanest "
+            "decision-focused shared mental model.\n"
+            "Memory update rules:\n"
+            "- Integrate decision-relevant candidate facts compactly.\n"
+            "- Keep exactly one concise candidate-evaluation row per candidate.\n"
+            "- Compare candidates only where the comparison helps the committee "
+            "choose a long-distance pilot.\n"
+            "- Track latest votes or favorites and the main reason behind each "
+            "position.\n"
+            "- Highlight the most important tradeoff and the current blocker to "
+            "unanimous agreement.\n"
+            "- Prefer concise synthesis over exhaustive provenance, vote-history "
+            "recaps, or repeated rationale."
         ),
     },
 
     "high": {
         "discussion": (
-            "HIGH context transparency means you expose an expanded public "
-            "reasoning-context summary of your internal decision context.\n"
+            "HIGH context transparency means you expose expanded transparency "
+            "context around a selected, decision-diagnostic assessment.\n"
             "Public contribution rules:\n"
             "- State your current position or recommendation.\n"
-            "- Include confidence or uncertainty.\n"
-            "- Link evidence to candidates or alternatives.\n"
-            "- Distinguish your own information from information shared by others.\n"
-            "- Reference relevant prior shared context.\n"
-            "- Compare major alternatives and tradeoffs.\n"
-            "- State unresolved uncertainties when relevant.\n"
+            "- Maintain soft diagnostic parity with moderate transparency: "
+            "surface comparable decision-diagnostic candidate evidence, not "
+            "substantially more unique candidate facts.\n"
+            "- Select the same kind of most decision-relevant evidence that a "
+            "compact moderate contribution would surface.\n"
+            "- Link selected evidence to candidates or alternatives.\n"
+            "- Add contextual detail: source/provenance, own versus others' "
+            "information, confidence or uncertainty, and relevant prior "
+            "discussion references.\n"
+            "- Mention alternative interpretations, unresolved questions, or "
+            "major tradeoffs when they help explain the current position.\n"
             "- State what would change your decision.\n"
+            "- When discussing alternatives, focus on tradeoff, uncertainty, "
+            "or prior-context relevance rather than listing all known facts.\n"
+            "- Do not provide exhaustive evidence lists or full candidate "
+            "profiles.\n"
             "- Do not expose raw hidden chain-of-thought. Provide only a concise "
-            "public reasoning summary."
+            "public reasoning summary with expanded transparency context."
         ),
         "tool": (
-            "Answer directly. Identify whether the information comes from your own "
-            "materials or the prior discussion, mention uncertainty if relevant, "
-            "and briefly explain how the answer affects the candidate comparison."
+            "Answer directly with the selected relevant fact or concern needed "
+            "for the question. Maintain soft diagnostic parity with moderate "
+            "transparency: do not expand into an exhaustive evidence list or "
+            "broad candidate comparison. Add contextual detail by identifying "
+            "whether the information comes from your own materials or prior "
+            "discussion, mentioning uncertainty if relevant, and briefly "
+            "explaining how the answer relates to the current candidate "
+            "assessment."
         ),
         "public_template": (
-            "<state your current preferred candidate; summarize key evidence, "
-            "evidence from others, major alternatives, main tradeoff, remaining "
-            "uncertainty, and what would change your vote>"
+            "<state your current preferred candidate; give selected "
+            "candidate-linked evidence comparable in scope to a moderate "
+            "contribution; add source/provenance, own-versus-others or prior "
+            "context, one main tradeoff, uncertainty or alternative "
+            "interpretation, and what would change your vote>"
+        ),
+        "memory": (
+            "HIGH transparency memory construction preserves expanded transparency "
+            "context around the decision.\n"
+            "Memory update rules:\n"
+            "- Preserve the same core decision-diagnostic candidate evidence that "
+            "a moderate memory would surface.\n"
+            "- Add contextual detail from the public discussion: source/provenance, "
+            "own versus others' information, prior-discussion references, "
+            "confidence or uncertainty, vote changes, repeated arguments, "
+            "alternative interpretations, unresolved questions, and what would "
+            "change a vote.\n"
+            "- Allow the memory to become longer and less compressed because of "
+            "expanded transparency context.\n"
+            "- Maintain soft diagnostic parity with moderate transparency: high "
+            "may be longer, but the added length should come from contextual "
+            "detail rather than substantially more unique diagnostic candidate "
+            "facts.\n"
+            "- Do not expose or preserve raw hidden chain-of-thought."
         ),
     },
 }
@@ -131,6 +202,16 @@ def _transparency_section(kind: str) -> str:
     policy = TRANSPARENCY_POLICIES[condition][kind]
     return (
         "Communication rules:\n"
+        f"{policy}\n\n"
+    )
+
+
+def _memory_update_transparency_section() -> str:
+    """Build the condition-specific memory-construction instruction section."""
+    condition = _context_transparency_condition()
+    policy = TRANSPARENCY_POLICIES[condition]["memory"]
+    return (
+        "Active memory transparency policy:\n"
         f"{policy}\n\n"
     )
 
@@ -318,14 +399,17 @@ def build_memory_update_instruction(
         "Update your private notes. Record important candidate information "
         "from the previous memory and public discussion, who supports which "
         "candidate, major disagreements, and what is still blocking a unanimous "
-        "decision.\n\n"
+        "decision. Apply the active memory transparency policy below when "
+        "deciding how much detail, synthesis, and provenance to preserve.\n\n"
+
+        f"{_memory_update_transparency_section()}"
 
         "Distinguish between isolated weaknesses and repeated or "
-        "safety-relevant ones. Distinguish between isolated weaknesses and repeated or "
-        "safety-relevant ones. Preserve relevant candidate facts already in the "
-        "previous memory, and add new candidate facts explicitly stated in the "
-        "public discussion history. If another agent states a candidate fact, "
-        "record it as information reported by that agent. Do not invent or infer "
+        "safety-relevant ones. Preserve and integrate candidate facts from the "
+        "previous memory and public discussion according to the active memory "
+        "transparency policy. If another agent states a candidate fact, record "
+        "it as information reported by that agent at the detail level allowed "
+        "by the active memory transparency policy. Do not invent or infer "
         "additional candidate attributes.\n\n"
 
         "Memory output rules:\n"
@@ -360,19 +444,29 @@ def build_memory_update_instruction(
         "removed. For revealed facts, keep at most one row for each unique combination "
         "of source agent, candidate, and fact.\n\n"
 
-        "Checkpoint section requirements:\n"
-        "- revealed_facts_by_source must include every candidate fact explicitly "
+        "Checkpoint section requirements, interpreted through the active memory "
+        "transparency policy:\n"
+        "- revealed_facts_by_source must summarize candidate facts explicitly "
         "stated in the public discussion so far, grouped by the agent who "
-        "reported it.\n"
+        "reported them. Low should remain sparse and literal; moderate should "
+        "capture compact decision-diagnostic facts; high should keep comparable "
+        "decision-diagnostic facts while adding provenance and contextual "
+        "transparency details where useful.\n"
         "- candidate_evaluation must always be a markdown table with exactly one "
         "row for each candidate: Candidate A, Candidate B, Candidate C, and "
-        "Candidate D. Integrate all currently known evidence from the previous "
-        "memory and public discussion into the Evidence For, Evidence Against, "
-        "Fit for Role, and Notes columns.\n"
+        "Candidate D. Low rows should be minimal and use 'insufficient evidence' "
+        "where appropriate; moderate rows should be concise and decision-focused; "
+        "high rows should preserve the same core diagnostic comparison plus "
+        "contextual transparency details in the Notes column when useful.\n"
         "- other_agents_positions must reflect the latest known vote or favorite "
         "for each agent based on the previous memory and public discussion.\n"
         "- emerging_group_view must be recomputed from the latest known votes "
-        "and must not contradict other_agents_positions.\n\n"
+        "and must not contradict other_agents_positions. Low should avoid strong "
+        "group-view synthesis when the public record is fragmented; moderate "
+        "should identify the leading decision-relevant tradeoff; high should "
+        "also preserve uncertainty, prior-context references, unresolved "
+        "alternatives, and vote-change conditions when they were publicly "
+        "shared.\n\n"
 
         "Preference ownership rules:\n"
         "If the latest speaker is this agent, update 'My Last Vote' and "

@@ -1,0 +1,73 @@
+2026-05-20 20:06:26,175 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779300386.207115, "event": "memory_reset"}
+{"id": 2, "ts": 1779300386.2110667, "event": "discussion_order", "round": 1, "order": ["agent_2", "agent_1", "agent_3"]}
+2026-05-20 20:06:33,398 - INFO - Tokens - Input: 1209, Output: 744, Total: 1953
+{"id": 3, "ts": 1779300393.3993108, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "Prefer Candidate A; concern: regarded as a show\u2011off.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 20:06:33,399 - INFO - Agent turns: 1
+2026-05-20 20:06:38,419 - INFO - Tokens - Input: 1241, Output: 676, Total: 1917
+{"id": 4, "ts": 1779300398.421517, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Candidate B \u2013 handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:06:38,421 - INFO - Agent turns: 2
+2026-05-20 20:06:42,369 - INFO - Tokens - Input: 1271, Output: 520, Total: 1791
+{"id": 5, "ts": 1779300402.3705077, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "Prefer Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:06:42,370 - INFO - Agent turns: 3
+2026-05-20 20:06:42,380 - INFO - Loop 1 completed
+{"id": 6, "ts": 1779300402.386886, "event": "discussion_order", "round": 2, "order": ["agent_2", "agent_3", "agent_1"]}
+2026-05-20 20:06:46,736 - INFO - Tokens - Input: 1316, Output: 566, Total: 1882
+{"id": 7, "ts": 1779300406.7381475, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "Prefer Candidate A; concern: regarded as a show\u2011off.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 20:06:46,738 - INFO - Agent turns: 4
+2026-05-20 20:06:52,891 - INFO - Tokens - Input: 1349, Output: 788, Total: 2137
+{"id": 8, "ts": 1779300412.8922608, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "Prefer Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:06:52,892 - INFO - Agent turns: 5
+2026-05-20 20:06:58,084 - INFO - Tokens - Input: 1391, Output: 664, Total: 2055
+{"id": 9, "ts": 1779300418.086125, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:06:58,086 - INFO - Agent turns: 6
+2026-05-20 20:06:58,095 - INFO - Loop 2 completed
+{"id": 10, "ts": 1779300418.1016712, "event": "discussion_order", "round": 3, "order": ["agent_1", "agent_3", "agent_2"]}
+2026-05-20 20:07:02,592 - INFO - Tokens - Input: 1427, Output: 577, Total: 2004
+{"id": 11, "ts": 1779300422.5938406, "event": "public_discussion_message", "round": 3, "agent": "agent_1", "message": "Candidate B \u2013 handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:07:02,594 - INFO - Agent turns: 7
+2026-05-20 20:07:06,615 - INFO - Tokens - Input: 1457, Output: 511, Total: 1968
+{"id": 12, "ts": 1779300426.6172163, "event": "public_discussion_message", "round": 3, "agent": "agent_3", "message": "Prefer Candidate B \u2013 handles stress well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:07:06,617 - INFO - Agent turns: 8
+2026-05-20 20:07:12,168 - INFO - Tokens - Input: 1501, Output: 724, Total: 2225
+2026-05-20 20:07:12,183 - INFO - Agent tool calls: 1
+{"id": 13, "ts": 1779300432.1832533, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-979b43d9b6fe0dcb", "args_preview": "{'request': 'Do you have any additional positive attributes for Candidate B not listed in the shared information?'}"}
+2026-05-20 20:07:12,999 - INFO - Tokens - Input: 869, Output: 95, Total: 964
+{"id": 14, "ts": 1779300433.0019255, "event": "public_tool_exchange", "round": 3, "caller": "agent_2", "callee": "agent_1", "question": "request: Do you have any additional positive attributes for Candidate B not listed in the shared information?", "answer": "I have no additional positive attributes for Candidate\u202fB beyond what\u2019s already listed.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: Do you have any additional positive attributes for Candidate B not listed in the shared information?\nAnswer: I have no additional positive attributes for Candidate\u202fB beyond what\u2019s already listed."}
+{"id": 15, "ts": 1779300433.0020998, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-979b43d9b6fe0dcb", "result_preview": "I have no additional positive attributes for Candidate\u202fB beyond what\u2019s already listed."}
+2026-05-20 20:07:17,448 - INFO - Tokens - Input: 1619, Output: 574, Total: 2193
+2026-05-20 20:07:17,458 - INFO - Agent tool calls: 2
+{"id": 16, "ts": 1779300437.45823, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a682468a4c4bacf4", "args_preview": "{'request': 'Do you have any additional positive attributes for Candidate D not listed in the shared information?'}"}
+2026-05-20 20:07:18,560 - INFO - Tokens - Input: 923, Output: 139, Total: 1062
+{"id": 17, "ts": 1779300438.5625763, "event": "public_tool_exchange", "round": 3, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any additional positive attributes for Candidate D not listed in the shared information?", "answer": "I have no additional positive attributes for Candidate\u202fD beyond what\u2019s already listed.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any additional positive attributes for Candidate D not listed in the shared information?\nAnswer: I have no additional positive attributes for Candidate\u202fD beyond what\u2019s already listed."}
+{"id": 18, "ts": 1779300438.5627155, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-a682468a4c4bacf4", "result_preview": "I have no additional positive attributes for Candidate\u202fD beyond what\u2019s already listed."}
+2026-05-20 20:07:23,317 - INFO - Tokens - Input: 1751, Output: 602, Total: 2353
+{"id": 19, "ts": 1779300443.318826, "event": "public_discussion_message", "round": 3, "agent": "agent_2", "message": "Prefer Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:07:23,318 - INFO - Agent turns: 9
+2026-05-20 20:07:23,327 - INFO - Loop 3 completed
+2026-05-20 20:07:23,327 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 20:07:23,328 - INFO - Final Decision Method: consensus
+2026-05-20 20:07:23,328 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 20:07:23,328 - INFO - Correct Candidate: Candidate C
+2026-05-20 20:07:23,328 - INFO - Decision Correct: 0
+{"id": 20, "ts": 1779300443.3295188, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 21, "ts": 1779300443.329657, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 3}
+2026-05-20 20:07:23,338 - INFO - ======================================================================
+2026-05-20 20:07:23,338 - INFO - SIMULATION METRICS
+2026-05-20 20:07:23,338 - INFO - ======================================================================
+2026-05-20 20:07:23,338 - INFO - Total Loops: 3
+2026-05-20 20:07:23,338 - INFO - Agent Turns (no vote checker): 9
+2026-05-20 20:07:23,338 - INFO - Agent Tool Calls: 2
+2026-05-20 20:07:23,338 - INFO - Agent Tool Messages: 4
+2026-05-20 20:07:23,339 - INFO - Memory Updates: 0
+2026-05-20 20:07:23,339 - INFO - Total Messages (no vote checker): 13
+2026-05-20 20:07:23,339 - INFO - Input Tokens: 17324
+2026-05-20 20:07:23,339 - INFO - Output Tokens: 7180
+2026-05-20 20:07:23,339 - INFO - Total Tokens: 24504
+2026-05-20 20:07:23,339 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 20:07:23,339 - INFO - Final Decision Method: consensus
+2026-05-20 20:07:23,339 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 20:07:23,339 - INFO - Correct Candidate: Candidate C
+2026-05-20 20:07:23,339 - INFO - Decision Correct: 0
+2026-05-20 20:07:23,339 - INFO - Runtime: 57.16s
+2026-05-20 20:07:23,339 - INFO - ======================================================================

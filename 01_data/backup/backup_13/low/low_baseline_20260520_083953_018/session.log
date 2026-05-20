@@ -1,0 +1,56 @@
+2026-05-20 20:23:01,653 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779301381.683622, "event": "memory_reset"}
+{"id": 2, "ts": 1779301381.6885471, "event": "discussion_order", "round": 1, "order": ["agent_3", "agent_1", "agent_2"]}
+2026-05-20 20:23:06,993 - INFO - Tokens - Input: 1201, Output: 519, Total: 1720
+{"id": 3, "ts": 1779301386.9942222, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:23:06,994 - INFO - Agent turns: 1
+2026-05-20 20:23:11,016 - INFO - Tokens - Input: 1236, Output: 555, Total: 1791
+{"id": 4, "ts": 1779301391.0181324, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:23:11,018 - INFO - Agent turns: 2
+2026-05-20 20:23:17,170 - INFO - Tokens - Input: 1275, Output: 830, Total: 2105
+2026-05-20 20:23:17,180 - INFO - Agent tool calls: 1
+{"id": 5, "ts": 1779301397.1809828, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9e5270f9d39d366c", "args_preview": "{'request': \"What are Candidate D's strengths or weaknesses regarding teamwork and crew cooperation?\"}"}
+2026-05-20 20:23:18,654 - INFO - Tokens - Input: 640, Output: 193, Total: 833
+{"id": 6, "ts": 1779301398.6568315, "event": "public_tool_exchange", "round": 1, "caller": "agent_2", "callee": "agent_1", "question": "request: What are Candidate D's strengths or weaknesses regarding teamwork and crew cooperation?", "answer": "He takes responsibility seriously but is regarded as arrogant and has relatively weak leadership skills, which can hinder crew cooperation.", "message": "Question and answer: Agent 2 asked Agent 1.\nQuestion: request: What are Candidate D's strengths or weaknesses regarding teamwork and crew cooperation?\nAnswer: He takes responsibility seriously but is regarded as arrogant and has relatively weak leadership skills, which can hinder crew cooperation."}
+{"id": 7, "ts": 1779301398.6570153, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-9e5270f9d39d366c", "result_preview": "He takes responsibility seriously but is regarded as arrogant and has relatively weak leadership skills, which can hinder crew cooperation."}
+2026-05-20 20:23:23,987 - INFO - Tokens - Input: 1399, Output: 689, Total: 2088
+{"id": 8, "ts": 1779301403.988866, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "Candidate A \u2013 very good leadership qualities\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 20:23:23,989 - INFO - Agent turns: 3
+2026-05-20 20:23:23,998 - INFO - Loop 1 completed
+{"id": 9, "ts": 1779301404.004146, "event": "discussion_order", "round": 2, "order": ["agent_1", "agent_3", "agent_2"]}
+2026-05-20 20:23:28,677 - INFO - Tokens - Input: 1371, Output: 603, Total: 1974
+{"id": 10, "ts": 1779301408.6791394, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:23:28,679 - INFO - Agent turns: 4
+2026-05-20 20:23:33,895 - INFO - Tokens - Input: 1402, Output: 677, Total: 2079
+{"id": 11, "ts": 1779301413.896986, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well.\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:23:33,897 - INFO - Agent turns: 5
+2026-05-20 20:23:39,332 - INFO - Tokens - Input: 1446, Output: 702, Total: 2148
+{"id": 12, "ts": 1779301419.3340325, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-20 20:23:39,334 - INFO - Agent turns: 6
+2026-05-20 20:23:39,343 - INFO - Loop 2 completed
+2026-05-20 20:23:39,343 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 20:23:39,343 - INFO - Final Decision Method: consensus
+2026-05-20 20:23:39,343 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 20:23:39,344 - INFO - Correct Candidate: Candidate C
+2026-05-20 20:23:39,344 - INFO - Decision Correct: 0
+{"id": 13, "ts": 1779301419.3455024, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 14, "ts": 1779301419.3456535, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 2}
+2026-05-20 20:23:39,353 - INFO - ======================================================================
+2026-05-20 20:23:39,354 - INFO - SIMULATION METRICS
+2026-05-20 20:23:39,354 - INFO - ======================================================================
+2026-05-20 20:23:39,354 - INFO - Total Loops: 2
+2026-05-20 20:23:39,354 - INFO - Agent Turns (no vote checker): 6
+2026-05-20 20:23:39,354 - INFO - Agent Tool Calls: 1
+2026-05-20 20:23:39,354 - INFO - Agent Tool Messages: 2
+2026-05-20 20:23:39,354 - INFO - Memory Updates: 0
+2026-05-20 20:23:39,354 - INFO - Total Messages (no vote checker): 8
+2026-05-20 20:23:39,354 - INFO - Input Tokens: 9970
+2026-05-20 20:23:39,354 - INFO - Output Tokens: 4768
+2026-05-20 20:23:39,354 - INFO - Total Tokens: 14738
+2026-05-20 20:23:39,354 - INFO - Final Chosen Candidate: Candidate B
+2026-05-20 20:23:39,355 - INFO - Final Decision Method: consensus
+2026-05-20 20:23:39,355 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-05-20 20:23:39,355 - INFO - Correct Candidate: Candidate C
+2026-05-20 20:23:39,355 - INFO - Decision Correct: 0
+2026-05-20 20:23:39,355 - INFO - Runtime: 37.70s
+2026-05-20 20:23:39,355 - INFO - ======================================================================
