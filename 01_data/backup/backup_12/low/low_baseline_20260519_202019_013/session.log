@@ -1,0 +1,101 @@
+2026-05-20 05:06:03,806 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1779246363.83567, "event": "memory_reset"}
+{"id": 2, "ts": 1779246363.8397398, "event": "discussion_order", "round": 1, "order": ["agent_3", "agent_2", "agent_1"]}
+2026-05-20 05:06:08,945 - INFO - Tokens - Input: 1201, Output: 504, Total: 1705
+{"id": 3, "ts": 1779246368.9463446, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:06:08,946 - INFO - Agent turns: 1
+2026-05-20 05:06:13,547 - INFO - Tokens - Input: 1239, Output: 616, Total: 1855
+{"id": 4, "ts": 1779246373.5494435, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "Candidate B \u2013 handles stress well, but makes nasty remarks about colleagues.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:06:13,549 - INFO - Agent turns: 2
+2026-05-20 05:06:18,819 - INFO - Tokens - Input: 1278, Output: 689, Total: 1967
+{"id": 5, "ts": 1779246378.8205178, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "Candidate C \u2013 known to be 100% reliable\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:06:18,820 - INFO - Agent turns: 3
+2026-05-20 05:06:18,829 - INFO - Loop 1 completed
+{"id": 6, "ts": 1779246378.8359675, "event": "discussion_order", "round": 2, "order": ["agent_2", "agent_3", "agent_1"]}
+2026-05-20 05:06:25,398 - INFO - Tokens - Input: 1320, Output: 862, Total: 2182
+{"id": 7, "ts": 1779246385.3994882, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "Candidate A \u2013 excellent spatial vision\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 05:06:25,399 - INFO - Agent turns: 4
+2026-05-20 05:06:30,762 - INFO - Tokens - Input: 1347, Output: 695, Total: 2042
+{"id": 8, "ts": 1779246390.7634785, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:06:30,763 - INFO - Agent turns: 5
+2026-05-20 05:06:36,987 - INFO - Tokens - Input: 1388, Output: 814, Total: 2202
+{"id": 9, "ts": 1779246396.9883227, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "Candidate C \u2013 known to be 100% reliable\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:06:36,988 - INFO - Agent turns: 6
+2026-05-20 05:06:36,997 - INFO - Loop 2 completed
+{"id": 10, "ts": 1779246397.0040882, "event": "discussion_order", "round": 3, "order": ["agent_3", "agent_2", "agent_1"]}
+2026-05-20 05:06:41,490 - INFO - Tokens - Input: 1422, Output: 581, Total: 2003
+{"id": 11, "ts": 1779246401.4915717, "event": "public_discussion_message", "round": 3, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:06:41,491 - INFO - Agent turns: 7
+2026-05-20 05:06:46,003 - INFO - Tokens - Input: 1466, Output: 580, Total: 2046
+{"id": 12, "ts": 1779246406.0045302, "event": "public_discussion_message", "round": 3, "agent": "agent_2", "message": "Candidate A \u2013 excellent spatial vision.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 05:06:46,004 - INFO - Agent turns: 8
+2026-05-20 05:06:52,651 - INFO - Tokens - Input: 1498, Output: 876, Total: 2374
+2026-05-20 05:06:52,661 - INFO - Agent tool calls: 1
+{"id": 13, "ts": 1779246412.6616476, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-a88e7d350088c14e", "args_preview": "{'request': \"Do you have any information about Candidate C's ability to handle stress or long-duration flights?\"}"}
+2026-05-20 05:06:54,380 - INFO - Tokens - Input: 873, Output: 212, Total: 1085
+{"id": 14, "ts": 1779246414.3820336, "event": "public_tool_exchange", "round": 3, "caller": "agent_1", "callee": "agent_2", "question": "request: Do you have any information about Candidate C's ability to handle stress or long-duration flights?", "answer": "Candidate C is noted to keep calm in a crisis, though no information is provided about long\u2011duration flight capability.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Do you have any information about Candidate C's ability to handle stress or long-duration flights?\nAnswer: Candidate C is noted to keep calm in a crisis, though no information is provided about long\u2011duration flight capability."}
+{"id": 15, "ts": 1779246414.3822088, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-a88e7d350088c14e", "result_preview": "Candidate C is noted to keep calm in a crisis, though no information is provided about long\u2011duration flight capability."}
+2026-05-20 05:07:00,126 - INFO - Tokens - Input: 1632, Output: 730, Total: 2362
+{"id": 16, "ts": 1779246420.128108, "event": "public_discussion_message", "round": 3, "agent": "agent_1", "message": "Candidate C \u2013 100% reliable and stays calm in a crisis.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:07:00,128 - INFO - Agent turns: 9
+2026-05-20 05:07:00,137 - INFO - Loop 3 completed
+{"id": 17, "ts": 1779246420.1437013, "event": "discussion_order", "round": 4, "order": ["agent_2", "agent_3", "agent_1"]}
+2026-05-20 05:07:06,685 - INFO - Tokens - Input: 1611, Output: 840, Total: 2451
+{"id": 18, "ts": 1779246426.6869526, "event": "public_discussion_message", "round": 4, "agent": "agent_2", "message": "Candidate A \u2013 excellent spatial vision and anticipates dangerous situations, but is regarded as a show\u2011off.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate A\"}"}
+2026-05-20 05:07:06,687 - INFO - Agent turns: 10
+2026-05-20 05:07:11,282 - INFO - Tokens - Input: 1652, Output: 587, Total: 2239
+{"id": 19, "ts": 1779246431.2836711, "event": "public_discussion_message", "round": 4, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:07:11,283 - INFO - Agent turns: 11
+2026-05-20 05:07:16,274 - INFO - Tokens - Input: 1693, Output: 641, Total: 2334
+{"id": 20, "ts": 1779246436.275439, "event": "public_discussion_message", "round": 4, "agent": "agent_1", "message": "Candidate C \u2013 100% reliable and stays calm in a crisis.\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:07:16,275 - INFO - Agent turns: 12
+2026-05-20 05:07:16,285 - INFO - Loop 4 completed
+{"id": 21, "ts": 1779246436.2918413, "event": "discussion_order", "round": 5, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-05-20 05:07:20,711 - INFO - Tokens - Input: 1735, Output: 564, Total: 2299
+2026-05-20 05:07:20,720 - INFO - Agent tool calls: 2
+{"id": 22, "ts": 1779246440.7210035, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-b58385086b4062ad", "args_preview": "{'request': \"Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?\"}"}
+2026-05-20 05:07:22,004 - INFO - Tokens - Input: 1112, Output: 159, Total: 1271
+{"id": 23, "ts": 1779246442.006184, "event": "public_tool_exchange", "round": 5, "caller": "agent_1", "callee": "agent_2", "question": "request: Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?", "answer": "No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?\nAnswer: No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance."}
+{"id": 24, "ts": 1779246442.0063605, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-b58385086b4062ad", "result_preview": "No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance."}
+2026-05-20 05:07:25,444 - INFO - Tokens - Input: 1869, Output: 434, Total: 2303
+{"id": 25, "ts": 1779246445.4459577, "event": "public_discussion_message", "round": 5, "agent": "agent_1", "message": "Candidate C \u2013 100% reliable\nMETADATA_JSON:\n{\"agent\": \"agent_1\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:07:25,446 - INFO - Agent turns: 13
+2026-05-20 05:07:32,741 - INFO - Tokens - Input: 1842, Output: 943, Total: 2785
+{"id": 26, "ts": 1779246452.742302, "event": "public_discussion_message", "round": 5, "agent": "agent_2", "message": "Candidate C \u2013 keeps calm in a crisis.\nMETADATA_JSON:\n{\"agent\": \"agent_2\", \"vote\": \"Candidate C\"}"}
+2026-05-20 05:07:32,742 - INFO - Agent turns: 14
+2026-05-20 05:07:38,147 - INFO - Tokens - Input: 1871, Output: 693, Total: 2564
+2026-05-20 05:07:38,157 - INFO - Agent tool calls: 3
+{"id": 27, "ts": 1779246458.157969, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8561bd58bc026029", "args_preview": "{'request': \"Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?\"}"}
+2026-05-20 05:07:39,469 - INFO - Tokens - Input: 1250, Output: 156, Total: 1406
+{"id": 28, "ts": 1779246459.4715865, "event": "public_tool_exchange", "round": 5, "caller": "agent_3", "callee": "agent_1", "question": "request: Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?", "answer": "No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Do you have any information about Candidate D's ability to handle stress or perform on long-duration flights?\nAnswer: No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance."}
+{"id": 29, "ts": 1779246459.471727, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-8561bd58bc026029", "result_preview": "No, there is no information provided about Candidate\u202fD\u2019s stress handling or long\u2011duration flight performance."}
+2026-05-20 05:07:43,851 - INFO - Tokens - Input: 2005, Output: 559, Total: 2564
+{"id": 30, "ts": 1779246463.8528783, "event": "public_discussion_message", "round": 5, "agent": "agent_3", "message": "Candidate B \u2013 handles stress very well\nMETADATA_JSON:\n{\"agent\": \"agent_3\", \"vote\": \"Candidate B\"}"}
+2026-05-20 05:07:43,853 - INFO - Agent turns: 15
+2026-05-20 05:07:43,862 - INFO - Loop 5 completed
+2026-05-20 05:07:43,862 - INFO - Final Chosen Candidate: Candidate C
+2026-05-20 05:07:43,862 - INFO - Final Decision Method: max_round_majority_vote
+2026-05-20 05:07:43,862 - INFO - Final Vote Count: {'Candidate C': 2, 'Candidate B': 1}
+2026-05-20 05:07:43,863 - INFO - Correct Candidate: Candidate C
+2026-05-20 05:07:43,863 - INFO - Decision Correct: 1
+{"id": 31, "ts": 1779246463.8644466, "event": "context_consistency_not_applicable", "reason": "explicit_smm_memory_disabled"}
+{"id": 32, "ts": 1779246463.8645697, "event": "final_decision", "candidate": "Candidate C", "method": "max_round_majority_vote", "vote_count": {"Candidate C": 2, "Candidate B": 1}, "correct_candidate": "Candidate C", "decision_correct": 1, "round": 5}
+2026-05-20 05:07:43,872 - INFO - ======================================================================
+2026-05-20 05:07:43,873 - INFO - SIMULATION METRICS
+2026-05-20 05:07:43,873 - INFO - ======================================================================
+2026-05-20 05:07:43,873 - INFO - Total Loops: 5
+2026-05-20 05:07:43,873 - INFO - Agent Turns (no vote checker): 15
+2026-05-20 05:07:43,873 - INFO - Agent Tool Calls: 3
+2026-05-20 05:07:43,873 - INFO - Agent Tool Messages: 6
+2026-05-20 05:07:43,873 - INFO - Memory Updates: 0
+2026-05-20 05:07:43,873 - INFO - Total Messages (no vote checker): 21
+2026-05-20 05:07:43,873 - INFO - Input Tokens: 31304
+2026-05-20 05:07:43,873 - INFO - Output Tokens: 12735
+2026-05-20 05:07:43,873 - INFO - Total Tokens: 44039
+2026-05-20 05:07:43,873 - INFO - Final Chosen Candidate: Candidate C
+2026-05-20 05:07:43,874 - INFO - Final Decision Method: max_round_majority_vote
+2026-05-20 05:07:43,874 - INFO - Final Vote Count: {'Candidate C': 2, 'Candidate B': 1}
+2026-05-20 05:07:43,874 - INFO - Correct Candidate: Candidate C
+2026-05-20 05:07:43,874 - INFO - Decision Correct: 1
+2026-05-20 05:07:43,874 - INFO - Runtime: 100.07s
+2026-05-20 05:07:43,874 - INFO - ======================================================================
