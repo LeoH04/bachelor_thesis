@@ -28,6 +28,29 @@ def _get_state(ctx) -> dict:
     return ctx.state
 
 
+def strip_adk_for_context(callback_context, llm_request) -> None:
+    """Remove ADK's generated multi-agent context block before model calls."""
+    llm_request.contents = [
+        content
+        for content in llm_request.contents
+        if not _is_adk_for_context_content(content)
+    ]
+    return None
+
+
+def _is_adk_for_context_content(content) -> bool:
+    parts = list(getattr(content, "parts", None) or [])
+    if not parts:
+        return False
+
+    first_text = getattr(parts[0], "text", None)
+    return (
+        getattr(content, "role", None) == "user"
+        and isinstance(first_text, str)
+        and first_text.strip().lower() == "for context:"
+    )
+
+
 def _agent_label(agent_name: str | None) -> str:
     """Return a readable discussion label for an ADK agent name."""
     if not agent_name:

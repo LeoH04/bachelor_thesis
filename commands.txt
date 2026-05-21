@@ -1,0 +1,65 @@
+# Run Agent Simulation with different experimental conditions
+SIM_CONDITION=high \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=moderate \
+SIM_SMM_MODE=treatment \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=low \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+# Run 15 simulations local
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate adk
+cd 02_code
+
+BATCH_ID="$(date +%Y%m%d_%H%M%S)"
+for i in $(seq -f "%03g" 1 15); do
+  SIM_CONDITION=moderate \
+  SIM_SMM_MODE=treatment \
+  SIM_RUN_ID="moderate_treatment_${BATCH_ID}_${i}" \
+  SIM_RUN_TAG=local_15 \
+  adk run multi_agent_system --replay multi_agent_system/config/replay.json || break
+done
+
+
+# Kill Agent  Simulation
+ps aux | grep -i adk
+kill -9 53993
+
+# Build a requirements.txt and an environment.yml
+conda env export --no-builds | sed '/^prefix:/d' > environment.yml
+python -m pip freeze > requirements.txt
+
+# Build the venv on the server
+sudo apt update
+sudo apt install -y python3.12-venv
+rm -rf adk
+python3 -m venv adk
+source adk/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# Find the running processes on the server
+ssh HohServer 'pgrep -af run_all_conditions.sh'
+
+# Kill the running processes on the server
+ssh HohServer 'pkill -f run_all_conditions.sh'
+
+# Copy server data to laptop
+rsync -avh --progress HohServer:~/git/bachelor_thesis/01_data/raw/simulations/ "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/"
+
+# Fore pull from GitHub
+git fetch origin
+git reset --hard origin/gold_standard
+git clean -fd
+
+# SSH tunnel to the model endpoint
+ssh -N -L 8080:144.41.15.40:30800 HohServer
+
+# Run an adk web simulation
+SIM_CONDITION=low \
+SIM_SMM_MODE=treatment \
+SIM_RUN_ID=low_web_$(date +%Y%m%d_%H%M%S) \
+adk web 

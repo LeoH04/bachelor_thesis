@@ -22,7 +22,7 @@ if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then
 fi
 
 COUNT="${SIM_COUNT:-10}"
-MAX_ATTEMPTS="${SIM_MAX_ATTEMPTS:-3}"
+MAX_ATTEMPTS=3
 SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-1}"
 RUN_TAG="${SIM_RUN_TAG:-transparency_experiment}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
@@ -52,15 +52,13 @@ for smm_mode in "${SMM_MODES[@]}"; do
     for i in $(seq -f "%03g" 1 "$COUNT"); do
       run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
       metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
-      attempt=1
-
       if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
         && grep -q '"status": "completed"' "$metadata_file"; then
         echo "Skipping completed simulation $i/$COUNT: $run_id"
         continue
       fi
 
-      while true; do
+      for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
         echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
 
         if SIM_CONDITION="$condition" \
@@ -79,10 +77,7 @@ for smm_mode in "${SMM_MODES[@]}"; do
           exit "$status"
         fi
 
-        sleep_seconds=$((attempt * 30))
-        echo "Simulation failed: $run_id. Retrying in ${sleep_seconds}s..." >&2
-        sleep "$sleep_seconds"
-        attempt=$((attempt + 1))
+        echo "Simulation failed: $run_id. Retrying..." >&2
       done
     done
 

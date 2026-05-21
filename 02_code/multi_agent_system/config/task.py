@@ -17,6 +17,42 @@ def load_task() -> dict:
 TASK = load_task()
 
 
+def _require_candidates() -> list[str]:
+    """Return configured candidates or fail before a simulation can run."""
+    candidates = TASK.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        raise ValueError("Task config must set a non-empty candidates list.")
+    if not all(isinstance(candidate, str) and candidate.strip() for candidate in candidates):
+        raise ValueError("Task config candidates must be non-empty strings.")
+    return candidates
+
+
+CANDIDATES = _require_candidates()
+
+
+def _require_correct_candidate() -> str:
+    """Return the configured ground-truth candidate or fail before a run starts."""
+    candidate = TASK.get("correct_candidate")
+    if candidate is None:
+        candidate = TASK.get("optimal_candidate")
+
+    if not isinstance(candidate, str) or not candidate.strip():
+        raise ValueError("Task config must set correct_candidate to a configured candidate.")
+
+    candidate = candidate.strip()
+    if candidate not in CANDIDATES:
+        valid = ", ".join(CANDIDATES)
+        raise ValueError(
+            f"Task config correct_candidate={candidate!r} is not a configured "
+            f"candidate. Expected one of: {valid}."
+        )
+
+    return candidate
+
+
+CORRECT_CANDIDATE = _require_correct_candidate()
+
+
 def _agent_sort_key(agent_key: str) -> tuple[str, int | str]:
     """Sort agent_N keys numerically while keeping a stable fallback."""
     prefix, separator, suffix = agent_key.rpartition("_")
@@ -39,9 +75,6 @@ def _as_bullets(items: Iterable[str]) -> str:
     return "\n".join(f"- {item}" for item in items) if items else "- (none)"
 
 
-def get_correct_candidate() -> str | None:
-    """Return the task's ground-truth candidate when configured."""
-    candidate = TASK.get("correct_candidate") or TASK.get("optimal_candidate")
-    if candidate in TASK.get("candidates", []):
-        return str(candidate)
-    return None
+def get_correct_candidate() -> str:
+    """Return the task's required ground-truth candidate."""
+    return CORRECT_CANDIDATE

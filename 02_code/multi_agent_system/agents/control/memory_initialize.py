@@ -1,4 +1,4 @@
-"""Reset agent memories and public discussion state at simulation startup."""
+"""Initialize agent memories and public discussion state at simulation startup."""
 
 import json
 from collections.abc import AsyncGenerator
@@ -10,29 +10,29 @@ from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 
 from ...config.history import reset_public_discussion_history
-from ...config.memory import reset_all_agent_memories
+from ...config.memory import initialize_all_agent_memories
 from ...config.trace import log_event
 
 
-def reset_agent_memories(tool_context: ToolContext) -> dict:
-    """Reset persisted agent memories and clear the shared discussion history."""
-    reset_all_agent_memories()
+def initialize_agent_memories(tool_context: ToolContext) -> dict:
+    """Initialize run-local agent memories and clear the shared discussion history."""
+    initialize_all_agent_memories()
     reset_public_discussion_history(tool_context.state)
-    log_event("memory_reset")
-    return {"status": "MEMORY_RESET"}
+    log_event("memory_initialized")
+    return {"status": "MEMORY_INITIALIZED"}
 
 
-class MemoryResetAgent(BaseAgent):
-    """ADK workflow agent that performs the simulation reset step."""
+class MemoryInitializationAgent(BaseAgent):
+    """ADK workflow agent that performs the simulation initialization step."""
 
     async def _run_async_impl(
         self,
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
-        """Run the reset logic and emit a structured ADK event."""
+        """Run the initialization logic and emit a structured ADK event."""
         actions = EventActions()
         tool_context = ToolContext(ctx, event_actions=actions)
-        result = reset_agent_memories(tool_context)
+        result = initialize_agent_memories(tool_context)
 
         yield Event(
             invocation_id=ctx.invocation_id,
@@ -46,4 +46,4 @@ class MemoryResetAgent(BaseAgent):
         )
 
 
-memory_reset_agent = MemoryResetAgent(name="memory_reset")
+memory_initialization_agent = MemoryInitializationAgent(name="memory_initialization")

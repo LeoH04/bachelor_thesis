@@ -1,7 +1,7 @@
-"""Build, persist, reset, and archive agent memories."""
+"""Build, persist, initialize, and archive agent memories."""
 
+import json
 import re
-import shutil
 from pathlib import Path
 
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
@@ -14,21 +14,66 @@ from .response_text import (
 )
 from .similarity import calculate_memory_similarity
 from .smm import explicit_smm_memory_enabled
-from .task import AGENT_KEYS, PROJECT_ROOT, TASK, _as_bullets
+from .task import AGENT_KEYS, TASK, _as_bullets
 from .trace import log_event
 
 _AGENT_MEMORIES_ARCHIVED = False
 
+MEMORY_SECTION_FIELDS = (
+    ("task_summary", "Task Summary"),
+    ("candidate_summary_table", "Candidate Summary Table"),
+    ("my_position", "My Position"),
+    ("other_agents_positions", "Other Agents' Positions"),
+    ("emerging_group_view", "Emerging Group View"),
+    ("open_questions", "Open Questions"),
+    ("next_step_focus", "Next-Step Focus"),
+)
+
 
 def _agent_memory_path(agent_key: str) -> Path:
     """Return the markdown memory file path for the given agent key."""
-    return PROJECT_ROOT / "agents" / "discussion" / f"{agent_key}.md"
+    return SHARED_MENTAL_MODELS_DIR / f"{agent_key}.md"
 
 
-def _extract_memory_markdown(text: str) -> str:
-    """Normalize a passive memory update response to raw markdown."""
+def _render_memory_sections(agent_key: str, data: dict) -> str:
+    """Render structured memory section bodies into the markdown memory document."""
+    title = f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})"
+    sections = [title]
+    for field, heading in MEMORY_SECTION_FIELDS:
+        body = data.get(field)
+        if not isinstance(body, str) or not body.strip():
+            return ""
+        sections.append(f"## {heading}\n{body.strip()}")
+    return "\n\n".join(sections).strip()
+
+
+def _extract_memory_markdown(agent_key: str, text: str) -> str:
+    """Normalize a passive memory update JSON response to raw markdown."""
     text = text.strip()
     text = MEMORY_MARKDOWN_PREFIX_RE.sub("", text)
+
+    json_text = text
+    json_fence_match = re.fullmatch(
+        r"```(?:json)?\s*(.*?)\s*```",
+        text,
+        re.DOTALL,
+    )
+    if json_fence_match:
+        json_text = json_fence_match.group(1).strip()
+
+    if json_text.startswith("{"):
+        try:
+            data = json.loads(json_text)
+        except json.JSONDecodeError:
+            return ""
+
+        if isinstance(data, dict):
+            memory = data.get("memory_markdown")
+            if isinstance(memory, str):
+                return memory.strip()
+            return _render_memory_sections(agent_key, data)
+        return ""
+
     fence_match = re.search(r"```(?:markdown|md)?\s*(.*?)\s*```", text, re.DOTALL)
     if fence_match:
         return fence_match.group(1).strip()
@@ -95,11 +140,12 @@ def read_agent_memory(agent_key: str) -> str:
 def write_agent_memory(agent_key: str, content: str) -> None:
     """Persist a full replacement markdown memory for the given agent."""
     path = _agent_memory_path(agent_key)
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content.strip() + "\n", encoding="utf-8")
 
 
 def archive_agent_memories() -> Path | None:
-    """Copy final agent memory markdown files into raw shared-mental-model data."""
+    """Finalize run-local agent memory markdown files and calculate metrics."""
     global _AGENT_MEMORIES_ARCHIVED
 
     destination = SHARED_MENTAL_MODELS_DIR
@@ -134,15 +180,13 @@ def archive_agent_memories() -> Path | None:
 
     destination.mkdir(parents=True, exist_ok=True)
 
-    copied_files = []
+    memory_files = []
     memory_texts = {}
     for agent_key in AGENT_KEYS:
         source = _agent_memory_path(agent_key)
         if source.exists():
-            target = destination / source.name
-            shutil.copy2(source, target)
-            copied_files.append(str(target))
-            memory_texts[agent_key] = target.read_text(encoding="utf-8")
+            memory_files.append(str(source))
+            memory_texts[agent_key] = source.read_text(encoding="utf-8")
 
     similarity = calculate_memory_similarity(memory_texts)
 
@@ -150,7 +194,7 @@ def archive_agent_memories() -> Path | None:
     update_run_metadata(
         {
             "shared_mental_models_archived": True,
-            "shared_mental_model_files": copied_files,
+            "shared_mental_model_files": memory_files,
             "context_consistency": similarity,
             "pairwise_memory_similarity": similarity.get("pairwise", []),
             "mean_pairwise_memory_similarity": similarity.get(
@@ -167,8 +211,11 @@ def archive_agent_memories() -> Path | None:
     return destination
 
 
-def reset_all_agent_memories() -> None:
-    """Reset every agent memory file to a fresh template."""
+def initialize_all_agent_memories() -> None:
+    """Initialize every run-local agent memory file with a fresh template."""
+    if not explicit_smm_memory_enabled():
+        return
+
     for agent_key in AGENT_KEYS:
         template = build_memory_template(agent_key)
         write_agent_memory(agent_key, template)
@@ -180,7 +227,7 @@ def record_memory_update_response(agent_key: str, _callback_context, llm_respons
     parts = list(getattr(content, "parts", None) or [])
     visible_parts = _drop_thought_parts(content, parts)
     text = _visible_text_from_parts(visible_parts)
-    memory = _extract_memory_markdown(text)
+    memory = _extract_memory_markdown(agent_key, text)
 
     if not memory:
         log_event(

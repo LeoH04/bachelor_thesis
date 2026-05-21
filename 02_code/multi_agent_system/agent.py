@@ -1,4 +1,5 @@
 import atexit
+import os
 import random
 from collections.abc import AsyncGenerator
 
@@ -7,12 +8,13 @@ from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event
 from google.adk.utils.context_utils import Aclosing
 
-from .agents.control.memory_reset import memory_reset_agent
+from .agents.control.memory_initialize import memory_initialization_agent
 from .agents.control.memory_update import MEMORY_UPDATE_STAGES
 from .agents.control.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
 from .agents.discussion.agent_1 import agent_1, agent_1_tool
 from .agents.discussion.agent_2 import agent_2, agent_2_tool
 from .agents.discussion.agent_3 import agent_3, agent_3_tool
+from .config.make_session_log import RUN_ID, update_run_metadata
 from .config.memory import archive_agent_memories
 from .config.metrics import metrics
 from .config.smm import explicit_smm_memory_enabled
@@ -21,6 +23,9 @@ from .config.trace import log_event
 from .tools.logging_agent_tool import LoggingAgentTool
 
 EXPLICIT_SMM_MEMORY = explicit_smm_memory_enabled()
+SIM_RANDOM_SEED = os.getenv("SIM_RANDOM_SEED") or RUN_ID
+SPEAKER_ORDER_RNG = random.Random(SIM_RANDOM_SEED)
+update_run_metadata({"speaker_order_seed": SIM_RANDOM_SEED})
 
 DISCUSSION_AGENTS = {
     "agent_1": agent_1,
@@ -87,7 +92,7 @@ class RandomizedDiscussionRoundAgent(BaseAgent):
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
         speaker_update_pairs = _speaker_update_pairs()
-        random.shuffle(speaker_update_pairs)
+        SPEAKER_ORDER_RNG.shuffle(speaker_update_pairs)
         log_event(
             "discussion_order",
             round=metrics.loop_count + 1,
@@ -126,7 +131,7 @@ discussion_loop = LoopAgent(
 root_agent = SequentialAgent(
     name="simulation",
     sub_agents=[
-        memory_reset_agent,
+        memory_initialization_agent,
         discussion_loop,
     ],
 )

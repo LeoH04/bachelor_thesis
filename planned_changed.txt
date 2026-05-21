@@ -1,0 +1,15 @@
+- Remove public_info + private_info from build_memory_update_instruction() DONE
+- Make the memory updater output JSON updated that then get rendered in markdown DONE
+- refine the prompts DONE
+- use .env loading instead of the manual .env helpers DONE
+- strip away "for context" in a before model callback DONE
+- add retry logic of simulation runs (shell script) DONE
+- do we need a seed for the order of agents? DONE
+- Are there any silent fallbacks we should make fail: 
+    memory.py (line 127): missing or empty agent memory returns a fresh template. In treatment mode this hides failed initialization or failed memory writes.
+    history.py (line 94): malformed scheduled agent output without METADATA_JSON or usable PUBLIC_MESSAGE is skipped. That also means no public history entry and no agent-turn metric.
+    response_text.py (line 59), prompts.py (line 156), vote_checker.py (line 72): missing, malformed, or invalid vote metadata becomes None / "Unavailable" and is ignored by consensus. Since every scheduled speaker is required to emit a valid vote, this should fail.
+    history.py (line 131): empty-parsed tool question/answer is not recorded. Tool exchanges are part of the public transcript by design, so a tool call with no record should fail.
+    memory.py (line 224): malformed memory-update output logs memory_update_missing and continues with stale memory. For treatment runs, that should probably abort the run.
+    make_session_log.py (line 76): corrupt metadata.json is ignored and overwritten from base metadata. For reproducible experimental data, invalid metadata should fail instead of quietly rebuilding. 
+- Change markdown file location to the run directory DONE
