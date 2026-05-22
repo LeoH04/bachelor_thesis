@@ -7,6 +7,8 @@ if (!is.null(dev.list())) dev.off()
 rm(list = ls())
 
 library(tidyverse)
+options(scipen = 999)
+
 path <- getwd()
 source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 
@@ -37,10 +39,12 @@ simulation_metrics$condition <- factor(
   levels = c("low", "moderate", "high"),
   ordered = TRUE
 )
+
 simulation_metrics$smm_mode <- factor(
   simulation_metrics$smm_mode,
   levels = c("treatment", "baseline")
 )
+
 simulation_metrics$run_tag <- factor(simulation_metrics$run_tag)
 simulation_metrics$status <- factor(simulation_metrics$status)
 simulation_metrics$decision_method <- factor(simulation_metrics$decision_method)
@@ -52,6 +56,7 @@ simulation_metrics$timestamp <- as.POSIXct(
   format = "%Y%m%d_%H%M%S",
   tz = "Europe/Berlin"
 )
+
 simulation_metrics$completed_at <- as.POSIXct(
   simulation_metrics$completed_at,
   format = "%Y-%m-%dT%H:%M:%S%z",
@@ -93,63 +98,114 @@ simulation_metrics[numeric_columns] <- lapply(
 # ------------------------------------------------------------
 # 2. Calculate costs
 # ------------------------------------------------------------
-total_number_input_tokens = sum(simulation_metrics$input_tokens)
-total_number_output_tokens = sum(simulation_metrics$output_tokens)
+total_number_input_tokens <- sum(simulation_metrics$input_tokens)
+total_number_output_tokens <- sum(simulation_metrics$output_tokens)
 
 costs <- calculate_costs(
   input_tokens = total_number_input_tokens,
   output_tokens = total_number_output_tokens,
   context = "short"
 )
-print(costs)
 
-condition_colors <- c(
-  "low" = "#7BAF9E",
-  "moderate" = "#D98C5F",
-  "high" = "#6F84B8"
-)
+print(costs)
 
 # ------------------------------------------------------------
 # PLOT THEME
 # ------------------------------------------------------------
 plot_theme <- theme_minimal(base_size = 13) +
   theme(
-    # Title
     plot.title = element_text(
       face = "bold",
       size = 15,
-      hjust = 0, 
+      hjust = 0,
       margin = margin(b = 12)
     ),
-    
-    # Axis labels
+    plot.subtitle = element_text(
+      size = 11,
+      margin = margin(b = 10)
+    ),
     axis.title = element_text(
       face = "bold",
       size = 12
     ),
-    
-    # Axis text
     axis.text = element_text(
       color = "black",
       size = 11
     ),
-    
-    # Grid
     panel.grid.major.x = element_blank(),
     panel.grid.minor = element_blank(),
     panel.grid.major.y = element_line(linewidth = 0.3),
-    
-    # Legend
     legend.position = "none",
-    
-    # Plot spacing
     plot.margin = margin(10, 15, 10, 10)
   )
 
-save_overview_plots <- function(mode_metrics, smm_mode) {
+# ------------------------------------------------------------
+# Helper function for mode-specific plots
+# ------------------------------------------------------------
+save_single_mode_plot <- function(
+    plot_data,
+    smm_mode,
+    y_var,
+    y_label,
+    title,
+    filename,
+    digits = 2,
+    y_limits = NULL
+) {
   file_prefix <- if (smm_mode == "treatment") "" else paste0(smm_mode, "_")
-  title_suffix <- paste0(" (", smm_mode, ")")
+  mode_label <- if (smm_mode == "treatment") "Treatment" else "Baseline"
+  bar_fill <- if (smm_mode == "treatment") "grey35" else "grey70"
+  
+  if (is.null(y_limits)) {
+    y_max <- max(plot_data[[y_var]], na.rm = TRUE)
+    
+    if (!is.finite(y_max) || y_max == 0) {
+      y_max <- 1
+    }
+    
+    y_limits <- c(0, y_max * 1.15)
+  }
+  
+  single_mode_plot <- ggplot(
+    plot_data,
+    aes(x = condition, y = .data[[y_var]])
+  ) +
+    geom_col(
+      width = 0.65,
+      fill = bar_fill
+    ) +
+    geom_text(
+      aes(label = round(.data[[y_var]], digits)),
+      vjust = -0.4,
+      size = 3.6
+    ) +
+    scale_y_continuous(
+      limits = y_limits,
+      expand = expansion(mult = c(0, 0))
+    ) +
+    labs(
+      x = "Condition",
+      y = y_label,
+      title = title,
+      subtitle = paste0(mode_label, " condition only")
+    ) +
+    plot_theme
+  
+  if (interactive()) print(single_mode_plot)
+  
+  ggsave(
+    filename = paste0(path, "/03_report/graphs/", file_prefix, filename),
+    plot = single_mode_plot,
+    width = 8,
+    height = 5
+  )
+}
 
+# ------------------------------------------------------------
+# Helper function for all overview plots of one mode
+# ------------------------------------------------------------
+save_overview_plots <- function(mode_metrics, smm_mode) {
+  
   # ------------------------------------------------------------
   # 3a. Overview of correctly chosen candidates across conditions
   # ------------------------------------------------------------
@@ -161,28 +217,19 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       correct_share = correct_choices / total_runs,
       .groups = "drop"
     )
-
+  
   print(correct_candidate_overview)
-
-  correct_candidate_overview_plot <- ggplot(correct_candidate_overview, aes(x = condition, y = correct_choices, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = correct_choices), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Correct choices",
-      title = paste0("Correct candidate choices by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(correct_candidate_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "correct_candidate_overview_plot.pdf"),
-    plot = correct_candidate_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = correct_candidate_overview,
+    smm_mode = smm_mode,
+    y_var = "correct_choices",
+    y_label = "Correct choices",
+    title = "Correct candidate choices by condition",
+    filename = "correct_candidate_overview_plot.pdf",
+    digits = 0
   )
-
+  
   # ------------------------------------------------------------
   # 3b. Overview of NA final candidates across conditions
   # ------------------------------------------------------------
@@ -193,28 +240,19 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       na_candidates = sum(is.na(final_candidate)),
       .groups = "drop"
     )
-
+  
   print(na_candidate_overview)
-
-  na_candidate_overview_plot <- ggplot(na_candidate_overview, aes(x = condition, y = na_candidates, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = na_candidates), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Number of runs",
-      title = paste0("Runs without a final candidate by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(na_candidate_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "na_candidate_overview_plot.pdf"),
-    plot = na_candidate_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = na_candidate_overview,
+    smm_mode = smm_mode,
+    y_var = "na_candidates",
+    y_label = "Number of runs",
+    title = "Runs without a final candidate by condition",
+    filename = "na_candidate_overview_plot.pdf",
+    digits = 0
   )
-
+  
   if (smm_mode == "treatment") {
     
     # ------------------------------------------------------------
@@ -230,30 +268,18 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
     
     print(semantic_similarity_overview)
     
-    semantic_similarity_overview_plot <- ggplot(
-      semantic_similarity_overview,
-      aes(x = condition, y = mean_semantic_similarity, fill = condition)
-    ) +
-      geom_col() +
-      geom_text(aes(label = round(mean_semantic_similarity, 3)), vjust = -0.5) +
-      labs(
-        x = "Condition",
-        y = "Mean semantic similarity",
-        title = paste0("Mean semantic similarity by condition", title_suffix)
-      ) +
-      scale_fill_manual(values = condition_colors) +
-      plot_theme
-    
-    if (interactive()) print(semantic_similarity_overview_plot)
-    
-    ggsave(
-      filename = paste0(path, "/03_report/graphs/", file_prefix, "semantic_similarity_overview_plot.pdf"),
-      plot = semantic_similarity_overview_plot,
-      width = 7,
-      height = 5
+    save_single_mode_plot(
+      plot_data = semantic_similarity_overview,
+      smm_mode = smm_mode,
+      y_var = "mean_semantic_similarity",
+      y_label = "Mean semantic similarity",
+      title = "Mean semantic similarity by condition",
+      filename = "semantic_similarity_overview_plot.pdf",
+      digits = 3,
+      y_limits = c(0, 1)
     )
   }
-
+  
   # ------------------------------------------------------------
   # 5. Overview of interaction rounds across conditions
   # ------------------------------------------------------------
@@ -264,28 +290,19 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       mean_rounds = mean(rounds, na.rm = TRUE),
       .groups = "drop"
     )
-
+  
   print(rounds_overview)
-
-  rounds_overview_plot <- ggplot(rounds_overview, aes(x = condition, y = mean_rounds, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_rounds, 2)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean rounds",
-      title = paste0("Mean interaction rounds by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(rounds_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "rounds_overview_plot.pdf"),
-    plot = rounds_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = rounds_overview,
+    smm_mode = smm_mode,
+    y_var = "mean_rounds",
+    y_label = "Mean rounds",
+    title = "Mean interaction rounds by condition",
+    filename = "rounds_overview_plot.pdf",
+    digits = 2
   )
-
+  
   # ------------------------------------------------------------
   # 6. Overview of messages across conditions
   # ------------------------------------------------------------
@@ -296,28 +313,19 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       mean_messages = mean(total_messages, na.rm = TRUE),
       .groups = "drop"
     )
-
+  
   print(messages_overview)
-
-  messages_overview_plot <- ggplot(messages_overview, aes(x = condition, y = mean_messages, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_messages, 2)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean messages",
-      title = paste0("Mean messages by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(messages_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "messages_overview_plot.pdf"),
-    plot = messages_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = messages_overview,
+    smm_mode = smm_mode,
+    y_var = "mean_messages",
+    y_label = "Mean messages",
+    title = "Mean messages by condition",
+    filename = "messages_overview_plot.pdf",
+    digits = 2
   )
-
+  
   # ------------------------------------------------------------
   # 7. Overview of tokens across conditions
   # ------------------------------------------------------------
@@ -328,28 +336,19 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       mean_tokens = mean(total_tokens, na.rm = TRUE),
       .groups = "drop"
     )
-
+  
   print(tokens_overview)
-
-  tokens_overview_plot <- ggplot(tokens_overview, aes(x = condition, y = mean_tokens, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_tokens, 0)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean tokens",
-      title = paste0("Mean tokens by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(tokens_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "tokens_overview_plot.pdf"),
-    plot = tokens_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = tokens_overview,
+    smm_mode = smm_mode,
+    y_var = "mean_tokens",
+    y_label = "Mean tokens",
+    title = "Mean tokens by condition",
+    filename = "tokens_overview_plot.pdf",
+    digits = 0
   )
-
+  
   # ------------------------------------------------------------
   # 8. Overview of runtime across conditions
   # ------------------------------------------------------------
@@ -360,33 +359,24 @@ save_overview_plots <- function(mode_metrics, smm_mode) {
       mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),
       .groups = "drop"
     )
-
+  
   print(runtime_overview)
-
-  runtime_overview_plot <- ggplot(runtime_overview, aes(x = condition, y = mean_runtime_seconds, fill = condition)) +
-    geom_col() +
-    geom_text(aes(label = round(mean_runtime_seconds, 2)), vjust = -0.5) +
-    labs(
-      x = "Condition",
-      y = "Mean runtime in seconds",
-      title = paste0("Mean runtime until task completion by condition", title_suffix)
-    ) +
-    scale_fill_manual(values = condition_colors) +
-    plot_theme
-  if (interactive()) print(runtime_overview_plot)
-
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, "runtime_overview_plot.pdf"),
-    plot = runtime_overview_plot,
-    width = 7,
-    height = 5
+  
+  save_single_mode_plot(
+    plot_data = runtime_overview,
+    smm_mode = smm_mode,
+    y_var = "mean_runtime_seconds",
+    y_label = "Mean runtime in seconds",
+    title = "Mean runtime until task completion by condition",
+    filename = "runtime_overview_plot.pdf",
+    digits = 2
   )
 }
 
 for (current_smm_mode in c("treatment", "baseline")) {
   mode_metrics <- simulation_metrics %>%
     filter(smm_mode == current_smm_mode)
-
+  
   if (nrow(mode_metrics) > 0) {
     save_overview_plots(mode_metrics, current_smm_mode)
   }

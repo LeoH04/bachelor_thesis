@@ -13,9 +13,6 @@ from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, TASK, _as_bullets
 
 
-MAX_DISCUSSION_ROUNDS_FOR_PROMPT = 5
-
-
 TRANSPARENCY_POLICIES = {
     "low": {
         "discussion": (
@@ -126,14 +123,9 @@ TRANSPARENCY_POLICIES = {
     },
 }
 
-
 def _context_transparency_condition() -> str:
     """Return the active context-transparency condition from SIM_CONDITION."""
-    raw_condition = os.getenv("SIM_CONDITION")
-    if raw_condition is None or not raw_condition.strip():
-        raise ValueError("Missing required SIM_CONDITION.")
-
-    condition = raw_condition.strip().lower()
+    condition = os.getenv("SIM_CONDITION", "low").strip().lower()
     if condition not in TRANSPARENCY_POLICIES:
         valid = ", ".join(sorted(TRANSPARENCY_POLICIES))
         raise ValueError(
@@ -160,31 +152,39 @@ def _transparency_section(kind: str) -> str:
         f"{policy}"
     )
 
+def _information_sharing_guidance() -> str:
+    """Return condition-neutral guidance for sharing individual information."""
+    return (
+        "Use the discussion to exchange decision-relevant information, but apply "
+        "the active context transparency policy to determine how much detail, "
+        "candidate linkage, reasoning, source context, comparison, and uncertainty "
+        "to disclose publicly."
+    )
+
+def _memory_guided_turn_section() -> str:
+    """Return speaking-turn guidance for treatment-mode memory use."""
+    if explicit_smm_memory_enabled():
+        return (
+            "Memory-guided speaking-turn use:\n"
+            "Use the explicit shared mental model from the previous update phase "
+            "to identify unresolved issues, missing decision-relevant information, "
+            "and the next most useful contribution.\n"
+            "Pay particular attention to the Open Questions (`open_questions`) "
+            "and Next-Step Focus (`next_step_focus`) memory sections. If either "
+            "section indicates a gap that could affect the final candidate choice, "
+            "prioritize that gap either by asking a targeted agent-tool question "
+            "or by addressing it in your public contribution, while staying within "
+            "the active context transparency policy.\n"
+            "Do not update memory during this speaking turn. Use memory only as "
+            "context for deciding what to ask or say.\n\n"
+        )
+
+    return ""
 
 def _public_message_template() -> str:
     """Return the output template for the active transparency condition."""
     condition = _context_transparency_condition()
     return TRANSPARENCY_POLICIES[condition]["public_template"]
-
-
-def _information_sharing_guidance() -> str:
-    """Return condition-aware guidance for sharing individual information."""
-    condition = _context_transparency_condition()
-    if condition == "low":
-        return (
-            "Use the limited rounds efficiently. Share only one minimal, "
-            "decision-relevant individual fact when it has not yet appeared in "
-            "the discussion and fits the active low-transparency policy. Ask a "
-            "targeted question when another agent may hold information that "
-            "could affect which candidate should be hired."
-        )
-
-    return (
-        "Use the limited rounds efficiently. Share relevant individual "
-        "information early, especially information that has not yet been made "
-        "public. Ask a targeted question when another agent may hold "
-        "information that could affect which candidate should be hired."
-    )
 
 
 def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
@@ -231,12 +231,16 @@ def build_agent_instruction(
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
     current_round = _round_number()
-    max_rounds = MAX_DISCUSSION_ROUNDS_FOR_PROMPT
     other_agents = [key for key in AGENT_KEYS if key != agent_key]
+    other_agent_tools = [
+        f"{key}_tool ({key.replace('_', ' ').title()})"
+        for key in other_agents
+    ]
     vote_options = "|".join(candidates) if candidates else "candidate"
     transparency_section = _transparency_section("discussion")
     public_message_template = _public_message_template()
     information_sharing_guidance = _information_sharing_guidance()
+    memory_guided_turn = _memory_guided_turn_section()
 
     return (
     f"You are {agent_key.replace('_', ' ').title()}.\n\n"
@@ -248,42 +252,28 @@ def build_agent_instruction(
     "Task:\n"
     f"{goal}\n"
     f"Candidates: {', '.join(candidates)}\n"
-    f"Current discussion round: {current_round}\n"
-    f"Maximum discussion rounds: {max_rounds}\n\n"
+    f"Current discussion round: {current_round}\n\n"
 
     "Information structure:\n"
-    "Each group member has received individual information about the candidates.\n"
-    "Some information may be identical across group members, and some may differ.\n"
-    "Your individual information may be incomplete.\n"
-    "The group's task is to combine information made available through discussion "
-    "and reach a unanimous final decision.\n\n"
+    "You have received individual information about the candidates. Part of the "
+    "information available to group members is identical, and part of it "
+    "differs across group members. On the basis of the full information set held "
+    "within the group, one candidate is clearly the best choice. Your group's task "
+    "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
+    "Information available to you:\n"
     "Public information known to all agents:\n"
-    f"{_as_bullets(public_info)}\n\n"
-    "Your individual information:\n"
-    f"{_as_bullets(private_info)}\n\n"
-
-    "Decision orientation:\n"
-    f"The discussion has at most {max_rounds} rounds. If all agents agree on a "
-    "candidate before the limit, the discussion can end early. If no "
-    "consensus is reached after "
-    f"{max_rounds} rounds, the final decision is made from the recorded votes.\n"
-    f"{information_sharing_guidance}\n"
-    "Your preferred candidate is provisional. Try to convince others with "
-    "decision-relevant evidence when your current candidate is best supported, "
-    "and let yourself be convinced when public evidence supports another "
-    "candidate more strongly.\n"
-    f"Your {METADATA_JSON_LABEL} vote must reflect your current best judgment "
-    "based on all public discussion so far, not merely your initial private "
-    "information.\n\n"
+        f"{_as_bullets(public_info)}\n\n"
+        "Your individual information:\n"
+        f"{_as_bullets(private_info)}\n\n"
 
     "Discussion instructions:\n"
     "Discuss the candidates naturally with the other group members.\n"
-    "Share information from your own candidate materials when it is relevant for judging a candidate's suitability and fits the active context transparency policy.\n"
-    "Prefer new decision-relevant individual facts over repeating facts already known to the group, while staying within the active context transparency policy.\n"
+    f"{information_sharing_guidance}\n"
+    "Share information from your own candidate materials when it is relevant for judging a candidate's suitability.\n"
+    "Prefer sharing important private facts that have not yet appeared in the discussion over repeating facts already known to the group.\n"
     "Take into account information contributed by others.\n"
     "Do not assume your own information alone is complete.\n"
-    "Weigh all explicitly stated positive and negative candidate information according to its relevance to the selection criteria in the task.\n"
     "Do not treat an early majority preference as a final decision until the group has had a chance to discuss information about the candidates.\n"
     "Your aim is not to defend your initial preference.\n"
     "Your aim is to identify the candidate who is best suited for the long-distance pilot position based on all information available to the group.\n\n"
@@ -295,28 +285,32 @@ def build_agent_instruction(
     "Do not invent candidate attributes, background details, aviation procedures, training plans, technologies, mitigation strategies, or explanations not explicitly given in the task.\n"
     "If a drawback is present, treat it as evidence to weigh, not as something you may solve by inventing a remedy.\n\n"
 
-    f"You may ask other agents specific questions as tools: {', '.join(other_agents)}.\n"
-    "Use a tool call when missing, conflicting, or uncertain information could "
-    "affect the hiring decision. Tool questions should be specific and "
-    "decision-relevant.\n"
-    "A tool call is only an information-gathering step, not a private side "
-    "channel or a substitute for your scheduled public contribution.\n"
+    f"You may ask other agents specific questions as tools: {', '.join(other_agent_tools)}.\n"
+    "Use tool calls to gather candidate information that may be distributed across group members.\n"
+    "Your own information is incomplete, so missing evidence in your own materials does not mean the candidate lacks that quality.\n"
+    "If one agent does not have information about a candidate or criterion, this also does not mean the candidate lacks that quality; another agent may have relevant information.\n"
+    "Ask targeted questions about specific candidates, criteria, strengths, drawbacks, or unresolved comparisons, while respecting the active context transparency policy.\n"
+    "Do not use tool calls to systematically reconstruct every agent's full information sheet.\n"
+    "Do not ask for another agent's full information sheet or ask which candidate is correct.\n"
+    "A tool call is only an information-gathering step.\n"
     "After any tool answer, you must still produce your scheduled public contribution using exactly "
     f"{PUBLIC_MESSAGE_LABEL} "
     f"and {METADATA_JSON_LABEL}.\n\n"
 
+    "Internal Memory:\n"
     f"{memory_context}"
+    f"{memory_guided_turn}"
 
     "Discussion so far:\n"
     f"{discussion_history}\n\n"
 
-    "Round behavior:\n"
-    "Round 1: State a provisional preference, not a final decision.\n"
-    "Round 1: Contribute information only at the detail level allowed by the active context transparency policy.\n"
-    "Round 1: Do not claim that the group is ready for a unanimous final decision unless meaningful information about the candidates has been discussed.\n"
-    "Round 2 and later: Take into account newly shared information while staying within the active context transparency policy.\n"
-    "Round 2 and later: Update your position if the combined evidence supports a different candidate.\n"
-    "Final decision: Support a unanimous decision only when the group has considered the relevant information shared across members.\n\n"
+    "Discussion progression:\n"
+    "Use the discussion to exchange relevant information and work toward a shared final recommendation, while staying within the active context transparency policy.\n"
+    "Start with a provisional assessment, but remain open to changing your position when other agents contribute relevant evidence.\n"
+    "Try to convince others when your information supports a candidate, and allow yourself to be convinced when the combined evidence supports a different candidate.\n"
+    "Do not treat early agreement as final if important candidate information may still be missing.\n"
+    "As the discussion develops, focus increasingly on resolving disagreements, comparing leading candidates, and identifying which candidate is best supported by the information shared by the group, without exceeding the disclosure level allowed by the active context transparency policy.\n"
+    "Support a final unanimous decision only when the group has had a reasonable chance to exchange and consider relevant information.\n\n"
 
     "Output only the two sections below, with no planning notes and no text "
     f"before {PUBLIC_MESSAGE_LABEL}.\n\n"
@@ -358,11 +352,11 @@ def build_memory_update_instruction(
         f"Candidates: {', '.join(candidates)}\n\n"
 
         "Information structure:\n"
-        "Group members may hold overlapping or unique candidate information. "
-        "This memory represents the agent's current understanding of the "
-        "publicly established discussion state, not an exhaustive copy of "
-        "private candidate materials. The group must combine information made "
-        "available through discussion and reach a unanimous final decision.\n\n"
+        "You have received individual information about the candidates. Part of the "
+        "information available to group members is identical, and part of it "
+        "differs across group members. On the basis of the full information set held "
+        "within the group, one candidate is clearly the best choice. Your group's task "
+        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
         "Latest scheduled speaker context:\n"
         f"- Latest scheduled speaker: {latest_speaker}\n"
@@ -375,18 +369,20 @@ def build_memory_update_instruction(
         "Discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Update this agent's private notes for use in later discussion turns. "
-        "Preserve this agent's own current position unless its own latest "
-        "contribution changed it. Record important candidate information that "
-        "has been mentioned in the public discussion, who supports which "
-        "candidate, major disagreements, and any issues still blocking a "
-        "unanimous decision.\n\n"
+        "Update your private notes for use in later discussion turns. Preserve your "
+        "own current position unless your own latest contribution changed it. Record "
+        "important candidate information that has been mentioned in discussion, who "
+        "supports which candidate, open questions, and the next steps.\n\n"
 
-        "When summarizing role fit, use only explicit candidate facts from the "
-        "public discussion and the selection criteria in the task. Preserve "
-        "uncertainty where evidence is missing or conflicting. Do not infer "
-        "unstated traits, do not invent remedies for drawbacks, and do not add "
-        "candidate facts that have not appeared in the discussion.\n\n"
+        "When summarizing role fit, map explicit facts to the stated selection "
+        "criteria by ordinary meaning rather than exact wording. Do not say a "
+        "candidate lacks evidence for a criterion when a stated fact reasonably "
+        "supports that criterion.\n\n"
+
+        "Do not add facts that were not in the discussion. If another "
+        "agent states a candidate fact, record it as information reported by that "
+        "agent unless it is also present in your own materials. Do not invent or "
+        "infer additional candidate attributes.\n\n"
 
         "Preference ownership rules:\n"
         "If the latest scheduled speaker is this same agent, update 'My Last Vote' "
@@ -432,40 +428,35 @@ def build_agent_tool_instruction(
         f"Candidates: {', '.join(candidates)}\n\n"
 
         "Information structure:\n"
-        "Each group member has received individual information about the candidates. "
-        "Some information may be identical across group members, and some may differ. "
-        "Your individual information may be incomplete. The group's task is to "
-        "combine information made available through discussion and reach a unanimous "
-        "final decision.\n\n"
+        "You have received individual information about the candidates. Part of the "
+        "information available to group members is identical, and part of it "
+        "differs across group members. On the basis of the full information set held "
+        "within the group, one candidate is clearly the best choice. Your group's task "
+        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
 
         "Public information known to all agents:\n"
         f"{_as_bullets(public_info)}\n\n"
         "Your individual information:\n"
         f"{_as_bullets(private_info)}\n\n"
 
-        "Grounding rule:\n"
         f"Answer only using facts explicitly present in your {_grounding_sources()}. "
-        "Do not invent candidate attributes or background details. If the question "
-        "asks for information you do not have, say that you do not have that "
+        "Answer the other group member's question directly, as you would during "
+        "the group discussion. Reveal relevant candidate information you hold that answers the question, "
+        "while staying at the detail level allowed by the active context transparency policy. "
+        "If the question asks about a selection criterion, include explicit candidate "
+        "facts you have that seem relevant to that criterion, without inventing "
+        "candidate attributes or background details. "
+        "If the question asks for information you do not have, say that you do not have that "
         "information.\n\n"
 
         f"{transparency_section}\n\n"
 
+        "Internal Memory:\n"
         f"{memory_context}"
 
         "Discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Answer the other group member's question directly, as you would during "
-        "the group discussion. Reveal relevant private information you hold that "
-        "answers the question, while staying at the detail level allowed by the "
-        "active context transparency policy. If the question asks about a "
-        "selection criterion, include explicit candidate facts you have that "
-        "seem relevant to that criterion, without adding unstated traits. Answer "
-        "responsively at the detail level allowed by the active context "
-        "transparency policy. "
-        "Do not update your private notes during this response.\n\n"
-
         "Output only the direct answer. Do not include metadata, planning notes, or "
-        "special formatting."
+        "special formatting. Do not update your private notes during this response."
     )
