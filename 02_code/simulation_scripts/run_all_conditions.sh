@@ -42,64 +42,67 @@ SKIP_COMPLETED="${SIM_SKIP_COMPLETED:-1}"
 RUN_TAG="${SIM_RUN_TAG:-transparency_experiment}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 if [[ -n "${SIM_SMM_MODE:-}" ]]; then
-  SMM_MODES=("$SIM_SMM_MODE")
-else
-  SMM_MODES=(treatment baseline)
-fi
-
-for smm_mode in "${SMM_MODES[@]}"; do
-  case "$smm_mode" in
-    baseline|treatment) ;;
+  case "$SIM_SMM_MODE" in
+    treatment)
+      RUN_MATRIX=("low:treatment" "moderate:treatment" "high:treatment")
+      ;;
+    baseline)
+      RUN_MATRIX=("moderate:baseline")
+      ;;
     *)
-      echo "Unsupported SIM_SMM_MODE: $smm_mode" >&2
+      echo "Unsupported SIM_SMM_MODE: $SIM_SMM_MODE" >&2
       echo "Expected one of: baseline, treatment" >&2
       exit 1
       ;;
   esac
-done
+else
+  RUN_MATRIX=(
+    "low:treatment"
+    "moderate:treatment"
+    "high:treatment"
+    "moderate:baseline"
+  )
+fi
 
 cd "$CODE_DIR"
 
-for smm_mode in "${SMM_MODES[@]}"; do
-  for condition in low moderate high; do
-    echo "Running condition: $condition ($smm_mode)"
+for run_spec in "${RUN_MATRIX[@]}"; do
+  IFS=":" read -r condition smm_mode <<< "$run_spec"
+  echo "Running condition: $condition ($smm_mode)"
 
-    for i in $(seq -f "%03g" 1 "$COUNT"); do
-      run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
-      metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
-      if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
-        && grep -q '"status": "completed"' "$metadata_file"; then
-        echo "Skipping completed simulation $i/$COUNT: $run_id"
-        continue
+  for i in $(seq -f "%03g" 1 "$COUNT"); do
+    run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
+    metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
+    if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
+      && grep -q '"status": "completed"' "$metadata_file"; then
+      echo "Skipping completed simulation $i/$COUNT: $run_id"
+      continue
+    fi
+
+    for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+      echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
+
+      if SIM_CONDITION="$condition" \
+        SIM_SMM_MODE="$smm_mode" \
+        SIM_RUN_ID="$run_id" \
+        SIM_RUN_TAG="$RUN_TAG" \
+        adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
+        echo "Finished simulation $i/$COUNT: $run_id"
+        break
+      else
+        status=$?
       fi
 
-      for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-        echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
+      if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
+        echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
+        exit "$status"
+      fi
 
-        if SIM_CONDITION="$condition" \
-          SIM_SMM_MODE="$smm_mode" \
-          SIM_RUN_ID="$run_id" \
-          SIM_RUN_TAG="$RUN_TAG" \
-          adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
-          echo "Finished simulation $i/$COUNT: $run_id"
-          break
-        else
-          status=$?
-        fi
-
-        if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
-          echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
-          exit "$status"
-        fi
-
-        echo "Simulation failed: $run_id. Retrying..." >&2
-      done
+      echo "Simulation failed: $run_id. Retrying..." >&2
     done
-
-    echo "Finished condition: $condition ($smm_mode)"
   done
 
-  echo "Finished all conditions for batch: $BATCH_ID ($smm_mode)"
+  echo "Finished condition: $condition ($smm_mode)"
 done
 
-echo "Finished SMM simulations for batch: $BATCH_ID"
+echo "Finished input-transparency simulations for batch: $BATCH_ID"

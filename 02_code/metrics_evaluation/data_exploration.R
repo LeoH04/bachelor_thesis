@@ -29,7 +29,7 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260521_210814.csv",
+  "01_data/processed/simulation_metrics_20260522_113819.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -42,7 +42,7 @@ simulation_metrics$condition <- factor(
 
 simulation_metrics$smm_mode <- factor(
   simulation_metrics$smm_mode,
-  levels = c("treatment", "baseline")
+  levels = c("baseline", "treatment")
 )
 
 simulation_metrics$run_tag <- factor(simulation_metrics$run_tag)
@@ -140,21 +140,75 @@ plot_theme <- theme_minimal(base_size = 13) +
   )
 
 # ------------------------------------------------------------
-# Helper function for mode-specific plots
+# Helper function for baseline + treatment comparison plots
 # ------------------------------------------------------------
-save_single_mode_plot <- function(
+save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, digits = 2) {
+  
+  y_max <- max(plot_data[[y_var]], na.rm = TRUE)
+  
+  if (!is.finite(y_max) || y_max == 0) {
+    y_max <- 1
+  }
+  
+  present_modes <- intersect(
+    c("baseline", "treatment"),
+    unique(as.character(plot_data$smm_mode))
+  )
+  
+  comparison_plot <- ggplot(
     plot_data,
-    smm_mode,
-    y_var,
-    y_label,
-    title,
-    filename,
-    digits = 2,
-    y_limits = NULL
-) {
-  file_prefix <- if (smm_mode == "treatment") "" else paste0(smm_mode, "_")
-  mode_label <- if (smm_mode == "treatment") "Treatment" else "Baseline"
-  bar_fill <- if (smm_mode == "treatment") "grey35" else "grey70"
+    aes(x = condition, y = .data[[y_var]], fill = smm_mode)
+  ) +
+    geom_col(
+      position = position_dodge(width = 0.75),
+      width = 0.65
+    ) +
+    geom_text(
+      aes(label = round(.data[[y_var]], digits)),
+      position = position_dodge(width = 0.75),
+      vjust = -0.4,
+      size = 3.6
+    ) +
+    scale_fill_manual(
+      values = c(
+        "baseline" = "grey70",
+        "treatment" = "grey35"
+      ),
+      breaks = present_modes,
+      labels = c(
+        "baseline" = "Baseline",
+        "treatment" = "Treatment"
+      )[present_modes],
+      name = NULL
+    ) +
+    scale_y_continuous(
+      limits = c(0, y_max * 1.15),
+      expand = expansion(mult = c(0, 0))
+    ) +
+    labs(
+      x = "Condition",
+      y = y_label,
+      title = title
+    ) +
+    plot_theme +
+    theme(
+      legend.position = "top"
+    )
+  
+  if (interactive()) print(comparison_plot)
+  
+  ggsave(
+    filename = paste0(path, "/03_report/graphs/", filename),
+    plot = comparison_plot,
+    width = 8,
+    height = 5
+  )
+}
+
+# ------------------------------------------------------------
+# Helper function for treatment-only plots
+# ------------------------------------------------------------
+save_single_mode_plot <- function(plot_data, y_var, y_label, title, filename, digits = 3, y_limits = NULL) {
   
   if (is.null(y_limits)) {
     y_max <- max(plot_data[[y_var]], na.rm = TRUE)
@@ -172,7 +226,7 @@ save_single_mode_plot <- function(
   ) +
     geom_col(
       width = 0.65,
-      fill = bar_fill
+      fill = "grey35"
     ) +
     geom_text(
       aes(label = round(.data[[y_var]], digits)),
@@ -187,14 +241,14 @@ save_single_mode_plot <- function(
       x = "Condition",
       y = y_label,
       title = title,
-      subtitle = paste0(mode_label, " condition only")
+      subtitle = "Treatment condition only"
     ) +
     plot_theme
   
   if (interactive()) print(single_mode_plot)
   
   ggsave(
-    filename = paste0(path, "/03_report/graphs/", file_prefix, filename),
+    filename = paste0(path, "/03_report/graphs/", filename),
     plot = single_mode_plot,
     width = 8,
     height = 5
@@ -202,182 +256,164 @@ save_single_mode_plot <- function(
 }
 
 # ------------------------------------------------------------
-# Helper function for all overview plots of one mode
+# 3a. Correct candidate choices: baseline vs treatment
 # ------------------------------------------------------------
-save_overview_plots <- function(mode_metrics, smm_mode) {
-  
-  # ------------------------------------------------------------
-  # 3a. Overview of correctly chosen candidates across conditions
-  # ------------------------------------------------------------
-  correct_candidate_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      correct_choices = sum(decision_correct, na.rm = TRUE),
-      correct_share = correct_choices / total_runs,
-      .groups = "drop"
-    )
-  
-  print(correct_candidate_overview)
-  
-  save_single_mode_plot(
-    plot_data = correct_candidate_overview,
-    smm_mode = smm_mode,
-    y_var = "correct_choices",
-    y_label = "Correct choices",
-    title = "Correct candidate choices by condition",
-    filename = "correct_candidate_overview_plot.pdf",
-    digits = 0
+correct_candidate_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    correct_choices = sum(decision_correct, na.rm = TRUE),
+    correct_share = correct_choices / total_runs,
+    .groups = "drop"
   )
-  
-  # ------------------------------------------------------------
-  # 3b. Overview of NA final candidates across conditions
-  # ------------------------------------------------------------
-  na_candidate_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      na_candidates = sum(is.na(final_candidate)),
-      .groups = "drop"
-    )
-  
-  print(na_candidate_overview)
-  
-  save_single_mode_plot(
-    plot_data = na_candidate_overview,
-    smm_mode = smm_mode,
-    y_var = "na_candidates",
-    y_label = "Number of runs",
-    title = "Runs without a final candidate by condition",
-    filename = "na_candidate_overview_plot.pdf",
-    digits = 0
+
+print(correct_candidate_overview)
+
+save_comparison_plot(
+  plot_data = correct_candidate_overview,
+  y_var = "correct_choices",
+  y_label = "Correct choices",
+  title = "Correct candidate choices by condition",
+  filename = "correct_candidate_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 3b. NA final candidates: baseline vs treatment
+# ------------------------------------------------------------
+na_candidate_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    na_candidates = sum(is.na(final_candidate)),
+    .groups = "drop"
   )
+
+print(na_candidate_overview)
+
+save_comparison_plot(
+  plot_data = na_candidate_overview,
+  y_var = "na_candidates",
+  y_label = "Number of runs",
+  title = "Runs without a final candidate by condition",
+  filename = "na_candidate_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 4. Treatment-only semantic similarity
+# This cannot be compared to baseline unless baseline has values.
+# ------------------------------------------------------------
+treatment_metrics <- simulation_metrics %>%
+  filter(smm_mode == "treatment")
+
+if (nrow(treatment_metrics) > 0) {
   
-  if (smm_mode == "treatment") {
-    
-    # ------------------------------------------------------------
-    # 4. Overview of semantic similarity across conditions
-    # ------------------------------------------------------------
-    semantic_similarity_overview <- mode_metrics %>%
-      group_by(condition) %>%
-      summarise(
-        total_runs = n(),
-        mean_semantic_similarity = mean(mean_pairwise_memory_similarity, na.rm = TRUE),
-        .groups = "drop"
-      )
-    
-    print(semantic_similarity_overview)
-    
-    save_single_mode_plot(
-      plot_data = semantic_similarity_overview,
-      smm_mode = smm_mode,
-      y_var = "mean_semantic_similarity",
-      y_label = "Mean semantic similarity",
-      title = "Mean semantic similarity by condition",
-      filename = "semantic_similarity_overview_plot.pdf",
-      digits = 3,
-      y_limits = c(0, 1)
-    )
-  }
-  
-  # ------------------------------------------------------------
-  # 5. Overview of interaction rounds across conditions
-  # ------------------------------------------------------------
-  rounds_overview <- mode_metrics %>%
+  semantic_similarity_overview <- treatment_metrics %>%
     group_by(condition) %>%
     summarise(
       total_runs = n(),
-      mean_rounds = mean(rounds, na.rm = TRUE),
+      mean_semantic_similarity = mean(mean_pairwise_memory_similarity, na.rm = TRUE),
       .groups = "drop"
     )
   
-  print(rounds_overview)
+  print(semantic_similarity_overview)
   
   save_single_mode_plot(
-    plot_data = rounds_overview,
-    smm_mode = smm_mode,
-    y_var = "mean_rounds",
-    y_label = "Mean rounds",
-    title = "Mean interaction rounds by condition",
-    filename = "rounds_overview_plot.pdf",
-    digits = 2
-  )
-  
-  # ------------------------------------------------------------
-  # 6. Overview of messages across conditions
-  # ------------------------------------------------------------
-  messages_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_messages = mean(total_messages, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(messages_overview)
-  
-  save_single_mode_plot(
-    plot_data = messages_overview,
-    smm_mode = smm_mode,
-    y_var = "mean_messages",
-    y_label = "Mean messages",
-    title = "Mean messages by condition",
-    filename = "messages_overview_plot.pdf",
-    digits = 2
-  )
-  
-  # ------------------------------------------------------------
-  # 7. Overview of tokens across conditions
-  # ------------------------------------------------------------
-  tokens_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_tokens = mean(total_tokens, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(tokens_overview)
-  
-  save_single_mode_plot(
-    plot_data = tokens_overview,
-    smm_mode = smm_mode,
-    y_var = "mean_tokens",
-    y_label = "Mean tokens",
-    title = "Mean tokens by condition",
-    filename = "tokens_overview_plot.pdf",
-    digits = 0
-  )
-  
-  # ------------------------------------------------------------
-  # 8. Overview of runtime across conditions
-  # ------------------------------------------------------------
-  runtime_overview <- mode_metrics %>%
-    group_by(condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(runtime_overview)
-  
-  save_single_mode_plot(
-    plot_data = runtime_overview,
-    smm_mode = smm_mode,
-    y_var = "mean_runtime_seconds",
-    y_label = "Mean runtime in seconds",
-    title = "Mean runtime until task completion by condition",
-    filename = "runtime_overview_plot.pdf",
-    digits = 2
+    plot_data = semantic_similarity_overview,
+    y_var = "mean_semantic_similarity",
+    y_label = "Mean semantic similarity",
+    title = "Mean semantic similarity by condition",
+    filename = "semantic_similarity_overview_plot.pdf",
+    digits = 3,
+    y_limits = c(0, 1)
   )
 }
 
-for (current_smm_mode in c("treatment", "baseline")) {
-  mode_metrics <- simulation_metrics %>%
-    filter(smm_mode == current_smm_mode)
-  
-  if (nrow(mode_metrics) > 0) {
-    save_overview_plots(mode_metrics, current_smm_mode)
-  }
-}
+# ------------------------------------------------------------
+# 5. Interaction rounds: baseline vs treatment
+# ------------------------------------------------------------
+rounds_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_rounds = mean(rounds, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(rounds_overview)
+
+save_comparison_plot(
+  plot_data = rounds_overview,
+  y_var = "mean_rounds",
+  y_label = "Mean rounds",
+  title = "Mean interaction rounds by condition",
+  filename = "rounds_overview_plot.pdf",
+  digits = 2
+)
+
+# ------------------------------------------------------------
+# 6. Messages: baseline vs treatment
+# ------------------------------------------------------------
+messages_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_messages = mean(total_messages, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(messages_overview)
+
+save_comparison_plot(
+  plot_data = messages_overview,
+  y_var = "mean_messages",
+  y_label = "Mean messages",
+  title = "Mean messages by condition",
+  filename = "messages_overview_plot.pdf",
+  digits = 2
+)
+
+# ------------------------------------------------------------
+# 7. Tokens: baseline vs treatment
+# ------------------------------------------------------------
+tokens_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_tokens = mean(total_tokens, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(tokens_overview)
+
+save_comparison_plot(
+  plot_data = tokens_overview,
+  y_var = "mean_tokens",
+  y_label = "Mean tokens",
+  title = "Mean tokens by condition",
+  filename = "tokens_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 8. Runtime: baseline vs treatment
+# ------------------------------------------------------------
+runtime_overview <- simulation_metrics %>%
+  group_by(smm_mode, condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(runtime_overview)
+
+save_comparison_plot(
+  plot_data = runtime_overview,
+  y_var = "mean_runtime_seconds",
+  y_label = "Mean runtime in seconds",
+  title = "Mean runtime until task completion by condition",
+  filename = "runtime_overview_plot.pdf",
+  digits = 2
+)

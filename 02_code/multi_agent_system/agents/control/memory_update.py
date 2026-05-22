@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 from ...config.history import strip_adk_for_context
 from ...config.memory import record_memory_update_response
-from ...config.model import DISCUSSION_MODEL
+from ...config.model import MEMORY_MODEL
 from ...config.prompts import build_memory_update_instruction
 from ...config.task import AGENT_KEYS
 
@@ -15,13 +15,11 @@ class MemoryUpdate(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    task_summary: str
-    candidate_summary_table: str
-    my_position: str
+    candidate_evidence_table: str
+    information_disclosure_tracker: str
+    my_current_position: str
     other_agents_positions: str
-    emerging_group_view: str
-    open_questions: str
-    next_step_focus: str
+    group_knowledge_state: str
 
 
 def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
@@ -47,7 +45,7 @@ def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:
 
     return LlmAgent(
         name=f"{agent_key}_memory_update_after_{after_agent_key}",
-        model=DISCUSSION_MODEL,
+        model=MEMORY_MODEL,
         instruction=instruction,
         output_schema=MemoryUpdate,
         include_contents="none",

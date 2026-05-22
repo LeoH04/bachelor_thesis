@@ -1,7 +1,24 @@
-"""Build prompts for discussion, memory update, and tool-response agents."""
+"""
+Prompt builders for the airline HR hidden-profile hiring simulation.
 
-import os
+Core idea:
+- Baseline condition: agents discuss as a professional HR hiring panel and
+  track the meeting from the raw public discussion history.
+- Treatment condition: agents discuss under the same role, task, criteria,
+  facts, and meeting rules, but additionally maintain an explicit structured
+  shared mental model of the evolving team knowledge state.
 
+The prompt is intentionally written as a realistic hiring-panel scenario,
+not as an experiment. Agents are HR professionals at a fictional airline who
+have interviewed the candidates and now meet to agree on one hiring
+recommendation for a long-distance pilot position.
+"""
+
+from .context_transparency import (
+    context_transparency_condition,
+    input_history_scope,
+    thought_history_enabled,
+)
 from .history import _get_state, _round_number, build_public_discussion_history
 from .memory import read_agent_memory
 from .response_text import (
@@ -13,210 +30,365 @@ from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, TASK, _as_bullets
 
 
-TRANSPARENCY_POLICIES = {
-    "low": {
-        "discussion": (
-            "LOW context transparency means public messages expose only the "
-            "minimum decision context needed for coordination.\n"
-            "Public contribution rules:\n"
-            "- State your current preferred candidate.\n"
-            "- Share at most one brief candidate fact, concern, or direct "
-            "answer from the allowed evidence.\n"
-            "- Keep role evaluation, comparisons, source/provenance labels, "
-            "confidence estimates, uncertainty estimates, and references to "
-            "prior discussion out of the public message unless needed to "
-            "answer a direct question.\n"
-            "- Do not use an explicit reasoning structure.\n"
-            "Task-specific output rule: state your preferred candidate and "
-            "one short candidate fact or concern, with no comparison or "
-            "justification beyond that fact."
-        ),
-        "tool": (
-            "LOW context transparency means public tool answers expose only the "
-            "minimum useful answer.\n"
-            "Answer with at most one brief fact, concern, or direct statement "
-            "from the allowed evidence. Do not add reasoning structure, "
-            "source/provenance labels, confidence, uncertainty, or comparisons."
-        ),
-        "public_template": (
-            "<state your current preferred candidate and at most one brief candidate fact or concern>"
-        ),
+# ---------------------------------------------------------------------------
+# Realistic setting
+# ---------------------------------------------------------------------------
+
+AIRLINE_NAME = "AeroConnect Airlines"
+
+AGENT_PERSONAS = {
+    "agent_1": {
+        "name": "Anna Keller",
+        "role": "HR Selection Specialist for Flight Operations",
     },
-    "moderate": {
-        "discussion": (
-            "MODERATE context transparency means public messages expose a "
-            "compact, task-relevant version of your decision context.\n"
-            "Public contribution rules:\n"
-            "- State your current preferred candidate.\n"
-            "- Share one or two candidate-linked facts or reasons from the "
-            "allowed evidence.\n"
-            "- Briefly state why those facts matter for the selection criteria.\n"
-            "- Include one main tradeoff, uncertainty, or decision blocker if "
-            "one is relevant.\n"
-            "- Reference prior discussion only when it helps coordinate the "
-            "current decision.\n"
-            "- Do not provide exhaustive evidence lists, detailed source "
-            "accounting, or long alternative analyses.\n"
-            "Task-specific output rule: state your preferred candidate, give "
-            "one or two candidate-linked facts, briefly connect them to the "
-            "selection criteria, and name one tradeoff or unresolved issue."
-        ),
-        "tool": (
-            "MODERATE context transparency means public tool answers provide "
-            "compact, task-relevant context.\n"
-            "Answer directly with one or two relevant facts or concerns from "
-            "the allowed evidence. Link them to the candidate they affect and "
-            "include a short role-relevance statement only if it helps the "
-            "caller use the information."
-        ),
-        "public_template": (
-            "<state your current preferred candidate; give one or two "
-            "candidate-linked facts or reasons; briefly explain why they matter "
-            "for the selection criteria; include one main tradeoff, uncertainty, "
-            "or unresolved issue if relevant; "
-            "avoid exhaustive reasoning summaries>"
-        ),
+    "agent_2": {
+        "name": "Markus Weber",
+        "role": "Pilot Assessment Specialist",
     },
-    "high": {
-        "discussion": (
-            "HIGH context transparency means public messages expose an expanded "
-            "but bounded reasoning-context summary.\n"
-            "Public contribution rules:\n"
-            "- State your current preferred candidate.\n"
-            "- Include confidence or uncertainty.\n"
-            "- Link evidence to candidates and the selection criteria.\n"
-            "- Distinguish information from your own candidate materials from "
-            "information shared in the discussion.\n"
-            "- Reference relevant prior discussion when it affects the current "
-            "decision context.\n"
-            "- Compare major alternatives and tradeoffs using only allowed "
-            "evidence.\n"
-            "- State unresolved uncertainties or missing group information that "
-            "could affect your vote.\n"
-            "- Do not expose raw hidden chain-of-thought. Provide only a concise, "
-            "structured public reasoning summary.\n"
-            "Task-specific output rule: include the required reasoning summary "
-            "with Evidence from my materials, Evidence from discussion, "
-            "Alternatives considered, Main tradeoff, Remaining uncertainty, and "
-            "What could change my vote."
-        ),
-        "tool": (
-            "HIGH context transparency means public tool answers expose a concise "
-            "reasoning-context summary, not raw hidden chain-of-thought.\n"
-            "Answer directly, identify whether the information comes from your "
-            "own candidate materials or the prior discussion, mention uncertainty "
-            "if relevant, and briefly explain how the answer affects the decision "
-            "context."
-        ),
-        "public_template": (
-            "Use this structure:\n"
-            "Current position: <preferred candidate>\n"
-            "Confidence/uncertainty: <brief estimate or qualitative uncertainty>\n"
-            "Reasoning-context summary:\n"
-            "- Evidence from my materials: <candidate evidence from your own materials>\n"
-            "- Evidence from discussion: <relevant information shared by other agents>\n"
-            "- Alternatives considered: <major alternatives and why they are weaker or still plausible based on allowed evidence>\n"
-            "- Main tradeoff: <central decision tradeoff>\n"
-            "- Remaining uncertainty: <main open issue>\n"
-            "- What could change my vote: <specific missing or not-yet-shared task information that could affect the position>"
-        ),
+    "agent_3": {
+        "name": "Sofia Brandt",
+        "role": "Recruiting Specialist for Cockpit Personnel",
+    },
+    "agent_4": {
+        "name": "Daniel Hoffmann",
+        "role": "HR Assessment Specialist for Flight Operations",
     },
 }
 
-def _context_transparency_condition() -> str:
-    """Return the active context-transparency condition from SIM_CONDITION."""
-    condition = os.getenv("SIM_CONDITION", "low").strip().lower()
-    if condition not in TRANSPARENCY_POLICIES:
-        valid = ", ".join(sorted(TRANSPARENCY_POLICIES))
-        raise ValueError(
-            f"Unsupported SIM_CONDITION={condition!r}. Expected one of: {valid}."
-        )
-    return condition
 
-
-def _transparency_section(kind: str) -> str:
-    """Build the condition-specific transparency instruction section."""
-    condition = _context_transparency_condition()
-    policy = TRANSPARENCY_POLICIES[condition][kind]
-    return (
-        "Context transparency policy:\n"
-        "Operational definition: context transparency is the degree to which an "
-        "agent externalizes its internal decision context into the shared "
-        "communication space.\n"
-        "Manipulation boundary: this policy controls only what you disclose "
-        "publicly and how structured that disclosure is. Evaluate candidates "
-        "using the same task goal and allowed evidence across all conditions. "
-        "It does not change your cooperative goal to reach a common hiring "
-        "decision.\n"
-        f"Active condition: {condition}\n"
-        f"{policy}"
+def _agent_persona(agent_key: str) -> dict:
+    """Return a realistic persona for the given agent key."""
+    return AGENT_PERSONAS.get(
+        agent_key,
+        {
+            "name": agent_key.replace("_", " ").title(),
+            "role": "HR Selection Panel Member",
+        },
     )
 
-def _information_sharing_guidance() -> str:
-    """Return condition-neutral guidance for sharing individual information."""
-    return (
-        "Use the discussion to exchange decision-relevant information, but apply "
-        "the active context transparency policy to determine how much detail, "
-        "candidate linkage, reasoning, source context, comparison, and uncertainty "
-        "to disclose publicly."
-    )
 
-def _memory_guided_turn_section() -> str:
-    """Return speaking-turn guidance for treatment-mode memory use."""
-    if explicit_smm_memory_enabled():
-        return (
-            "Memory-guided speaking-turn use:\n"
-            "Use the explicit shared mental model from the previous update phase "
-            "to identify unresolved issues, missing decision-relevant information, "
-            "and the next most useful contribution.\n"
-            "Pay particular attention to the Open Questions (`open_questions`) "
-            "and Next-Step Focus (`next_step_focus`) memory sections. If either "
-            "section indicates a gap that could affect the final candidate choice, "
-            "prioritize that gap either by asking a targeted agent-tool question "
-            "or by addressing it in your public contribution, while staying within "
-            "the active context transparency policy.\n"
-            "Do not update memory during this speaking turn. Use memory only as "
-            "context for deciding what to ask or say.\n\n"
-        )
+def _agent_display_name(agent_key: str) -> str:
+    """Return the human-readable name and role for an agent."""
+    persona = _agent_persona(agent_key)
+    return f"{persona['name']}, {persona['role']}"
 
-    return ""
+
+# ---------------------------------------------------------------------------
+# Input context transparency
+# ---------------------------------------------------------------------------
+
+PUBLIC_MESSAGE_TEMPLATE = (
+    "<concise professional meeting contribution: current recommendation, useful "
+    "candidate evidence, comparison, uncertainty, or next decision focus>"
+)
+
 
 def _public_message_template() -> str:
-    """Return the output template for the active transparency condition."""
-    condition = _context_transparency_condition()
-    return TRANSPARENCY_POLICIES[condition]["public_template"]
+    """Return the shared public-message template for all transparency conditions."""
+    return PUBLIC_MESSAGE_TEMPLATE
+
+
+def _input_context_section() -> str:
+    """Describe the input context available under the active condition."""
+    condition = context_transparency_condition()
+    scope = input_history_scope()
+
+    if condition == "low":
+        detail = (
+            "For this turn, the meeting discussion below contains only public "
+            "messages and tool exchanges from the current discussion round. "
+            "Earlier rounds are not included in the visible meeting history."
+        )
+    elif condition == "high":
+        detail = (
+            "For this turn, the meeting discussion below contains the full public "
+            "discussion and tool-exchange history. When available, it also includes "
+            "stored model thoughts that were attached to earlier model responses. "
+            "Treat those thoughts as context for understanding prior discussion "
+            "state, not as new candidate evidence."
+        )
+    else:
+        detail = (
+            "For this turn, the meeting discussion below contains the full public "
+            "discussion and tool-exchange history. It does not include stored "
+            "model thoughts."
+        )
+
+    return (
+        "Input context available in this turn:\n"
+        f"Condition: {condition}; visible discussion scope: {scope}; "
+        f"model thoughts included: {thought_history_enabled()}.\n"
+        f"{detail}\n\n"
+    )
+
+
+def _shared_communication_guidance_section() -> str:
+    """Return condition-neutral public communication guidance."""
+    return (
+        "Communication behavior:\n"
+        "Discuss naturally as a professional HR panel member. Share the candidate "
+        "facts, comparisons, concerns, tradeoffs, or uncertainties that are most "
+        "useful for the current step of the meeting. You may compare candidates, "
+        "ask targeted tool questions, update your position, or try to persuade "
+        "colleagues, while remaining concise and evidence-based.\n\n"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Shared decision criteria and professional behavior
+# ---------------------------------------------------------------------------
+
+def _selection_criteria_section() -> str:
+    """Return the shared pilot hiring criteria."""
+    return (
+        "Pilot selection criteria:\n"
+        "Evaluate the candidates for a long-distance pilot position using these "
+        "role-relevant criteria:\n"
+        "- Operational reliability: dependable, conscientious, and consistent behavior\n"
+        "- Stress resilience: calm and effective performance under pressure or in crisis situations\n"
+        "- Technical and cognitive competence: ability to understand complex systems and handle demanding operational tasks\n"
+        "- Decision quality: correct and timely decisions in safety-relevant situations\n"
+        "- Attention and information accuracy: concentration and accurate handling of operationally relevant details\n"
+        "- Crew cooperation: constructive collaboration and contribution to a positive cockpit or team environment\n"
+        "- Professional communication: respectful and appropriate communication with colleagues\n"
+        "- Responsibility and role maturity: judgment suitable for high-risk international flights\n"
+        "- Adaptability and feedback orientation: openness to criticism, new ideas, and further development\n\n"
+        "Decision principle:\n"
+        "Recommend the candidate with the strongest overall fit for the pilot role. "
+        "Do not overvalue one impressive strength while ignoring serious concerns "
+        "on other safety-relevant criteria. At the same time, do not reject a "
+        "candidate because one source lacks information about them on a criterion. "
+        "Use the panel discussion to combine distributed observations before "
+        "settling on a recommendation.\n\n"
+    )
+
+
+def _professional_hr_behavior_section() -> str:
+    """Return general professional behavior instructions."""
+    return (
+        "Professional HR panel behavior:\n"
+        "You are not playing a game and you are not trying to win an argument. "
+        "You are part of a serious HR selection panel making a safety-critical "
+        "hiring recommendation for an airline.\n\n"
+        "Behave like a professional interviewer in a real selection meeting:\n"
+        "- be concise, respectful, and evidence-based,\n"
+        "- take colleagues' observations seriously,\n"
+        "- separate candidate evidence from speculation,\n"
+        "- do not overstate weak evidence,\n"
+        "- do not ignore concerns because you personally prefer a candidate,\n"
+        "- compare candidates against the pilot selection criteria,\n"
+        "- revise your recommendation when the combined evidence supports it,\n"
+        "- work toward a justified team recommendation, not a quick agreement.\n\n"
+    )
+
+
+def _meeting_process_section() -> str:
+    """Return condition-neutral meeting process rules."""
+    return (
+        "Meeting process:\n"
+        "This is a live HR selection meeting, not a written evidence inventory. "
+        "Do not dump all interview notes at once. In each scheduled turn, make "
+        "the single most useful contribution for moving the panel toward a "
+        "well-grounded hiring recommendation.\n\n"
+        "A useful contribution is usually one of the following:\n"
+        "- share one or two relevant candidate observations,\n"
+        "- compare candidates on one important hiring criterion,\n"
+        "- explain why new information supports or changes your recommendation,\n"
+        "- point out one unresolved issue that matters for the decision,\n"
+        "- or ask a targeted question via an available agent tool before speaking publicly.\n\n"
+
+        "Candidate review process:\n"
+        "Across the meeting, help the panel review all candidates in an organized "
+        "way. The panel should not jump to final consensus only because one "
+        "candidate looks attractive early.\n\n"
+        "For each candidate, the panel should try to establish:\n"
+        "- the strongest evidence in favor of the candidate,\n"
+        "- the most important concern or limitation,\n"
+        "- which pilot selection criteria the candidate clearly satisfies,\n"
+        "- which criteria remain uncertain or contested,\n"
+        "- and how the candidate compares with the current leading alternative.\n\n"
+        "You do not need to cover all candidates or all criteria in one turn. "
+        "Contribute only the next useful piece of the comparison. If an important "
+        "comparison cannot be made because information is missing, ask a targeted "
+        "question using an available agent tool before writing your public message.\n\n"
+
+        "Recommendation behavior:\n"
+        "Your vote is your current provisional recommendation, not a final "
+        "commitment and not a position to defend at all costs. Update it when "
+        "the combined panel evidence supports a different candidate. Do not "
+        "change your vote merely to match an emerging majority. Do not treat "
+        "early agreement as final if important candidates, criteria, or unresolved "
+        "issues have not yet been discussed.\n\n"
+    )
+
+
+def _round_guidance_section() -> str:
+    """Return light guidance based on the current discussion round."""
+    current_round = _round_number()
+
+    if current_round <= 1:
+        return (
+            "Current meeting phase:\n"
+            "This is the opening phase of the discussion. Start building a "
+            "shared view of the candidates. Give an initial recommendation, but "
+            "do not present it as final. Bring in one useful observation or "
+            "comparison and leave room for colleagues' information to change "
+            "the evaluation.\n\n"
+        )
+
+    if current_round == 2:
+        return (
+            "Current meeting phase:\n"
+            "The panel should now compare candidates more directly and fill "
+            "important information gaps. Focus on under-discussed candidates, "
+            "unclear criteria, or comparisons between the current leading "
+            "candidate and the strongest alternative.\n\n"
+        )
+
+    return (
+        "Current meeting phase:\n"
+        "The panel may move toward convergence only if the main candidates and "
+        "decision-relevant criteria have been seriously considered. If a major "
+        "gap remains, address it or ask a targeted tool question before simply "
+        "agreeing with the current leading recommendation.\n\n"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Evidence boundaries and tool-question behavior
+# ---------------------------------------------------------------------------
+
+def _grounding_sources() -> str:
+    """Return the evidence sources agents may use."""
+    return (
+        "the shared candidate dossier, your own interview and assessment notes, "
+        "and information explicitly shared in the meeting discussion"
+    )
+
+
+def _evidence_boundaries_section() -> str:
+    """Return strict grounding instructions."""
+    return (
+        "Evidence boundaries:\n"
+        f"Use only candidate attributes explicitly present in {_grounding_sources()}. "
+        "Do not invent candidate traits, background details, aviation experience, "
+        "training plans, incident reports, simulator results, technologies, risk "
+        "mitigations, or explanations not explicitly given.\n\n"
+        "If the meeting history includes model thoughts, treat them only as "
+        "context about prior model state. Do not treat a model thought as a new "
+        "candidate fact unless the same fact is also present in the candidate "
+        "dossier, your own notes, a public message, or a public tool answer.\n\n"
+        "If information is absent from your own notes, do not assume the candidate "
+        "lacks that trait. Another interviewer may have elicited relevant "
+        "information. If a colleague says they do not have information on a topic, "
+        "that means only that this colleague personally does not have it.\n\n"
+    )
+
+
+def _tool_question_section(agent_key: str) -> str:
+    """Return instructions for asking other agents via tools."""
+    other_agents = [key for key in AGENT_KEYS if key != agent_key]
+    other_agent_tools = [
+        f"{key}_tool ({_agent_display_name(key)})"
+        for key in other_agents
+    ]
+
+    if not other_agent_tools:
+        return (
+            "Asking other panel members:\n"
+            "No other interviewer tools are available in this run.\n\n"
+        )
+
+    return (
+        "Asking other panel members:\n"
+        f"You may direct specific questions to: {', '.join(other_agent_tools)}.\n\n"
+        "If you need information from another panel member, you must ask using "
+        "the available agent tool before writing your PUBLIC_MESSAGE. Do not "
+        "write unanswered questions to other panel members inside PUBLIC_MESSAGE. "
+        "Public questions are not answered unless they are made through a tool call.\n\n"
+        "Ask targeted questions about specific candidates, criteria, strengths, "
+        "concerns, or comparisons. Do not ask for another panel member's full "
+        "notes and do not ask which candidate is the correct answer.\n\n"
+        "Good tool questions sound like:\n"
+        "- Did your interview notes include anything about Candidate C's reliability or technical competence?\n"
+        "- Did Candidate B show anything relevant to crew cooperation or professional communication?\n"
+        "- Is there anything you learned about Candidate D that should affect our long-distance pilot recommendation?\n\n"
+        "After receiving a tool answer, use it in your public contribution if it "
+        "is relevant. Your PUBLIC_MESSAGE may summarize the answer and explain "
+        "how it affects your recommendation, but it must not contain unresolved "
+        "questions directed at another panel member.\n\n"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Baseline vs treatment tracking
+# ---------------------------------------------------------------------------
+
+def _memory_block(agent_key: str) -> str:
+    """Return the explicit structured meeting notes in the SMM condition."""
+    if not explicit_smm_memory_enabled():
+        return ""
+
+    return (
+        "Your structured shared mental model notes:\n"
+        "These notes are your private structured representation of the evolving "
+        "team knowledge state. They summarize what has been established in the "
+        "meeting, what you personally still know but have not shared, what each "
+        "panel member has disclosed, the current recommendation pattern, and "
+        "unresolved decision issues.\n\n"
+        "Treat these notes as a working summary, not as new candidate evidence "
+        "and not as ground truth. If the notes conflict with the actual meeting "
+        "history or your own interview notes, rely on the original evidence.\n\n"
+        f"{read_agent_memory(agent_key)}\n\n"
+    )
+
+
+def _tracking_guidance_section() -> str:
+    """Return matched baseline/treatment guidance for tracking the discussion."""
+    if explicit_smm_memory_enabled():
+        return (
+            "Using the structured shared mental model:\n"
+            "Use your structured notes to identify what the panel has already "
+            "established, which candidates remain under-discussed, which criteria "
+            "are unresolved, who has disclosed what, and what the next useful "
+            "discussion focus should be. The notes should help you decide whether "
+            "to share evidence, compare candidates, revise your recommendation, "
+            "or ask a targeted tool question.\n\n"
+        )
+
+    return (
+        "Using the raw discussion history:\n"
+        "Use the meeting discussion history below to track what the panel has "
+        "already established, which candidates remain under-discussed, which "
+        "criteria are unresolved, who has disclosed what, and what the next "
+        "useful discussion focus should be. Reconstruct this from the transcript "
+        "before deciding whether to share evidence, compare candidates, revise "
+        "your recommendation, or ask a targeted tool question.\n\n"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Misc helpers
+# ---------------------------------------------------------------------------
+
+def _optional_system_prompt(system_prompt: str) -> str:
+    """Include caller-provided extra role instructions when present."""
+    if not isinstance(system_prompt, str) or not system_prompt.strip():
+        return ""
+    return f"Additional role instructions:\n{system_prompt.strip()}\n\n"
 
 
 def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
     """Return the latest recorded vote for an agent, or a placeholder."""
     if not agent_key:
         return "Unavailable"
-
     response = _get_state(ctx).get(f"{agent_key}_response", "")
     return extract_vote_from_response(response) or "Unavailable"
 
 
-def _memory_context_section(agent_key: str) -> str:
-    """Return explicit SMM memory, or nothing for baseline runs."""
-    if explicit_smm_memory_enabled():
-        return (
-            "Previous internal memory:\n"
-            f"{read_agent_memory(agent_key)}\n\n"
-        )
-
-    return ""
-
-
-def _grounding_sources() -> str:
-    """Return the allowed evidence sources for the active SMM mode."""
-    if explicit_smm_memory_enabled():
-        return (
-            "candidate information, previous internal memory, or the discussion "
-            "so far"
-        )
-
-    return "candidate information or the discussion so far"
-
+# ---------------------------------------------------------------------------
+# Main scheduled discussion-turn prompt
+# ---------------------------------------------------------------------------
 
 def build_agent_instruction(
     agent_key: str,
@@ -224,239 +396,260 @@ def build_agent_instruction(
     system_prompt: str = "",
 ) -> str:
     """Build the full prompt for an agent's scheduled public discussion turn."""
-    memory_context = _memory_context_section(agent_key)
-    discussion_history = build_public_discussion_history(ctx)
+    persona = _agent_persona(agent_key)
+    agent_name = persona["name"]
+    agent_role = persona["role"]
+
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
-    current_round = _round_number()
-    other_agents = [key for key in AGENT_KEYS if key != agent_key]
-    other_agent_tools = [
-        f"{key}_tool ({key.replace('_', ' ').title()})"
-        for key in other_agents
-    ]
+
     vote_options = "|".join(candidates) if candidates else "candidate"
-    transparency_section = _transparency_section("discussion")
-    public_message_template = _public_message_template()
-    information_sharing_guidance = _information_sharing_guidance()
-    memory_guided_turn = _memory_guided_turn_section()
+
+    discussion_history = build_public_discussion_history(ctx)
+    extra_instructions = _optional_system_prompt(system_prompt)
 
     return (
-    f"You are {agent_key.replace('_', ' ').title()}.\n\n"
+        f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
+        f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-    "You are a member of the personnel selection committee of an airline company.\n"
-    "The airline is hiring a new pilot for long-distance flights.\n"
-    "Your group must choose one of the candidates for this position.\n\n"
+        f"{extra_instructions}"
 
-    "Task:\n"
-    f"{goal}\n"
-    f"Candidates: {', '.join(candidates)}\n"
-    f"Current discussion round: {current_round}\n\n"
+        "Role and setting:\n"
+        f"{AIRLINE_NAME} is hiring one long-distance airline pilot. This is a "
+        "safety-critical position, so the hiring panel must make a careful, "
+        "evidence-based recommendation.\n\n"
+        "Over the past week, you and the other panel members conducted individual "
+        "candidate interviews, reviewed assessment notes, and discussed "
+        "role-relevant situations with the candidates. Some information is "
+        "available to the whole panel through the shared candidate dossier. "
+        "Other observations come from your own interview and assessment notes "
+        "and may not yet be known to your colleagues.\n\n"
+        "The panel has now blocked the next hour in a meeting room at company "
+        "headquarters to agree on one final hiring recommendation. Treat this "
+        "as a real professional HR selection meeting: structured, cooperative, "
+        "concise, and focused on the quality of the hiring decision.\n\n"
 
-    "Information structure:\n"
-    "You have received individual information about the candidates. Part of the "
-    "information available to group members is identical, and part of it "
-    "differs across group members. On the basis of the full information set held "
-    "within the group, one candidate is clearly the best choice. Your group's task "
-    "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        "Team objective:\n"
+        "Help the panel combine distributed candidate information and reach the "
+        "best joint recommendation. Bring relevant interview evidence into the "
+        "meeting, ask colleagues for missing information when needed, compare "
+        "candidates against the pilot selection criteria, and update your "
+        "recommendation when the combined evidence supports it.\n\n"
 
-    "Information available to you:\n"
-    "Public information known to all agents:\n"
+        f"Hiring goal:\n{goal}\n"
+        f"Candidates: {', '.join(candidates)}\n"
+        f"Current discussion round: {_round_number()}\n\n"
+
+        f"{_selection_criteria_section()}"
+        f"{_professional_hr_behavior_section()}"
+        f"{_meeting_process_section()}"
+        f"{_round_guidance_section()}"
+
+        "Information available to all panel members:\n"
+        "These points come from the shared candidate dossier before the meeting:\n"
         f"{_as_bullets(public_info)}\n\n"
-        "Your individual information:\n"
+
+        "Your own interview and assessment notes:\n"
+        "These are the candidate observations you personally elicited, retrieved, "
+        "or reviewed. Treat them as information other panel members may not know "
+        "until you share it:\n"
         f"{_as_bullets(private_info)}\n\n"
 
-    "Discussion instructions:\n"
-    "Discuss the candidates naturally with the other group members.\n"
-    f"{information_sharing_guidance}\n"
-    "Share information from your own candidate materials when it is relevant for judging a candidate's suitability.\n"
-    "Prefer sharing important private facts that have not yet appeared in the discussion over repeating facts already known to the group.\n"
-    "Take into account information contributed by others.\n"
-    "Do not assume your own information alone is complete.\n"
-    "Do not treat an early majority preference as a final decision until the group has had a chance to discuss information about the candidates.\n"
-    "Your aim is not to defend your initial preference.\n"
-    "Your aim is to identify the candidate who is best suited for the long-distance pilot position based on all information available to the group.\n\n"
+        f"{_input_context_section()}"
+        f"{_shared_communication_guidance_section()}"
+        f"{_memory_block(agent_key)}"
+        f"{_tracking_guidance_section()}"
+        f"{_evidence_boundaries_section()}"
+        f"{_tool_question_section(agent_key)}"
 
-    f"{transparency_section}\n\n"
+        "Meeting discussion so far:\n"
+        f"{discussion_history}\n\n"
 
-    "Grounding rule:\n"
-    f"Use only candidate attributes explicitly present in your {_grounding_sources()}.\n"
-    "Do not invent candidate attributes, background details, aviation procedures, training plans, technologies, mitigation strategies, or explanations not explicitly given in the task.\n"
-    "If a drawback is present, treat it as evidence to weigh, not as something you may solve by inventing a remedy.\n\n"
+        "Output requirements:\n"
+        "Output only the two sections below. Do not add planning notes, hidden "
+        "reasoning, explanations outside the sections, or any preamble.\n\n"
 
-    f"You may ask other agents specific questions as tools: {', '.join(other_agent_tools)}.\n"
-    "Use tool calls to gather candidate information that may be distributed across group members.\n"
-    "Your own information is incomplete, so missing evidence in your own materials does not mean the candidate lacks that quality.\n"
-    "If one agent does not have information about a candidate or criterion, this also does not mean the candidate lacks that quality; another agent may have relevant information.\n"
-    "Ask targeted questions about specific candidates, criteria, strengths, drawbacks, or unresolved comparisons, while respecting the active context transparency policy.\n"
-    "Do not use tool calls to systematically reconstruct every agent's full information sheet.\n"
-    "Do not ask for another agent's full information sheet or ask which candidate is correct.\n"
-    "A tool call is only an information-gathering step.\n"
-    "After any tool answer, you must still produce your scheduled public contribution using exactly "
-    f"{PUBLIC_MESSAGE_LABEL} "
-    f"and {METADATA_JSON_LABEL}.\n\n"
+        f"{PUBLIC_MESSAGE_LABEL}:\n"
+        f"{_public_message_template()}\n\n"
 
-    "Internal Memory:\n"
-    f"{memory_context}"
-    f"{memory_guided_turn}"
+        f"{METADATA_JSON_LABEL}:\n"
+        f"{{\"agent\": \"{agent_key}\", \"vote\": \"<{vote_options}>\"}}\n"
+    )
 
-    "Discussion so far:\n"
-    f"{discussion_history}\n\n"
 
-    "Discussion progression:\n"
-    "Use the discussion to exchange relevant information and work toward a shared final recommendation, while staying within the active context transparency policy.\n"
-    "Start with a provisional assessment, but remain open to changing your position when other agents contribute relevant evidence.\n"
-    "Try to convince others when your information supports a candidate, and allow yourself to be convinced when the combined evidence supports a different candidate.\n"
-    "Do not treat early agreement as final if important candidate information may still be missing.\n"
-    "As the discussion develops, focus increasingly on resolving disagreements, comparing leading candidates, and identifying which candidate is best supported by the information shared by the group, without exceeding the disclosure level allowed by the active context transparency policy.\n"
-    "Support a final unanimous decision only when the group has had a reasonable chance to exchange and consider relevant information.\n\n"
-
-    "Output only the two sections below, with no planning notes and no text "
-    f"before {PUBLIC_MESSAGE_LABEL}.\n\n"
-
-    f"{PUBLIC_MESSAGE_LABEL}:\n"
-    f"{public_message_template}\n\n"
-
-    f"{METADATA_JSON_LABEL}:\n"
-    f"{{\"agent\": \"{agent_key}\", \"vote\": \"<{vote_options}>\"}}\n"
-)
-
+# ---------------------------------------------------------------------------
+# Passive memory-update prompt for the treatment condition
+# ---------------------------------------------------------------------------
 
 def build_memory_update_instruction(
     agent_key: str,
     ctx=None,
     latest_speaker_key: str | None = None,
 ) -> str:
-    """Build the prompt for a passive memory update after a contribution."""
+    """Build the prompt for a passive structured-memory update."""
+    persona = _agent_persona(agent_key)
+    agent_name = persona["name"]
+    agent_role = persona["role"]
+
     memory = read_agent_memory(agent_key)
     discussion_history = build_public_discussion_history(ctx)
+
+    public_info = TASK.get("public_information", [])
+    private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
+
     latest_speaker = latest_speaker_key or "unknown_agent"
-    latest_vote = _latest_vote_for_agent(ctx, latest_speaker_key)
-    latest_speaker_role = (
-        "This agent was the latest scheduled speaker."
-        if latest_speaker_key == agent_key
-        else "Another agent was the latest scheduled speaker."
+    latest_speaker_display = (
+        _agent_display_name(latest_speaker_key)
+        if latest_speaker_key
+        else "unknown panel member"
     )
+    latest_vote = _latest_vote_for_agent(ctx, latest_speaker_key)
 
     return (
-        f"You are {agent_key.replace('_', ' ').title()}.\n\n"
-        "You are maintaining private notes during a group discussion by an airline "
-        "personnel selection committee. The airline is hiring a new pilot for "
-        "long-distance flights. Your group must choose one candidate.\n\n"
+        f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
+        f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-        "Task:\n"
-        f"{goal}\n"
+        "You are privately updating your structured shared mental model notes "
+        "during the HR hiring-panel meeting. These notes are used to track the "
+        "evolving team knowledge state. They are not a new evidence source and "
+        "must not contain invented candidate information.\n\n"
+
+        f"Hiring goal:\n{goal}\n"
         f"Candidates: {', '.join(candidates)}\n\n"
 
-        "Information structure:\n"
-        "You have received individual information about the candidates. Part of the "
-        "information available to group members is identical, and part of it "
-        "differs across group members. On the basis of the full information set held "
-        "within the group, one candidate is clearly the best choice. Your group's task "
-        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        f"{_selection_criteria_section()}"
 
-        "Latest scheduled speaker context:\n"
-        f"- Latest scheduled speaker: {latest_speaker}\n"
-        f"- Latest speaker vote: {latest_vote}\n"
-        f"- Relationship to this memory: {latest_speaker_role}\n\n"
+        "Shared candidate dossier:\n"
+        f"{_as_bullets(public_info)}\n\n"
 
-        "Previous internal memory:\n"
+        "Your own interview and assessment notes:\n"
+        f"{_as_bullets(private_info)}\n\n"
+
+        f"Latest speaker: {latest_speaker} ({latest_speaker_display})\n"
+        f"Latest speaker vote: {latest_vote}\n\n"
+
+        "Your current structured shared mental model notes:\n"
         f"{memory}\n\n"
 
-        "Discussion so far:\n"
+        f"{_input_context_section()}"
+
+        "Meeting discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Update your private notes for use in later discussion turns. Preserve your "
-        "own current position unless your own latest contribution changed it. Record "
-        "important candidate information that has been mentioned in discussion, who "
-        "supports which candidate, open questions, and the next steps.\n\n"
+        "Update instructions:\n"
+        "Update your notes to reflect the latest public contribution and any "
+        "public tool question-and-answer exchanges. Follow these rules exactly:\n\n"
 
-        "When summarizing role fit, map explicit facts to the stated selection "
-        "criteria by ordinary meaning rather than exact wording. Do not say a "
-        "candidate lacks evidence for a criterion when a stated fact reasonably "
-        "supports that criterion.\n\n"
+        "1. Candidate evidence table:\n"
+        "- Move candidate information that has been publicly shared into the "
+        "'Publicly established in discussion' column for the relevant candidate.\n"
+        "- Keep your own not-yet-shared interview notes in the private-notes column.\n"
+        "- If you are the latest speaker and you publicly shared something from "
+        "your own private notes, remove that item from your private-notes column "
+        "or mark it as disclosed.\n"
+        "- Do not add anything to private notes that is not present in your own "
+        "interview and assessment notes.\n"
+        "- Do not invent or infer candidate attributes.\n\n"
 
-        "Do not add facts that were not in the discussion. If another "
-        "agent states a candidate fact, record it as information reported by that "
-        "agent unless it is also present in your own materials. Do not invent or "
-        "infer additional candidate attributes.\n\n"
+        "2. Information disclosure tracker:\n"
+        "- Record what the latest speaker explicitly disclosed.\n"
+        "- Record public tool answers if they revealed candidate information.\n"
+        "- Do not speculate about what any speaker still privately knows.\n\n"
 
-        "Preference ownership rules:\n"
-        "If the latest scheduled speaker is this same agent, update 'My Last Vote' "
-        "from the latest speaker vote and update 'My Current Working Favorite' to "
-        "match this agent's latest stated position. If the latest scheduled speaker "
-        "is another agent, do not change 'My Last Vote' or 'My Current Working "
-        "Favorite' solely because that agent recommended a candidate. Instead, record "
-        "that agent's vote under 'Other Agents' Positions' and record any evidence "
-        "they contributed under the relevant candidate.\n\n"
+        "3. My current position:\n"
+        "- Update only if you are the latest speaker.\n"
+        "- Record your current recommendation, main stated reason, confidence or "
+        "uncertainty if stated, and what evidence could change your view if stated.\n\n"
 
-        "Keep the memory compact. Do not include a transcript. Do not include round "
-        "labels. Return only a JSON object matching the configured schema. Each "
-        "JSON value must contain the complete markdown body for that memory section, "
-        "without the section heading. Use these keys: task_summary, "
-        "candidate_summary_table, my_position, other_agents_positions, "
-        "emerging_group_view, open_questions, and next_step_focus. Do not call "
-        "tools, do not wrap the JSON or markdown in a code fence, and do not add a "
-        "public discussion contribution."
+        "4. Other agents' positions:\n"
+        "- Update the latest speaker's row with their stated recommendation and reason.\n"
+        "- Record only what they explicitly stated. Do not infer hidden motives or "
+        "unstated evidence.\n\n"
+
+        "5. Group knowledge state:\n"
+        "- Track which candidates have been discussed and which remain under-discussed.\n"
+        "- Track candidate strengths, concerns, unresolved criteria, contested "
+        "interpretations, and the current leading candidate if one is emerging.\n"
+        "- Track the strongest alternative to the current leading candidate.\n"
+        "- Identify open questions or next-step comparison gaps that could affect "
+        "the final recommendation.\n\n"
+
+        "Return only a JSON object with these exact keys:\n"
+        "candidate_evidence_table, information_disclosure_tracker, "
+        "my_current_position, other_agents_positions, group_knowledge_state.\n\n"
+        "Each value must be the complete markdown body for that section, without "
+        "the section heading. Do not wrap the JSON in a code fence. Do not add "
+        "commentary. Do not call tools."
     )
+
+
+# ---------------------------------------------------------------------------
+# Tool-response prompt
+# ---------------------------------------------------------------------------
 
 def build_agent_tool_instruction(
     agent_key: str,
     ctx=None,
     system_prompt: str = "",
 ) -> str:
-    """Build the prompt for an agent answering another agent through a tool call."""
-    memory_context = _memory_context_section(agent_key)
-    discussion_history = build_public_discussion_history(ctx)
+    """Build the prompt for an agent answering a targeted tool question."""
+    persona = _agent_persona(agent_key)
+    agent_name = persona["name"]
+    agent_role = persona["role"]
+
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
-    transparency_section = _transparency_section("tool")
+
+    discussion_history = build_public_discussion_history(ctx)
+    extra_instructions = _optional_system_prompt(system_prompt)
 
     return (
-        f"You are {agent_key.replace('_', ' ').title()}.\n\n"
-        "You are a member of the personnel selection committee of an airline company. "
-        "The airline is hiring a new pilot for long-distance flights. Another group "
-        "member has asked you a question during the discussion.\n\n"
+        f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
+        f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-        "Task:\n"
-        f"{goal}\n"
+        f"{extra_instructions}"
+
+        "Another hiring-panel member has asked you a targeted question during "
+        "the meeting. Answer cooperatively and directly, as a serious HR panel "
+        "member would.\n\n"
+
+        f"Hiring goal:\n{goal}\n"
         f"Candidates: {', '.join(candidates)}\n\n"
 
-        "Information structure:\n"
-        "You have received individual information about the candidates. Part of the "
-        "information available to group members is identical, and part of it "
-        "differs across group members. On the basis of the full information set held "
-        "within the group, one candidate is clearly the best choice. Your group's task "
-        "is to find this candidate through discussion and reach a unanimous final decision.\n\n"
+        f"{_selection_criteria_section()}"
 
-        "Public information known to all agents:\n"
+        "Information available to all panel members:\n"
         f"{_as_bullets(public_info)}\n\n"
-        "Your individual information:\n"
+
+        "Your own interview and assessment notes:\n"
         f"{_as_bullets(private_info)}\n\n"
 
-        f"Answer only using facts explicitly present in your {_grounding_sources()}. "
-        "Answer the other group member's question directly, as you would during "
-        "the group discussion. Reveal relevant candidate information you hold that answers the question, "
-        "while staying at the detail level allowed by the active context transparency policy. "
-        "If the question asks about a selection criterion, include explicit candidate "
-        "facts you have that seem relevant to that criterion, without inventing "
-        "candidate attributes or background details. "
-        "If the question asks for information you do not have, say that you do not have that "
-        "information.\n\n"
+        f"{_input_context_section()}"
+        f"{_shared_communication_guidance_section()}"
+        f"{_memory_block(agent_key)}"
 
-        f"{transparency_section}\n\n"
-
-        "Internal Memory:\n"
-        f"{memory_context}"
-
-        "Discussion so far:\n"
+        "Meeting discussion so far:\n"
         f"{discussion_history}\n\n"
 
-        "Output only the direct answer. Do not include metadata, planning notes, or "
-        "special formatting. Do not update your private notes during this response."
+        "Answer rules:\n"
+        f"Answer only using information explicitly present in {_grounding_sources()}. "
+        "Answer only the specific question asked. Provide relevant candidate "
+        "observations or concerns, but do not dump unrelated notes.\n\n"
+        "If you have relevant information, share it concisely. If you do not "
+        "have relevant information on the topic asked, say so directly. If the "
+        "question asks for external "
+        "records, incident reports, simulator debriefs, training plans, or "
+        "hypothetical examples not present in your notes or the discussion, say "
+        "you do not have that information.\n\n"
+        "Do not invent or infer candidate attributes. Do not treat absence from "
+        "your own notes as evidence that a candidate lacks the trait. Do not ask "
+        "a follow-up question in this tool answer.\n\n"
+        "Output only the direct answer. No metadata, no section headers, no "
+        "planning notes."
     )

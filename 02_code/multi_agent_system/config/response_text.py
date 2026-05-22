@@ -53,7 +53,7 @@ def _extract_public_message(text: str) -> str:
     if match:
         return _clean_public_message(match.group(1))
 
-    return ""
+    return _clean_public_message(text)
 
 
 def extract_vote_from_response(text: object) -> str | None:
@@ -76,20 +76,42 @@ def extract_vote_from_response(text: object) -> str | None:
 
 def _is_thought_part(part: object) -> bool:
     """Return whether a model response part is internal reasoning."""
+    if isinstance(part, dict):
+        return bool(part.get("thought", False))
     return bool(getattr(part, "thought", False))
+
+
+def _part_text(part: object) -> str:
+    """Return text from an ADK part object or serialized part dictionary."""
+    if isinstance(part, dict):
+        return str(part.get("text") or "")
+    return str(getattr(part, "text", "") or "")
 
 
 def _visible_text_from_parts(parts: Iterable[object]) -> str:
     """Join only non-thought text parts from an ADK model response."""
     return "\n".join(
-        part.text
+        text
         for part in parts
-        if getattr(part, "text", None) and not _is_thought_part(part)
+        for text in [_part_text(part)]
+        if text and not _is_thought_part(part)
     ).strip()
 
 
-def _drop_thought_parts(_content: object, parts: list[object]) -> list[object]:
+def _thought_text_from_parts(parts: Iterable[object]) -> str:
+    """Join only thought text parts from an ADK model response."""
+    return "\n".join(
+        text
+        for part in parts
+        for text in [_part_text(part)]
+        if text and _is_thought_part(part)
+    ).strip()
+
+
+def _drop_thought_parts(_content: object, parts: list[object] | None = None) -> list[object]:
     """Return non-thought parts without mutating the ADK response content."""
+    if parts is None:
+        parts = list(_content or [])
     return [part for part in parts if not _is_thought_part(part)]
 
 

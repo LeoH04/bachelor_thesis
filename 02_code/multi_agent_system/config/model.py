@@ -1,4 +1,4 @@
-"""Configure LLM instances for discussion and vote-checking agents."""
+"""Configure LLM instances for simulation agents."""
 
 import os
 from google.adk.models.lite_llm import LiteLlm, LiteLLMClient
@@ -27,11 +27,18 @@ class TokenTrackingLiteLLMClient(LiteLLMClient):
         return response
 
 
-DISCUSSION_MODEL = LiteLlm(
-    model=os.getenv("OPEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    api_base=os.getenv("NIM_BASE_URL"),
-    llm_client=TokenTrackingLiteLLMClient(),
-    stream_options={"include_usage": True},
-    temperature=float(os.getenv("MODEL_TEMPERATURE"))
-)
+def _make_model(temperature: float) -> LiteLlm:
+    """Create one token-tracking LiteLLM model with the given temperature."""
+    return LiteLlm(
+        model=os.getenv("OPEN_MODEL"),
+        api_key=os.getenv("NVIDIA_API_KEY"),
+        api_base=os.getenv("NIM_BASE_URL"),
+        llm_client=TokenTrackingLiteLLMClient(),
+        stream_options={"include_usage": True},
+        temperature=temperature,
+    )
+
+
+DISCUSSION_MODEL = _make_model(0.2)
+MEMORY_MODEL = _make_model(0.0)
+TOOL_MODEL = _make_model(0.1)

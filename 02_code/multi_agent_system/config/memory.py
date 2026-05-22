@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 
+from .context_transparency import current_round_memory_scope_enabled
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 from .response_text import (
@@ -14,19 +15,17 @@ from .response_text import (
 )
 from .similarity import calculate_memory_similarity
 from .smm import explicit_smm_memory_enabled
-from .task import AGENT_KEYS, TASK, _as_bullets
+from .task import AGENT_KEYS, TASK
 from .trace import log_event
 
 _AGENT_MEMORIES_ARCHIVED = False
 
 MEMORY_SECTION_FIELDS = (
-    ("task_summary", "Task Summary"),
-    ("candidate_summary_table", "Candidate Summary Table"),
-    ("my_position", "My Position"),
+    ("candidate_evidence_table", "Candidate Evidence Table"),
+    ("information_disclosure_tracker", "Information Disclosure Tracker"),
+    ("my_current_position", "My Current Position"),
     ("other_agents_positions", "Other Agents' Positions"),
-    ("emerging_group_view", "Emerging Group View"),
-    ("open_questions", "Open Questions"),
-    ("next_step_focus", "Next-Step Focus"),
+    ("group_knowledge_state", "Group Knowledge State"),
 )
 
 
@@ -83,44 +82,43 @@ def _extract_memory_markdown(agent_key: str, text: str) -> str:
 def build_memory_template(agent_key: str) -> str:
     """Create the initial structured markdown memory for one agent."""
     candidates = TASK.get("candidates", [])
-    goal = TASK.get("goal", "")
 
     candidate_rows = "\n".join(
-        f"| {candidate} |  |  |  |  |" for candidate in candidates
+        f"| {candidate} |  |  |  |" for candidate in candidates
     )
-    agent_position_rows = "\n".join(
-        f"| {key} | Unknown |  |  |" for key in AGENT_KEYS
+    disclosure_rows = "\n".join(
+        f"| Agent {key.split('_')[-1]} | - |" for key in AGENT_KEYS
+    )
+    other_agent_rows = "\n".join(
+        f"| Agent {key.split('_')[-1]} | - | - | - |"
+        for key in AGENT_KEYS
+        if key != agent_key
     )
 
     return (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
-        "## Task Summary\n"
-        f"Goal\n{goal}\n\n"
-        f"Candidates\n{_as_bullets(candidates)}\n\n"
-        "## Candidate Summary Table\n"
-        "| Candidate | Evidence For | Evidence Against | Fit for Role | Notes |\n"
-        "| --- | --- | --- | --- | --- |\n"
-        f"{candidate_rows}\n\n"
-        "## My Position\n"
-        "My Last Vote\n- None\n\n"
-        "My Current Working Favorite\n- Undecided\n\n"
-        "My Rationale\n-\n\n"
-        "Evidence That Could Change My Mind\n-\n\n"
-        "Confidence (percent)\n-\n\n"
-        "## Other Agents' Positions\n"
-        "| Agent | Latest Vote | Main Reason | Evidence Shared |\n"
+        "## Candidate Evidence Table\n"
+        "| Candidate | Publicly established in discussion | My private notes (not yet shared) | My fit assessment |\n"
         "| --- | --- | --- | --- |\n"
-        f"{agent_position_rows}\n\n"
-        "## Emerging Group View\n"
-        "Group-Leading Candidate\n- None\n\n"
-        "Important Agreements\n-\n\n"
-        "Important Disagreements / Tensions\n-\n\n"
-        "Uncertainties\n-\n\n"
-        "## Open Questions\n"
-        "Missing evidence\n-\n\n"
-        "What would change the decision\n-\n\n"
-        "## Next-Step Focus\n"
-        "What to ask or look for next\n-\n"
+        f"{candidate_rows}\n\n"
+        "## Information Disclosure Tracker\n"
+        "| Agent | What they have shared so far |\n"
+        "| --- | --- |\n"
+        f"{disclosure_rows}\n\n"
+        "## My Current Position\n"
+        "Current vote: -\n"
+        "Main reason: -\n"
+        "Confidence: -\n"
+        "What would change my mind: -\n\n"
+        "## Other Agents' Positions\n"
+        "| Agent | Last vote | Stated reason | What they have revealed so far |\n"
+        "| --- | --- | --- | --- |\n"
+        f"{other_agent_rows}\n\n"
+        "## Group Knowledge State\n"
+        "What the group has collectively established: -\n"
+        "What remains contested: -\n"
+        "What information is still missing from discussion: -\n"
+        "Current group-leading candidate: -\n"
     )
 
 
@@ -219,6 +217,20 @@ def initialize_all_agent_memories() -> None:
     for agent_key in AGENT_KEYS:
         template = build_memory_template(agent_key)
         write_agent_memory(agent_key, template)
+
+
+def reset_agent_memories_for_current_round(round_number: int | None = None) -> bool:
+    """Reset treatment memories when low input transparency limits context by round."""
+    if not explicit_smm_memory_enabled() or not current_round_memory_scope_enabled():
+        return False
+
+    initialize_all_agent_memories()
+    log_event(
+        "round_memory_reset",
+        round=round_number or metrics.loop_count + 1,
+        reason="low_input_transparency_current_round_scope",
+    )
+    return True
 
 
 def record_memory_update_response(agent_key: str, _callback_context, llm_response):

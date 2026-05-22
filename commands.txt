@@ -1,5 +1,6 @@
 # Run Agent Simulation with different experimental conditions
 SIM_CONDITION=high \
+SIM_SMM_MODE=treatment \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
 SIM_CONDITION=moderate \
@@ -7,6 +8,11 @@ SIM_SMM_MODE=treatment \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
 SIM_CONDITION=low \
+SIM_SMM_MODE=treatment \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=moderate \
+SIM_SMM_MODE=baseline \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 
 # Run 15 simulations local
@@ -62,4 +68,4 @@ ssh -N -L 8080:144.41.15.40:30800 HohServer
 SIM_CONDITION=low \
 SIM_SMM_MODE=treatment \
 SIM_RUN_ID=low_web_$(date +%Y%m%d_%H%M%S) \
-adk web 
+adk web

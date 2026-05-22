@@ -6,6 +6,7 @@ import re
 import time
 from pathlib import Path
 
+from .context_transparency import context_transparency_metadata
 from .smm import smm_metadata, smm_mode
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -48,11 +49,12 @@ SHARED_MENTAL_MODELS_DIR = RUN_DIR / "shared_mental_models"
 
 def _base_metadata() -> dict:
     """Return stable metadata fields known when the run starts."""
-    return {
+    metadata = {
         "schema_version": 1,
         "status": "initialized",
         "run_id": RUN_ID,
         "condition": SIM_CONDITION,
+        **context_transparency_metadata(),
         **smm_metadata(),
         "run_tag": RUN_TAG,
         "timestamp": TIMESTAMP,
@@ -63,6 +65,9 @@ def _base_metadata() -> dict:
             "shared_mental_models": str(SHARED_MENTAL_MODELS_DIR),
         },
     }
+    if not metadata["explicit_smm_memory"]:
+        metadata["smm_memory_scope"] = "not_applicable"
+    return metadata
 
 
 def _write_metadata(metadata: dict) -> None:
@@ -90,4 +95,6 @@ def update_run_metadata(updates: dict) -> None:
 RUN_DIR.mkdir(parents=True, exist_ok=True)
 SESSION_LOG_FILE.write_text("", encoding="utf-8")
 CHAT_LOG_FILE.write_text("# Public Discussion\n\n", encoding="utf-8")
-_write_metadata(_base_metadata())
+initial_metadata = _base_metadata()
+initial_metadata["thought_history_items"] = 0
+_write_metadata(initial_metadata)

@@ -14,7 +14,7 @@ SERVER="${SIM_SERVER:-HohServer}"
 REMOTE_REPO="${SIM_REMOTE_REPO:-~/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 SMM_MODE="${SIM_SMM_MODE:-}"
-SMM_LABEL="${SMM_MODE:-treatment+baseline}"
+SMM_LABEL="${SMM_MODE:-treatment+moderate-baseline}"
 SMM_MODE_ARG="${SMM_MODE:-__all__}"
 RESUME="${SIM_RESUME:-1}"
 
@@ -43,7 +43,7 @@ if [[ "$SMM_MODE_ARG" == "__all__" ]]; then
 else
   SMM_MODE="$SMM_MODE_ARG"
 fi
-SMM_LABEL="${SMM_MODE:-treatment+baseline}"
+SMM_LABEL="${SMM_MODE:-treatment+moderate-baseline}"
 
 cd "$REMOTE_REPO"
 git reset --hard HEAD
