@@ -197,9 +197,9 @@ def _meeting_process_section() -> str:
         "- point out one unresolved issue that matters for the decision,\n"
         "- or ask a targeted question via an available agent tool before speaking publicly.\n\n"
         "Before asking for external records, simulator debriefs, references, or "
-        "other outside data, first disclose any relevant private notes you have "
-        "and use agent tools to check whether another panel member has internal "
-        "interview or assessment notes on the issue.\n\n"
+        "other outside data, first disclose any relevant candidate information "
+        "available to you and use agent tools to check whether another panel "
+        "member has internal interview or assessment observations on the issue.\n\n"
 
         "Candidate review process:\n"
         "Across the meeting, help the panel review all candidates in an organized "
@@ -227,9 +227,10 @@ def _meeting_process_section() -> str:
         "Before treating a consensus as well-grounded, check whether every "
         "candidate has been compared on the core pilot criteria using available "
         "panel evidence. If a criterion is still unclear, first disclose your "
-        "own relevant notes or ask a panel member for their internal notes. Do "
+        "own relevant information or ask a panel member for their internal observations. Do "
         "not delay the decision only for external data that is not present in "
-        "the dossier, private notes, public discussion, or tool answers.\n\n"
+        "the candidate information available in the meeting, public discussion, "
+        "or tool answers.\n\n"
     )
 
 
@@ -272,8 +273,8 @@ def _round_guidance_section() -> str:
 def _grounding_sources() -> str:
     """Return the evidence sources agents may use."""
     return (
-        "the shared candidate dossier, your own interview and assessment notes, "
-        "and information explicitly shared in the meeting discussion"
+        "the candidate information available to you and information explicitly "
+        "shared in the meeting discussion"
     )
 
 
@@ -293,10 +294,10 @@ def _evidence_boundaries_section() -> str:
         "lacks that trait. Another interviewer may have elicited relevant "
         "information. If a colleague says they do not have information on a topic, "
         "that means only that this colleague personally does not have it.\n\n"
-        "The panel should make the recommendation from the shared dossier, private "
-        "interview notes, public discussion, and public tool answers available in "
-        "this meeting. Do not keep asking for external records or future checks "
-        "until available internal panel evidence has been shared or queried.\n\n"
+        "The panel should make the recommendation from candidate information "
+        "available in the meeting, public discussion, and public tool answers. "
+        "Do not keep asking for external records or future checks until available "
+        "internal panel evidence has been shared or queried.\n\n"
     )
 
 
@@ -349,9 +350,9 @@ def _memory_block(agent_key: str) -> str:
 
     return (
         "Your structured shared mental model notes:\n"
-        "These notes are your private structured representation of the evolving "
+        "These notes are your structured representation of the evolving "
         "team knowledge state. They summarize what has been established in the "
-        "meeting, what you personally still know but have not shared, what each "
+        "meeting, what information you know that has not yet been discussed, what each "
         "panel member has disclosed, current preferences separately from evidence, "
         "and unresolved decision issues.\n\n"
         "Treat these notes as a working summary, not as new candidate evidence "
@@ -421,6 +422,7 @@ def build_agent_instruction(
 
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
+    available_info = [*public_info, *private_info]
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
@@ -441,10 +443,11 @@ def build_agent_instruction(
         "evidence-based recommendation.\n\n"
         "Over the past week, you and the other panel members conducted individual "
         "candidate interviews, reviewed assessment notes, and discussed "
-        "role-relevant situations with the candidates. Some information is "
-        "available to the whole panel through the shared candidate dossier. "
-        "Other observations come from your own interview and assessment notes "
-        "and may not yet be known to your colleagues.\n\n"
+        "role-relevant situations with the candidates. You have candidate "
+        "information available from the selection process; other panel members "
+        "may have overlapping or different observations. Some of what you know "
+        "may already be known by colleagues, and some may be known only to you "
+        "until it is discussed.\n\n"
         "The panel has now blocked the next hour in a meeting room at company "
         "headquarters to agree on one final hiring recommendation. Treat this "
         "as a real professional HR selection meeting: structured, cooperative, "
@@ -466,15 +469,11 @@ def build_agent_instruction(
         f"{_meeting_process_section()}"
         f"{_round_guidance_section()}"
 
-        "Information available to all panel members:\n"
-        "These points come from the shared candidate dossier before the meeting:\n"
-        f"{_as_bullets(public_info)}\n\n"
-
-        "Your own interview and assessment notes:\n"
-        "These are the candidate observations you personally elicited, retrieved, "
-        "or reviewed. Treat them as information other panel members may not know "
-        "until you share it:\n"
-        f"{_as_bullets(private_info)}\n\n"
+        "Candidate information available to you:\n"
+        "Treat this as your working notes for the meeting. Some items may overlap "
+        "with what colleagues know, and some may be known only to you until you "
+        "bring them into the discussion.\n"
+        f"{_as_bullets(available_info)}\n\n"
 
         f"{_input_context_section()}"
         f"{_shared_communication_guidance_section()}"
@@ -517,6 +516,7 @@ def build_memory_update_instruction(
 
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
+    available_info = [*public_info, *private_info]
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
@@ -532,7 +532,7 @@ def build_memory_update_instruction(
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
         f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-        "You are privately updating your structured shared mental model notes "
+        "You are updating your structured shared mental model notes "
         "during the HR hiring-panel meeting. These notes are used to track the "
         "evolving team knowledge state. They are not a new evidence source and "
         "must not contain invented candidate information.\n\n"
@@ -542,11 +542,11 @@ def build_memory_update_instruction(
 
         f"{_selection_criteria_section()}"
 
-        "Shared candidate dossier:\n"
-        f"{_as_bullets(public_info)}\n\n"
-
-        "Your own interview and assessment notes:\n"
-        f"{_as_bullets(private_info)}\n\n"
+        "Candidate information available to you:\n"
+        "Treat this as your working notes for the meeting. Some items may overlap "
+        "with what colleagues know, and some may be known only to you until they "
+        "are discussed.\n"
+        f"{_as_bullets(available_info)}\n\n"
 
         f"Latest speaker: {latest_speaker} ({latest_speaker_display})\n"
         f"Latest speaker vote: {latest_vote}\n\n"
@@ -567,27 +567,27 @@ def build_memory_update_instruction(
         "- Keep preferences and leading-candidate judgments out of this matrix; "
         "record only candidate evidence, concerns, unknowns, likely knowledge "
         "owners, and next best questions.\n"
-        "- For each candidate and pilot criterion, track public evidence, "
+        "- For each candidate and pilot criterion, track discussed evidence, "
         "counterevidence or concerns, what remains unknown or unclear, your own "
-        "private evidence not yet shared, the likely knowledge owner if known, "
+        "evidence not yet discussed, the likely knowledge owner if known, "
         "and the next best internal question.\n"
         "- Move candidate information that has been publicly shared into the "
-        "public-evidence or counterevidence column for the relevant cell.\n"
-        "- Keep your own not-yet-shared interview notes in the private-evidence "
-        "column until they are publicly disclosed.\n"
+        "discussed-evidence or counterevidence column for the relevant cell.\n"
+        "- Keep relevant information you know in the not-yet-discussed evidence "
+        "column until it appears in the public discussion.\n"
         "- If you are the latest speaker and you publicly shared something from "
-        "your own private notes, remove that item from private evidence or mark "
-        "it as disclosed.\n"
+        "your available information, remove that item from not-yet-discussed "
+        "evidence or mark it as discussed.\n"
         "- Do not treat one agent lacking information as proof that evidence does "
         "not exist; mark it as unknown unless the relevant owner has been checked.\n"
-        "- Do not add anything to private notes that is not present in your own "
-        "interview and assessment notes.\n"
+        "- Do not add anything to evidence you know that is not present in the "
+        "candidate information available to you.\n"
         "- Do not invent or infer candidate attributes.\n\n"
 
         "2. Information disclosure tracker:\n"
         "- Record what the latest speaker explicitly disclosed.\n"
         "- Record public tool answers if they revealed candidate information.\n"
-        "- Do not speculate about what any speaker still privately knows.\n\n"
+        "- Do not speculate about what any speaker still knows but has not discussed.\n\n"
 
         "3. My current position:\n"
         "- Update only if you are the latest speaker.\n"
@@ -633,6 +633,7 @@ def build_agent_tool_instruction(
 
     public_info = TASK.get("public_information", [])
     private_info = TASK.get("private_information", {}).get(agent_key, [])
+    available_info = [*public_info, *private_info]
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
@@ -654,11 +655,11 @@ def build_agent_tool_instruction(
 
         f"{_selection_criteria_section()}"
 
-        "Information available to all panel members:\n"
-        f"{_as_bullets(public_info)}\n\n"
-
-        "Your own interview and assessment notes:\n"
-        f"{_as_bullets(private_info)}\n\n"
+        "Candidate information available to you:\n"
+        "Treat this as your working notes for the meeting. Some items may overlap "
+        "with what colleagues know, and some may be known only to you until they "
+        "are discussed.\n"
+        f"{_as_bullets(available_info)}\n\n"
 
         f"{_input_context_section()}"
         f"{_shared_communication_guidance_section()}"
@@ -670,7 +671,7 @@ def build_agent_tool_instruction(
         "Answer rules:\n"
         f"Answer only using information explicitly present in {_grounding_sources()}. "
         "Answer the specific question first. If you do not have the exact item "
-        "asked for but you do have nearby relevant private evidence on the same "
+        "asked for but you do have nearby relevant evidence on the same "
         "candidate or criterion, say that clearly and volunteer that evidence. "
         "Do not dump unrelated notes.\n\n"
         "If you have relevant information, share it concisely. If you do not "

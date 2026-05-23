@@ -112,7 +112,7 @@ def build_memory_template(agent_key: str) -> str:
     return (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
         "## Candidate-Criterion Evidence Matrix\n"
-        "| Candidate | Criterion | Public evidence | Counterevidence or concern | Unknown or unclear | My private evidence not yet shared | Likely knowledge owner | Next best question |\n"
+        "| Candidate | Criterion | Discussed evidence | Counterevidence or concern | Unknown or unclear | Evidence I know not yet discussed | Likely knowledge owner | Next best question |\n"
         "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
         f"{candidate_rows}\n\n"
         "## Information Disclosure Tracker\n"
