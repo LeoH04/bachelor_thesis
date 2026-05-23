@@ -8,6 +8,7 @@ from .response_text import (
     _drop_thought_parts,
     _extract_public_message,
     _public_value_text,
+    _strip_metadata_json_section,
     _thought_text_from_parts,
     _visible_text_from_parts,
 )
@@ -125,6 +126,9 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     public_message = _extract_public_message(text)
     if not public_message:
         return llm_response
+    discussion_message = _strip_metadata_json_section(public_message)
+    if not discussion_message:
+        return llm_response
 
     state = _get_state(callback_context)
     history = list(state.get(PUBLIC_DISCUSSION_STATE_KEY, []))
@@ -132,7 +136,7 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     history_item = {
         "round": round_number,
         "agent": agent_name,
-        "message": public_message,
+        "message": discussion_message,
     }
     if thoughts:
         history_item["thoughts"] = thoughts
@@ -143,7 +147,7 @@ def record_public_discussion_response(callback_context, llm_response) -> None:
     log_details = dict(
         round=round_number,
         agent=agent_name,
-        message=public_message,
+        message=discussion_message,
     )
     if thoughts:
         log_details["thoughts"] = thoughts

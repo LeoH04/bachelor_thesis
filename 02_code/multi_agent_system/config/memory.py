@@ -20,8 +20,20 @@ from .trace import log_event
 
 _AGENT_MEMORIES_ARCHIVED = False
 
+PILOT_CRITERIA = (
+    "Reliability",
+    "Stress resilience",
+    "Technical competence",
+    "Decision quality",
+    "Attention and information accuracy",
+    "Crew cooperation",
+    "Professional communication",
+    "Responsibility and role maturity",
+    "Adaptability and feedback orientation",
+)
+
 MEMORY_SECTION_FIELDS = (
-    ("candidate_evidence_table", "Candidate Evidence Table"),
+    ("candidate_evidence_table", "Candidate-Criterion Evidence Matrix"),
     ("information_disclosure_tracker", "Information Disclosure Tracker"),
     ("my_current_position", "My Current Position"),
     ("other_agents_positions", "Other Agents' Positions"),
@@ -84,7 +96,9 @@ def build_memory_template(agent_key: str) -> str:
     candidates = TASK.get("candidates", [])
 
     candidate_rows = "\n".join(
-        f"| {candidate} |  |  |  |" for candidate in candidates
+        f"| {candidate} | {criterion} |  |  | Unknown |  |  |  |"
+        for candidate in candidates
+        for criterion in PILOT_CRITERIA
     )
     disclosure_rows = "\n".join(
         f"| Agent {key.split('_')[-1]} | - |" for key in AGENT_KEYS
@@ -97,9 +111,9 @@ def build_memory_template(agent_key: str) -> str:
 
     return (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
-        "## Candidate Evidence Table\n"
-        "| Candidate | Publicly established in discussion | My private notes (not yet shared) | My fit assessment |\n"
-        "| --- | --- | --- | --- |\n"
+        "## Candidate-Criterion Evidence Matrix\n"
+        "| Candidate | Criterion | Public evidence | Counterevidence or concern | Unknown or unclear | My private evidence not yet shared | Likely knowledge owner | Next best question |\n"
+        "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
         f"{candidate_rows}\n\n"
         "## Information Disclosure Tracker\n"
         "| Agent | What they have shared so far |\n"
@@ -118,7 +132,7 @@ def build_memory_template(agent_key: str) -> str:
         "What the group has collectively established: -\n"
         "What remains contested: -\n"
         "What information is still missing from discussion: -\n"
-        "Current group-leading candidate: -\n"
+        "Consensus readiness based on available evidence: -\n"
     )
 
 

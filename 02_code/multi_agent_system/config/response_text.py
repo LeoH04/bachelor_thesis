@@ -25,6 +25,10 @@ METADATA_JSON_BLOCK_RE = re.compile(
     rf"\b{METADATA_JSON_LABEL}\s*:\s*(\{{.*?\}})",
     re.DOTALL | re.IGNORECASE,
 )
+METADATA_JSON_SECTION_RE = re.compile(
+    rf"(?:^|\n)\s*(?:\*\*)?{METADATA_JSON_LABEL}(?:\*\*)?\s*:\s*(?:\*\*)?\s*\{{.*?\}}\s*$",
+    re.DOTALL | re.IGNORECASE,
+)
 MEMORY_MARKDOWN_PREFIX_RE = re.compile(
     rf"^\s*{MEMORY_MARKDOWN_LABEL}\s*:\s*",
     re.IGNORECASE,
@@ -54,6 +58,11 @@ def _extract_public_message(text: str) -> str:
         return _clean_public_message(match.group(1))
 
     return _clean_public_message(text)
+
+
+def _strip_metadata_json_section(text: str) -> str:
+    """Remove structured vote metadata before showing discussion history to agents."""
+    return METADATA_JSON_SECTION_RE.sub("", text).strip()
 
 
 def extract_vote_from_response(text: object) -> str | None:

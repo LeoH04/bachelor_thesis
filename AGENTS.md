@@ -1,226 +1,306 @@
-# Multi-Agent Simulation: Context Transparency Study
+# Multi-Agent Simulation: Input Context Transparency Study
 
 ## 1. Objective
-The objective of this simulation is to analyze how different levels of context transparency influence:
-- Context consistency (alignment of shared mental models)
-- Coordination efficiency (communication cost and speed)
-- Overall system performance (decision accuracy)
+This simulation studies how different levels of input context transparency affect
+multi-agent hidden-profile decision making.
 
-The simulation reflects a realistic enterprise-style decision-making process.
+The main outcomes are:
+- Context consistency, measured through similarity between agent memories
+- Coordination efficiency, measured through rounds, messages, tool calls, token
+  use, and runtime
+- Decision quality, measured by whether the group selects the correct candidate
 
-## 2. System Overview
-The system models a structured multi-agent workflow with:
-- Iterative discussion rounds
-- Random communication order
-- Explicit stopping criteria
-- Controlled interaction for reproducibility and measurement
+The current experimental setup compares three treatment conditions against one
+moderate baseline. Transparency now changes what agents can see as input, not
+what agents are asked to disclose in their public output.
 
-## 3. Task Design: Hidden Profile Scenario
-- Each agent receives private, incomplete information
-- No agent can solve the task independently
-- The optimal solution emerges only through information sharing
+## 2. Task Design
+The task is a hidden-profile HR selection scenario for a long-distance pilot
+position at a fictional airline.
 
-## 4. Agents
-- Total agents: 3
+Key properties:
+- Three panel agents receive shared public candidate information.
+- Each panel agent also receives private, incomplete candidate information.
+- No agent can solve the task reliably alone.
+- The best decision requires agents to combine distributed evidence through
+  discussion and targeted questions.
 
-Each agent:
-- Has private knowledge
-- Maintains an internal memory (shared mental model)
-- Can call other agents as mediated tools during its own speaking turn
+## 3. Agents
+The active discussion agents are:
+- `agent_1`: Anna Keller, HR Selection Specialist for Flight Operations
+- `agent_2`: Markus Weber, Pilot Assessment Specialist
+- `agent_3`: Sofia Brandt, Recruiting Specialist for Cockpit Personnel
+
+Each discussion agent:
+- Has private candidate notes
+- Sees public task information
+- Can call the other agents through mediated ADK agent tools
 - Produces a public message and structured vote metadata
-- Does not update memory during the speaking turn itself
+- Does not directly edit memory during its own speaking turn
 
-## 5. Communication Structure
+Each agent also has a tool-agent variant used for targeted questions from other
+agents. Tool-agent responses are concise answers to the caller's question.
 
-### 5.1 Orchestration
-Communication is:
-- Content-decentralized (agents generate their own reasoning)
-- Execution-centralized (controlled by orchestrator)
+## 4. Orchestration
+The workflow is centralized by the ADK orchestration layer.
 
-- Agents can request information from other agents via orchestrator-mediated tool calls
-- Tool calls are not private side channels: the question and answer are recorded in the public discussion history
-- All interaction is mediated through the orchestrator
+Important implementation points:
+- Speaker order is randomized at the start of each discussion round.
+- Randomization is seeded by `SIM_RANDOM_SEED` when provided, otherwise by
+  `RUN_ID`.
+- Agent-to-agent tool calls are mediated through `LoggingAgentTool`.
+- Tool calls are not private side channels. The public question and answer are
+  appended to the public discussion history.
+- The vote checker runs after every full round.
 
-### 5.2 Discussion Loop
-Each round follows a fixed sequence:
-1. Agent 1 speaks
-2. All agent memories are updated in parallel
-3. Agent 2 speaks
-4. All agent memories are updated in parallel
-5. Agent 3 speaks
-6. All agent memories are updated in parallel
-7. Vote checker evaluates the round
+One discussion round follows this structure:
+1. Shuffle the three speakers.
+2. For each speaker in shuffled order:
+   - Run the speaker.
+   - If `SIM_SMM_MODE=treatment`, run the parallel memory-update stage for all
+     agent memories.
+3. Run the vote checker.
 
-During each speaking turn, an agent:
-- Reads:
-  - Full discussion history
-  - Its internal memory
-- May call other agents as tools
-- Produces:
-  - A public message
-  - Structured metadata
+The main workflow is defined in `02_code/multi_agent_system/agent.py`.
 
-During each tool exchange:
-- The calling agent asks another agent a specific question
-- The called agent answers directly and concisely
-- The tool question and answer are appended to the public discussion history
-- No memory is updated inside the tool response itself
+## 5. SMM Modes
+The shared mental model mode is controlled by `SIM_SMM_MODE`.
 
-During each memory-update phase:
-- Three passive memory-update agents run in parallel
-- Each one updates exactly one agent memory
-- Updates use the full public discussion history, including public tool exchanges
-- Memory updates are internal and are not added as public discussion messages
+### 5.1 Treatment
+`SIM_SMM_MODE=treatment`
 
-### 5.3 Agent Output Structure
-Each agent contribution includes:
-- Message (natural language reasoning)
-- Preferred candidate
-- Structured vote metadata in `METADATA_JSON`
+Treatment runs use explicit structured SMM memory. The memories are initialized
+at the start of the run and updated after each public speaker turn.
 
-The public message may include confidence, uncertainty, and justification depending on the transparency condition.
+The passive memory updater receives:
+- The target agent's current structured memory
+- Shared public candidate information
+- The target agent's own private notes
+- The prompt-visible discussion history for the active transparency condition
 
-## 6. Context Transparency Conditions
+Memory updates are private. They are not added to the public transcript.
 
-### 6.1 Low Transparency
-- Fragmented information sharing
-- No explicit links to candidates
-- No evaluation or reasoning
+### 5.2 Baseline
+`SIM_SMM_MODE=baseline`
 
-### 6.2 Moderate Transparency
-- Information linked to specific candidates
-- Concise evaluations included
+Baseline runs do not use explicit SMM memory updates. Agents rely on their normal
+prompt context and the prompt-visible discussion history.
 
-### 6.3 High Transparency
-Includes all of the above plus:
-- Sources or justification
-- Uncertainty estimates
-- References to prior discussion
+The current run matrix includes only the moderate baseline.
 
-## 7. Simulation Phases
+## 6. Input Context Transparency Conditions
+The transparency condition is controlled by `SIM_CONDITION`.
 
-### 7.1 Initialization Phase
-- Assign private information to each agent
-- Initialize agent memory
-- Define experimental condition
+The implementation lives in
+`02_code/multi_agent_system/config/context_transparency.py`.
 
-### 7.2 Iterative Discussion Phase
-- Execute discussion rounds
-- Record public speaker messages and public tool exchanges
-- Update all agent memories after every speaker turn
+### 6.1 Low
+`SIM_CONDITION=low`
 
-### 7.3 Decision Phase
-After each round, perform a decision check.
+Agents see only public discussion and tool exchanges from the current discussion
+round.
 
-Termination Criteria:
-- All 3 agents agree on the same candidate
+Low treatment additionally resets run-local explicit SMM memory at the start of
+each round, so the structured memory can summarize only the current-round
+interaction.
 
-### 7.4 Maximum Round Constraint
-- A maximum number of rounds is predefined
-- If reached without consensus:
-  - Final decision is made via majority voting
+Low never includes stored model thoughts.
 
-## 8. Memory and Shared Mental Models
-Each agent maintains an internal memory representing:
-- Task
-- Candidates
-- Shared information
+### 6.2 Moderate
+`SIM_CONDITION=moderate`
 
-Memory is updated:
-- After each scheduled speaker turn
-- In parallel for all 3 agents
-- Based on the public discussion history, including tool exchanges
-- Through passive memory-update agents, not during normal speaking turns
+Agents see the full public discussion and tool-exchange history from the run.
 
-## 9. Evaluation Metrics
+Moderate treatment keeps explicit SMM memory across the full meeting.
 
-### 9.1 Context Consistency
-Measured as:
-- Semantic similarity between agent memories
+Moderate never includes stored model thoughts.
 
-Method:
-- Embeddings
-- Cosine similarity
+### 6.3 High
+`SIM_CONDITION=high`
 
-### 9.2 Coordination Efficiency
-Measured using:
-- Number of rounds
-- Number of messages
-- Number of agent-tool calls
-- Number of memory updates
-- Token usage
-- Runtime
+Agents see the full public discussion and tool-exchange history from the run.
+When ADK/model response parts contain `part.thought == true`, those stored model
+thoughts are attached to the relevant history entry and rendered into future
+prompt history.
 
-### 9.3 System Performance
-Binary metric:
-- 1 = Correct decision
-- 0 = Incorrect decision
+High treatment keeps explicit SMM memory across the full meeting.
 
-## 10. System Architecture
+Model thoughts are experimental input context only. They are not public
+transcript content and should not be treated as independent candidate evidence.
 
-### 10.1 Orchestration Layer
-Responsible for:
-- Execution order
-- Loop control
-- Termination logic
-- State tracking
+## 7. Public History and Thought History
+Public discussion history is managed in
+`02_code/multi_agent_system/config/history.py`.
 
-### 10.2 Agent Layer
-- LLM-based agents
-- Each agent:
-  - Processes inputs
-  - Maintains state
-  - Generates outputs
+The public history records:
+- Scheduled speaker messages
+- Mediated agent-tool questions and answers
 
-### 10.3 Interaction Model
-- No unmediated agent-to-agent communication
-- Agent-to-agent tool calls are allowed
-- Tool exchanges are recorded as public discussion content
-- All communication and memory updates are mediated by the orchestrator
+For normal speaker turns:
+- Visible text is extracted from non-thought response parts.
+- Public output is appended to the public discussion state.
+- Public output is written to `chat.md`.
+- In high only, thought parts are stored alongside the history item.
 
-## 11. Implementation Options
-- Google ADK
-- LangGraph
-- CrewAI Flows
+For tool-agent turns:
+- In high only, tool-agent thoughts are temporarily stashed.
+- When the public tool exchange is logged, the stashed thoughts are attached to
+  that tool-exchange history item.
 
-Support:
-- Sequential execution
-- Looping
-- Conditional logic
-- State management
+`chat.md` remains a public transcript only. It must not include model thoughts.
+Thoughts may appear in structured run state, session logs, metadata counts, and
+high-condition prompt-built history.
 
-### 11.1 Local ADK Environment
-For shell commands that need Google ADK, activate the Conda environment like this:
+## 8. Prompt Behavior
+Prompt builders are defined in
+`02_code/multi_agent_system/config/prompts.py`.
+
+All conditions use the same public-output template. The treatment changes the
+input context available to the agents, not the disclosure style requested from
+them.
+
+Discussion agents receive:
+- Their persona and task role
+- Public candidate information
+- Their own private candidate notes
+- The active input-context description
+- Explicit SMM memory when treatment mode is active
+- The scoped public discussion history
+- Tool-use and evidence-boundary instructions
+
+Memory-update agents receive the same scoped discussion history as discussion
+agents. In high, this may include thought-enriched history. In low and moderate,
+thought text is not included.
+
+## 9. Decision Logic
+The vote checker is defined in
+`02_code/multi_agent_system/agents/control/vote_checker.py`.
+
+Decision rules:
+- Minimum consensus rounds: 2
+- Maximum discussion rounds: 5
+- If all agents vote for the same candidate after the minimum round threshold,
+  the run ends by consensus.
+- If maximum rounds are reached and a majority exists, the run ends by majority
+  vote.
+- If maximum rounds are reached without a majority, the run ends without a
+  selected winner.
+
+Each discussion response must include structured vote metadata in
+`METADATA_JSON`.
+
+## 10. Run Matrix
+The batch runner is
+`02_code/simulation_scripts/run_all_conditions.sh`.
+
+Default matrix:
+- `low_treatment`
+- `moderate_treatment`
+- `high_treatment`
+- `moderate_baseline`
+
+The old low and high baselines are no longer part of the default experiment.
+
+Run five simulations for each current matrix cell:
 
 ```bash
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate adk
+SIM_COUNT=5 ./02_code/simulation_scripts/run_all_conditions.sh
 ```
 
-Example:
+Run only treatment cells:
 
 ```bash
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate adk
+SIM_SMM_MODE=treatment SIM_COUNT=5 ./02_code/simulation_scripts/run_all_conditions.sh
+```
+
+Run only the moderate baseline:
+
+```bash
+SIM_SMM_MODE=baseline SIM_COUNT=5 ./02_code/simulation_scripts/run_all_conditions.sh
+```
+
+Single-run examples:
+
+```bash
+SIM_CONDITION=low SIM_SMM_MODE=treatment \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=moderate SIM_SMM_MODE=treatment \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=high SIM_SMM_MODE=treatment \
+adk run multi_agent_system --replay multi_agent_system/config/replay.json
+
+SIM_CONDITION=moderate SIM_SMM_MODE=baseline \
 adk run multi_agent_system --replay multi_agent_system/config/replay.json
 ```
 
-## 12. Design Rationale
-Prioritizes:
-- Control
-- Traceability
-- Reproducibility
+For shell commands that need Google ADK, activate the local Conda environment:
 
-Reflects enterprise systems where:
-- Workflows are structured
-- Interactions are monitored
-- Decisions must be explainable
+```bash
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate adk
+cd 02_code
+```
 
-## 13. Summary
-This simulation studies:
-- Impact of context transparency on:
-  - Shared mental models
-  - Coordination
-  - Decision quality
+## 11. Logs and Metadata
+Each run writes under:
 
-Bridges research and enterprise system design.
+```text
+01_data/raw/simulations/<condition>/<run_id>/
+```
+
+Run IDs use:
+
+```text
+{condition}_{smm_mode}_{batch}_{i}
+```
+
+Important outputs include:
+- `chat.md`: public transcript only
+- `metadata.json`: run metadata and metrics
+- Session trace/log files: structured events, including thought-history counts
+  and high-condition thought entries when available
+- Archived SMM memory files for treatment runs
+
+Metadata includes context-transparency fields such as:
+- `context_transparency_condition`
+- `input_history_scope`
+- `input_thought_history`
+- `smm_memory_scope`
+- `thought_history_items`
+
+## 12. Evaluation
+The main evaluation dimensions are:
+
+Context consistency:
+- Calculated from archived agent memories in treatment runs
+- Uses embedding-based pairwise memory similarity when available
+
+Coordination efficiency:
+- Discussion rounds
+- Public messages
+- Agent-tool calls
+- Memory updates
+- Token usage
+- Runtime
+
+Decision quality:
+- Final candidate
+- Decision method
+- Whether the selected candidate matches the configured correct candidate
+
+## 13. Design Boundary
+The most important design boundary is:
+
+Transparency changes prompt-visible input context only.
+
+It should not change:
+- The public-output template
+- The public transcript format
+- The candidate facts available in the task setup
+- The rule that tool questions and answers are public
+- The rule that model thoughts are not public transcript content
+
+This keeps the experiment focused on input context transparency and explicit SMM
+memory rather than output-style differences.

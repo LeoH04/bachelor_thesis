@@ -18,3 +18,18 @@
 - Adjust model temperature values DONE
 - Changed context transparency to affect the context input not agent output (low only the current round, moderate full discussion round and high full + thoughts) DONE
 - Changed baseline runs to moderate baseline only DONE
+
+Prompt-visible discussion history now strips METADATA_JSON, while chat.md still keeps the full message including metadata for human review.
+See response_text.py (line 28) and history.py (line 126).
+
+SMM memory now uses a criterion-by-candidate evidence matrix with the requested criteria and fields: public evidence, counterevidence, unknowns, private evidence, likely owner, next question.
+See memory.py (line 23).
+
+Preferences are separated from evidence more clearly. The memory no longer starts with Current group-leading candidate in group knowledge, and prompts tell agents not to let apparent majority substitute for criterion-level evidence.
+See prompts.py (line 350).
+
+Added the internal-evidence-before-external-data rule and the readiness check before convergence.
+See prompts.py (line 199).
+
+Tool-agent answers now answer the narrow question first, but volunteer nearby relevant private evidence if exact external/simulator/reference evidence is missing.
+See prompts.py (line 670).
