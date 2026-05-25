@@ -15,11 +15,11 @@ class MemoryUpdate(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    candidate_evidence_table: str
-    information_disclosure_tracker: str
-    my_current_position: str
-    other_agents_positions: str
-    group_knowledge_state: str
+    candidate_review_status: str
+    candidate_coverage_checklist: str
+    information_distribution: str
+    current_positions: str
+    group_decision_state: str
 
 
 def _make_memory_update_agent(agent_key: str, after_agent_key: str) -> LlmAgent:

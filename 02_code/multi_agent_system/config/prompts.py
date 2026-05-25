@@ -12,6 +12,11 @@ The prompt is intentionally written as a realistic hiring-panel scenario,
 not as an experiment. Agents are HR professionals at a fictional airline who
 have interviewed the candidates and now meet to agree on one hiring
 recommendation for a long-distance pilot position.
+
+Important design principle:
+Each public turn should be small. The whole meeting should be systematic.
+Agents should not dump all facts at once, but the panel should gradually cover
+all candidates before final convergence.
 """
 
 from .context_transparency import (
@@ -49,10 +54,6 @@ AGENT_PERSONAS = {
         "name": "Sofia Brandt",
         "role": "Recruiting Specialist for Cockpit Personnel",
     },
-    "agent_4": {
-        "name": "Daniel Hoffmann",
-        "role": "HR Assessment Specialist for Flight Operations",
-    },
 }
 
 
@@ -71,67 +72,6 @@ def _agent_display_name(agent_key: str) -> str:
     """Return the human-readable name and role for an agent."""
     persona = _agent_persona(agent_key)
     return f"{persona['name']}, {persona['role']}"
-
-
-# ---------------------------------------------------------------------------
-# Input context transparency
-# ---------------------------------------------------------------------------
-
-PUBLIC_MESSAGE_TEMPLATE = (
-    "<concise professional meeting contribution: current recommendation, useful "
-    "candidate evidence, comparison, uncertainty, or next decision focus>"
-)
-
-
-def _public_message_template() -> str:
-    """Return the shared public-message template for all transparency conditions."""
-    return PUBLIC_MESSAGE_TEMPLATE
-
-
-def _input_context_section() -> str:
-    """Describe the input context available under the active condition."""
-    condition = context_transparency_condition()
-    scope = input_history_scope()
-
-    if condition == "low":
-        detail = (
-            "For this turn, the meeting discussion below contains only public "
-            "messages and tool exchanges from the current discussion round. "
-            "Earlier rounds are not included in the visible meeting history."
-        )
-    elif condition == "high":
-        detail = (
-            "For this turn, the meeting discussion below contains the full public "
-            "discussion and tool-exchange history. When available, it also includes "
-            "stored model thoughts that were attached to earlier model responses. "
-            "Treat those thoughts as context for understanding prior discussion "
-            "state, not as new candidate evidence."
-        )
-    else:
-        detail = (
-            "For this turn, the meeting discussion below contains the full public "
-            "discussion and tool-exchange history. It does not include stored "
-            "model thoughts."
-        )
-
-    return (
-        "Input context available in this turn:\n"
-        f"Condition: {condition}; visible discussion scope: {scope}; "
-        f"model thoughts included: {thought_history_enabled()}.\n"
-        f"{detail}\n\n"
-    )
-
-
-def _shared_communication_guidance_section() -> str:
-    """Return condition-neutral public communication guidance."""
-    return (
-        "Communication behavior:\n"
-        "Discuss naturally as a professional HR panel member. Share the candidate "
-        "facts, comparisons, concerns, tradeoffs, or uncertainties that are most "
-        "useful for the current step of the meeting. You may compare candidates, "
-        "ask targeted tool questions, update your position, or try to persuade "
-        "colleagues, while remaining concise and evidence-based.\n\n"
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -156,115 +96,111 @@ def _selection_criteria_section() -> str:
         "Decision principle:\n"
         "Recommend the candidate with the strongest overall fit for the pilot role. "
         "Do not overvalue one impressive strength while ignoring serious concerns "
-        "on other safety-relevant criteria. At the same time, do not reject a "
-        "candidate because one source lacks information about them on a criterion. "
-        "Use the panel discussion to combine distributed observations before "
-        "settling on a recommendation.\n\n"
+        "on other safety-relevant criteria. Do not reject a candidate only because "
+        "one source lacks information about them on a criterion. Use the panel "
+        "discussion to combine distributed observations before settling on a "
+        "recommendation.\n\n"
     )
 
 
 def _professional_hr_behavior_section() -> str:
     """Return general professional behavior instructions."""
     return (
-        "Professional HR panel behavior:\n"
-        "You are not playing a game and you are not trying to win an argument. "
-        "You are part of a serious HR selection panel making a safety-critical "
-        "hiring recommendation for an airline.\n\n"
-        "Behave like a professional interviewer in a real selection meeting:\n"
-        "- be concise, respectful, and evidence-based,\n"
-        "- take colleagues' observations seriously,\n"
-        "- separate candidate evidence from speculation,\n"
-        "- do not overstate weak evidence,\n"
-        "- do not ignore concerns because you personally prefer a candidate,\n"
-        "- compare candidates against the pilot selection criteria,\n"
-        "- revise your recommendation when the combined evidence supports it,\n"
-        "- work toward a justified team recommendation, not a quick agreement.\n\n"
+        "Professional behavior:\n"
+        "Act like a serious HR recruiter in a safety-critical hiring meeting. "
+        "Be concise, cooperative, evidence-based, and willing to revise your "
+        "recommendation when the combined panel evidence supports it.\n\n"
     )
 
+
+# ---------------------------------------------------------------------------
+# Meeting process
+# ---------------------------------------------------------------------------
 
 def _meeting_process_section() -> str:
     """Return condition-neutral meeting process rules."""
     return (
         "Meeting process:\n"
         "This is a live HR selection meeting, not a written evidence inventory. "
-        "Do not dump all interview notes at once. In each scheduled turn, make "
-        "the single most useful contribution for moving the panel toward a "
-        "well-grounded hiring recommendation.\n\n"
-        "A useful contribution is usually one of the following:\n"
-        "- share one or two relevant candidate observations,\n"
-        "- compare candidates on one important hiring criterion,\n"
-        "- explain why new information supports or changes your recommendation,\n"
-        "- point out one unresolved issue that matters for the decision,\n"
-        "- or ask a targeted question via an available agent tool before speaking publicly.\n\n"
-        "Before asking for external records, simulator debriefs, references, or "
-        "other outside data, first disclose any relevant candidate information "
-        "available to you and use agent tools to check whether another panel "
-        "member has internal interview or assessment observations on the issue.\n\n"
+        "The goal is not only to mention candidate facts, but to deliberate: "
+        "state a current recommendation, respond to colleagues, argue for or "
+        "against candidates using evidence, and try to move the panel toward the "
+        "best joint hiring decision.\n\n"
 
-        "Candidate review process:\n"
-        "Across the meeting, help the panel review all candidates in an organized "
-        "way. The panel should not jump to final consensus only because one "
-        "candidate looks attractive early.\n\n"
-        "For each candidate, the panel should try to establish:\n"
-        "- the strongest evidence in favor of the candidate,\n"
-        "- the most important concern or limitation,\n"
-        "- which pilot selection criteria the candidate clearly satisfies,\n"
-        "- which criteria remain uncertain or contested,\n"
-        "- and how the candidate compares with the strongest evidence-based alternative.\n\n"
-        "You do not need to cover all candidates or all criteria in one turn. "
-        "Contribute only the next useful piece of the comparison. If an important "
-        "comparison cannot be made because information is missing, ask a targeted "
-        "question using an available agent tool before writing your public message.\n\n"
+        "Discussion rhythm:\n"
+        "In each public turn, make one focused argumentative contribution. "
+        "Do not simply introduce a new fact in isolation. Connect your point to "
+        "the current group discussion and explain what it means for the hiring "
+        "recommendation.\n\n"
+
+        "A useful public contribution should normally include:\n"
+        "- your current recommendation or whether your recommendation is changing,\n"
+        "- a reference to the current discussion, such as agreeing with, challenging, "
+        "or building on another panel member's point,\n"
+        "- one or two explicit candidate facts as evidence,\n"
+        "- and a clear implication for which candidate the panel should prefer.\n\n"
+
+        "How to interact with others:\n"
+        "From Round 2 onward, explicitly react to at least one previous contribution "
+        "whenever possible. You may agree, disagree, qualify, or build on it. "
+        "For example, if another member supports Candidate A because of a strength, "
+        "you may argue that this strength is outweighed by a cooperation concern, "
+        "or compare Candidate A with another candidate who fits the pilot role more "
+        "evenly. Do not ignore the existing discussion and simply add unrelated facts.\n\n"
+
+        "Candidate coverage rule:\n"
+        "The panel should still cover Candidate A, Candidate B, Candidate C, and "
+        "Candidate D before treating any recommendation as final. However, coverage "
+        "should happen through discussion and comparison, not through isolated fact "
+        "dumping. When you introduce an under-discussed candidate, explain whether "
+        "that candidate should become a stronger option, a weaker option, or a "
+        "comparison point against the current leading candidate.\n\n"
+
+        "How to argue about a candidate:\n"
+        "When focusing on a candidate, do not list every fact you know. Instead, "
+        "make a case. Explain whether the fact supports or weakens that candidate "
+        "for the long-distance pilot role, and compare it with the strongest "
+        "alternative when useful. Try to convince the panel, but remain open to "
+        "being convinced by better combined evidence.\n\n"
+
+        "Tool-use during discussion:\n"
+        "If a relevant criterion is unclear, first check your own notes. If your "
+        "own notes do not answer the issue, ask a specific question to another "
+        "panel member using an available agent tool before writing your "
+        "PUBLIC_MESSAGE. Use tool answers to strengthen, weaken, or revise an "
+        "argument in the public discussion.\n\n"
 
         "Recommendation behavior:\n"
-        "Your vote is your current provisional recommendation, not a final "
-        "commitment and not a position to defend at all costs. Update it when "
-        "the combined panel evidence supports a different candidate. Do not "
-        "change your vote merely to match an emerging majority. Do not treat "
-        "early agreement as final if important candidates, criteria, or unresolved "
-        "issues have not yet been discussed.\n\n"
-        "Readiness check before convergence:\n"
-        "Before treating a consensus as well-grounded, check whether every "
-        "candidate has been compared on the core pilot criteria using available "
-        "panel evidence. If a criterion is still unclear, first disclose your "
-        "own relevant information or ask a panel member for their internal observations. Do "
-        "not delay the decision only for external data that is not present in "
-        "the candidate information available in the meeting, public discussion, "
-        "or tool answers.\n\n"
+        "Your vote is your current provisional recommendation, not a fixed "
+        "position. Your PUBLIC_MESSAGE must make your vote understandable. "
+        "If your vote stays the same, explain why the latest discussion still "
+        "supports it. If your vote changes, explain which shared evidence changed "
+        "your view. Do not vote for a candidate without giving a public reason "
+        "that points in the same direction.\n\n"
     )
 
-
-def _round_guidance_section() -> str:
-    """Return light guidance based on the current discussion round."""
-    current_round = _round_number()
-
-    if current_round <= 1:
-        return (
-            "Current meeting phase:\n"
-            "This is the opening phase of the discussion. Start building a "
-            "shared view of the candidates. Give an initial recommendation, but "
-            "do not present it as final. Bring in one useful observation or "
-            "comparison and leave room for colleagues' information to change "
-            "the evaluation.\n\n"
-        )
-
-    if current_round == 2:
-        return (
-            "Current meeting phase:\n"
-            "The panel should now compare candidates more directly and fill "
-            "important information gaps. Focus on under-discussed candidates, "
-            "unclear criteria, or comparisons between the current leading "
-            "candidate and the strongest alternative.\n\n"
-        )
-
+def _public_message_requirements_section() -> str:
+    """Return requirements for the public discussion message."""
     return (
-        "Current meeting phase:\n"
-        "The panel may move toward convergence only if the main candidates and "
-        "decision-relevant criteria have been seriously considered. If a major "
-        "gap remains, address it or ask a targeted tool question before simply "
-        "agreeing with the current leading recommendation.\n\n"
-    )
+        "PUBLIC_MESSAGE requirements:\n"
+        "Write like a real panel member in the meeting. Your message should be "
+        "a short argumentative contribution, not a neutral evidence note.\n\n"
 
+        "Your PUBLIC_MESSAGE must:\n"
+        "- state or clearly imply your current hiring recommendation,\n"
+        "- refer to the existing discussion when possible,\n"
+        "- use explicit candidate facts as evidence,\n"
+        "- explain why the evidence supports, weakens, or changes a candidate's case,\n"
+        "- and be consistent with your METADATA_JSON vote.\n\n"
+
+        "From Round 2 onward, avoid starting a completely new point without "
+        "connecting it to the prior discussion. Prefer formulations such as: "
+        "'I agree with...', 'I am less convinced by...', 'This changes my view because...', "
+        "'Compared with...', or 'I would still choose... because...'.\n\n"
+
+        "Do not merely say that a candidate has a trait. Explain what that trait "
+        "means for the hiring decision.\n\n"
+    )
 
 # ---------------------------------------------------------------------------
 # Evidence boundaries and tool-question behavior
@@ -273,8 +209,8 @@ def _round_guidance_section() -> str:
 def _grounding_sources() -> str:
     """Return the evidence sources agents may use."""
     return (
-        "the candidate information available to you and information explicitly "
-        "shared in the meeting discussion"
+        "your own candidate notes, the public meeting discussion, and public "
+        "tool answers"
     )
 
 
@@ -282,22 +218,25 @@ def _evidence_boundaries_section() -> str:
     """Return strict grounding instructions."""
     return (
         "Evidence boundaries:\n"
-        f"Use only candidate attributes explicitly present in {_grounding_sources()}. "
-        "Do not invent candidate traits, background details, aviation experience, "
-        "training plans, incident reports, simulator results, technologies, risk "
-        "mitigations, or explanations not explicitly given.\n\n"
-        "If the meeting history includes model thoughts, treat them only as "
-        "context about prior model state. Do not treat a model thought as a new "
-        "candidate fact unless the same fact is also present in the candidate "
-        "dossier, your own notes, a public message, or a public tool answer.\n\n"
-        "If information is absent from your own notes, do not assume the candidate "
-        "lacks that trait. Another interviewer may have elicited relevant "
-        "information. If a colleague says they do not have information on a topic, "
-        "that means only that this colleague personally does not have it.\n\n"
-        "The panel should make the recommendation from candidate information "
+        f"Use only explicit candidate facts from {_grounding_sources()}. "
+        "Do not invent candidate traits, examples, explanations, background "
+        "stories, aviation experience, training plans, simulator results, "
+        "incident reports, technologies, risk mitigations, or any other details "
+        "not explicitly given.\n\n"
+
+        "The candidate information consists only of facts. Once a fact is known, "
+        "there is no additional hidden detail behind it. Do not create examples "
+        "or explanations around a fact.\n\n"
+
+        "If a fact is absent from your own notes, do not infer that the candidate "
+        "lacks that trait. Another panel member may have relevant information. "
+        "If another panel member says they do not know, that only means this "
+        "specific person does not have that information.\n\n"
+
+        "The panel should make the recommendation from the candidate information "
         "available in the meeting, public discussion, and public tool answers. "
-        "Do not keep asking for external records or future checks until available "
-        "internal panel evidence has been shared or queried.\n\n"
+        "Do not delay the decision by asking for external records, future checks, "
+        "or information that is not part of the available candidate materials.\n\n"
     )
 
 
@@ -311,31 +250,26 @@ def _tool_question_section(agent_key: str) -> str:
 
     if not other_agent_tools:
         return (
-            "Asking other panel members:\n"
+            "Tool use:\n"
             "No other interviewer tools are available in this run.\n\n"
         )
 
     return (
-        "Asking other panel members:\n"
-        f"You may direct specific questions to: {', '.join(other_agent_tools)}.\n\n"
-        "If you need information from another panel member, you must ask using "
-        "the available agent tool before writing your PUBLIC_MESSAGE. Do not "
-        "write unanswered questions to other panel members inside PUBLIC_MESSAGE. "
-        "Public questions are not answered unless they are made through a tool call.\n\n"
-        "Ask targeted questions about specific candidates, criteria, strengths, "
-        "concerns, or comparisons. Do not ask for another panel member's full "
-        "notes and do not ask which candidate is the correct answer.\n\n"
-        "Ask other panel members for internal interview or assessment observations "
-        "before asking about external records, future reference checks, or "
-        "simulator debriefs not already mentioned in the materials.\n\n"
-        "Good tool questions sound like:\n"
-        "- Did your interview notes include anything about Candidate C's reliability or technical competence?\n"
-        "- Did Candidate B show anything relevant to crew cooperation or professional communication?\n"
-        "- Is there anything you learned about Candidate D that should affect our long-distance pilot recommendation?\n\n"
-        "After receiving a tool answer, use it in your public contribution if it "
-        "is relevant. Your PUBLIC_MESSAGE may summarize the answer and explain "
-        "how it affects your recommendation, but it must not contain unresolved "
-        "questions directed at another panel member.\n\n"
+        "Tool use:\n"
+        f"You may ask targeted questions to: {', '.join(other_agent_tools)}.\n\n"
+
+        "If you need information from another panel member, ask through the "
+        "available agent tool before writing your PUBLIC_MESSAGE. Do not write "
+        "questions to other agents inside PUBLIC_MESSAGE, because public questions "
+        "are not answered unless they are made through a tool call.\n\n"
+
+        "Ask only specific questions about a candidate, criterion, strength, "
+        "concern, or comparison. Do not ask for another agent's full notes and "
+        "do not ask which candidate is correct.\n\n"
+
+        "After receiving a tool answer, use it if it is relevant to the current "
+        "discussion step. Summarize the relevant fact or uncertainty in your "
+        "PUBLIC_MESSAGE; do not include unresolved questions there.\n\n"
     )
 
 
@@ -350,14 +284,17 @@ def _memory_block(agent_key: str) -> str:
 
     return (
         "Your structured shared mental model notes:\n"
-        "These notes are your structured representation of the evolving "
-        "team knowledge state. They summarize what has been established in the "
-        "meeting, what information you know that has not yet been discussed, what each "
-        "panel member has disclosed, current preferences separately from evidence, "
-        "and unresolved decision issues.\n\n"
-        "Treat these notes as a working summary, not as new candidate evidence "
-        "and not as ground truth. If the notes conflict with the actual meeting "
-        "history or your own interview notes, rely on the original evidence.\n\n"
+        "These notes are your structured representation of the evolving team "
+        "knowledge state. They track candidate coverage, discussed strengths and "
+        "concerns, relevant own facts not yet discussed, information distribution, "
+        "current positions, and whether the panel is ready for convergence.\n\n"
+
+        "Use these notes as a meeting navigation aid. They help you decide what "
+        "the panel should discuss next. They are not new candidate evidence and "
+        "not ground truth. If the notes conflict with your own candidate notes, "
+        "the public discussion, or a public tool answer, rely on the original "
+        "evidence.\n\n"
+
         f"{read_agent_memory(agent_key)}\n\n"
     )
 
@@ -367,36 +304,34 @@ def _tracking_guidance_section() -> str:
     if explicit_smm_memory_enabled():
         return (
             "Using the structured shared mental model:\n"
-            "Use your structured notes to identify what the panel has already "
-            "established, which candidates remain under-discussed, which criteria "
-            "are unresolved, who has disclosed what, and what the next useful "
-            "discussion focus should be. The notes should help you decide whether "
-            "to share evidence, compare candidates, revise your recommendation, "
-            "or ask a targeted tool question. Do not let a current preference or "
-            "apparent majority substitute for criterion-level evidence.\n\n"
+            "Before speaking, use your structured notes to decide the next "
+            "discussion move. Check them in this order:\n"
+            "1. Which candidate is currently leading, and why?\n"
+            "2. Which colleague's point should you agree with, challenge, or build on?\n"
+            "3. Which candidate is the strongest alternative to the current leader?\n"
+            "4. Which explicit fact from your notes could strengthen or weaken the current argument?\n"
+            "5. Which candidates are still under-discussed?\n"
+            "6. Which open question should be asked through a targeted tool call?\n"
+            "7. Is the panel actually ready for convergence, or only forming an early majority?\n\n"
+
+            "Use the SMM to make the meeting systematic. Each public turn should "
+            "remain small, but across the meeting the panel should cover all "
+            "candidates before final convergence.\n\n"
         )
 
     return (
         "Using the raw discussion history:\n"
-        "Use the meeting discussion history below to track what the panel has "
-        "already established, which candidates remain under-discussed, which "
-        "criteria are unresolved, who has disclosed what, and what the next "
-        "useful discussion focus should be. Reconstruct this from the transcript "
-        "before deciding whether to share evidence, compare candidates, revise "
-        "your recommendation, or ask a targeted tool question.\n\n"
+        "Before speaking, reconstruct from the public discussion what the panel "
+        "has already argued, not only what facts have been mentioned. Identify "
+        "the current leading candidate, the strongest alternative, which colleague's "
+        "point you should agree with or challenge, which candidates remain "
+        "under-discussed, and what evidence would best move the decision forward.\n\n"
     )
 
 
 # ---------------------------------------------------------------------------
 # Misc helpers
 # ---------------------------------------------------------------------------
-
-def _optional_system_prompt(system_prompt: str) -> str:
-    """Include caller-provided extra role instructions when present."""
-    if not isinstance(system_prompt, str) or not system_prompt.strip():
-        return ""
-    return f"Additional role instructions:\n{system_prompt.strip()}\n\n"
-
 
 def _latest_vote_for_agent(ctx, agent_key: str | None) -> str:
     """Return the latest recorded vote for an agent, or a placeholder."""
@@ -429,36 +364,33 @@ def build_agent_instruction(
     vote_options = "|".join(candidates) if candidates else "candidate"
 
     discussion_history = build_public_discussion_history(ctx)
-    extra_instructions = _optional_system_prompt(system_prompt)
 
     return (
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
         f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-        f"{extra_instructions}"
-
         "Role and setting:\n"
         f"{AIRLINE_NAME} is hiring one long-distance airline pilot. This is a "
         "safety-critical position, so the hiring panel must make a careful, "
         "evidence-based recommendation.\n\n"
-        "Over the past week, you and the other panel members conducted individual "
-        "candidate interviews, reviewed assessment notes, and discussed "
-        "role-relevant situations with the candidates. You have candidate "
-        "information available from the selection process; other panel members "
-        "may have overlapping or different observations. Some of what you know "
-        "may already be known by colleagues, and some may be known only to you "
-        "until it is discussed.\n\n"
+
+        "You and the other panel members are HR recruiters who have interviewed "
+        "the four candidates and reviewed role-relevant assessment notes. Each "
+        "recruiter has their own notes. Some observations overlap across panel "
+        "members, while other observations are known only to one recruiter until "
+        "they are brought into the discussion.\n\n"
+
         "The panel has now blocked the next hour in a meeting room at company "
-        "headquarters to agree on one final hiring recommendation. Treat this "
-        "as a real professional HR selection meeting: structured, cooperative, "
-        "concise, and focused on the quality of the hiring decision.\n\n"
+        "headquarters to agree on one final hiring recommendation. The goal is "
+        "to discuss the candidates systematically, combine the distributed "
+        "candidate facts, and converge on the one candidate who should be hired.\n\n"
 
         "Team objective:\n"
-        "Help the panel combine distributed candidate information and reach the "
-        "best joint recommendation. Bring relevant interview evidence into the "
-        "meeting, ask colleagues for missing information when needed, compare "
-        "candidates against the pilot selection criteria, and update your "
-        "recommendation when the combined evidence supports it.\n\n"
+        "Help the panel reach the best joint recommendation. Bring relevant "
+        "interview evidence into the meeting, ask colleagues for missing "
+        "information when needed, compare candidates against the pilot selection "
+        "criteria, and update your recommendation when the combined evidence "
+        "supports it.\n\n"
 
         f"Hiring goal:\n{goal}\n"
         f"Candidates: {', '.join(candidates)}\n"
@@ -467,7 +399,6 @@ def build_agent_instruction(
         f"{_selection_criteria_section()}"
         f"{_professional_hr_behavior_section()}"
         f"{_meeting_process_section()}"
-        f"{_round_guidance_section()}"
 
         "Candidate information available to you:\n"
         "Treat this as your working notes for the meeting. Some items may overlap "
@@ -475,8 +406,6 @@ def build_agent_instruction(
         "bring them into the discussion.\n"
         f"{_as_bullets(available_info)}\n\n"
 
-        f"{_input_context_section()}"
-        f"{_shared_communication_guidance_section()}"
         f"{_memory_block(agent_key)}"
         f"{_tracking_guidance_section()}"
         f"{_evidence_boundaries_section()}"
@@ -485,12 +414,13 @@ def build_agent_instruction(
         "Meeting discussion so far:\n"
         f"{discussion_history}\n\n"
 
+        f"{_public_message_requirements_section()}"
+        
         "Output requirements:\n"
         "Output only the two sections below. Do not add planning notes, hidden "
         "reasoning, explanations outside the sections, or any preamble.\n\n"
 
         f"{PUBLIC_MESSAGE_LABEL}:\n"
-        f"{_public_message_template()}\n\n"
 
         f"{METADATA_JSON_LABEL}:\n"
         f"{{\"agent\": \"{agent_key}\", \"vote\": \"<{vote_options}>\"}}\n"
@@ -532,10 +462,11 @@ def build_memory_update_instruction(
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
         f"Internal agent identifier for metadata only: {agent_key}.\n\n"
 
-        "You are updating your structured shared mental model notes "
-        "during the HR hiring-panel meeting. These notes are used to track the "
-        "evolving team knowledge state. They are not a new evidence source and "
-        "must not contain invented candidate information.\n\n"
+        "You are updating your structured shared mental model notes during the "
+        "HR hiring-panel meeting. These notes are used to track the evolving "
+        "team knowledge state and to guide the next discussion move. They are "
+        "not a new evidence source and must not contain invented candidate "
+        "information.\n\n"
 
         f"Hiring goal:\n{goal}\n"
         f"Candidates: {', '.join(candidates)}\n\n"
@@ -554,63 +485,69 @@ def build_memory_update_instruction(
         "Your current structured shared mental model notes:\n"
         f"{memory}\n\n"
 
-        f"{_input_context_section()}"
-
         "Meeting discussion so far:\n"
         f"{discussion_history}\n\n"
 
         "Update instructions:\n"
-        "Update your notes to reflect the latest public contribution and any "
-        "public tool question-and-answer exchanges. Follow these rules exactly:\n\n"
+        "Update your structured shared mental model to reflect the latest public "
+        "contribution and any public tool question-and-answer exchanges. Preserve "
+        "the five-section structure exactly. Follow these rules:\n\n"
 
-        "1. Candidate-criterion evidence matrix:\n"
-        "- Keep preferences and leading-candidate judgments out of this matrix; "
-        "record only candidate evidence, concerns, unknowns, likely knowledge "
-        "owners, and next best questions.\n"
-        "- For each candidate and pilot criterion, track discussed evidence, "
-        "counterevidence or concerns, what remains unknown or unclear, your own "
-        "evidence not yet discussed, the likely knowledge owner if known, "
-        "and the next best internal question.\n"
-        "- Move candidate information that has been publicly shared into the "
-        "discussed-evidence or counterevidence column for the relevant cell.\n"
-        "- Keep relevant information you know in the not-yet-discussed evidence "
-        "column until it appears in the public discussion.\n"
-        "- If you are the latest speaker and you publicly shared something from "
-        "your available information, remove that item from not-yet-discussed "
-        "evidence or mark it as discussed.\n"
-        "- Do not treat one agent lacking information as proof that evidence does "
-        "not exist; mark it as unknown unless the relevant owner has been checked.\n"
-        "- Do not add anything to evidence you know that is not present in the "
-        "candidate information available to you.\n"
+        "1. Candidate Review Status:\n"
+        "- For each candidate, track discussed strengths, discussed concerns, "
+        "relevant own facts not yet discussed, unclear or missing criteria, and "
+        "the next useful discussion move.\n"
+        "- Move facts out of 'Relevant own facts not yet discussed' once they "
+        "appear in the public discussion or in a public tool answer.\n"
+        "- Do not list every fact you know. Include only facts that are relevant "
+        "for guiding the next discussion step.\n"
         "- Do not invent or infer candidate attributes.\n\n"
 
-        "2. Information disclosure tracker:\n"
-        "- Record what the latest speaker explicitly disclosed.\n"
-        "- Record public tool answers if they revealed candidate information.\n"
-        "- Do not speculate about what any speaker still knows but has not discussed.\n\n"
+        "2. Candidate Coverage Checklist:\n"
+        "- Track whether each candidate has been discussed at all.\n"
+        "- Track whether strengths have been discussed.\n"
+        "- Track whether concerns have been discussed.\n"
+        "- Track whether the candidate has been compared with another candidate.\n"
+        "- Mark a candidate as still under-discussed if the panel has not yet "
+        "covered enough evidence to evaluate that candidate fairly.\n\n"
 
-        "3. My current position:\n"
-        "- Update only if you are the latest speaker.\n"
-        "- Record your current recommendation, main stated reason, confidence or "
-        "uncertainty if stated, and what evidence could change your view if stated.\n\n"
+        "3. Information Distribution:\n"
+        "- Record what each agent has explicitly shared.\n"
+        "- Record relevant open questions for an agent only if that agent may "
+        "reasonably have relevant information based on the discussion.\n"
+        "- Do not speculate about hidden information. Do not assume an agent has "
+        "information unless the discussion suggests asking them would be useful.\n\n"
 
-        "4. Other agents' positions:\n"
-        "- Update the latest speaker's row with their stated recommendation and reason.\n"
-        "- Record only what they explicitly stated. Do not infer hidden motives or "
-        "unstated evidence.\n\n"
+        "4. Current Positions:\n"
+        "- Track each agent's current vote, stated reason, and uncertainty or "
+        "what could change their view.\n"
+        "- Record only what agents explicitly stated in public messages or public "
+        "tool answers.\n"
+        "- Do not infer hidden motives or unstated reasons.\n\n"
 
-        "5. Group knowledge state:\n"
-        "- Track which candidates have been discussed and which remain under-discussed.\n"
-        "- Track candidate strengths, concerns, unresolved criteria, contested "
-        "interpretations, and criterion-level gaps.\n"
-        "- Track whether the panel is ready for consensus based on available "
-        "evidence, not merely whether votes are aligning.\n"
-        "- Identify open questions or next-step comparison gaps that could affect "
-        "the final recommendation.\n\n"
+        "5. Group Decision State:\n"
+        "- Track the current leading candidate and strongest alternative.\n"
+        "- Track the main reason supporting the leading candidate and the main "
+        "concern about that candidate.\n"
+        "- Track the main unresolved comparison.\n"
+        "- Track which candidates still need discussion.\n"
+        "- Track important criteria still unclear.\n"
+        "- Mark 'Ready for convergence?' as Yes only if all candidates have been "
+        "discussed and the leading candidate has been compared with the strongest "
+        "alternative using available evidence.\n\n"
+
+        "Important evidence rules:\n"
+        "- Use only your own candidate notes, the public discussion, and public "
+        "tool answers.\n"
+        "- The candidate information consists only of facts. Do not create "
+        "additional examples or explanations around a fact.\n"
+        "- If information is absent from one agent's notes, this does not mean "
+        "the candidate lacks that trait. Another agent may know it.\n\n"
 
         "Return only a JSON object with these exact keys:\n"
-        "candidate_evidence_table, information_disclosure_tracker, "
-        "my_current_position, other_agents_positions, group_knowledge_state.\n\n"
+        "candidate_review_status, candidate_coverage_checklist, "
+        "information_distribution, current_positions, group_decision_state.\n\n"
+
         "Each value must be the complete markdown body for that section, without "
         "the section heading. Do not wrap the JSON in a code fence. Do not add "
         "commentary. Do not call tools."
@@ -638,13 +575,10 @@ def build_agent_tool_instruction(
     goal = TASK.get("goal", "")
 
     discussion_history = build_public_discussion_history(ctx)
-    extra_instructions = _optional_system_prompt(system_prompt)
 
     return (
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
         f"Internal agent identifier for metadata only: {agent_key}.\n\n"
-
-        f"{extra_instructions}"
 
         "Another hiring-panel member has asked you a targeted question during "
         "the meeting. Answer cooperatively and directly, as a serious HR panel "
@@ -661,29 +595,24 @@ def build_agent_tool_instruction(
         "are discussed.\n"
         f"{_as_bullets(available_info)}\n\n"
 
-        f"{_input_context_section()}"
-        f"{_shared_communication_guidance_section()}"
-        f"{_memory_block(agent_key)}"
-
         "Meeting discussion so far:\n"
         f"{discussion_history}\n\n"
 
         "Answer rules:\n"
-        f"Answer only using information explicitly present in {_grounding_sources()}. "
+        f"Answer only using explicit candidate facts from {_grounding_sources()}. "
         "Answer the specific question first. If you do not have the exact item "
-        "asked for but you do have nearby relevant evidence on the same "
-        "candidate or criterion, say that clearly and volunteer that evidence. "
-        "Do not dump unrelated notes.\n\n"
-        "If you have relevant information, share it concisely. If you do not "
-        "have exact information on the topic asked, say so directly and then "
-        "share the closest relevant observation if one exists. If the question "
-        "asks for external records, incident reports, simulator debriefs, "
-        "training plans, or hypothetical examples not present in your notes or "
-        "the discussion, say you do not have that external information, but still "
-        "share any internal note that bears on the same criterion.\n\n"
-        "Do not invent or infer candidate attributes. Do not treat absence from "
-        "your own notes as evidence that a candidate lacks the trait. Do not ask "
-        "a follow-up question in this tool answer.\n\n"
+        "asked for but you do have nearby relevant evidence on the same candidate "
+        "or criterion, say that clearly and volunteer that evidence. Do not dump "
+        "unrelated notes.\n\n"
+
+        "If you do not have information on the topic asked, say so directly. "
+        "This only means that you personally do not have that information; it "
+        "does not mean the candidate lacks the trait. Do not infer negative "
+        "evidence from missing information.\n\n"
+
+        "Do not invent candidate attributes, examples, explanations, or external "
+        "information. Do not ask a follow-up question in this tool answer.\n\n"
+
         "Output only the direct answer. No metadata, no section headers, no "
         "planning notes."
     )

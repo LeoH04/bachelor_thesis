@@ -1,0 +1,318 @@
+# Shared Mental Model (Agent 2)
+
+## Candidate-Criterion Evidence Matrix
+## Candidate‑Criterion Evidence Matrix
+
+**Candidate A**
+- *Reliability*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes (no explicit reliability observation)
+  - Evidence I know not yet discussed: No explicit reliability data
+  - Likely knowledge owner: Agent 2
+  - Next best question: Do we have any observations on Candidate A's consistency and dependability?
+- *Stress resilience*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes (no stress data shared)
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any observations of Candidate A under high stress?
+- *Technical competence*
+  - Discussed evidence: anticipates dangerous situations; sees complex connections; excellent spatial vision
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Can we get examples of Candidate A handling complex avionics?
+- *Decision quality*
+  - Discussed evidence: can anticipate dangerous situations
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any examples of Candidate A's decision‑making in emergencies?
+- *Attention and information accuracy*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes (no memory/attention data)
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Do we have data on Candidate A's memory for numbers or detail orientation?
+- *Crew cooperation*
+  - Discussed evidence: None (no specific observation)
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: How does Candidate A interact with crew members in simulations?
+- *Professional communication*
+  - Discussed evidence: regarded as a show‑off
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any observed communication style of Candidate A with peers?
+- *Responsibility and role maturity*
+  - Discussed evidence: very good leadership qualities
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Examples of Candidate A taking responsibility for outcomes?
+- *Adaptability and feedback orientation*
+  - Discussed evidence: regarded as not open to new ideas
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Has Candidate A shown openness to new procedures?
+
+**Candidate B**
+- *Reliability*
+  - Discussed evidence: very conscientious (suggests reliability but not explicit)
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes (no direct reliability observation)
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any incidents showing reliability issues?
+- *Stress resilience*
+  - Discussed evidence: handles stress very well
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Examples of Candidate B under pressure?
+- *Technical competence*
+  - Discussed evidence: good at assessing weather conditions; excellent computer skills
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Further technical skill examples?
+- *Decision quality*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Observations of Candidate B decision‑making speed/accuracy?
+- *Attention and information accuracy*
+  - Discussed evidence: relatively weak memory for numbers
+  - Counterevidence or concern: weak numeric memory
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any other attention‑related observations for Candidate B?
+- *Crew cooperation*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Do we have any observations of Candidate B's teamwork?
+- *Professional communication*
+  - Discussed evidence: makes nasty remarks about his colleagues
+  - Counterevidence or concern: negative communication style
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any examples of positive communication from Candidate B?
+- *Responsibility and role maturity*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Has Candidate B demonstrated responsibility in past roles?
+- *Adaptability and feedback orientation*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Is Candidate B open to feedback and new ideas?
+
+**Candidate C**
+- *Reliability*
+  - Discussed evidence: 100 % reliable
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 1 / Agent 2
+  - Next best question: Any concrete examples of reliability incidents?
+- *Stress resilience*
+  - Discussed evidence: keeps calm in a crisis
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Examples of Candidate C under sustained stress?
+- *Technical competence*
+  - Discussed evidence: understands complicated technology
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Further technical skill examples for Candidate C?
+- *Decision quality*
+  - Discussed evidence: can make correct decisions quickly
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Decision‑making under ambiguous info for Candidate C?
+- *Attention and information accuracy*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Any attention‑related observations for Candidate C?
+- *Crew cooperation*
+  - Discussed evidence: creates a positive atmosphere with his crew
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 1 / Agent 2
+  - Next best question: Observations of Candidate C teamwork in simulations?
+- *Professional communication*
+  - Discussed evidence: difficulty communicating ideas; regarded as egocentric
+  - Counterevidence or concern: communication difficulty, egocentric perception
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Examples of Candidate C's communication style?
+- *Responsibility and role maturity*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Responsibility examples for Candidate C?
+- *Adaptability and feedback orientation*
+  - Discussed evidence: not very willing to further his education
+  - Counterevidence or concern: limited willingness to learn
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Is Candidate C open to training?
+
+**Candidate D**
+- *Reliability*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Reliability observations for Candidate D?
+- *Stress resilience*
+  - Discussed evidence: responds to unexpected events adequately
+  - Counterevidence or concern: has a hot temper
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Examples of Candidate D handling high stress?
+- *Technical competence*
+  - Discussed evidence: solves problems extremely well
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Technical skill examples for Candidate D?
+- *Decision quality*
+  - Discussed evidence: responds to unexpected events adequately
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Decision‑making examples for Candidate D?
+- *Attention and information accuracy*
+  - Discussed evidence: can concentrate very well
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Attention to detail examples for Candidate D?
+- *Crew cooperation*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Teamwork observations for Candidate D?
+- *Professional communication*
+  - Discussed evidence: None
+  - Counterevidence or concern: regarded as a know‑it‑all (negative perception)
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Communication style observations for Candidate D?
+- *Responsibility and role maturity*
+  - Discussed evidence: takes responsibility seriously
+  - Counterevidence or concern: None
+  - Unknown or unclear: No
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Responsibility examples beyond statement for Candidate D?
+- *Adaptability and feedback orientation*
+  - Discussed evidence: None
+  - Counterevidence or concern: None
+  - Unknown or unclear: Yes
+  - Evidence I know not yet discussed: None
+  - Likely knowledge owner: Agent 2
+  - Next best question: Is Candidate D open to feedback and new ideas?
+
+## Information Disclosure Tracker
+- **Latest speaker (Agent 3)** disclosed a provisional recommendation for **Candidate C** as the strongest overall fit, citing:
+  - 100 % reliability
+  - Proven stress resilience (keeps calm in a crisis)
+  - Quick, correct decision‑making
+  - Solid technical competence (understands complicated technology)
+  - Positive crew‑cooperation (creates a positive atmosphere with his crew)
+  - Remaining concerns: difficulty communicating ideas, egocentric perception, and limited willingness to pursue further education (affecting professional communication and adaptability).
+- Agent 3 also reiterated that **Candidate B** has a clear professional‑communication weakness (makes nasty remarks) and no crew‑cooperation evidence, and that **Candidates A** and **D** lack comparable reliability or crew‑cooperation data.
+- No new tool‑generated information was provided in this round.
+
+## My Current Position
+- **Current vote**: Candidate C
+- **Main reason**: Concrete evidence of 100 % reliability and positive crew‑cooperation, combined with strong stress resilience, quick correct decision‑making, and solid technical understanding. Remaining communication and adaptability concerns are noted but do not outweigh the documented strengths.
+- **Confidence**: Moderate
+- **What would change my mind**: Evidence showing serious communication deficits for Candidate C, or reliable/crew‑cooperation evidence for another candidate that outweighs C’s strengths.
+
+## Other Agents' Positions
+- **Agent 1**
+  - **Vote**: Candidate C
+  - **Reason**: Highlights Candidate C’s 100 % reliability and positive crew atmosphere; notes B’s communication weakness and lack of crew‑cooperation evidence for others.
+- **Agent 2 (myself)**
+  - **Vote**: Candidate C
+  - **Reason**: Same as above – reliability, crew‑cooperation, stress resilience, decision quality, technical competence; concerns about communication and adaptability are noted.
+- **Agent 3**
+  - **Vote**: Candidate C (provisional)
+  - **Reason**: Emphasizes C’s reliability, stress resilience, decision‑making, technical skill, and crew‑cooperation; points out communication difficulty, egocentric attitude, and limited willingness to further education as remaining issues, while noting lack of comparable evidence for A, B, D.
+
+## Group Knowledge State
+- **Established observations**
+  - *Candidate A*: technical strengths (anticipates danger, complex connections, spatial vision), leadership qualities, perceived as a show‑off, not open to new ideas. No explicit reliability, stress, crew‑cooperation, attention, or communication data.
+  - *Candidate B*: very conscientious, handles stress well, good weather assessment, excellent computer skills, weak numeric memory, makes nasty remarks about colleagues. No reliability, decision‑quality, crew‑cooperation, responsibility, or adaptability data.
+  - *Candidate C*: 100 % reliable, creates positive crew atmosphere, stays calm in crisis, makes quick correct decisions, understands complex technology. Concerns: difficulty communicating ideas, egocentric, not eager for further education. No explicit responsibility data.
+  - *Candidate D*: responds adequately to unexpected events, concentrates well, solves problems extremely well, takes responsibility seriously, regarded as a know‑it‑all, has a hot temper. No reliability, crew‑cooperation, or adaptability data.
+
+- **Remaining gaps / contested points**
+  - Reliability evidence missing for A, B, D.
+  - Crew‑cooperation evidence missing for A, B, D.
+  - Professional communication strengths not documented for A, C, D; weaknesses noted for B (nasty remarks) and C (difficulty communicating, egocentric).
+  - Attention/accuracy data missing for A, C.
+  - Responsibility evidence explicit only for D (takes responsibility) and implied for A (leadership); absent for B and C.
+  - Adaptability/feedback orientation data missing for A, B, D; C shows limited willingness to learn.
+  - Stress resilience data present for B (handles stress well) and D (responds adequately) but concerns about D’s hot temper.
+
+- **Consensus readiness**: The panel currently leans toward Candidate C due to the strongest documented safety‑critical evidence (reliability and crew‑cooperation). However, definitive consensus is pending further clarification on C’s communication impact and adaptability, and any additional reliability or crew‑cooperation data for the other candidates.
+
+- **Open questions / next steps**
+  - Can we obtain concrete examples of Candidate C’s communication behavior in crew settings?
+  - Is Candidate C open to feedback and training despite the noted reluctance?
+  - Are there any reliability or crew‑cooperation observations for Candidates A, B, D (e.g., from simulator debriefs or past flight records)?
+  - Does Candidate D’s hot temper manifest under high‑stress flight conditions?
+  - Any attention‑to‑detail or checklist compliance evidence for Candidates A and C?
+  - How does Candidate B’s decision‑making quality compare under time pressure?

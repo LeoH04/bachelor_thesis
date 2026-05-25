@@ -20,26 +20,14 @@ from .trace import log_event
 
 _AGENT_MEMORIES_ARCHIVED = False
 
-PILOT_CRITERIA = (
-    "Reliability",
-    "Stress resilience",
-    "Technical competence",
-    "Decision quality",
-    "Attention and information accuracy",
-    "Crew cooperation",
-    "Professional communication",
-    "Responsibility and role maturity",
-    "Adaptability and feedback orientation",
-)
 
 MEMORY_SECTION_FIELDS = (
-    ("candidate_evidence_table", "Candidate-Criterion Evidence Matrix"),
-    ("information_disclosure_tracker", "Information Disclosure Tracker"),
-    ("my_current_position", "My Current Position"),
-    ("other_agents_positions", "Other Agents' Positions"),
-    ("group_knowledge_state", "Group Knowledge State"),
+    ("candidate_review_status", "Candidate Review Status"),
+    ("candidate_coverage_checklist", "Candidate Coverage Checklist"),
+    ("information_distribution", "Information Distribution"),
+    ("current_positions", "Current Positions"),
+    ("group_decision_state", "Group Decision State"),
 )
-
 
 def _agent_memory_path(agent_key: str) -> Path:
     """Return the markdown memory file path for the given agent key."""
@@ -95,44 +83,61 @@ def build_memory_template(agent_key: str) -> str:
     """Create the initial structured markdown memory for one agent."""
     candidates = TASK.get("candidates", [])
 
-    candidate_rows = "\n".join(
-        f"| {candidate} | {criterion} |  |  | Unknown |  |  |  |"
+    candidate_review_rows = "\n".join(
+        f"| {candidate} | - | - | - | - | - |"
         for candidate in candidates
-        for criterion in PILOT_CRITERIA
     )
-    disclosure_rows = "\n".join(
-        f"| Agent {key.split('_')[-1]} | - |" for key in AGENT_KEYS
+
+    candidate_coverage_rows = "\n".join(
+        f"| {candidate} | No | No | No | No | Yes |"
+        for candidate in candidates
     )
-    other_agent_rows = "\n".join(
+
+    information_distribution_rows = "\n".join(
+        f"| Agent {key.split('_')[-1]} | - | - |"
+        for key in AGENT_KEYS
+    )
+
+    current_position_rows = "\n".join(
         f"| Agent {key.split('_')[-1]} | - | - | - |"
         for key in AGENT_KEYS
-        if key != agent_key
     )
+
+    candidates_needing_discussion = ", ".join(candidates) if candidates else "-"
 
     return (
         f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
-        "## Candidate-Criterion Evidence Matrix\n"
-        "| Candidate | Criterion | Discussed evidence | Counterevidence or concern | Unknown or unclear | Evidence I know not yet discussed | Likely knowledge owner | Next best question |\n"
-        "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
-        f"{candidate_rows}\n\n"
-        "## Information Disclosure Tracker\n"
-        "| Agent | What they have shared so far |\n"
-        "| --- | --- |\n"
-        f"{disclosure_rows}\n\n"
-        "## My Current Position\n"
-        "Current vote: -\n"
-        "Main reason: -\n"
-        "Confidence: -\n"
-        "What would change my mind: -\n\n"
-        "## Other Agents' Positions\n"
-        "| Agent | Last vote | Stated reason | What they have revealed so far |\n"
+
+        "## Candidate Review Status\n"
+        "| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |\n"
+        "| --- | --- | --- | --- | --- | --- |\n"
+        f"{candidate_review_rows}\n\n"
+
+        "## Candidate Coverage Checklist\n"
+        "| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |\n"
+        "| --- | --- | --- | --- | --- | --- |\n"
+        f"{candidate_coverage_rows}\n\n"
+
+        "## Information Distribution\n"
+        "| Agent | Candidate facts they have shared | Relevant open questions for this agent |\n"
+        "| --- | --- | --- |\n"
+        f"{information_distribution_rows}\n\n"
+
+        "## Current Positions\n"
+        "| Agent | Current vote | Stated reason | Uncertainty or what could change their view |\n"
         "| --- | --- | --- | --- |\n"
-        f"{other_agent_rows}\n\n"
-        "## Group Knowledge State\n"
-        "What the group has collectively established: -\n"
-        "What remains contested: -\n"
-        "What information is still missing from discussion: -\n"
-        "Consensus readiness based on available evidence: -\n"
+        f"{current_position_rows}\n\n"
+
+        "## Group Decision State\n"
+        "Current leading candidate: -\n\n"
+        "Strongest alternative: -\n\n"
+        "Main reason supporting the leading candidate: -\n\n"
+        "Main concern about the leading candidate: -\n\n"
+        "Main unresolved comparison: -\n\n"
+        f"Candidates that still need discussion: {candidates_needing_discussion}\n\n"
+        "Important criteria still unclear: -\n\n"
+        "Ready for convergence? No\n\n"
+        "Reason: The panel has not yet systematically discussed all candidates.\n"
     )
 
 
