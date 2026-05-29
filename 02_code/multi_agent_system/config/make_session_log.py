@@ -50,13 +50,10 @@ SHARED_MENTAL_MODELS_DIR = RUN_DIR / "shared_mental_models"
 def _base_metadata() -> dict:
     """Return stable metadata fields known when the run starts."""
     metadata = {
-        "schema_version": 1,
         "status": "initialized",
         "run_id": RUN_ID,
-        "condition": SIM_CONDITION,
         **context_transparency_metadata(),
         **smm_metadata(),
-        "run_tag": RUN_TAG,
         "timestamp": TIMESTAMP,
         "paths": {
             "run_dir": str(RUN_DIR),
@@ -65,8 +62,6 @@ def _base_metadata() -> dict:
             "shared_mental_models": str(SHARED_MENTAL_MODELS_DIR),
         },
     }
-    if not metadata["explicit_smm_memory"]:
-        metadata["smm_memory_scope"] = "not_applicable"
     return metadata
 
 
@@ -96,5 +91,4 @@ RUN_DIR.mkdir(parents=True, exist_ok=True)
 SESSION_LOG_FILE.write_text("", encoding="utf-8")
 CHAT_LOG_FILE.write_text("# Public Discussion\n\n", encoding="utf-8")
 initial_metadata = _base_metadata()
-initial_metadata["thought_history_items"] = 0
 _write_metadata(initial_metadata)

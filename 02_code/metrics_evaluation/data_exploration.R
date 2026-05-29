@@ -29,13 +29,13 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260526_231706.csv",
+  "01_data/processed/simulation_metrics_20260529_163907.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
 
-simulation_metrics$condition <- factor(
-  simulation_metrics$condition,
+simulation_metrics$context_transparency_condition <- factor(
+  simulation_metrics$context_transparency_condition,
   levels = c("low", "moderate", "high"),
   ordered = TRUE
 )
@@ -45,7 +45,6 @@ simulation_metrics$smm_mode <- factor(
   levels = c("baseline", "treatment")
 )
 
-simulation_metrics$run_tag <- factor(simulation_metrics$run_tag)
 simulation_metrics$status <- factor(simulation_metrics$status)
 simulation_metrics$decision_method <- factor(simulation_metrics$decision_method)
 simulation_metrics$final_candidate <- factor(simulation_metrics$final_candidate)
@@ -157,7 +156,7 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
   
   comparison_plot <- ggplot(
     plot_data,
-    aes(x = condition, y = .data[[y_var]], fill = smm_mode)
+    aes(x = context_transparency_condition, y = .data[[y_var]], fill = smm_mode)
   ) +
     geom_col(
       position = position_dodge(width = 0.75),
@@ -222,7 +221,7 @@ save_single_mode_plot <- function(plot_data, y_var, y_label, title, filename, di
   
   single_mode_plot <- ggplot(
     plot_data,
-    aes(x = condition, y = .data[[y_var]])
+    aes(x = context_transparency_condition, y = .data[[y_var]])
   ) +
     geom_col(
       width = 0.65,
@@ -259,7 +258,7 @@ save_single_mode_plot <- function(plot_data, y_var, y_label, title, filename, di
 # 3a. Correct candidate choices: baseline vs treatment
 # ------------------------------------------------------------
 correct_candidate_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     correct_choices = sum(decision_correct, na.rm = TRUE),
@@ -282,7 +281,7 @@ save_comparison_plot(
 # 3b. NA final candidates: baseline vs treatment
 # ------------------------------------------------------------
 na_candidate_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     na_candidates = sum(is.na(final_candidate)),
@@ -310,7 +309,7 @@ treatment_metrics <- simulation_metrics %>%
 if (nrow(treatment_metrics) > 0) {
   
   semantic_similarity_overview <- treatment_metrics %>%
-    group_by(condition) %>%
+    group_by(context_transparency_condition) %>%
     summarise(
       total_runs = n(),
       mean_semantic_similarity = mean(mean_pairwise_memory_similarity, na.rm = TRUE),
@@ -334,7 +333,7 @@ if (nrow(treatment_metrics) > 0) {
 # 5. Interaction rounds: baseline vs treatment
 # ------------------------------------------------------------
 rounds_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     mean_rounds = mean(rounds, na.rm = TRUE),
@@ -356,7 +355,7 @@ save_comparison_plot(
 # 6. Messages: baseline vs treatment
 # ------------------------------------------------------------
 messages_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     mean_messages = mean(total_messages, na.rm = TRUE),
@@ -378,7 +377,7 @@ save_comparison_plot(
 # 7. Tokens: baseline vs treatment
 # ------------------------------------------------------------
 tokens_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     mean_tokens = mean(total_tokens, na.rm = TRUE),
@@ -400,7 +399,7 @@ save_comparison_plot(
 # 8. Runtime: baseline vs treatment
 # ------------------------------------------------------------
 runtime_overview <- simulation_metrics %>%
-  group_by(smm_mode, condition) %>%
+  group_by(smm_mode, context_transparency_condition) %>%
   summarise(
     total_runs = n(),
     mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),

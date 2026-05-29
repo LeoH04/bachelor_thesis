@@ -27,8 +27,6 @@ def explicit_smm_memory_enabled() -> bool:
 
 def smm_metadata() -> dict[str, object]:
     """Return stable metadata fields for the active SMM mode."""
-    mode = smm_mode()
     return {
-        "smm_mode": mode,
-        "explicit_smm_memory": mode == "treatment",
+        "smm_mode": smm_mode(),
     }

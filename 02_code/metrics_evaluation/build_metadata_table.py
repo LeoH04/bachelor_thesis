@@ -17,15 +17,8 @@ DEFAULT_OUTPUT = REPO_ROOT / "01_data" / "processed" / "simulation_metrics.csv"
 
 BASE_COLUMNS = [
     "run_id",
-    "condition",
     "context_transparency_condition",
-    "input_history_scope",
-    "input_thought_history",
-    "smm_memory_scope",
-    "thought_history_items",
     "smm_mode",
-    "explicit_smm_memory",
-    "run_tag",
     "speaker_order_seed",
     "status",
     "timestamp",
@@ -47,8 +40,6 @@ BASE_COLUMNS = [
     "mean_pairwise_memory_similarity",
     "min_pairwise_memory_similarity",
     "max_pairwise_memory_similarity",
-    "memory_similarity_method",
-    "embedding_model",
     "metadata_file",
 ]
 
@@ -76,18 +67,11 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
     context = metadata.get("context_consistency") or {}
     row = {
         "run_id": metadata.get("run_id"),
-        "condition": metadata.get("condition"),
         "context_transparency_condition": metadata.get(
             "context_transparency_condition",
             metadata.get("condition"),
         ),
-        "input_history_scope": metadata.get("input_history_scope"),
-        "input_thought_history": metadata.get("input_thought_history"),
-        "smm_memory_scope": metadata.get("smm_memory_scope"),
-        "thought_history_items": metadata.get("thought_history_items", 0),
         "smm_mode": metadata.get("smm_mode", "treatment"),
-        "explicit_smm_memory": metadata.get("explicit_smm_memory", True),
-        "run_tag": metadata.get("run_tag"),
         "speaker_order_seed": metadata.get("speaker_order_seed"),
         "status": metadata.get("status"),
         "timestamp": metadata.get("timestamp"),
@@ -112,8 +96,6 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         ),
         "min_pairwise_memory_similarity": context.get("min_pairwise_similarity"),
         "max_pairwise_memory_similarity": context.get("max_pairwise_similarity"),
-        "memory_similarity_method": context.get("method"),
-        "embedding_model": context.get("embedding_model"),
         "metadata_file": str(path.relative_to(REPO_ROOT)),
     }
 
@@ -160,7 +142,7 @@ def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], 
     columns = BASE_COLUMNS + sorted(vote_columns) + sorted(similarity_columns)
     rows.sort(
         key=lambda row: (
-            CONDITION_ORDER.get(str(row.get("condition")), 99),
+            CONDITION_ORDER.get(str(row.get("context_transparency_condition")), 99),
             SMM_MODE_ORDER.get(str(row.get("smm_mode")), 99),
             str(row.get("run_id") or ""),
         )

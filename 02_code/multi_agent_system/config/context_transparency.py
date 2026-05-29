@@ -40,7 +40,4 @@ def context_transparency_metadata() -> dict[str, object]:
     """Return stable metadata fields for the input-transparency manipulation."""
     return {
         "context_transparency_condition": context_transparency_condition(),
-        "input_history_scope": input_history_scope(),
-        "input_thought_history": thought_history_enabled(),
-        "smm_memory_scope": smm_memory_scope(),
     }

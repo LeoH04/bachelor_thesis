@@ -12,7 +12,6 @@ from .response_text import (
     _replace_response_text,
     _visible_text_from_parts,
 )
-from .similarity import calculate_memory_similarity
 from .smm import explicit_smm_memory_enabled
 from .task import AGENT_KEYS, TASK
 from .trace import log_event
@@ -27,6 +26,7 @@ MEMORY_SECTION_FIELDS = (
     ("current_positions", "Current Positions"),
     ("group_decision_state", "Group Decision State"),
 )
+
 
 def _agent_memory_path(agent_key: str) -> Path:
     """Return the markdown memory file path for the given agent key."""
@@ -170,9 +170,7 @@ def archive_agent_memories() -> Path | None:
 
     if not explicit_smm_memory_enabled():
         similarity = {
-            "method": "not_applicable",
             "reason": "explicit_smm_memory_disabled",
-            "agent_count": 0,
             "pairwise": [],
             "mean_pairwise_similarity": None,
             "min_pairwise_similarity": None,
@@ -197,32 +195,21 @@ def archive_agent_memories() -> Path | None:
     destination.mkdir(parents=True, exist_ok=True)
 
     memory_files = []
-    memory_texts = {}
     for agent_key in AGENT_KEYS:
         source = _agent_memory_path(agent_key)
         if source.exists():
             memory_files.append(str(source))
-            memory_texts[agent_key] = source.read_text(encoding="utf-8")
-
-    similarity = calculate_memory_similarity(memory_texts)
 
     _AGENT_MEMORIES_ARCHIVED = True
     update_run_metadata(
         {
             "shared_mental_models_archived": True,
             "shared_mental_model_files": memory_files,
-            "context_consistency": similarity,
-            "pairwise_memory_similarity": similarity.get("pairwise", []),
-            "mean_pairwise_memory_similarity": similarity.get(
-                "mean_pairwise_similarity"
-            ),
         }
     )
     log_event(
-        "context_consistency_calculated",
-        method=similarity.get("method"),
-        mean_pairwise_similarity=similarity.get("mean_pairwise_similarity"),
-        pairwise=similarity.get("pairwise", []),
+        "context_consistency_deferred",
+        reason="memory_similarity_calculated_post_run",
     )
     return destination
 

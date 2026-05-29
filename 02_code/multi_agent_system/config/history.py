@@ -1,7 +1,7 @@
 """Record and format public discussion history."""
 
 from .context_transparency import current_round_history_enabled, thought_history_enabled
-from .make_session_log import CHAT_LOG_FILE, update_run_metadata
+from .make_session_log import CHAT_LOG_FILE
 from .metrics import metrics
 from .response_text import (
     METADATA_JSON_LABEL_RE,
@@ -89,7 +89,6 @@ def _record_thought_history_item(state: dict) -> int:
     except (TypeError, ValueError):
         count = 1
     state[THOUGHT_HISTORY_COUNT_STATE_KEY] = count
-    update_run_metadata({"thought_history_items": count})
     return count
 
 
