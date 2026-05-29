@@ -18,7 +18,12 @@ def context_transparency_condition() -> str:
 
 def current_round_history_enabled() -> bool:
     """Return whether prompts should see only current-round discussion history."""
-    return context_transparency_condition() == "low"
+    return False
+
+
+def discussion_history_enabled() -> bool:
+    """Return whether raw public discussion history should be shown in prompts."""
+    return context_transparency_condition() != "low"
 
 
 def thought_history_enabled() -> bool:
@@ -28,6 +33,8 @@ def thought_history_enabled() -> bool:
 
 def input_history_scope() -> str:
     """Return a stable metadata label for the prompt-visible history scope."""
+    if not discussion_history_enabled():
+        return "none"
     return "current_round" if current_round_history_enabled() else "full_history"
 
 

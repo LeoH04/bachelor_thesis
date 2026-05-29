@@ -1,6 +1,6 @@
 """Record and format public discussion history."""
 
-from .context_transparency import current_round_history_enabled, thought_history_enabled
+from .context_transparency import input_history_scope, thought_history_enabled
 from .make_session_log import CHAT_LOG_FILE
 from .metrics import metrics
 from .response_text import (
@@ -259,7 +259,10 @@ def _indent_history_detail(text: str) -> str:
 
 def _history_items_for_active_scope(history: list[object]) -> list[object]:
     """Return history entries visible under the active input-context condition."""
-    if not current_round_history_enabled():
+    scope = input_history_scope()
+    if scope == "none":
+        return []
+    if scope != "current_round":
         return history
 
     current_round = _round_number()
@@ -272,6 +275,9 @@ def _history_items_for_active_scope(history: list[object]) -> list[object]:
 
 def build_public_discussion_history(ctx) -> str:
     """Format the stored public discussion transcript for inclusion in prompts."""
+    if input_history_scope() == "none":
+        return "- Discussion history is hidden for this input-context condition."
+
     state = _get_state(ctx)
     history = state.get(PUBLIC_DISCUSSION_STATE_KEY, [])
     if not isinstance(history, list) or not history:
