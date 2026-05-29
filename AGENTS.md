@@ -100,9 +100,9 @@ The implementation lives in
 Agents see only public discussion and tool exchanges from the current discussion
 round.
 
-Low treatment additionally resets run-local explicit SMM memory at the start of
-each round, so the structured memory can summarize only the current-round
-interaction.
+Low treatment keeps explicit SMM memory across the full meeting. The raw
+discussion history shown in prompts is current-round scoped, but the structured
+memory is not reset between rounds.
 
 Low never includes stored model thoughts.
 

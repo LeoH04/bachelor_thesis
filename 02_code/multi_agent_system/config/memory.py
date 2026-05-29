@@ -4,7 +4,6 @@ import json
 import re
 from pathlib import Path
 
-from .context_transparency import current_round_memory_scope_enabled
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 from .response_text import (
@@ -236,20 +235,6 @@ def initialize_all_agent_memories() -> None:
     for agent_key in AGENT_KEYS:
         template = build_memory_template(agent_key)
         write_agent_memory(agent_key, template)
-
-
-def reset_agent_memories_for_current_round(round_number: int | None = None) -> bool:
-    """Reset treatment memories when low input transparency limits context by round."""
-    if not explicit_smm_memory_enabled() or not current_round_memory_scope_enabled():
-        return False
-
-    initialize_all_agent_memories()
-    log_event(
-        "round_memory_reset",
-        round=round_number or metrics.loop_count + 1,
-        reason="low_input_transparency_current_round_scope",
-    )
-    return True
 
 
 def record_memory_update_response(agent_key: str, _callback_context, llm_response):

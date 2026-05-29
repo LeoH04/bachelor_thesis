@@ -15,7 +15,7 @@ from .agents.discussion.agent_1 import agent_1, agent_1_tool
 from .agents.discussion.agent_2 import agent_2, agent_2_tool
 from .agents.discussion.agent_3 import agent_3, agent_3_tool
 from .config.make_session_log import RUN_ID, update_run_metadata
-from .config.memory import archive_agent_memories, reset_agent_memories_for_current_round
+from .config.memory import archive_agent_memories
 from .config.metrics import metrics
 from .config.smm import explicit_smm_memory_enabled
 from .config.task import AGENT_KEYS
@@ -92,8 +92,6 @@ class RandomizedDiscussionRoundAgent(BaseAgent):
         ctx: InvocationContext,
     ) -> AsyncGenerator[Event, None]:
         round_number = metrics.loop_count + 1
-        if EXPLICIT_SMM_MEMORY:
-            reset_agent_memories_for_current_round(round_number)
 
         speaker_update_pairs = _speaker_update_pairs()
         SPEAKER_ORDER_RNG.shuffle(speaker_update_pairs)

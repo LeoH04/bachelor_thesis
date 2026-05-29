@@ -26,11 +26,6 @@ def thought_history_enabled() -> bool:
     return context_transparency_condition() == "high"
 
 
-def current_round_memory_scope_enabled() -> bool:
-    """Return whether treatment SMM memory should reset at each discussion round."""
-    return context_transparency_condition() == "low"
-
-
 def input_history_scope() -> str:
     """Return a stable metadata label for the prompt-visible history scope."""
     return "current_round" if current_round_history_enabled() else "full_history"
@@ -38,11 +33,7 @@ def input_history_scope() -> str:
 
 def smm_memory_scope() -> str:
     """Return a stable metadata label for the treatment memory scope."""
-    return (
-        "current_round"
-        if current_round_memory_scope_enabled()
-        else "full_meeting"
-    )
+    return "full_meeting"
 
 
 def context_transparency_metadata() -> dict[str, object]:
