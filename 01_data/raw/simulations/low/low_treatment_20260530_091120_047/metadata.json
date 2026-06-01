@@ -4,24 +4,42 @@
   "agent_turns": 15,
   "completed_at": "2026-05-30T15:14:07+0200",
   "context_consistency": {
-    "max_pairwise_similarity": 0.960035,
-    "mean_pairwise_similarity": 0.944442,
-    "min_pairwise_similarity": 0.929329,
+    "embedding_input_characters": {
+      "agent_1": 4679,
+      "agent_2": 4002,
+      "agent_3": 4567
+    },
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "embedding_raw_characters": {
+      "agent_1": 4813,
+      "agent_2": 4002,
+      "agent_3": 4699
+    },
+    "embedding_removed_adjacent_duplicate_lines": {
+      "agent_1": 5,
+      "agent_2": 0,
+      "agent_3": 5
+    },
+    "embedding_text_normalization": "collapse_adjacent_duplicate_lines",
+    "max_pairwise_similarity": 0.954768,
+    "mean_pairwise_similarity": 0.942042,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.921065,
     "pairwise": [
       {
         "agent_a": "agent_1",
         "agent_b": "agent_2",
-        "similarity": 0.943961
+        "similarity": 0.954768
       },
       {
         "agent_a": "agent_1",
         "agent_b": "agent_3",
-        "similarity": 0.960035
+        "similarity": 0.950294
       },
       {
         "agent_a": "agent_2",
         "agent_b": "agent_3",
-        "similarity": 0.929329
+        "similarity": 0.921065
       }
     ]
   },
@@ -29,26 +47,28 @@
   "correct_candidate": "Candidate C",
   "decision_correct": 0,
   "decision_method": "max_round_no_majority",
+  "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
   "final_candidate": null,
   "input_tokens": 220898,
-  "mean_pairwise_memory_similarity": 0.944442,
+  "mean_pairwise_memory_similarity": 0.942042,
+  "memory_similarity_method": "embedding_cosine",
   "memory_updates": 45,
   "output_tokens": 110686,
   "pairwise_memory_similarity": [
     {
       "agent_a": "agent_1",
       "agent_b": "agent_2",
-      "similarity": 0.943961
+      "similarity": 0.954768
     },
     {
       "agent_a": "agent_1",
       "agent_b": "agent_3",
-      "similarity": 0.960035
+      "similarity": 0.950294
     },
     {
       "agent_a": "agent_2",
       "agent_b": "agent_3",
-      "similarity": 0.929329
+      "similarity": 0.921065
     }
   ],
   "paths": {
@@ -66,7 +86,11 @@
     "/Users/leonardhegemann/Documents/Studium/Bachelor/SoSe_2026/Abschlussarbeit/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260530_091120_047/shared_mental_models/agent_3.md"
   ],
   "shared_mental_models_archived": true,
+  "smm_evidence_share": 0.5,
   "smm_mode": "treatment",
+  "smm_quality": 0.471021,
+  "smm_quality_method": "c_decisive_evidence_coverage_x_memory_similarity",
+  "smm_similarity": 0.942042,
   "speaker_order_seed": "low_treatment_20260530_091120_047",
   "status": "completed",
   "timestamp": "20260530_150358",

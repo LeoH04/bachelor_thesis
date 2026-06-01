@@ -96,6 +96,9 @@ numeric_columns <- c(
   "mean_pairwise_memory_similarity",
   "min_pairwise_memory_similarity",
   "max_pairwise_memory_similarity",
+  "smm_similarity",
+  "smm_evidence_share",
+  "smm_quality",
   grep("^similarity_", names(simulation_metrics), value = TRUE)
 )
 
@@ -382,8 +385,8 @@ save_four_column_plot(
 )
 
 # ------------------------------------------------------------
-# 4. Treatment-only semantic similarity
-# This cannot be meaningfully compared to baseline unless baseline has values.
+# 4. Treatment-only SMM metrics
+# These cannot be meaningfully compared to baseline unless baseline has values.
 # ------------------------------------------------------------
 
 treatment_metrics <- simulation_metrics %>%
@@ -407,6 +410,26 @@ if (nrow(treatment_metrics) > 0) {
     y_label = "Mean semantic similarity",
     title = "Mean semantic similarity by condition",
     filename = "semantic_similarity_overview_plot.pdf",
+    digits = 3,
+    y_limits = c(0, 1)
+  )
+  
+  smm_quality_overview <- treatment_metrics %>%
+    group_by(context_transparency_condition) %>%
+    summarise(
+      total_runs = n(),
+      mean_smm_quality = mean(smm_quality, na.rm = TRUE),
+      .groups = "drop"
+    )
+  
+  print(smm_quality_overview)
+  
+  save_single_mode_plot(
+    plot_data = smm_quality_overview,
+    y_var = "mean_smm_quality",
+    y_label = "Mean SMM quality",
+    title = "Mean SMM quality by condition",
+    filename = "smm_quality_overview_plot.pdf",
     digits = 3,
     y_limits = c(0, 1)
   )

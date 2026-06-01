@@ -41,6 +41,10 @@ BASE_COLUMNS = [
     "mean_pairwise_memory_similarity",
     "min_pairwise_memory_similarity",
     "max_pairwise_memory_similarity",
+    "smm_similarity",
+    "smm_evidence_share",
+    "smm_quality",
+    "smm_quality_method",
     "metadata_file",
 ]
 
@@ -98,6 +102,13 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         ),
         "min_pairwise_memory_similarity": context.get("min_pairwise_similarity"),
         "max_pairwise_memory_similarity": context.get("max_pairwise_similarity"),
+        "smm_similarity": metadata.get(
+            "smm_similarity",
+            metadata.get("mean_pairwise_memory_similarity"),
+        ),
+        "smm_evidence_share": metadata.get("smm_evidence_share"),
+        "smm_quality": metadata.get("smm_quality"),
+        "smm_quality_method": metadata.get("smm_quality_method"),
         "metadata_file": str(path.relative_to(REPO_ROOT)),
     }
 
