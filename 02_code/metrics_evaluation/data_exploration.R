@@ -1,5 +1,7 @@
 # ============================================================
 # Data exploration of generated simulation data
+# Baseline as separate fourth column:
+# Baseline | Low | Moderate | High
 # ============================================================
 
 # Empty workspace
@@ -15,13 +17,14 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # ------------------------------------------------------------
 # 1. LOAD DATA
 # ------------------------------------------------------------
+
 # simulation_metric_files <- list.files(
 #   "01_data/processed",
 #   pattern = "^simulation_metrics_.*\\.csv$",
 #   full.names = TRUE
 # )
 # latest_simulation_metric_file <- sort(simulation_metric_files, decreasing = TRUE)[1]
-# 
+#
 # simulation_metrics <- read.csv(
 #   latest_simulation_metric_file,
 #   na.strings = c("", "NA"),
@@ -29,10 +32,14 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260529_163907.csv",
+  "01_data/processed/simulation_metrics_20260530_091120.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
+
+# ------------------------------------------------------------
+# 1a. Type conversion
+# ------------------------------------------------------------
 
 simulation_metrics$context_transparency_condition <- factor(
   simulation_metrics$context_transparency_condition,
@@ -76,6 +83,8 @@ integer_columns <- c(
   grep("^votes_", names(simulation_metrics), value = TRUE)
 )
 
+integer_columns <- intersect(integer_columns, names(simulation_metrics))
+
 simulation_metrics[integer_columns] <- lapply(
   simulation_metrics[integer_columns],
   as.integer
@@ -83,11 +92,14 @@ simulation_metrics[integer_columns] <- lapply(
 
 numeric_columns <- c(
   "runtime_seconds",
+  "tokens_per_correct_decision",
   "mean_pairwise_memory_similarity",
   "min_pairwise_memory_similarity",
   "max_pairwise_memory_similarity",
   grep("^similarity_", names(simulation_metrics), value = TRUE)
 )
+
+numeric_columns <- intersect(numeric_columns, names(simulation_metrics))
 
 simulation_metrics[numeric_columns] <- lapply(
   simulation_metrics[numeric_columns],
@@ -95,10 +107,31 @@ simulation_metrics[numeric_columns] <- lapply(
 )
 
 # ------------------------------------------------------------
+# 1b. Create plotting condition
+# ------------------------------------------------------------
+# This collapses all baseline runs into one reference condition.
+# Treatment runs remain separated by context transparency condition.
+
+simulation_metrics <- simulation_metrics %>%
+  mutate(
+    plot_condition = case_when(
+      smm_mode == "baseline" ~ "baseline",
+      smm_mode == "treatment" ~ as.character(context_transparency_condition),
+      TRUE ~ NA_character_
+    ),
+    plot_condition = factor(
+      plot_condition,
+      levels = c("baseline", "low", "moderate", "high"),
+      labels = c("Baseline", "Low", "Moderate", "High")
+    )
+  )
+
+# ------------------------------------------------------------
 # 2. Calculate costs
 # ------------------------------------------------------------
-total_number_input_tokens <- sum(simulation_metrics$input_tokens)
-total_number_output_tokens <- sum(simulation_metrics$output_tokens)
+
+total_number_input_tokens <- sum(simulation_metrics$input_tokens, na.rm = TRUE)
+total_number_output_tokens <- sum(simulation_metrics$output_tokens, na.rm = TRUE)
 
 costs <- calculate_costs(
   input_tokens = total_number_input_tokens,
@@ -111,6 +144,7 @@ print(costs)
 # ------------------------------------------------------------
 # PLOT THEME
 # ------------------------------------------------------------
+
 plot_theme <- theme_minimal(base_size = 13) +
   theme(
     plot.title = element_text(
@@ -139,51 +173,78 @@ plot_theme <- theme_minimal(base_size = 13) +
   )
 
 # ------------------------------------------------------------
-# Helper function for baseline + treatment comparison plots
+# Helper function for four-column plots
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
-save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, digits = 2) {
+
+save_four_column_plot <- function(
+    plot_data,
+    y_var,
+    y_label,
+    title,
+    filename,
+    digits = 2,
+    y_limits = NULL,
+    as_percent = FALSE
+) {
   
-  y_max <- max(plot_data[[y_var]], na.rm = TRUE)
+  plot_data <- plot_data %>%
+    filter(!is.na(plot_condition)) %>%
+    mutate(
+      plot_group = if_else(
+        as.character(plot_condition) == "Baseline",
+        "Baseline",
+        "Treatment"
+      ),
+      plot_label = if (as_percent) {
+        paste0(round(.data[[y_var]] * 100, digits), "%")
+      } else {
+        as.character(round(.data[[y_var]], digits))
+      }
+    )
   
-  if (!is.finite(y_max) || y_max == 0) {
-    y_max <- 1
+  if (is.null(y_limits)) {
+    y_max <- max(plot_data[[y_var]], na.rm = TRUE)
+
+    if (!is.finite(y_max) || y_max == 0) {
+      y_max <- 1
+    }
+
+    y_limits <- c(0, y_max * 1.15)
   }
   
-  present_modes <- intersect(
-    c("baseline", "treatment"),
-    unique(as.character(plot_data$smm_mode))
-  )
+  y_scale <- if (as_percent) {
+    scale_y_continuous(
+      limits = y_limits,
+      expand = expansion(mult = c(0, 0)),
+      labels = function(x) paste0(round(x * 100), "%")
+    )
+  } else {
+    scale_y_continuous(
+      limits = y_limits,
+      expand = expansion(mult = c(0, 0))
+    )
+  }
   
-  comparison_plot <- ggplot(
+  four_column_plot <- ggplot(
     plot_data,
-    aes(x = context_transparency_condition, y = .data[[y_var]], fill = smm_mode)
+    aes(x = plot_condition, y = .data[[y_var]], fill = plot_group)
   ) +
     geom_col(
-      position = position_dodge(width = 0.75),
       width = 0.65
     ) +
     geom_text(
-      aes(label = round(.data[[y_var]], digits)),
-      position = position_dodge(width = 0.75),
+      aes(label = plot_label),
       vjust = -0.4,
       size = 3.6
     ) +
     scale_fill_manual(
       values = c(
-        "baseline" = "grey70",
-        "treatment" = "grey35"
-      ),
-      breaks = present_modes,
-      labels = c(
-        "baseline" = "Baseline",
-        "treatment" = "Treatment"
-      )[present_modes],
-      name = NULL
+        "Baseline" = "grey70",
+        "Treatment" = "grey35"
+      )
     ) +
-    scale_y_continuous(
-      limits = c(0, y_max * 1.15),
-      expand = expansion(mult = c(0, 0))
-    ) +
+    y_scale +
     labs(
       x = "Condition",
       y = y_label,
@@ -191,14 +252,14 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
     ) +
     plot_theme +
     theme(
-      legend.position = "top"
+      legend.position = "none"
     )
   
-  if (interactive()) print(comparison_plot)
+  if (interactive()) print(four_column_plot)
   
   ggsave(
     filename = paste0(path, "/03_report/graphs/", filename),
-    plot = comparison_plot,
+    plot = four_column_plot,
     width = 8,
     height = 5
   )
@@ -207,7 +268,16 @@ save_comparison_plot <- function(plot_data, y_var, y_label, title, filename, dig
 # ------------------------------------------------------------
 # Helper function for treatment-only plots
 # ------------------------------------------------------------
-save_single_mode_plot <- function(plot_data, y_var, y_label, title, filename, digits = 3, y_limits = NULL) {
+
+save_single_mode_plot <- function(
+    plot_data,
+    y_var,
+    y_label,
+    title,
+    filename,
+    digits = 3,
+    y_limits = NULL
+) {
   
   if (is.null(y_limits)) {
     y_max <- max(plot_data[[y_var]], na.rm = TRUE)
@@ -255,10 +325,14 @@ save_single_mode_plot <- function(plot_data, y_var, y_label, title, filename, di
 }
 
 # ------------------------------------------------------------
-# 3a. Correct candidate choices: baseline vs treatment
+# 3a. Correct candidate choices
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+# Use shares instead of raw counts because collapsed baseline may contain
+# a different number of runs than each treatment condition.
+
 correct_candidate_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     correct_choices = sum(decision_correct, na.rm = TRUE),
@@ -268,41 +342,50 @@ correct_candidate_overview <- simulation_metrics %>%
 
 print(correct_candidate_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = correct_candidate_overview,
-  y_var = "correct_choices",
-  y_label = "Correct choices",
+  y_var = "correct_share",
+  y_label = "Share of correct choices",
   title = "Correct candidate choices by condition",
   filename = "correct_candidate_overview_plot.pdf",
-  digits = 0
+  digits = 1,
+  y_limits = c(0, 1),
+  as_percent = TRUE
 )
 
 # ------------------------------------------------------------
-# 3b. NA final candidates: baseline vs treatment
+# 3b. NA final candidates
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+# Again use shares instead of raw counts.
+
 na_candidate_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     na_candidates = sum(is.na(final_candidate)),
+    na_share = na_candidates / total_runs,
     .groups = "drop"
   )
 
 print(na_candidate_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = na_candidate_overview,
-  y_var = "na_candidates",
-  y_label = "Number of runs",
+  y_var = "na_share",
+  y_label = "Share of runs without final candidate",
   title = "Runs without a final candidate by condition",
   filename = "na_candidate_overview_plot.pdf",
-  digits = 0
+  digits = 1,
+  y_limits = c(0, 1),
+  as_percent = TRUE
 )
 
 # ------------------------------------------------------------
 # 4. Treatment-only semantic similarity
-# This cannot be compared to baseline unless baseline has values.
+# This cannot be meaningfully compared to baseline unless baseline has values.
 # ------------------------------------------------------------
+
 treatment_metrics <- simulation_metrics %>%
   filter(smm_mode == "treatment")
 
@@ -330,10 +413,12 @@ if (nrow(treatment_metrics) > 0) {
 }
 
 # ------------------------------------------------------------
-# 5. Interaction rounds: baseline vs treatment
+# 5. Interaction rounds
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+
 rounds_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     mean_rounds = mean(rounds, na.rm = TRUE),
@@ -342,7 +427,7 @@ rounds_overview <- simulation_metrics %>%
 
 print(rounds_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = rounds_overview,
   y_var = "mean_rounds",
   y_label = "Mean rounds",
@@ -352,10 +437,12 @@ save_comparison_plot(
 )
 
 # ------------------------------------------------------------
-# 6. Messages: baseline vs treatment
+# 6. Messages
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+
 messages_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     mean_messages = mean(total_messages, na.rm = TRUE),
@@ -364,7 +451,7 @@ messages_overview <- simulation_metrics %>%
 
 print(messages_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = messages_overview,
   y_var = "mean_messages",
   y_label = "Mean messages",
@@ -374,10 +461,12 @@ save_comparison_plot(
 )
 
 # ------------------------------------------------------------
-# 7. Tokens: baseline vs treatment
+# 7. Tokens
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+
 tokens_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     mean_tokens = mean(total_tokens, na.rm = TRUE),
@@ -386,7 +475,7 @@ tokens_overview <- simulation_metrics %>%
 
 print(tokens_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = tokens_overview,
   y_var = "mean_tokens",
   y_label = "Mean tokens",
@@ -396,10 +485,32 @@ save_comparison_plot(
 )
 
 # ------------------------------------------------------------
-# 8. Runtime: baseline vs treatment
+# 8. Efficiency
+# Baseline | Low | Moderate | High
 # ------------------------------------------------------------
+
+efficiency_overview <- simulation_metrics %>%
+  filter(!is.na(tokens_per_correct_decision)) %>%
+  distinct(plot_condition, tokens_per_correct_decision)
+
+print(efficiency_overview)
+
+save_four_column_plot(
+  plot_data = efficiency_overview,
+  y_var = "tokens_per_correct_decision",
+  y_label = "Tokens per correct decision",
+  title = "Tokens per correct decision by condition",
+  filename = "efficiency_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 9. Runtime
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
 runtime_overview <- simulation_metrics %>%
-  group_by(smm_mode, context_transparency_condition) %>%
+  group_by(plot_condition) %>%
   summarise(
     total_runs = n(),
     mean_runtime_seconds = mean(runtime_seconds, na.rm = TRUE),
@@ -408,7 +519,7 @@ runtime_overview <- simulation_metrics %>%
 
 print(runtime_overview)
 
-save_comparison_plot(
+save_four_column_plot(
   plot_data = runtime_overview,
   y_var = "mean_runtime_seconds",
   y_label = "Mean runtime in seconds",

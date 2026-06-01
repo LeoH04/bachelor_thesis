@@ -7,6 +7,7 @@ import argparse
 import json
 import math
 import os
+import shlex
 import sys
 from itertools import combinations
 from pathlib import Path
@@ -15,6 +16,55 @@ from typing import Mapping
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
+DEFAULT_ENV_FILE = REPO_ROOT / "02_code" / "multi_agent_system" / ".env"
+EMBEDDING_TEXT_NORMALIZATION = "collapse_adjacent_duplicate_lines"
+_DEFAULT_ENV_LOADED = False
+
+
+def _parse_env_line(line: str) -> tuple[str, str] | None:
+    """Parse one simple dotenv assignment without overriding shell semantics."""
+    line = line.strip()
+    if not line or line.startswith("#"):
+        return None
+    if line.startswith("export "):
+        line = line[len("export ") :].strip()
+    if "=" not in line:
+        return None
+
+    key, raw_value = line.split("=", 1)
+    key = key.strip()
+    if not key:
+        return None
+
+    try:
+        parts = shlex.split(raw_value, comments=True, posix=True)
+    except ValueError:
+        return key, raw_value.strip().strip("'\"")
+
+    return key, " ".join(parts)
+
+
+def load_env_file(path: Path) -> None:
+    """Load missing environment values from a dotenv-style file."""
+    if not path.exists():
+        return
+
+    for line in path.read_text(encoding="utf-8").splitlines():
+        parsed = _parse_env_line(line)
+        if parsed is None:
+            continue
+        key, value = parsed
+        os.environ.setdefault(key, value)
+
+
+def load_default_env_files() -> None:
+    """Load the repo-local model env file once so metrics work from any cwd."""
+    global _DEFAULT_ENV_LOADED
+    if _DEFAULT_ENV_LOADED:
+        return
+
+    load_env_file(DEFAULT_ENV_FILE)
+    _DEFAULT_ENV_LOADED = True
 
 
 def _cosine(left: list[float], right: list[float]) -> float:
@@ -31,6 +81,7 @@ def _cosine(left: list[float], right: list[float]) -> float:
 
 def _config_value(key: str) -> str | None:
     """Return exactly one configured value from env."""
+    load_default_env_files()
     return os.getenv(key)
 
 
@@ -77,7 +128,16 @@ def _coerce_embedding(item: object) -> list[float]:
 
 def _embedding_vectors(texts: Mapping[str, str], model: str) -> dict[str, list[float]]:
     """Build dense semantic embedding vectors with LiteLLM when configured."""
-    from litellm import embedding
+    try:
+        from litellm import embedding
+    except ModuleNotFoundError as exc:
+        if exc.name != "litellm":
+            raise
+        raise RuntimeError(
+            "Missing Python package 'litellm'. Activate the ADK environment with "
+            "the project requirements installed, or install dependencies from the "
+            "repository root with: python -m pip install -r requirements.txt"
+        ) from exc
 
     agent_keys = sorted(texts)
     kwargs = _embedding_kwargs(model, [texts[key] for key in agent_keys])
@@ -95,6 +155,31 @@ def _embedding_vectors(texts: Mapping[str, str], model: str) -> dict[str, list[f
         )
 
     return vectors
+
+
+def _collapse_adjacent_duplicate_lines(text: str) -> str:
+    """Remove exact adjacent line duplication before embedding archived memories."""
+    lines = []
+    previous_key = None
+    for line in text.splitlines():
+        key = line.strip()
+        if key == previous_key:
+            continue
+        lines.append(line.rstrip())
+        previous_key = key
+    normalized = "\n".join(lines).strip()
+    return normalized if normalized else text.strip()
+
+
+def _embedding_texts(texts: Mapping[str, str]) -> tuple[dict[str, str], dict[str, int]]:
+    """Return normalized embedding inputs and per-agent removed line counts."""
+    normalized = {}
+    removed_counts = {}
+    for agent_key, text in texts.items():
+        normalized_text = _collapse_adjacent_duplicate_lines(text)
+        normalized[agent_key] = normalized_text
+        removed_counts[agent_key] = text.count("\n") - normalized_text.count("\n")
+    return normalized, removed_counts
 
 
 def _pairwise_similarity(
@@ -148,10 +233,23 @@ def calculate_memory_similarity(texts: Mapping[str, str]) -> dict[str, object]:
         )
 
     model = _embedding_model()
-    vectors = _embedding_vectors(non_empty_texts, model)
+    embedding_texts, removed_duplicate_lines = _embedding_texts(non_empty_texts)
+    vectors = _embedding_vectors(embedding_texts, model)
     return _similarity_summary(
-        non_empty_texts,
+        embedding_texts,
         _pairwise_similarity(vectors),
+        method="embedding_cosine",
+        embedding_model=model,
+        embedding_text_normalization=EMBEDDING_TEXT_NORMALIZATION,
+        embedding_raw_characters={
+            agent_key: len(text)
+            for agent_key, text in sorted(non_empty_texts.items())
+        },
+        embedding_input_characters={
+            agent_key: len(text)
+            for agent_key, text in sorted(embedding_texts.items())
+        },
+        embedding_removed_adjacent_duplicate_lines=removed_duplicate_lines,
     )
 
 
@@ -235,6 +333,8 @@ def update_similarity(metadata_file: Path, force: bool, include_incomplete: bool
             "shared_mental_models_archived": True,
             "shared_mental_model_files": memory_files,
             "context_consistency": similarity,
+            "memory_similarity_method": similarity.get("method"),
+            "embedding_model": similarity.get("embedding_model"),
             "pairwise_memory_similarity": similarity.get("pairwise", []),
             "mean_pairwise_memory_similarity": similarity.get(
                 "mean_pairwise_similarity"
@@ -273,6 +373,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     """Calculate memory similarity for selected runs."""
     args = parse_args()
+    load_default_env_files()
     counts: dict[str, int] = {}
 
     for metadata_file in metadata_files_from(args):
@@ -282,6 +383,8 @@ def main() -> int:
             include_incomplete=args.include_incomplete,
         )
         counts[status] = counts.get(status, 0) + 1
+        if status == "updated":
+            print(f"updated: {metadata_file.parent.name}", flush=True)
 
     total = sum(counts.values())
     summary = ", ".join(f"{key}: {value}" for key, value in sorted(counts.items()))
