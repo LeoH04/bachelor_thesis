@@ -26,7 +26,7 @@ simulation_metrics <- read.csv(paste0(path,
 )
 
 # ------------------------------------------------------------
-# 2. Test average treatment against baseline
+# 2. H1: Test average treatment against baseline
 # ------------------------------------------------------------
 
 # SMM vs. baseline: compare average SMM treatment performance against baseline.
@@ -38,7 +38,7 @@ baseline_decisions <- subset(
   simulation_metrics,
   smm_mode == "baseline" & !is.na(decision_correct)
 )
-smm_vs_baseline <- prop.test(
+h1 <- prop.test(
   x = c(sum(smm_decisions$decision_correct), sum(baseline_decisions$decision_correct)),
   n = c(nrow(smm_decisions), nrow(baseline_decisions)),
   alternative = "greater"
@@ -80,17 +80,17 @@ d <- d[complete.cases(d[, c(
 # 5. Fit regression models
 # ------------------------------------------------------------
 
-# H1a/H1b adapted to SMM quality:
+# H2a/H2b adapted to SMM quality:
 # context transparency -> SMM quality
-h1 <- lm(smm_quality ~ condition, data = d)
+h2 <- lm(smm_quality ~ condition, data = d)
 
-# H2: SMM quality -> coordination efficiency, controlling for transparency
-h2 <- lm(coordination_efficiency ~ smm_quality + condition, data = d)
+# H3: SMM quality -> coordination efficiency, controlling for transparency
+h3 <- lm(coordination_efficiency ~ smm_quality + condition, data = d)
 
 
-# H3 adapted to SMM quality:
+# H4 adapted to SMM quality:
 # SMM quality -> correct decision, controlling for transparency
-h3 <- glm(
+h4 <- glm(
   coordination_effectiveness ~ smm_quality + condition,
   data = d,
   family = binomial
@@ -107,28 +107,28 @@ print(aggregate(smm_quality ~ condition, data = d, FUN = mean))
 # 7. Print heteroskedasticity diagnostics
 # ------------------------------------------------------------
 
-cat("\nWhite test for heteroskedasticity: H1\n")
-print(white(h1, interactions = TRUE))
-
 cat("\nWhite test for heteroskedasticity: H2\n")
 print(white(h2, interactions = TRUE))
+
+cat("\nWhite test for heteroskedasticity: H3\n")
+print(white(h3, interactions = TRUE))
 
 # ------------------------------------------------------------
 # 8. Print regression results
 # ------------------------------------------------------------
 
-cat("\nH1a/H1b regression: transparency -> SMM quality (HC3 robust standard errors)\n")
-print(coeftest(h1, vcov. = vcovHC(h1, type = "HC3")))
+cat("\nH2a/H2b regression: transparency -> SMM quality (HC3 robust standard errors)\n")
+print(coeftest(h2, vcov. = vcovHC(h2, type = "HC3")))
 
-cat("\nH2 regression\n")
-print(summary(h2))
-
-cat("\nH3 logistic regression: SMM quality -> correct decision\n")
+cat("\nH3 regression\n")
 print(summary(h3))
+
+cat("\nH4 logistic regression: SMM quality -> correct decision\n")
+print(summary(h4))
 
 # ------------------------------------------------------------
 # 9. Print baseline comparison
 # ------------------------------------------------------------
 
-cat("\nAverage SMM treatment vs. baseline correct-decision share test\n")
-print(smm_vs_baseline)
+cat("\nH1 average SMM treatment vs. baseline correct-decision share test\n")
+print(h1)
