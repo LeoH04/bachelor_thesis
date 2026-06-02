@@ -24,6 +24,7 @@ from .context_transparency import (
     input_history_scope,
     thought_history_enabled,
 )
+from .agents import agent_display_name, agent_persona
 from .history import _get_state, _round_number, build_public_discussion_history
 from .memory import read_agent_memory
 from .response_text import (
@@ -40,38 +41,6 @@ from .task import AGENT_KEYS, TASK, _as_bullets
 # ---------------------------------------------------------------------------
 
 AIRLINE_NAME = "AeroConnect Airlines"
-
-AGENT_PERSONAS = {
-    "agent_1": {
-        "name": "Agent 1",
-        "role": "HR Selection Specialist for Flight Operations",
-    },
-    "agent_2": {
-        "name": "Agent 2",
-        "role": "Pilot Assessment Specialist",
-    },
-    "agent_3": {
-        "name": "Agent 3",
-        "role": "Recruiting Specialist for Cockpit Personnel",
-    },
-}
-
-
-def _agent_persona(agent_key: str) -> dict:
-    """Return a realistic persona for the given agent key."""
-    return AGENT_PERSONAS.get(
-        agent_key,
-        {
-            "name": agent_key.replace("_", " ").title(),
-            "role": "HR Selection Panel Member",
-        },
-    )
-
-
-def _agent_display_name(agent_key: str) -> str:
-    """Return the human-readable name and role for an agent."""
-    persona = _agent_persona(agent_key)
-    return f"{persona['name']}, {persona['role']}"
 
 
 # ---------------------------------------------------------------------------
@@ -244,7 +213,7 @@ def _tool_question_section(agent_key: str) -> str:
     """Return instructions for asking other agents via tools."""
     other_agents = [key for key in AGENT_KEYS if key != agent_key]
     other_agent_tools = [
-        f"{key}_tool ({_agent_display_name(key)})"
+        f"{key}_tool ({agent_display_name(key)})"
         for key in other_agents
     ]
 
@@ -351,7 +320,7 @@ def build_agent_instruction(
     system_prompt: str = "",
 ) -> str:
     """Build the full prompt for an agent's scheduled public discussion turn."""
-    persona = _agent_persona(agent_key)
+    persona = agent_persona(agent_key)
     agent_name = persona["name"]
     agent_role = persona["role"]
 
@@ -437,7 +406,7 @@ def build_memory_update_instruction(
     latest_speaker_key: str | None = None,
 ) -> str:
     """Build the prompt for a passive structured-memory update."""
-    persona = _agent_persona(agent_key)
+    persona = agent_persona(agent_key)
     agent_name = persona["name"]
     agent_role = persona["role"]
 
@@ -452,7 +421,7 @@ def build_memory_update_instruction(
 
     latest_speaker = latest_speaker_key or "unknown_agent"
     latest_speaker_display = (
-        _agent_display_name(latest_speaker_key)
+        agent_display_name(latest_speaker_key)
         if latest_speaker_key
         else "unknown panel member"
     )
@@ -564,7 +533,7 @@ def build_agent_tool_instruction(
     system_prompt: str = "",
 ) -> str:
     """Build the prompt for an agent answering a targeted tool question."""
-    persona = _agent_persona(agent_key)
+    persona = agent_persona(agent_key)
     agent_name = persona["name"]
     agent_role = persona["role"]
 

@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Iterable
 
+from .agents import AGENT_ORDER
+
 TASK_PATH = Path(__file__).parent / "hidden_profile_task.json"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -54,7 +56,10 @@ CORRECT_CANDIDATE = _require_correct_candidate()
 
 
 def _agent_sort_key(agent_key: str) -> tuple[str, int | str]:
-    """Sort agent_N keys numerically while keeping a stable fallback."""
+    """Sort configured agent keys while keeping a stable fallback."""
+    if agent_key in AGENT_ORDER:
+        return "configured", AGENT_ORDER.index(agent_key)
+
     prefix, separator, suffix = agent_key.rpartition("_")
     if separator:
         try:

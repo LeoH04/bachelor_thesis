@@ -11,9 +11,9 @@ from google.adk.utils.context_utils import Aclosing
 from .agents.control.memory_initialize import memory_initialization_agent
 from .agents.control.memory_update import MEMORY_UPDATE_STAGES
 from .agents.control.vote_checker import MAX_DISCUSSION_ROUNDS, vote_checker
-from .agents.discussion.agent_1 import agent_1, agent_1_tool
-from .agents.discussion.agent_2 import agent_2, agent_2_tool
-from .agents.discussion.agent_3 import agent_3, agent_3_tool
+from .agents.discussion.emily_brooks import emily_brooks, emily_brooks_tool
+from .agents.discussion.james_carter import james_carter, james_carter_tool
+from .agents.discussion.sarah_mitchell import sarah_mitchell, sarah_mitchell_tool
 from .config.make_session_log import RUN_ID, update_run_metadata
 from .config.memory import archive_agent_memories
 from .config.metrics import metrics
@@ -28,15 +28,15 @@ SPEAKER_ORDER_RNG = random.Random(SIM_RANDOM_SEED)
 update_run_metadata({"speaker_order_seed": SIM_RANDOM_SEED})
 
 DISCUSSION_AGENTS = {
-    "agent_1": agent_1,
-    "agent_2": agent_2,
-    "agent_3": agent_3,
+    "sarah_mitchell": sarah_mitchell,
+    "james_carter": james_carter,
+    "emily_brooks": emily_brooks,
 }
 
 TOOL_AGENTS = {
-    "agent_1": agent_1_tool,
-    "agent_2": agent_2_tool,
-    "agent_3": agent_3_tool,
+    "sarah_mitchell": sarah_mitchell_tool,
+    "james_carter": james_carter_tool,
+    "emily_brooks": emily_brooks_tool,
 }
 
 

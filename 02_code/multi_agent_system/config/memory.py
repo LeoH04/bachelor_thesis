@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 
+from .agents import agent_name_for_key
 from .make_session_log import SHARED_MENTAL_MODELS_DIR, update_run_metadata
 from .metrics import metrics
 from .response_text import (
@@ -35,7 +36,7 @@ def _agent_memory_path(agent_key: str) -> Path:
 
 def _render_memory_sections(agent_key: str, data: dict) -> str:
     """Render structured memory section bodies into the markdown memory document."""
-    title = f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})"
+    title = f"# Shared Mental Model ({agent_name_for_key(agent_key)})"
     sections = [title]
     for field, heading in MEMORY_SECTION_FIELDS:
         body = data.get(field)
@@ -93,19 +94,19 @@ def build_memory_template(agent_key: str) -> str:
     )
 
     information_distribution_rows = "\n".join(
-        f"| Agent {key.split('_')[-1]} | - | - |"
+        f"| {agent_name_for_key(key)} | - | - |"
         for key in AGENT_KEYS
     )
 
     current_position_rows = "\n".join(
-        f"| Agent {key.split('_')[-1]} | - | - | - |"
+        f"| {agent_name_for_key(key)} | - | - | - |"
         for key in AGENT_KEYS
     )
 
     candidates_needing_discussion = ", ".join(candidates) if candidates else "-"
 
     return (
-        f"# Shared Mental Model (Agent {agent_key.split('_')[-1]})\n\n"
+        f"# Shared Mental Model ({agent_name_for_key(agent_key)})\n\n"
 
         "## Candidate Review Status\n"
         "| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |\n"

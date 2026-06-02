@@ -27,9 +27,9 @@ Key properties:
 
 ## 3. Agents
 The active discussion agents are:
-- `agent_1`: Anna Keller, HR Selection Specialist for Flight Operations
-- `agent_2`: Markus Weber, Pilot Assessment Specialist
-- `agent_3`: Sofia Brandt, Recruiting Specialist for Cockpit Personnel
+- `sarah_mitchell`: Sarah Mitchell, HR Selection Specialist for Flight Operations
+- `james_carter`: James Carter, Pilot Assessment Specialist
+- `emily_brooks`: Emily Brooks, Recruiting Specialist for Cockpit Personnel
 
 Each discussion agent:
 - Has private candidate notes

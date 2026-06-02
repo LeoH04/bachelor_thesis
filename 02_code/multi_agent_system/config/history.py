@@ -1,6 +1,7 @@
 """Record and format public discussion history."""
 
 from .context_transparency import input_history_scope, thought_history_enabled
+from .agents import agent_name_for_key
 from .make_session_log import CHAT_LOG_FILE
 from .metrics import metrics
 from .response_text import (
@@ -71,7 +72,7 @@ def _agent_label(agent_name: str | None) -> str:
     if not agent_name:
         return "Unknown Agent"
 
-    return agent_name.removesuffix("_tool").replace("_", " ").title()
+    return agent_name_for_key(agent_name.removesuffix("_tool"))
 
 
 def _agent_key(agent_name: str | None) -> str:
@@ -289,7 +290,7 @@ def build_public_discussion_history(ctx) -> str:
         if not isinstance(item, dict):
             continue
         round_number = item.get("round", "?")
-        agent = str(item.get("agent", "unknown_agent")).replace("_", " ").title()
+        agent = agent_name_for_key(str(item.get("agent", "unknown_agent")))
         message = str(item.get("message", "")).strip()
         if message:
             thoughts = str(item.get("thoughts", "")).strip()

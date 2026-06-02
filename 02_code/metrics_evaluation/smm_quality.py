@@ -107,7 +107,7 @@ def read_memory_texts(run_dir: Path) -> dict[str, str]:
     memory_dir = run_dir / "shared_mental_models"
     memory_texts = {}
 
-    for path in sorted(memory_dir.glob("agent_*.md")):
+    for path in sorted(memory_dir.glob("*.md")):
         text = path.read_text(encoding="utf-8", errors="ignore").strip()
         if text:
             memory_texts[path.stem] = text
