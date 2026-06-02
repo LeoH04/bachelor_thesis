@@ -2,9 +2,16 @@
 # Statistical tests for simulation metrics
 # ============================================================
 
-# Clean workspace
+# ------------------------------------------------------------
+# 0. Setup
+# ------------------------------------------------------------
+
 if (!is.null(dev.list())) dev.off()
 rm(list = ls())
+
+library(lmtest)
+library(sandwich)
+library(skedastic)
 
 path <- getwd()
 
@@ -17,6 +24,10 @@ simulation_metrics <- read.csv(paste0(path,
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
+
+# ------------------------------------------------------------
+# 2. Test average treatment against baseline
+# ------------------------------------------------------------
 
 # SMM vs. baseline: compare average SMM treatment performance against baseline.
 smm_decisions <- subset(
@@ -33,11 +44,15 @@ smm_vs_baseline <- prop.test(
   alternative = "greater"
 )
 
+# ------------------------------------------------------------
+# 3. Prepare treatment data
+# ------------------------------------------------------------
+
 # Keep only runs where shared-memory metrics exist.
 d <- subset(simulation_metrics, smm_mode == "treatment")
 
 # ------------------------------------------------------------
-# 2. Conduct statistical tests
+# 4. Create analysis variables
 # ------------------------------------------------------------
 
 # Moderate is the reference group; coefficients are Low vs Moderate and High vs Moderate.
@@ -61,6 +76,10 @@ d <- d[complete.cases(d[, c(
   "coordination_effectiveness"
 )]), ]
 
+# ------------------------------------------------------------
+# 5. Fit regression models
+# ------------------------------------------------------------
+
 # H1a/H1b adapted to SMM quality:
 # context transparency -> SMM quality
 h1 <- lm(smm_quality ~ condition, data = d)
@@ -78,20 +97,38 @@ h3 <- glm(
 )
 
 # ------------------------------------------------------------
-# 3. Summarize test results
+# 6. Print descriptive summaries
 # ------------------------------------------------------------
 
 cat("\nSMM quality summary by condition\n")
 print(aggregate(smm_quality ~ condition, data = d, FUN = mean))
 
-cat("\nH1a/H1b regression: transparency -> SMM quality\n")
-print(summary(h1))
+# ------------------------------------------------------------
+# 7. Print heteroskedasticity diagnostics
+# ------------------------------------------------------------
+
+cat("\nWhite test for heteroskedasticity: H1\n")
+print(white(h1, interactions = TRUE))
+
+cat("\nWhite test for heteroskedasticity: H2\n")
+print(white(h2, interactions = TRUE))
+
+# ------------------------------------------------------------
+# 8. Print regression results
+# ------------------------------------------------------------
+
+cat("\nH1a/H1b regression: transparency -> SMM quality (HC3 robust standard errors)\n")
+print(coeftest(h1, vcov. = vcovHC(h1, type = "HC3")))
 
 cat("\nH2 regression\n")
 print(summary(h2))
 
 cat("\nH3 logistic regression: SMM quality -> correct decision\n")
 print(summary(h3))
+
+# ------------------------------------------------------------
+# 9. Print baseline comparison
+# ------------------------------------------------------------
 
 cat("\nAverage SMM treatment vs. baseline correct-decision share test\n")
 print(smm_vs_baseline)
