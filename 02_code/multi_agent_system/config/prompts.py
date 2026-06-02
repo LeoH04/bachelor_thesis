@@ -43,15 +43,15 @@ AIRLINE_NAME = "AeroConnect Airlines"
 
 AGENT_PERSONAS = {
     "agent_1": {
-        "name": "Anna Keller",
+        "name": "Agent 1",
         "role": "HR Selection Specialist for Flight Operations",
     },
     "agent_2": {
-        "name": "Markus Weber",
+        "name": "Agent 2",
         "role": "Pilot Assessment Specialist",
     },
     "agent_3": {
-        "name": "Sofia Brandt",
+        "name": "Agent 3",
         "role": "Recruiting Specialist for Cockpit Personnel",
     },
 }

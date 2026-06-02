@@ -46,22 +46,13 @@ d$smm_quality <- as.numeric(d$smm_quality)
 d$coordination_effectiveness <- as.numeric(d$decision_correct)
 d$rounds <- as.numeric(d$rounds)
 d$total_messages <- as.numeric(d$total_messages)
-d$agent_tool_calls <- as.numeric(d$agent_tool_calls)
 d$total_tokens <- as.numeric(d$total_tokens)
-d$runtime_seconds <- as.numeric(d$runtime_seconds)
 
-interaction_cost <- rowMeans(scale(d[, c(
+d$coordination_efficiency <- -rowMeans(scale(d[, c(
   "rounds",
   "total_messages",
-  "agent_tool_calls"
+  "total_tokens"
 )]))
-token_cost <- as.numeric(scale(d$total_tokens))
-time_cost <- as.numeric(scale(d$runtime_seconds))
-d$coordination_efficiency <- -rowMeans(cbind(
-  interaction_cost,
-  token_cost,
-  time_cost
-))
 
 d <- d[complete.cases(d[, c(
   "condition",
