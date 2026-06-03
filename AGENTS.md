@@ -97,11 +97,9 @@ The implementation lives in
 ### 6.1 Low
 `SIM_CONDITION=low`
 
-Agents see only public discussion and tool exchanges from the current discussion
-round.
+Agents do not see raw public discussion or tool-exchange history in prompts.
 
-Low treatment keeps explicit SMM memory across the full meeting. The raw
-discussion history shown in prompts is current-round scoped, but the structured
+Low treatment keeps explicit SMM memory across the full meeting. The structured
 memory is not reset between rounds.
 
 Low never includes stored model thoughts.
@@ -148,8 +146,8 @@ For tool-agent turns:
   that tool-exchange history item.
 
 `chat.md` remains a public transcript only. It must not include model thoughts.
-Thoughts may appear in structured run state, session logs, metadata counts, and
-high-condition prompt-built history.
+Thoughts may appear in structured run state, session logs, and high-condition
+prompt-built history.
 
 ## 8. Prompt Behavior
 Prompt builders are defined in
@@ -163,7 +161,7 @@ Discussion agents receive:
 - Their persona and task role
 - Public candidate information
 - Their own private candidate notes
-- The active input-context description
+- The current discussion round
 - Explicit SMM memory when treatment mode is active
 - The scoped public discussion history
 - Tool-use and evidence-boundary instructions
@@ -263,12 +261,12 @@ Important outputs include:
   and high-condition thought entries when available
 - Archived SMM memory files for treatment runs
 
-Metadata includes context-transparency fields such as:
+Metadata includes the active context-transparency field:
 - `context_transparency_condition`
-- `input_history_scope`
-- `input_thought_history`
-- `smm_memory_scope`
-- `thought_history_items`
+
+Related history-scope behavior is derived in
+`02_code/multi_agent_system/config/context_transparency.py`; those derived
+labels are not currently persisted as separate metadata fields.
 
 ## 12. Evaluation
 The main evaluation dimensions are:
