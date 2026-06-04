@@ -1,0 +1,128 @@
+2026-06-03 11:20:51,397 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1780478451.4235504, "event": "memory_initialized"}
+{"id": 2, "ts": 1780478451.4286125, "event": "discussion_order", "round": 1, "order": ["emily_brooks", "james_carter", "sarah_mitchell"]}
+2026-06-03 11:20:59,198 - INFO - Tokens - Input: 2754, Output: 697, Total: 3451
+{"id": 3, "ts": 1780478459.200214, "event": "public_discussion_message", "round": 1, "agent": "emily_brooks", "message": "I\u2019d like to put Candidate\u202fB forward as the provisional choice.\u202fB\u2019s profile hits the core safety\u2011critical criteria: they are described as \u201cvery conscientious,\u201d which speaks to operational reliability; they \u201chandle stress very well,\u201d indicating strong stress resilience; and they are \u201cgood at assessing weather conditions\u201d plus have \u201cexcellent computer skills,\u201d covering technical competence and decision\u2011making under complex conditions. The only notable drawback is the comment that B is \u201cregarded as pretentious\u201d and sometimes \u201cadopts the wrong tone when communicating.\u201d While communication style is important, these issues appear less severe than the more systemic concerns we see with the other candidates (e.g., A\u2019s unfriendly demeanor, D\u2019s moody loner reputation, and C\u2019s egocentric, poorly communicative, and non\u2011development\u2011oriented attitude). Given B\u2019s overall balance of reliability, stress handling, and technical ability, I believe they present the strongest overall fit for the long\u2011distance pilot role, provided we address the communication tone through targeted coaching."}
+2026-06-03 11:20:59,200 - INFO - Agent turns: 1
+2026-06-03 11:21:21,725 - INFO - Tokens - Input: 1895, Output: 1717, Total: 3612
+2026-06-03 11:21:21,728 - INFO - Memory updates: 1
+{"id": 4, "ts": 1780478481.7281837, "event": "memory_updated", "agent": "emily_brooks", "round": 1}
+2026-06-03 11:21:26,975 - INFO - Tokens - Input: 1900, Output: 2251, Total: 4151
+2026-06-03 11:21:26,977 - INFO - Memory updates: 2
+{"id": 5, "ts": 1780478486.9780424, "event": "memory_updated", "agent": "sarah_mitchell", "round": 1}
+2026-06-03 11:21:31,769 - INFO - Tokens - Input: 1897, Output: 2829, Total: 4726
+2026-06-03 11:21:31,771 - INFO - Memory updates: 3
+{"id": 6, "ts": 1780478491.7715778, "event": "memory_updated", "agent": "james_carter", "round": 1}
+2026-06-03 11:21:34,042 - INFO - Tokens - Input: 3388, Output: 184, Total: 3572
+2026-06-03 11:21:34,071 - INFO - Agent tool calls: 1
+{"id": 7, "ts": 1780478494.0715015, "event": "agent_tool_call_start", "caller": "james_carter", "callee": "emily_brooks_tool", "function_call_id": "chatcmpl-tool-be95235321624ab8", "args_preview": "{'request': \"Can you provide specific examples of Candidate B's communication issues, particularly regarding tone and any impact on crew cooperation?\"}"}
+2026-06-03 11:21:35,646 - INFO - Tokens - Input: 1063, Output: 192, Total: 1255
+{"id": 8, "ts": 1780478495.6494691, "event": "public_tool_exchange", "round": 1, "caller": "james_carter", "callee": "emily_brooks", "question": "request: Can you provide specific examples of Candidate B's communication issues, particularly regarding tone and any impact on crew cooperation?", "answer": "I don\u2019t have any concrete examples of how Candidate\u202fB\u2019s tone has manifested in interactions, nor any documented impact on crew cooperation. The only information available is that Candidate\u202fB \u201csometimes adopts the wrong tone when communicating\u201d and is \u201cregarded as pretentious.\u201d No further detail on specific incidents or their effect on teamwork is provided.", "message": "Question and answer: James Carter asked Emily Brooks.\nQuestion: request: Can you provide specific examples of Candidate B's communication issues, particularly regarding tone and any impact on crew cooperation?\nAnswer: I don\u2019t have any concrete examples of how Candidate\u202fB\u2019s tone has manifested in interactions, nor any documented impact on crew cooperation. The only information available is that Candidate\u202fB \u201csometimes adopts the wrong tone when communicating\u201d and is \u201cregarded as pretentious.\u201d No further detail on specific incidents or their effect on teamwork is provided."}
+{"id": 9, "ts": 1780478495.6496909, "event": "agent_tool_call_end", "caller": "james_carter", "callee": "emily_brooks_tool", "function_call_id": "chatcmpl-tool-be95235321624ab8", "result_preview": "I don\u2019t have any concrete examples of how Candidate\u202fB\u2019s tone has manifested in interactions, nor any documented impact on crew cooperation. The only information available is that Candidate\u202fB \u201csometimes adopts the wrong tone when communicating\u201d and is \u201cregarded as pretentious.\u201d No further detail on specific incidents or their effect on teamwork is provided."}
+2026-06-03 11:21:41,594 - INFO - Tokens - Input: 3621, Output: 731, Total: 4352
+2026-06-03 11:21:41,605 - INFO - Agent tool calls: 2
+{"id": 10, "ts": 1780478501.605604, "event": "agent_tool_call_start", "caller": "james_carter", "callee": "sarah_mitchell_tool", "function_call_id": "chatcmpl-tool-8b31cad0a0c790fe", "args_preview": "{'request': 'Do you have observations on any candidate\u2019s crew cooperation or adaptability, particularly for Candidates C and D?'}"}
+2026-06-03 11:21:44,885 - INFO - Tokens - Input: 1180, Output: 391, Total: 1571
+{"id": 11, "ts": 1780478504.8875082, "event": "public_tool_exchange", "round": 1, "caller": "james_carter", "callee": "sarah_mitchell", "question": "request: Do you have observations on any candidate\u2019s crew cooperation or adaptability, particularly for Candidates C and D?", "answer": "- **Candidate\u202fC** \u2013 My notes indicate that C \u201ccreates a positive atmosphere with his crew,\u201d which is a direct observation of good crew cooperation. I have no specific information about C\u2019s adaptability.\n- **Candidate\u202fD** \u2013 I have no explicit observations regarding D\u2019s crew\u2011cooperation behavior. The only related notes are that D is regarded as arrogant and has relatively weak leadership skills, which could be relevant but do not constitute a concrete cooperation observation. Regarding adaptability, D \u201cresponds to unexpected events adequately,\u201d which suggests an ability to adapt to changing situations. No further details are available.", "message": "Question and answer: James Carter asked Sarah Mitchell.\nQuestion: request: Do you have observations on any candidate\u2019s crew cooperation or adaptability, particularly for Candidates C and D?\nAnswer: - **Candidate\u202fC** \u2013 My notes indicate that C \u201ccreates a positive atmosphere with his crew,\u201d which is a direct observation of good crew cooperation. I have no specific information about C\u2019s adaptability.\n- **Candidate\u202fD** \u2013 I have no explicit observations regarding D\u2019s crew\u2011cooperation behavior. The only related notes are that D is regarded as arrogant and has relatively weak leadership skills, which could be relevant but do not constitute a concrete cooperation observation. Regarding adaptability, D \u201cresponds to unexpected events adequately,\u201d which suggests an ability to adapt to changing situations. No further details are available."}
+{"id": 12, "ts": 1780478504.8876567, "event": "agent_tool_call_end", "caller": "james_carter", "callee": "sarah_mitchell_tool", "function_call_id": "chatcmpl-tool-8b31cad0a0c790fe", "result_preview": "- **Candidate\u202fC** \u2013 My notes indicate that C \u201ccreates a positive atmosphere with his crew,\u201d which is a direct observation of good crew cooperation. I have no specific information about C\u2019s adaptability.\n\n- **Candidate\u202fD** \u2013 I have no explicit observations regarding D\u2019s crew\u2011cooperation behavior. The only related notes are that D is regarded as arrogant and has relatively weak leadership skills, which could be relevant but do not constitute a concrete cooperation observation. Regarding adaptabili..."}
+2026-06-03 11:21:54,509 - INFO - Tokens - Input: 3971, Output: 1163, Total: 5134
+{"id": 13, "ts": 1780478514.510974, "event": "public_discussion_message", "round": 1, "agent": "james_carter", "message": "I\u2019m leaning toward Candidate\u202fC as the provisional choice. While Emily highlighted Candidate\u202fB\u2019s conscientiousness and stress handling, we have no concrete evidence that B\u2019s \u201cwrong tone\u201d actually impairs crew cooperation, and the noted weak memory for numbers raises concerns about attention accuracy. In contrast, Sarah confirmed that Candidate\u202fC \u201ccreates a positive atmosphere with his crew,\u201d giving us a clear indication of strong crew cooperation\u2014a critical safety factor for long\u2011distance flights. Moreover, C \u201ckeeps calm in a crisis,\u201d \u201cunderstands complicated technology,\u201d and \u201cmakes correct decisions quickly,\u201d covering stress resilience, technical competence, and decision quality. The remaining concerns\u2014difficulty communicating ideas, egocentric attitude, and reluctance to further education\u2014are important but appear less likely to jeopardize immediate operational safety than B\u2019s potential attention lapses and unverified communication impact. Therefore, I recommend moving forward with Candidate\u202fC, pending a brief plan to address the communication and development gaps."}
+2026-06-03 11:21:54,511 - INFO - Agent turns: 2
+2026-06-03 11:22:25,327 - INFO - Tokens - Input: 2789, Output: 2235, Total: 5024
+2026-06-03 11:22:25,329 - INFO - Memory updates: 4
+{"id": 14, "ts": 1780478545.3294828, "event": "memory_updated", "agent": "james_carter", "round": 1}
+2026-06-03 11:22:32,970 - INFO - Tokens - Input: 2736, Output: 2994, Total: 5730
+2026-06-03 11:22:32,972 - INFO - Memory updates: 5
+{"id": 15, "ts": 1780478552.972834, "event": "memory_updated", "agent": "emily_brooks", "round": 1}
+2026-06-03 11:22:38,710 - INFO - Tokens - Input: 2965, Output: 3680, Total: 6645
+2026-06-03 11:22:38,712 - INFO - Memory updates: 6
+{"id": 16, "ts": 1780478558.7128632, "event": "memory_updated", "agent": "sarah_mitchell", "round": 1}
+2026-06-03 11:22:45,720 - INFO - Tokens - Input: 4323, Output: 741, Total: 5064
+{"id": 17, "ts": 1780478565.7222373, "event": "public_discussion_message", "round": 1, "agent": "sarah_mitchell", "message": "I\u2019m inclined to side with James and put Candidate\u202fC forward as the provisional choice.\u202fBeyond the strengths James highlighted\u2014calmness in a crisis, rapid correct decisions, and solid technical understanding\u2014my notes confirm that C is \u201c100\u202f% reliable\u201d and \u201ccreates a positive atmosphere with his crew,\u201d which directly addresses two of our most critical criteria: operational reliability and crew cooperation. By contrast, Candidate\u202fB, while very conscientious, has a noted \u201cweak memory for numbers,\u201d raising a concrete concern for attention\u2011accuracy in safety\u2011critical calculations, and the \u201cpretentious\u201d tone and uncooperative behavior remain unverified but potentially detrimental to teamwork. Given C\u2019s proven reliability and crew\u2011focused behavior, I believe C currently offers the strongest overall fit for the long\u2011distance pilot role, pending a plan to support his communication development."}
+2026-06-03 11:22:45,722 - INFO - Agent turns: 3
+2026-06-03 11:23:19,336 - INFO - Tokens - Input: 3432, Output: 2391, Total: 5823
+2026-06-03 11:23:19,339 - INFO - Memory updates: 7
+{"id": 18, "ts": 1780478599.3392117, "event": "memory_updated", "agent": "sarah_mitchell", "round": 1}
+2026-06-03 11:23:23,083 - INFO - Tokens - Input: 3261, Output: 2764, Total: 6025
+2026-06-03 11:23:23,085 - INFO - Memory updates: 8
+{"id": 19, "ts": 1780478603.0858567, "event": "memory_updated", "agent": "james_carter", "round": 1}
+2026-06-03 11:23:28,751 - INFO - Tokens - Input: 3401, Output: 3435, Total: 6836
+{"id": 20, "ts": 1780478608.753021, "event": "memory_update_missing", "agent": "emily_brooks", "round": 1}
+2026-06-03 11:23:28,764 - INFO - Loop 1 completed
+{"id": 21, "ts": 1780478608.7702937, "event": "discussion_order", "round": 2, "order": ["emily_brooks", "james_carter", "sarah_mitchell"]}
+2026-06-03 11:23:34,331 - INFO - Tokens - Input: 4471, Output: 609, Total: 5080
+{"id": 22, "ts": 1780478614.3335893, "event": "public_discussion_message", "round": 2, "agent": "emily_brooks", "message": "I\u2019m moving my provisional recommendation to Candidate\u202fC.\u202fJames and Sarah have highlighted concrete evidence that C is \u201c100\u202f% reliable\u201d and \u201ccreates a positive atmosphere with his crew,\u201d directly addressing two of our most safety\u2011critical criteria: operational reliability and crew cooperation.\u202fC also \u201ckeeps calm in a crisis,\u201d \u201cunderstands complicated technology,\u201d and \u201cmakes correct decisions quickly,\u201d covering stress resilience, technical competence, and decision quality.\u202fIn contrast, the concerns about Candidate\u202fB\u2019s communication tone remain unsubstantiated, and the attention\u2011accuracy issue (weak memory for numbers) has not been confirmed in our data.\u202fWhile C\u2019s difficulty communicating ideas and egocentric attitude are noted, they appear less likely to impair immediate flight safety than the unresolved attention risk for B.\u202fTherefore, I believe C offers the strongest overall fit for the long\u2011distance pilot role, provided we implement a development plan for his communication and continuous learning."}
+2026-06-03 11:23:34,333 - INFO - Agent turns: 4
+2026-06-03 11:24:05,244 - INFO - Tokens - Input: 3645, Output: 2195, Total: 5840
+2026-06-03 11:24:05,246 - INFO - Memory updates: 9
+{"id": 23, "ts": 1780478645.2468402, "event": "memory_updated", "agent": "sarah_mitchell", "round": 2}
+2026-06-03 11:24:10,522 - INFO - Tokens - Input: 3601, Output: 2694, Total: 6295
+2026-06-03 11:24:10,524 - INFO - Memory updates: 10
+{"id": 24, "ts": 1780478650.5249302, "event": "memory_updated", "agent": "emily_brooks", "round": 2}
+2026-06-03 11:24:12,353 - INFO - Tokens - Input: 3606, Output: 2909, Total: 6515
+2026-06-03 11:24:12,355 - INFO - Memory updates: 11
+{"id": 25, "ts": 1780478652.3557484, "event": "memory_updated", "agent": "james_carter", "round": 2}
+2026-06-03 11:24:16,191 - INFO - Tokens - Input: 4747, Output: 372, Total: 5119
+2026-06-03 11:24:16,200 - INFO - Agent tool calls: 3
+{"id": 26, "ts": 1780478656.201042, "event": "agent_tool_call_start", "caller": "james_carter", "callee": "sarah_mitchell_tool", "function_call_id": "chatcmpl-tool-9076c0a7dc191f4f", "args_preview": "{'request': \"Do you have any observations on Candidate C's adaptability or willingness to receive feedback and further education?\"}"}
+2026-06-03 11:24:17,842 - INFO - Tokens - Input: 1927, Output: 187, Total: 2114
+{"id": 27, "ts": 1780478657.844677, "event": "public_tool_exchange", "round": 2, "caller": "james_carter", "callee": "sarah_mitchell", "question": "request: Do you have any observations on Candidate C's adaptability or willingness to receive feedback and further education?", "answer": "I do not have any specific observations regarding Candidate\u202fC\u2019s adaptability to changing situations.\u202fWhat I can confirm from my notes is that Candidate\u202fC \u201cis not very willing to further his education,\u201d which suggests a limited openness to additional training or development opportunities.\u202fThere is no recorded information about how C responds to feedback or criticism.", "message": "Question and answer: James Carter asked Sarah Mitchell.\nQuestion: request: Do you have any observations on Candidate C's adaptability or willingness to receive feedback and further education?\nAnswer: I do not have any specific observations regarding Candidate\u202fC\u2019s adaptability to changing situations.\u202fWhat I can confirm from my notes is that Candidate\u202fC \u201cis not very willing to further his education,\u201d which suggests a limited openness to additional training or development opportunities.\u202fThere is no recorded information about how C responds to feedback or criticism."}
+{"id": 28, "ts": 1780478657.8448238, "event": "agent_tool_call_end", "caller": "james_carter", "callee": "sarah_mitchell_tool", "function_call_id": "chatcmpl-tool-9076c0a7dc191f4f", "result_preview": "I do not have any specific observations regarding Candidate\u202fC\u2019s adaptability to changing situations.\u202fWhat I can confirm from my notes is that Candidate\u202fC \u201cis not very willing to further his education,\u201d which suggests a limited openness to additional training or development opportunities.\u202fThere is no recorded information about how C responds to feedback or criticism."}
+2026-06-03 11:24:21,837 - INFO - Tokens - Input: 4972, Output: 467, Total: 5439
+{"id": 29, "ts": 1780478661.838803, "event": "public_discussion_message", "round": 2, "agent": "james_carter", "message": "I remain in favour of Candidate\u202fC as our provisional choice.\u202fBuilding on Sarah\u2019s confirmation that C \u201ccreates a positive atmosphere with his crew\u201d and my own notes that C \u201ckeeps calm in a crisis,\u201d \u201cunderstands complicated technology,\u201d and \u201cmakes correct decisions quickly,\u201d C still meets the core safety criteria of reliability, crew cooperation, stress resilience, technical competence, and decision quality.\u202fThe new clarification that C \u201cis not very willing to further his education\u201d does raise a legitimate concern about adaptability and ongoing learning, which are important for long\u2011distance operations.\u202fHowever, this gap is addressable through a targeted development plan, whereas Candidate\u202fB\u2019s \u201cweak memory for numbers\u201d presents a concrete attention\u2011accuracy risk, and Candidate\u202fD\u2019s \u201chot temper\u201d and \u201cknow\u2011it\u2011all\u201d attitude could undermine crew dynamics.\u202fThus, despite the adaptability issue, C remains the strongest overall fit, provided we commit to supporting his continuous learning."}
+2026-06-03 11:24:21,838 - INFO - Agent turns: 5
+2026-06-03 11:24:55,656 - INFO - Tokens - Input: 3998, Output: 2384, Total: 6382
+2026-06-03 11:24:55,659 - INFO - Memory updates: 12
+{"id": 30, "ts": 1780478695.6592715, "event": "memory_updated", "agent": "emily_brooks", "round": 2}
+2026-06-03 11:24:57,735 - INFO - Tokens - Input: 3979, Output: 2586, Total: 6565
+2026-06-03 11:24:57,738 - INFO - Memory updates: 13
+{"id": 31, "ts": 1780478697.7383213, "event": "memory_updated", "agent": "james_carter", "round": 2}
+2026-06-03 11:25:10,040 - INFO - Tokens - Input: 3945, Output: 4030, Total: 7975
+2026-06-03 11:25:10,043 - INFO - Memory updates: 14
+{"id": 32, "ts": 1780478710.0436237, "event": "memory_updated", "agent": "sarah_mitchell", "round": 2}
+2026-06-03 11:25:13,658 - INFO - Tokens - Input: 5095, Output: 313, Total: 5408
+2026-06-03 11:25:13,669 - INFO - Agent tool calls: 4
+{"id": 33, "ts": 1780478713.6697161, "event": "agent_tool_call_start", "caller": "sarah_mitchell", "callee": "james_carter_tool", "function_call_id": "chatcmpl-tool-b5ab47fc31f9bb5a", "args_preview": "{'request': 'Do you have observations on Candidate A\u2019s reliability, stress resilience, or attention\u2011accuracy performance?'}"}
+2026-06-03 11:25:15,702 - INFO - Tokens - Input: 2238, Output: 206, Total: 2444
+{"id": 34, "ts": 1780478715.7050505, "event": "public_tool_exchange", "round": 2, "caller": "sarah_mitchell", "callee": "james_carter", "question": "request: Do you have observations on Candidate A\u2019s reliability, stress resilience, or attention\u2011accuracy performance?", "answer": "I do not have any observations on Candidate\u202fA\u2019s reliability, stress\u2011resilience, or attention\u2011accuracy performance.", "message": "Question and answer: Sarah Mitchell asked James Carter.\nQuestion: request: Do you have observations on Candidate A\u2019s reliability, stress resilience, or attention\u2011accuracy performance?\nAnswer: I do not have any observations on Candidate\u202fA\u2019s reliability, stress\u2011resilience, or attention\u2011accuracy performance."}
+{"id": 35, "ts": 1780478715.7051857, "event": "agent_tool_call_end", "caller": "sarah_mitchell", "callee": "james_carter_tool", "function_call_id": "chatcmpl-tool-b5ab47fc31f9bb5a", "result_preview": "I do not have any observations on Candidate\u202fA\u2019s reliability, stress\u2011resilience, or attention\u2011accuracy performance."}
+2026-06-03 11:25:19,536 - INFO - Tokens - Input: 5232, Output: 452, Total: 5684
+{"id": 36, "ts": 1780478719.5385458, "event": "public_discussion_message", "round": 2, "agent": "sarah_mitchell", "message": "I remain aligned with James and Emily in keeping Candidate\u202fC as our provisional choice.\u202fWhile Candidate\u202fA brings impressive traits\u2014anticipating dangerous situations, seeing complex connections, excellent spatial vision, and strong leadership qualities\u2014our panel still lacks any concrete evidence of A\u2019s operational reliability, stress\u2011resilience, or attention\u2011accuracy, all of which are non\u2011negotiable for long\u2011distance flights.\u202fIn contrast, Candidate\u202fC is documented as 100\u202f% reliable, creates a positive crew atmosphere, stays calm in crises, understands complex technology, and makes rapid correct decisions.\u202fThe only remaining concerns for C are his communication difficulty and limited willingness for further education, which we can address through a targeted development plan.\u202fGiven the current evidence, C still offers the strongest overall safety\u2011critical fit."}
+2026-06-03 11:25:19,538 - INFO - Agent turns: 6
+2026-06-03 11:26:14,015 - INFO - Tokens - Input: 4264, Output: 3840, Total: 8104
+2026-06-03 11:26:14,017 - INFO - Memory updates: 15
+{"id": 37, "ts": 1780478774.0180407, "event": "memory_updated", "agent": "sarah_mitchell", "round": 2}
+2026-06-03 11:26:15,891 - INFO - Tokens - Input: 4240, Output: 4003, Total: 8243
+2026-06-03 11:26:15,895 - INFO - Memory updates: 16
+{"id": 38, "ts": 1780478775.8953733, "event": "memory_updated", "agent": "james_carter", "round": 2}
+2026-06-03 11:26:27,553 - INFO - Tokens - Input: 4316, Output: 5341, Total: 9657
+2026-06-03 11:26:27,555 - INFO - Memory updates: 17
+{"id": 39, "ts": 1780478787.5560708, "event": "memory_updated", "agent": "emily_brooks", "round": 2}
+2026-06-03 11:26:27,569 - INFO - Loop 2 completed
+2026-06-03 11:26:27,569 - INFO - Final Chosen Candidate: Candidate C
+2026-06-03 11:26:27,569 - INFO - Final Decision Method: consensus
+2026-06-03 11:26:27,569 - INFO - Final Vote Count: {'Candidate C': 3}
+2026-06-03 11:26:27,570 - INFO - Correct Candidate: Candidate C
+2026-06-03 11:26:27,570 - INFO - Decision Correct: 1
+{"id": 40, "ts": 1780478787.5714982, "event": "context_consistency_deferred", "reason": "memory_similarity_calculated_post_run"}
+{"id": 41, "ts": 1780478787.5716438, "event": "agent_memories_archived", "directory": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260602_165012_041/shared_mental_models", "round": 2}
+{"id": 42, "ts": 1780478787.5717301, "event": "final_decision", "candidate": "Candidate C", "method": "consensus", "vote_count": {"Candidate C": 3}, "correct_candidate": "Candidate C", "decision_correct": 1, "round": 2}
+2026-06-03 11:26:27,582 - INFO - ======================================================================
+2026-06-03 11:26:27,582 - INFO - SIMULATION METRICS
+2026-06-03 11:26:27,582 - INFO - ======================================================================
+2026-06-03 11:26:27,582 - INFO - Total Loops: 2
+2026-06-03 11:26:27,582 - INFO - Agent Turns (no vote checker): 6
+2026-06-03 11:26:27,582 - INFO - Agent Tool Calls: 4
+2026-06-03 11:26:27,582 - INFO - Agent Tool Messages: 8
+2026-06-03 11:26:27,582 - INFO - Memory Updates: 17
+2026-06-03 11:26:27,583 - INFO - Total Messages (no vote checker): 14
+2026-06-03 11:26:27,583 - INFO - Input Tokens: 108852
+2026-06-03 11:26:27,583 - INFO - Output Tokens: 60983
+2026-06-03 11:26:27,583 - INFO - Total Tokens: 169835
+2026-06-03 11:26:27,583 - INFO - Final Chosen Candidate: Candidate C
+2026-06-03 11:26:27,583 - INFO - Final Decision Method: consensus
+2026-06-03 11:26:27,583 - INFO - Final Vote Count: {'Candidate C': 3}
+2026-06-03 11:26:27,583 - INFO - Correct Candidate: Candidate C
+2026-06-03 11:26:27,583 - INFO - Decision Correct: 1
+2026-06-03 11:26:27,583 - INFO - Runtime: 336.19s
+2026-06-03 11:26:27,583 - INFO - ======================================================================

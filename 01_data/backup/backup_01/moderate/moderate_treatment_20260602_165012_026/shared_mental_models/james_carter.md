@@ -1,0 +1,48 @@
+# Shared Mental Model (James Carter)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | • Technical & cognitive competence (sees complex connections, excellent spatial vision)\n• Can anticipate dangerous situations (proactive decision quality) | • Regarded as a show‑off\n• Not open to new ideas\n• Unorganized\n• Not good at taking criticism (feedback) | • Very good leadership qualities (not yet discussed) | • Stress resilience (response to pressure)\n• Crew cooperation / teamwork\n• Professional communication\n• Attention to detail\n• Adaptability / feedback orientation\n• Leadership in cockpit contexts\n• Openness to new ideas | • Ask panel for observations of A’s stress resilience, crew‑cooperation, and leadership in cockpit situations\n• Seek examples of A’s communication style and willingness to accept feedback\n• Probe openness to new ideas |
+| Candidate B | • Very conscientious (operational reliability)\n• Handles stress very well (stress resilience)\n• Good at assessing weather conditions (technical competence)\n• Excellent computer skills (technical competence) | • Relatively weak memory for numbers (attention to numeric detail)\n• Makes nasty remarks about colleagues (professional communication)\n• Perceived as pretentious (attitude) | *None (all listed facts have been mentioned)* | • Concrete examples of crew‑cooperation and professional communication under high‑stress situations\n• Decision quality in safety‑critical scenarios\n• Attention to numeric detail beyond memory issue\n• Adaptability / feedback orientation\n• Evidence of decision‑making under pressure | • Request specific incidents showing B’s communication with crew, handling of numeric data, decision‑making under safety‑critical pressure, and receptiveness to feedback |
+| Candidate C | • Keeps calm in a crisis (stress resilience)\n• Can make correct decisions quickly (decision quality)\n• Understands complicated technology (technical competence) | • Difficulty communicating ideas (professional communication)\n• Regarded as egocentric (crew cooperation)\n• Not very willing to further his education (adaptability/learning) | *None (all listed facts have been mentioned)* | • Evidence of crew cooperation and how egocentric attitude affects team dynamics\n• Professional communication style in cockpit\n• Willingness to pursue further training/education\n• Decision quality in complex, multi‑system scenarios\n• Attention to detail\n• Leadership in cockpit contexts | • Ask for concrete examples of C’s interaction with crew, willingness to accept training, and decision quality in complex operational contexts |
+| Candidate D | • Concentrates very well (attention)\n• Solves problems extremely well (technical competence, decision quality)\n• Takes responsibility seriously (responsibility)\n• Responds adequately to unexpected events (stress resilience) | • Regarded as a “know‑it‑all” / arrogant (crew cooperation)\n• Hot temper (professional communication)\n• Relatively weak leadership skills (leadership) | *None (all listed facts have been mentioned)* | • Concrete examples of decision‑making quality during unexpected events\n• Crew cooperation and professional communication, especially under pressure\n• Adaptability / openness to feedback\n• Leadership in cockpit contexts\n• Impact of hot temper on safety | • Request specific incidents showing D’s decision quality in unexpected situations, his communication style with crew, and how he handles feedback or criticism |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared indirectly with B, C, D) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (directly compared with A, C, D) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (directly compared with B, D) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (directly compared with B, C) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Sarah Mitchell | • Vote: Candidate B (provisional)\n• Reason: B shows strong operational reliability, stress handling, and solid technical competence; pretentiousness seen as less severe than D’s arrogance and weak leadership\n• Stated lack of explicit observations on Candidate D’s crew‑cooperation or professional communication\n• Stated lack of explicit observations on Candidate C’s stress‑resilience\n• Noted Candidate A is unorganized and not good at taking criticism | • Do you have any observations of Candidate A’s stress resilience or ability to work with crew (including leadership and communication)?\n• Do you have any observations of Candidate B’s crew‑cooperation or professional communication, especially under pressure? |
+| James Carter | • Vote: Candidate B (provisional)\n• Reason: B’s strong reliability, stress handling, and technical competence outweigh D’s interpersonal concerns\n• Admitted no specific documented incident of D’s problem‑solving during unexpected events\n• Provided technical and cognitive competence details for Candidate A (sees complex connections, excellent spatial vision, can anticipate dangerous situations)\n• Confirmed Candidate C “keeps calm in a crisis” | • Do you have any observations of Candidate D’s crew‑cooperation or professional communication, especially under pressure?\n• Do you have any observations of Candidate B’s crew‑cooperation or communication style? |
+| Emily Brooks | • Vote: Candidate B (provisional)\n• Reason: B’s conscientiousness, stress handling, and technical competence give a well‑rounded fit; C’s communication and adaptability concerns remain; D lacks crew‑cooperation evidence\n• Stated lack of documented examples of B’s crew‑cooperation or professional communication in high‑stress situations\n• Stated lack of explicit observations on Candidate C’s willingness to pursue further education | • Do you have any observations on Candidate D’s crew‑cooperation or professional communication?\n• Do you have any further observations on Candidate C’s willingness to pursue further training or education? |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Sarah Mitchell | Candidate B | B shows strong operational reliability, excellent stress handling, and solid technical competence; pretentiousness seen as less severe than D’s arrogance and weak leadership. | If concrete evidence emerges that B’s communication issues (nasty remarks, pretentious tone) pose safety‑relevant risks, or if D’s interpersonal traits are shown to be benign, her view could shift. |
+| James Carter | Candidate B | B’s strong reliability, stress handling, and technical competence outweigh D’s interpersonal concerns. | Evidence that D’s crew‑cooperation or communication is strong, or that B’s communication/numeric memory issues lead to safety‑relevant problems, could shift his vote. |
+| Emily Brooks | Candidate B | B’s conscientiousness, stress handling, and technical competence (weather assessment, computer skills) give a well‑rounded fit; C’s communication and adaptability concerns remain; D lacks crew‑cooperation evidence. | Concrete examples showing B’s communication or teamwork being unsafe could change her vote; proof that D’s interpersonal issues are harmless could shift her toward D; additional evidence improving C’s cooperation profile could affect the ranking |
+
+## Group Decision State
+## Group Decision State
+| Item | Detail |
+|---|---|
+| Current leading candidate | Candidate B |
+| Strongest alternative | Candidate C |
+| Main reason supporting the leading candidate | Strong operational reliability (very conscientious), excellent stress handling, and solid technical competence (weather assessment, computer skills) directly address core long‑distance pilot criteria. |
+| Main concern about the leading candidate | Professional communication issues (nasty remarks, pretentious tone) and relatively weak numeric memory may affect crew coordination and attention to detail. |
+| Main unresolved comparison | How B’s communication/crew‑cooperation risks compare to C’s egocentric attitude, communication difficulties, limited learning willingness, and to D’s interpersonal concerns (know‑it‑all, hot temper, weak leadership). |
+| Candidates that still need discussion | Candidate A (stress resilience, crew cooperation, leadership, communication, openness to ideas)\nCandidate D (crew cooperation, professional communication, decision quality under unexpected events, adaptability/feedback)\nCandidate C (crew cooperation, adaptability/learning, decision quality in complex scenarios, attention to detail)\nCandidate B (concrete examples of communication, numeric handling, decision quality, feedback receptiveness) |
+| Important criteria still unclear | Stress resilience for A\nCrew cooperation and professional communication for A, B, D\nAttention to numeric detail for B\nDecision quality under pressure for D and C\nAdaptability / feedback orientation for A and C\nLeadership in cockpit contexts for A and D\nOpenness to new ideas for A\nLearning willingness for C\nImpact of D’s hot temper on safety |
+| Ready for convergence? | No |

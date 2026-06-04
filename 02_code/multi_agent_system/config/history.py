@@ -263,6 +263,8 @@ def _history_items_for_active_scope(history: list[object]) -> list[object]:
     scope = input_history_scope()
     if scope == "none":
         return []
+    if scope == "latest_turn":
+        return _latest_scheduled_turn_items(history)
     if scope != "current_round":
         return history
 
@@ -272,6 +274,44 @@ def _history_items_for_active_scope(history: list[object]) -> list[object]:
         for item in history
         if isinstance(item, dict) and item.get("round") == current_round
     ]
+
+
+def _latest_scheduled_turn_items(history: list[object]) -> list[object]:
+    """Return the latest scheduled speaker message plus its tool exchanges."""
+    latest_message_index = None
+    latest_message = None
+    for index in range(len(history) - 1, -1, -1):
+        item = history[index]
+        if not isinstance(item, dict):
+            continue
+        if item.get("source") == "agent_tool_call":
+            continue
+        if not str(item.get("message", "")).strip():
+            continue
+        latest_message_index = index
+        latest_message = item
+        break
+
+    if latest_message_index is None or latest_message is None:
+        return []
+
+    latest_agent = latest_message.get("agent")
+    latest_round = latest_message.get("round")
+    start_index = latest_message_index
+    while start_index > 0:
+        previous = history[start_index - 1]
+        if not isinstance(previous, dict):
+            break
+        if (
+            previous.get("source") == "agent_tool_call"
+            and previous.get("caller") == latest_agent
+            and previous.get("round") == latest_round
+        ):
+            start_index -= 1
+            continue
+        break
+
+    return history[start_index : latest_message_index + 1]
 
 
 def build_public_discussion_history(ctx) -> str:

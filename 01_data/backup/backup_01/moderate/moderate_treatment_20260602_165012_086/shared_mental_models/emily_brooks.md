@@ -1,0 +1,50 @@
+# Shared Mental Model (Emily Brooks)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| **Candidate A** | - Anticipates dangerous situations<br>- Sees complex connections<br>- Excellent spatial vision<br>- Very good leadership qualities | - Unfriendly<br>- Eats unhealthily<br>- No concrete evidence of stress‑resilience<br>- No concrete evidence of operational reliability (health consistency)<br>- No documented crew‑cooperation | *None* | - Stress‑resilience (no evidence)<br>- Operational reliability consistency (health/behavior over time)<br>- Crew‑cooperation (no observations)<br>- Adaptability<br>- Feedback‑orientation<br>- Decision‑quality under pressure (no concrete evidence) | Probe A’s stress‑resilience, health‑reliability, crew‑cooperation, adaptability, and feedback orientation |
+| **Candidate B** | - Very conscientious<br>- Handles stress well<br>- Good at assessing weather conditions<br>- Excellent computer skills | - Pretentious<br>- Sometimes adopts wrong tone<br>- Grumpy/uncooperative (crew‑cooperation risk) | *None* | - Crew‑cooperation (lack of concrete evidence)<br>- Professional communication quality (tone issues)<br>- Decision‑quality under pressure<br>- Responsibility for long‑haul flights<br>- Adaptability<br>- Feedback‑orientation | Probe B’s adaptability, decision‑quality under pressure, broader responsibility, crew‑cooperation specifics, and feedback orientation |
+| **Candidate C** | - Puts concern for others above everything<br>- Excellent attention skills<br>- Can make correct decisions quickly | - Difficulty communicating ideas<br>- Regarded as egocentric<br>- Not very willing to further his education | *None* | - Stress‑resilience (no evidence)<br>- Responsibility for long‑haul flights<br>- Crew‑cooperation (communication issues)<br>- Adaptability<br>- Feedback‑orientation<br>- Decision‑quality under pressure (limited evidence) | Probe C’s stress‑resilience, responsibility, adaptability, and feedback orientation |
+| **Candidate D** | - Responds to unexpected events adequately<br>- Concentrates very well<br>- Solves problems extremely well<br>- Takes responsibility seriously | - Moody<br>- Loner<br>- Hot temper<br>- Know‑it‑all<br>- No concrete evidence of crew‑cooperation<br>- No concrete evidence of professional communication<br>- No concrete evidence of leadership effectiveness in team settings | *None* | - Crew‑cooperation (no observations)<br>- Professional communication quality<br>- Leadership effectiveness in team settings<br>- Adaptability<br>- Feedback‑orientation | Probe D’s crew‑cooperation, professional communication, leadership effectiveness, adaptability, and feedback orientation |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Discussed? | Strengths discussed? | Concerns discussed? | Compared with another? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| A | Yes | Yes | Yes | Yes (vs B, C, D) | Yes |
+| B | Yes | Yes | Yes | Yes (vs A, C, D) | Yes |
+| C | Yes | Yes | Yes | Yes (vs A, B, D) | Yes |
+| D | Yes | Yes | Yes | Yes (vs A, B, C) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Facts shared | Open questions for this agent |
+|---|---|---|
+| Sarah Mitchell | - Candidate B is grumpy/uncooperative (crew‑cooperation risk).<br>- Candidate A has technical strengths (danger anticipation, complex‑connection insight, spatial vision) and leadership qualities; also unfriendly and eats unhealthily.<br>- Candidate D shows reliability, responsibility, problem‑solving, concentration; concerns: moody, loner, hot temper, know‑it‑all. | • Does Sarah have any observations of Candidate D’s crew‑cooperation or feedback orientation?<br>• Can Sarah comment on Candidate D’s leadership effectiveness in a team setting?<br>• Does Sarah have any insight into Candidate D’s adaptability?<br>• Does Sarah know of any evidence about Candidate A’s stress‑resilience, health consistency, or crew‑cooperation?<br>• Does Sarah have any information on Candidate B’s adaptability, decision‑quality under pressure, broader responsibility, or feedback orientation?<br>• Does Sarah have any data on Candidate C’s stress‑resilience, responsibility, adaptability, or feedback orientation? |
+| James Carter | - Candidate D demonstrates strong reliability, stress handling, problem‑solving, concentration, and responsibility; concerns: moody, loner, hot temper, know‑it‑all.<br>- Candidate B is grumpy/uncooperative.<br>- Candidate C has poor communication.<br>- No specific assessment of Candidate D’s crew‑cooperation, leadership, or feedback orientation. | • Can James provide any concrete examples of Candidate D’s crew‑cooperation or feedback orientation?<br>• Does James have observations on Candidate D’s leadership effectiveness in team settings?<br>• Any insight from James on Candidate D’s adaptability?<br>• Does James know of any evidence regarding Candidate A’s stress‑resilience, health reliability, or crew‑cooperation?<br>• Does James have information on Candidate B’s adaptability, decision‑quality under pressure, broader responsibility, or feedback orientation?<br>• Does James have any data on Candidate C’s stress‑resilience, responsibility, adaptability, or feedback orientation? |
+| Emily Brooks (self) | - Candidate A: anticipates dangerous situations, sees complex connections, excellent spatial vision, very good leadership; unfriendly, eats unhealthily.<br>- Candidate B: very conscientious, handles stress well, good at assessing weather, excellent computer skills; pretentious, sometimes wrong tone.<br>- Candidate C: difficulty communicating ideas, regarded as egocentric, not very willing to further education, puts concern for others above everything, excellent attention skills.<br>- Candidate D: responds to unexpected events adequately, concentrates very well, solves problems extremely well, takes responsibility seriously; moody, loner, hot temper, know‑it‑all.<br>- Current votes: all three agents (Sarah, James, Emily) vote Candidate D. | • Does Emily have any concrete observations of Candidate D’s crew‑cooperation or feedback orientation?<br>• Can Emily assess Candidate D’s leadership effectiveness in team settings?<br>• Any information on Candidate D’s adaptability?<br>• Does Emily have any evidence of Candidate A’s stress‑resilience, health consistency, or crew‑cooperation?<br>• Does Emily know of Candidate A’s adaptability or feedback orientation?<br>• Does Emily have data on Candidate B’s adaptability, decision‑quality under pressure, broader responsibility, or feedback orientation?<br>• Does Emily have any insight into Candidate C’s stress‑resilience, responsibility, adaptability, or feedback orientation? |
+
+## Current Positions
+## Current Positions
+| Agent | Vote | Reason | Uncertainty / possible change |
+|---|---|---|---|
+| Sarah Mitchell | Candidate D | D shows proven operational reliability, responsibility, problem‑solving, and stress handling; crew‑cooperation concerns remain unverified, but no concrete evidence of detrimental impact. | May shift if concrete evidence emerges showing D’s crew‑cooperation or temper negatively affect safety, or if new evidence improves A’s reliability/teamwork. |
+| James Carter | Candidate D | D’s concrete evidence of reliability, stress resilience, decision quality, and responsibility outweighs A’s technical strengths and unknown teamwork. | May change if D’s interpersonal issues (loner, hot temper, know‑it‑all) are shown to impair crew collaboration, or if new data on A’s reliability/teamwork emerges. |
+| Emily Brooks | Candidate D | D satisfies core safety‑critical criteria with concrete observations; gaps in crew‑cooperation and feedback orientation are less critical than A’s unknown reliability and teamwork. | Could reconsider if D’s crew‑cooperation or feedback orientation prove problematic, or if A’s reliability and teamwork evidence strengthens significantly. |
+
+## Group Decision State
+## Group Decision State
+- **Current leading candidate:** Candidate D (unanimous vote: Sarah Mitchell, James Carter, Emily Brooks) 
+- **Strongest alternative:** Candidate A 
+- **Main reason supporting leading candidate:** Concrete evidence of operational reliability, stress resilience, decision quality, and responsibility (responds to unexpected events, concentration, problem‑solving, takes responsibility). 
+- **Main concern about leading candidate:** Lack of concrete evidence on crew‑cooperation, professional communication, leadership effectiveness in team settings, adaptability, and feedback orientation; interpersonal descriptors (moody, loner, hot temper, know‑it‑all) remain unverified in safety impact. 
+- **Main unresolved comparison:** D’s interpersonal/teamwork unknown vs. A’s strong technical profile but unknown stress‑resilience, health reliability, and crew‑cooperation. 
+- **Candidates still need discussion:** 
+  - **A:** stress‑resilience, operational reliability (health consistency), crew‑cooperation, adaptability, feedback orientation. 
+  - **B:** crew‑cooperation specifics, adaptability, decision‑quality under pressure, broader responsibility, feedback orientation. 
+  - **C:** stress‑resilience, responsibility for long‑haul, adaptability, feedback orientation. 
+  - **D:** crew‑cooperation, professional communication, leadership effectiveness, adaptability, feedback orientation. 
+- **Important criteria still unclear:** Stress resilience (A, C); decision quality under pressure (A, B, C); operational reliability consistency (A); crew cooperation (A, B, D); professional communication (B, D); responsibility (B, C); adaptability (all); feedback orientation (all); leadership effectiveness (D). 
+- **Ready for convergence?** No – gaps remain for all candidates, and the leading candidate still lacks evidence on several safety‑relevant criteria.

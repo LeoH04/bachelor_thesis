@@ -1,0 +1,46 @@
+# Shared Mental Model (James Carter)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Show‑off; not open to new ideas; no documented decision‑making quality under stress or unexpected events | Operational reliability; stress resilience; decision quality under stress; attention & information accuracy; crew‑cooperation behavior; responsibility maturity; adaptability/feedback orientation | Operational reliability (no concrete evidence); stress resilience (no evidence); decision quality under stress (no evidence); attention & information accuracy (no evidence); crew cooperation (show‑off attitude); responsibility maturity (no evidence); adaptability (not open to new ideas) | Elicit concrete examples of A’s reliability, stress handling, decision‑making under pressure, attention to detail, crew‑cooperation behavior, responsibility maturity, and openness to new ideas |
+| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Makes nasty remarks about colleagues (cooperation risk); relatively weak memory for numbers (attention/accuracy risk); no documented decision‑quality evidence | Decision‑quality evidence; responsibility maturity; adaptability/feedback orientation; impact of weak memory on safety‑critical tasks; concrete examples of how interpersonal issues affect crew safety | Decision quality (no documented examples); responsibility maturity (no evidence); adaptability (no evidence); attention & information accuracy (weak memory for numbers); crew cooperation (nasty remarks) | Obtain specific examples of B’s decision‑making quality, evidence of responsibility maturity, how memory weakness manifests in operations, and mitigation of interpersonal issues |
+| Candidate C | 100 % reliable; creates positive crew atmosphere; makes correct decisions quickly; keeps calm in crisis; understands complicated technology | Difficulty communicating ideas; regarded as egocentric; not willing to further education; no explicit evidence of responsibility maturity for high‑risk international flights | Responsibility maturity for high‑risk flights; adaptability/feedback orientation; attention & information accuracy (numerical handling); deeper decision‑quality evidence beyond speed | Responsibility maturity (no evidence); adaptability (limited education appetite); attention & information accuracy (no data); decision quality depth (only speed) | Request evidence of C’s responsibility maturity in high‑risk contexts, examples of handling numerical data, and any feedback on adaptability |
+| Candidate D | Responds adequately to unexpected events; concentrates very well; solves problems extremely well; takes responsibility seriously | Hot temper; regarded as know‑it‑all (potential crew‑cooperation risk); no evidence of decision quality under prolonged stress; no evidence of handling numerical data accurately | Stress resilience over prolonged periods; decision quality under high stress; attention to numerical data; concrete crew‑cooperation behavior; responsibility maturity for high‑risk flights; adaptability/feedback orientation | Stress resilience (no evidence of prolonged pressure); decision quality (only “adequate” under unexpected events); attention & information accuracy (no data on numbers); crew cooperation (temper/know‑it‑all); responsibility maturity (no evidence); adaptability (no evidence) | Ask for concrete examples of D’s decision‑making quality under stress, handling of numerical information, crew‑cooperation incidents, and evidence of responsibility maturity |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared to B) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared to C and D) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared to B) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (compared to B) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Emily Brooks | Candidate B: very conscientious, handles stress well, good at assessing weather conditions, excellent computer skills; noted B’s pretentious/grumpy tone and weak memory for numbers; provisional recommendation of Candidate B. Also shared observations on Candidate D’s technical competence and cooperation risk. | Can Emily provide concrete examples of how B’s nasty remarks have impacted crew safety or performance? How does B’s weak memory for numbers manifest in operational tasks? Does Emily have any specific incidents illustrating D’s cooperation risk or decision‑making under stress? |
+| Sarah Mitchell | Candidate B: grumpiness/uncooperative tendencies; weak memory for numbers. Candidate C: 100 % reliable, positive crew atmosphere, quick correct decisions, calm in crisis, understands complicated technology; noted C’s communication challenges, egocentricity, limited education appetite, lack of responsibility‑maturity evidence. Candidate D: adequate response to unexpected events, strong problem‑solving, good concentration; answered tool questions about D’s decision‑making and attention to numbers. | Can Sarah provide any concrete evidence of C’s responsibility maturity in high‑risk or international flights? Are there documented cases where C’s communication issues affected safety? Does Sarah have examples of D’s decision quality under prolonged stress or handling of numerical data? |
+| James Carter (self) | Candidate A: anticipates dangerous situations, sees complex connections, excellent spatial vision, very good leadership qualities; concerns: show‑off, not open to new ideas. Candidate D: responds adequately to unexpected events, concentrates well, solves problems extremely well, takes responsibility seriously; concerns: hot temper, know‑it‑all. Answered tool queries on D’s stress resilience, crew‑cooperation, technical competence, decision‑making, attention to numbers, and on A’s decision‑making under stress. Also answered about B’s cooperation and attention lapses. | Can James obtain concrete examples of A’s decision‑making quality under stress or unexpected events? What evidence exists of D’s decision‑making quality under high stress and handling of numerical information? Are there any documented instances of B’s decision‑quality performance? |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Emily Brooks | Candidate B | Strong reliability, stress resilience, and technical competence (weather assessment, computer skills); interpersonal issues seen as manageable. | New evidence of serious cooperation or safety‑impacting behavior for B could shift vote. |
+| Sarah Mitchell | Candidate C | 100 % reliability, positive crew atmosphere, rapid correct decisions; concerns about B’s grumpiness and weak memory outweigh C’s communication/education gaps. | Evidence that C lacks responsibility maturity for high‑risk flights or that communication issues compromise safety could change view. |
+| James Carter | Candidate B | Most complete safety profile (conscientious, handles stress well, strong technical skills); pending confirmation that interpersonal concerns are manageable and no stronger evidence for others. | If B’s interpersonal issues are shown to compromise safety or if A/D provide stronger evidence of decision quality and reliability, vote could change. |
+
+## Group Decision State
+## Group Decision State
+- **Current leading candidate:** Candidate B (2 votes vs 1)  
+- **Strongest alternative:** Candidate C  
+- **Main reason supporting the leading candidate:** Strong reliability (very conscientious), proven stress resilience, and technical competence (weather assessment, computer skills) directly meet long‑distance operational demands.  
+- **Main concern about the leading candidate:** Interpersonal issues (nasty remarks) and weak memory for numbers raise potential crew‑cooperation and attention‑accuracy risks; no documented decision‑quality evidence.  
+- **Main unresolved comparison:** B’s cooperation/attention risks versus C’s missing responsibility maturity and communication challenges.  
+- **Candidates that still need discussion:** Candidate A and Candidate D (both lack documented decision quality, stress resilience, attention to numerical data, clear evidence of crew cooperation and responsibility maturity).  
+- **Important criteria still unclear:** Operational reliability (A); stress resilience (A, D); decision quality (B, D); attention & information accuracy (B, D); crew cooperation (A, D); responsibility maturity (C, D); adaptability/feedback orientation (A, C, D).  
+- **Ready for convergence?** No

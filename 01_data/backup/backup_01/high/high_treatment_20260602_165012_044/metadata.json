@@ -1,0 +1,103 @@
+{
+  "agent_tool_calls": 2,
+  "agent_tool_messages": 4,
+  "agent_turns": 6,
+  "completed_at": "2026-06-04T01:25:13+0200",
+  "context_consistency": {
+    "embedding_input_characters": {
+      "emily_brooks": 6353,
+      "james_carter": 6229,
+      "sarah_mitchell": 6345
+    },
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "embedding_raw_characters": {
+      "emily_brooks": 6353,
+      "james_carter": 6229,
+      "sarah_mitchell": 6477
+    },
+    "embedding_removed_adjacent_duplicate_lines": {
+      "emily_brooks": 0,
+      "james_carter": 0,
+      "sarah_mitchell": 5
+    },
+    "embedding_text_normalization": "collapse_adjacent_duplicate_lines",
+    "max_pairwise_similarity": 0.955998,
+    "mean_pairwise_similarity": 0.951643,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.946353,
+    "pairwise": [
+      {
+        "agent_a": "emily_brooks",
+        "agent_b": "james_carter",
+        "similarity": 0.955998
+      },
+      {
+        "agent_a": "emily_brooks",
+        "agent_b": "sarah_mitchell",
+        "similarity": 0.946353
+      },
+      {
+        "agent_a": "james_carter",
+        "agent_b": "sarah_mitchell",
+        "similarity": 0.952578
+      }
+    ]
+  },
+  "context_transparency_condition": "high",
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "consensus",
+  "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+  "final_candidate": "Candidate A",
+  "input_tokens": 124220,
+  "mean_pairwise_memory_similarity": 0.951643,
+  "memory_similarity_method": "embedding_cosine",
+  "memory_updates": 18,
+  "output_tokens": 58094,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "emily_brooks",
+      "agent_b": "james_carter",
+      "similarity": 0.955998
+    },
+    {
+      "agent_a": "emily_brooks",
+      "agent_b": "sarah_mitchell",
+      "similarity": 0.946353
+    },
+    {
+      "agent_a": "james_carter",
+      "agent_b": "sarah_mitchell",
+      "similarity": 0.952578
+    }
+  ],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_treatment_20260602_165012_044",
+  "runtime_seconds": 323.0831,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/shared_mental_models/sarah_mitchell.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/shared_mental_models/james_carter.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260602_165012_044/shared_mental_models/emily_brooks.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_evidence_share": 0.444444,
+  "smm_mode": "treatment",
+  "smm_quality": 0.422952,
+  "smm_quality_method": "c_decisive_evidence_coverage_x_memory_similarity",
+  "smm_similarity": 0.951643,
+  "speaker_order_seed": "high_treatment_20260602_165012_044",
+  "status": "completed",
+  "timestamp": "20260604_011950",
+  "tokens_per_correct_decision": 434882.22,
+  "total_messages": 10,
+  "total_tokens": 182314,
+  "vote_count": {
+    "Candidate A": 3
+  }
+}
