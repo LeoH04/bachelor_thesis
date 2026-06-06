@@ -8,7 +8,7 @@ options(width = 220, scipen = 999)
 # 1. Load data
 # ------------------------------------------------------------
 
-input_file <- "01_data/processed/simulation_metrics_20260530_091120.csv"
+input_file <- "01_data/processed/simulation_metrics_20260604_140134.csv"
 
 if (!file.exists(input_file)) {
   stop(paste("Metrics file not found:", input_file))

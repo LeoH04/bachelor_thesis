@@ -1,0 +1,51 @@
+# Shared Mental Model (Emily Brooks)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | - Anticipates dangerous situations<br>- Sees complex connections<br>- Excellent spatial vision<br>- Very good leadership qualities | - Unfriendly<br>- Eats unhealthily<br>- Regarded as pretentious<br>- Sometimes not good at taking criticism<br>- Can be unorganized | *None (all known facts have been introduced)* | - Operational reliability (no concrete examples)<br>- Stress resilience (no concrete examples)<br>- Crew cooperation<br>- Professional communication<br>- Decision quality<br>- Technical competence depth for long‑haul ops<br>- Attention and information accuracy<br>- Responsibility/maturity<br>- Adaptability/feedback orientation | Ask panel for concrete examples of A’s reliability, stress handling, crew‑cooperation, communication style, decision‑quality incidents, technical competence on long‑haul systems, and attention accuracy. |
+| Candidate B | - Very conscientious<br>- Handles stress very well<br>- Good at assessing weather conditions<br>- Excellent computer skills | - Pretentious / grumpy<br>- Sometimes adopts wrong tone<br>- Makes nasty remarks about colleagues<br>- Weak memory for numbers | *None* | - Decision quality in safety‑critical scenarios<br>- Adaptability / feedback orientation<br>- Detailed attention to numeric data (beyond weak memory)<br>- Crew cooperation beyond tone issues | Request specific examples of B’s decision quality in safety‑critical situations and evidence of his adaptability, feedback receptiveness, and concrete crew‑cooperation behaviors. |
+| Candidate C | - Makes correct decisions quickly<br>- Excellent attention skills<br>- Puts concern for others above everything<br>- 100 % reliable<br>- Creates positive crew atmosphere<br>- Proven ability to keep calm in a crisis (stress resilience) | - Difficulty communicating ideas<br>- Regarded as egocentric<br>- Not very willing to further his education | *None* | - Technical competence depth for long‑distance operations<br>- Overall responsibility/maturity<br>- Adaptability / feedback orientation | Provide observations on C’s technical competence depth for long‑haul ops, overall responsibility/maturity, and adaptability/feedback orientation. |
+| Candidate D | - Responds adequately to unexpected events (stress resilience)<br>- Solves problems extremely well (decision quality)<br>- Can concentrate very well (attention)<br>- Takes responsibility seriously (maturity) | - Considered moody<br>- Regarded as a loner<br>- Arrogant / know‑it‑all attitude<br>- Weak leadership skills | *None* | - Operational reliability (no documented observations)<br>- Crew cooperation (no documented observations)<br>- Professional communication (no documented observations) | Invite concrete examples of D’s reliability, crew‑cooperation behaviors, professional communication style, and any documented decision‑making incidents in safety‑critical contexts. |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with C by James) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with A, C, D) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with A by James) | Yes |
+| Candidate D | Yes (strengths & concerns noted) | Yes | Yes | No | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Sarah Mitchell | • Endorses Candidate C as the stronger overall fit.<br>• C is 100 % reliable, creates a positive crew atmosphere, makes correct decisions quickly, and has excellent attention skills.<br>• Notes lack of evidence on C’s stress‑resilience and technical competence depth for long‑distance operations.<br>• Highlights Candidate B’s reliability, stress resilience, and weather‑assessment ability.<br>• Points out B’s gaps in decision‑quality evidence and attention to detail (weak memory for numbers).<br>• States she has no documented observations of Candidate A’s operational reliability, stress‑resilience, crew‑cooperation, or professional communication; notes A can anticipate dangerous situations, has very good leadership qualities, sometimes not good at taking criticism, and can be unorganized.<br>• Provides information on Candidate D: stress resilience (responds to unexpected events adequately), decision quality (solves problems extremely well), attention (can concentrate very well), responsibility (takes responsibility seriously); also notes D is regarded as arrogant and has weak leadership, implying possible crew‑cooperation/communication issues. | *None* |
+| James Carter | • Very conscientious, handles stress well, good at assessing weather conditions (strengths of B).<br>• Makes nasty remarks about colleagues, weak memory for numbers, sometimes wrong tone (concerns for B).<br>• Previously shifted provisional recommendation to Candidate A citing anticipatory and leadership strengths.<br>• No concrete examples of A’s reliability or stress handling.<br>• Notes D “responds to unexpected events adequately,” indicating some stress resilience; described D as “know‑it‑all” and having a “hot temper.”<br>• Now states Candidate C has explicit proof of 100 % reliability, a proven ability to keep calm in a crisis, and a track record of making quick, correct decisions; shifts his provisional recommendation to Candidate C. | *None* |
+| Emily Brooks | • Candidate C makes correct decisions quickly, is 100 % reliable, has excellent attention, puts concern for others first, and creates a positive crew atmosphere.<br>• Candidate C has proven ability to keep calm in a crisis (stress resilience).<br>• Candidate A anticipates dangerous situations, sees complex connections, has excellent spatial vision, and very good leadership qualities.<br>• Highlighted missing evidence on A’s operational reliability and stress handling, and on C’s technical competence depth.<br>• Stated vote for Candidate C. | • Observations on Candidate C’s technical/cognitive competence depth for long‑distance flights? |
+| (Other agents) | *None shared* | *None* |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| James Carter | Candidate C | C has explicit proof of 100 % reliability, a proven ability to keep calm in a crisis, and quick correct decisions – core safety‑critical criteria; C’s communication/egocentric issues are outweighed by concrete safety evidence. | Could change if evidence emerges showing C’s technical competence for long‑haul ops is insufficient, or if egocentric/communication issues prove to degrade crew performance. |
+| Emily Brooks | Candidate C | Quick correct decisions, strong attention, concern for others, positive crew atmosphere, 100 % reliability, and proven calmness in crises. | Could change with evidence of poor technical competence depth for long‑haul, limited responsibility/maturity, or egocentric attitude affecting crew dynamics. |
+| Sarah Mitchell | Candidate C | C’s reliability, positive crew atmosphere, demonstrated decision quality and attention; B lacks decision‑quality and attention evidence. | Might shift if C’s technical competence or adaptability gaps become critical, or if D’s reliability and teamwork prove strong. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate C (three votes: Emily Brooks, Sarah Mitchell, James Carter)  
+- **Strongest alternative:** Candidate A (no votes but most discussed alternative)  
+
+- **Main reason supporting the leading candidate:** Explicit proof of 100 % reliability, demonstrated ability to stay calm in crises (stress resilience), quick and correct decision‑making, excellent attention, concern for others, and a positive crew atmosphere – all core safety‑critical criteria for long‑distance flights.  
+- **Main concern about the leading candidate:** Communication style and egocentric attitude may affect crew dynamics; lack of documented evidence on technical competence depth for long‑haul operations, overall responsibility/maturity, and adaptability/feedback orientation.  
+
+- **Main unresolved comparison:** C vs A on technical competence depth for long‑haul systems, overall responsibility/maturity, and adaptability/feedback orientation.  
+
+- **Candidates that still need discussion:** Candidate D (operational reliability, crew‑cooperation, professional communication, concrete decision‑quality examples); Candidate B (decision quality in safety‑critical scenarios, adaptability, detailed numeric attention, crew‑cooperation beyond tone); Candidate A (operational reliability, stress handling, crew cooperation, communication, decision quality, technical competence depth, attention accuracy, responsibility, adaptability); Candidate C (technical competence depth for long‑distance ops, overall responsibility/maturity, adaptability/feedback orientation).  
+
+- **Important criteria still unclear:**  
+  - *Candidate A:* operational reliability, stress resilience, crew cooperation, professional communication, decision quality, technical competence depth for long‑haul, attention and information accuracy, responsibility/maturity, adaptability/feedback orientation.  
+  - *Candidate B:* decision quality in safety‑critical scenarios, adaptability/feedback orientation, detailed attention to numeric data, crew cooperation beyond tone issues.  
+  - *Candidate C:* technical competence depth for long‑distance operations, overall responsibility/maturity, adaptability/feedback orientation.  
+  - *Candidate D:* operational reliability, crew cooperation, professional communication, concrete decision‑quality evidence in safety‑critical contexts.  
+
+- **Ready for convergence?** No – several safety‑relevant criteria remain undocumented for all candidates, and the leading candidate has not yet been fully compared with the strongest alternative across the complete set of criteria.
