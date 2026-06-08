@@ -20,7 +20,7 @@ path <- getwd()
 # ------------------------------------------------------------
 
 simulation_metrics <- read.csv(paste0(path,
-  "/01_data/processed/simulation_metrics_20260530_091120.csv"),
+  "/01_data/processed/simulation_metrics_20260606_092841.csv"),
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
