@@ -72,6 +72,7 @@ for run_spec in "${RUN_MATRIX[@]}"; do
 
   for i in $(seq -f "%03g" 1 "$COUNT"); do
     run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
+    run_seed="${condition}_${smm_mode}_${i}"
     metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
     if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
       && grep -q '"status": "completed"' "$metadata_file"; then
@@ -80,11 +81,12 @@ for run_spec in "${RUN_MATRIX[@]}"; do
     fi
 
     for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-      echo "Starting simulation $i/$COUNT: $run_id (attempt $attempt/$MAX_ATTEMPTS)"
+      echo "Starting simulation $i/$COUNT: $run_id (seed $run_seed, attempt $attempt/$MAX_ATTEMPTS)"
 
       if SIM_CONDITION="$condition" \
         SIM_SMM_MODE="$smm_mode" \
         SIM_RUN_ID="$run_id" \
+        SIM_RANDOM_SEED="$run_seed" \
         SIM_RUN_TAG="$RUN_TAG" \
         adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
         echo "Finished simulation $i/$COUNT: $run_id"
