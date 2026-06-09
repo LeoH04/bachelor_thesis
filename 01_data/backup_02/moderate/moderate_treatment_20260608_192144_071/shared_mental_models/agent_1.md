@@ -1,0 +1,51 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+| --- | --- | --- | --- | --- | --- |
+| Candidate A | *(none yet discussed)* | - Sometimes not good at taking criticism<br>- Can be unorganized | - Anticipate dangerous situations<br>- See complex connections<br>- Excellent spatial vision<br>- Very good leadership qualities | Operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity | Elicit concrete evidence of reliability, stress handling, technical competence, decision quality, attention to detail, crew cooperation, professional communication, adaptability, and maturity |
+| Candidate B | *(none yet discussed)* | - Grumpy attitude<br>- Uncooperative behavior | - Very conscientious<br>- Handles stress very well<br>- Good at assessing weather conditions<br>- Excellent computer skills | Operational reliability (beyond conscientiousness), technical competence, decision quality, attention accuracy, crew cooperation (positive examples), professional communication, adaptability, responsibility & role maturity | Ask for specific examples of crew cooperation, professional communication, decision quality in safety‑relevant situations, and evidence of responsibility/maturity |
+| Candidate C | - 100 % reliability<br>- Makes correct decisions quickly<br>- Creates positive crew atmosphere<br>- Calmness in crises<br>- Solid technical understanding | - Difficulty communicating ideas<br>- Regarded as egocentric<br>- Not very willing to further his education<br>- No recorded evidence of responsibility or role maturity | *(none – all known facts have been discussed)* | Explicit stress‑resilience evidence; depth of technical competence; attention and information accuracy; adaptability; responsibility & role maturity | Seek concrete examples of stress‑resilience, deeper technical competence, attention‑to‑detail, adaptability, and responsibility/maturity |
+| Candidate D | - Takes responsibility seriously<br>- Solves problems extremely well<br>- Can concentrate very well<br>- Responds adequately to unexpected events | - Regarded as arrogant<br>- Relatively weak leadership skills<br>- Known as “know‑it‑all” with hot temper<br>- No documented crew‑cooperation<br>- No professional communication evidence<br>- No decision‑quality evidence in safety‑relevant situations | *(none – all known facts have been discussed)* | Operational reliability; stress resilience; technical competence; attention and information accuracy; adaptability; crew cooperation; professional communication; decision quality in safety‑relevant situations; responsibility & role maturity beyond taking responsibility | Obtain evidence of decision quality in safety‑critical contexts, crew cooperation, professional communication, stress handling, technical competence, attention accuracy, adaptability, and deeper responsibility maturity |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+| --- | --- | --- | --- | --- | --- |
+| Candidate A | Yes | No | Yes | No | Yes |
+| Candidate B | Yes | No | Yes | No | Yes |
+| Candidate C | Yes | Yes | Yes | No | Yes |
+| Candidate D | Yes | Yes | Yes | No | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+| --- | --- | --- |
+| Agent 1 | • Provisional recommendation of Candidate C<br>• Listed C’s strengths (reliability, quick correct decisions, calmness, technical understanding) and concerns (communication difficulty, egocentric, limited education willingness, no responsibility evidence)<br>• Answered that there is no explicit evidence of Candidate A’s operational reliability or stress‑resilience<br>• Answered that there is no recorded technical competence or decision‑quality evidence for Candidate B<br>• Answered that there is no recorded responsibility or role‑maturity evidence for Candidate C | • Candidate A: operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate B: operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate D: decision quality in safety‑relevant situations, crew cooperation, professional communication, stress resilience, technical competence, attention accuracy, adaptability, responsibility & role maturity |
+| Agent 2 | • Agreement with Agent 1 on Candidate C’s core safety‑critical strengths<br>• Stated that there are no recorded examples of positive crew cooperation or professional communication for Candidate B<br>• Stated that there are no recorded examples of decision‑quality in safety‑relevant situations for Candidate D<br>• Stated that there are no recorded examples of technical competence or decision‑quality for Candidate B<br>• Answered that there is no documented crew‑cooperation for Candidate D | • Candidate A: operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate B: operational reliability (beyond conscientiousness), technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate D: decision quality in safety‑relevant situations, crew cooperation, professional communication, stress resilience, technical competence, attention accuracy, adaptability, responsibility & role maturity |
+| Agent 3 | • Voted for Candidate C and restated C’s strengths and concerns<br>• Asked whether Candidate C demonstrates responsibility or role maturity (answer: no recorded evidence)<br>• Asked for examples of Candidate D’s decision quality in safety‑relevant situations (answer: none recorded) | • Candidate A: operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate B: operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity<br>• Candidate D: decision quality in safety‑relevant situations, crew cooperation, professional communication, stress resilience, technical competence, attention accuracy, adaptability, responsibility & role maturity |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+| --- | --- | --- | --- |
+| Agent 1 | Candidate C | Reliability, quick correct decisions, positive crew atmosphere, calmness, solid technical understanding outweigh communication and adaptability concerns | New evidence showing poor stress resilience, technical gaps, or lack of responsibility could shift view |
+| Agent 2 | Candidate C | Core safety‑critical strengths (reliability, rapid correct decisions, calmness, technical understanding, positive crew atmosphere) outweigh deficits; other candidates have more serious gaps | Evidence that another candidate better meets missing criteria (stress resilience, decision quality) or C shows deficits could change view |
+| Agent 3 | Candidate C | 100 % reliability, rapid correct decisions, calmness, solid technical understanding, positive crew atmosphere cover most safety‑critical criteria; concerns about communication and responsibility remain | If Candidate D demonstrates strong decision quality in safety‑relevant situations, view could change |
+
+## Group Decision State
+## Group Decision State
+| Field | Value |
+| --- | --- |
+| Current leading candidate | Candidate C |
+| Strongest alternative | (none identified) |
+| Main reason supporting the leading candidate | 100 % reliability, rapid correct decisions, calmness under pressure, solid technical understanding, and a positive crew atmosphere address core safety‑critical criteria |
+| Main concern about the leading candidate | Difficulty communicating ideas, egocentric attitude, limited willingness for further education, and no recorded evidence of responsibility or role maturity (plus lack of explicit stress‑resilience evidence) |
+| Main unresolved comparison | No direct comparison between Candidate C and the others on missing criteria (stress resilience, depth of technical competence, attention accuracy, adaptability, responsibility & role maturity) and lack of decision‑quality evidence for Candidate D |
+| Candidates that still need discussion | Candidate A, Candidate B, Candidate D (deeper probing of missing criteria and interpersonal evidence) – also Candidate C still needs evidence on responsibility/maturity and stress resilience |
+| Important criteria still unclear | **Candidate A:** operational reliability, stress resilience, technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity  
+**Candidate B:** operational reliability (beyond conscientiousness), technical competence, decision quality, attention accuracy, crew cooperation, professional communication, adaptability, responsibility & role maturity  
+**Candidate C:** explicit stress‑resilience evidence, depth of technical competence, attention & information accuracy, adaptability, responsibility & role maturity  
+**Candidate D:** operational reliability, stress resilience, technical competence, attention & information accuracy, adaptability, crew cooperation, professional communication, decision quality in safety‑relevant situations, responsibility & role maturity beyond taking responsibility |
+| Ready for convergence? | No |
