@@ -32,12 +32,19 @@ def thought_history_enabled() -> bool:
 
 
 def input_history_scope() -> str:
-    """Return a stable metadata label for the prompt-visible history scope."""
+    """Return the raw public-history scope for passive memory updates."""
     if context_transparency_condition() == "low":
         return "latest_turn"
     if not discussion_history_enabled():
         return "none"
     return "current_round" if current_round_history_enabled() else "full_history"
+
+
+def agent_prompt_history_scope() -> str:
+    """Return the raw public-history scope for discussion and tool-answer prompts."""
+    if context_transparency_condition() == "low":
+        return "none"
+    return input_history_scope()
 
 
 def smm_memory_scope() -> str:

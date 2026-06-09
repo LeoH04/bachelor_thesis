@@ -20,9 +20,7 @@ all candidates before final convergence.
 """
 
 from .context_transparency import (
-    context_transparency_condition,
-    input_history_scope,
-    thought_history_enabled,
+    agent_prompt_history_scope,
 )
 from .history import _get_state, _round_number, build_public_discussion_history
 from .memory import read_agent_memory
@@ -363,7 +361,10 @@ def build_agent_instruction(
 
     vote_options = "|".join(candidates) if candidates else "candidate"
 
-    discussion_history = build_public_discussion_history(ctx)
+    discussion_history = build_public_discussion_history(
+        ctx,
+        scope=agent_prompt_history_scope(),
+    )
 
     return (
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
@@ -574,7 +575,10 @@ def build_agent_tool_instruction(
     candidates = TASK.get("candidates", [])
     goal = TASK.get("goal", "")
 
-    discussion_history = build_public_discussion_history(ctx)
+    discussion_history = build_public_discussion_history(
+        ctx,
+        scope=agent_prompt_history_scope(),
+    )
 
     return (
         f"You are {agent_name}, {agent_role} at {AIRLINE_NAME}.\n"
