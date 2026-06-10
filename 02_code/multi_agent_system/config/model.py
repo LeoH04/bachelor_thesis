@@ -39,6 +39,6 @@ def _make_model(temperature: float) -> LiteLlm:
     )
 
 
-DISCUSSION_MODEL = _make_model(0.2)
+DISCUSSION_MODEL = _make_model(0.0)
 MEMORY_MODEL = _make_model(0.0)
-TOOL_MODEL = _make_model(0.1)
+TOOL_MODEL = _make_model(0.0)
