@@ -257,12 +257,9 @@ def _indent_history_detail(text: str) -> str:
     return "\n".join(f"  {line}" for line in text.strip().splitlines())
 
 
-def _history_items_for_active_scope(
-    history: list[object],
-    scope: str | None = None,
-) -> list[object]:
+def _history_items_for_active_scope(history: list[object]) -> list[object]:
     """Return history entries visible under the active input-context condition."""
-    scope = input_history_scope() if scope is None else scope
+    scope = input_history_scope()
     if scope == "none":
         return []
     if scope == "latest_turn":
@@ -316,10 +313,9 @@ def _latest_scheduled_turn_items(history: list[object]) -> list[object]:
     return history[start_index : latest_message_index + 1]
 
 
-def build_public_discussion_history(ctx, scope: str | None = None) -> str:
+def build_public_discussion_history(ctx) -> str:
     """Format the stored public discussion transcript for inclusion in prompts."""
-    scope = input_history_scope() if scope is None else scope
-    if scope == "none":
+    if input_history_scope() == "none":
         return "- Discussion history is hidden for this input-context condition."
 
     state = _get_state(ctx)
@@ -329,7 +325,7 @@ def build_public_discussion_history(ctx, scope: str | None = None) -> str:
 
     lines = []
     include_thoughts = thought_history_enabled()
-    for item in _history_items_for_active_scope(history, scope):
+    for item in _history_items_for_active_scope(history):
         if not isinstance(item, dict):
             continue
         round_number = item.get("round", "?")
