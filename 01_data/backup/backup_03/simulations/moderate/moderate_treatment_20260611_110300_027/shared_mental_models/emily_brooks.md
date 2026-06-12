@@ -1,0 +1,43 @@
+# Shared Mental Model (Emily Brooks)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | - | - | • Anticipates dangerous situations<br>• Sees complex connections<br>• Excellent spatial vision<br>• Very good leadership qualities<br>• Unfriendly<br>• Eats unhealthily<br>• Sometimes not good at taking criticism | Operational reliability, stress resilience, decision quality, technical competence, attention/accuracy, crew cooperation, professional communication, responsibility, adaptability/feedback orientation | Elicit observations on reliability, stress handling, technical competence, decision‑making quality, crew cooperation, professional communication, responsibility, and adaptability. |
+| Candidate B | • Very conscientious (operational reliability)<br>• Handles stress very well (stress resilience)<br>• Good at assessing weather conditions (technical competence)<br>• Excellent computer skills (technical competence) | • Pretentious (crew cooperation)<br>• Sometimes adopts the wrong tone (professional communication)<br>• Uncooperative (crew cooperation) | • Decision‑making quality in safety‑critical situations<br>• Responsibility in high‑risk scenarios<br>• Adaptability / feedback orientation | Decision quality, responsibility in high‑risk situations, adaptability/feedback orientation | Probe decision‑making quality, responsibility judgment, and openness to feedback. |
+| Candidate C | • Makes correct decisions quickly (decision quality)<br>• Keeps calm under pressure (stress resilience)<br>• Creates a positive atmosphere with crew (crew cooperation)<br>• Puts concern for others above everything (responsibility)<br>• Excellent attention skills (attention/accuracy)<br>• 100 % reliable (operational reliability) | • Difficulty communicating ideas (professional communication)<br>• Regarded as egocentric (crew cooperation)<br>• Not very willing to further his education (adaptability) | • Technical competence<br>• Broader responsibility judgment beyond caring for others | Technical competence, broader responsibility judgment | Ask about technical competence and deeper responsibility judgment. |
+| Candidate D | • Responds adequately to unexpected events (adaptability)<br>• Concentrates very well (attention/accuracy)<br>• Solves problems extremely well (technical competence)<br>• Takes responsibility seriously (responsibility) | • Considered moody (stress resilience/crew cooperation)<br>• Regarded as a loner (crew cooperation)<br>• Arrogant / weak leadership (professional communication, leadership)<br>• No documented crew‑interaction or feedback handling | • Operational reliability<br>• Decision quality<br>• Professional communication<br>• Adaptability / feedback orientation<br>• Crew‑cooperation dynamics<br>• Stress‑resilience depth | Operational reliability, decision quality, professional communication, adaptability/feedback orientation, crew‑cooperation dynamics, stress‑resilience depth | Elicit observations on reliability, decision‑making quality, communication style, crew‑cooperation impact of moodiness, and adaptability to feedback. |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | No | No | No | No | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (vs. C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (vs. B, D) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (vs. C) | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Sarah Mitchell | • Crew‑cooperation: A – none, B – uncooperative, C – creates positive atmosphere, D – none (loner/arrogant)<br>• Adaptability: A – none, B – none, C – none (reluctant to further education), D – responds adequately to unexpected events<br>• Feedback orientation: A – not good at taking criticism, B – none, C – limited, D – none explicit<br>• Vote for Candidate C; reason: crew‑cooperation, reliability, decision quality; noted concerns about egocentricity and adaptability are less safety‑critical<br>• Leadership style of D: weak<br>• No documented crew interaction for D | • Do you have observations on Candidate A’s operational reliability, stress handling, technical competence, decision quality, crew cooperation, professional communication, and responsibility?<br>• Do you have any observations on Candidate D’s professional communication style, crew‑cooperation impact of moodiness, decision‑making quality, and adaptability? |
+| James Carter | • Vote for Candidate C; reason: calm under pressure, rapid correct decisions, positive crew atmosphere outweigh B’s cooperation weakness<br>• Provided observations on Candidate D: leadership style described as weak, no concrete crew‑interaction example, no explicit feedback‑handling example<br>• Asked for B’s decision quality, B’s adaptability, and D’s decision‑making quality | • Can you provide observations on Candidate B’s decision‑making quality in safety‑critical situations?<br>• Do you have information on Candidate B’s responsibility judgment in high‑risk scenarios?<br>• Any insight on Candidate B’s adaptability or how he handles feedback?<br>• Do you have observations on Candidate D’s decision‑making quality in safety‑critical situations? |
+| Emily Brooks | • Presented Candidate B’s strengths: conscientious, stress handling, weather assessment, computer skills<br>• Presented Candidate B’s concerns: pretentiousness, wrong tone, uncooperative<br>• Initially voted for B, then shifted vote to C, citing C’s reliability, crew‑cooperation, decision quality, calmness, and attention skills
+• Asked for observations on Candidate A and Candidate D across multiple criteria | • Do you have observations on Candidate A’s operational reliability, stress resilience, technical competence, decision quality, crew cooperation, professional communication, and responsibility?
+• Do you have any observations on Candidate D’s operational reliability, stress resilience, crew cooperation, and adaptability? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Emily Brooks | Candidate C | Positive crew atmosphere, 100 % reliability, rapid correct decisions, calm under pressure, excellent attention; these meet core safety criteria despite egocentricity and limited adaptability. | Could change if strong evidence shows C’s egocentric behavior or adaptability issues compromise safety, or if another candidate demonstrates superior technical competence and responsibility with acceptable crew cooperation. |
+| James Carter | Candidate C | Calm under pressure, makes correct decisions quickly, creates positive crew atmosphere; these outweigh B’s cooperation weakness. | Could change if C’s egocentric attitude or limited adaptability are shown to affect crew dynamics or safety, or if B’s cooperation improves and his technical/reliability strengths become decisive. |
+| Sarah Mitchell | Candidate C | Crew‑cooperation decisive; C is reliable, creates positive atmosphere, and makes correct decisions quickly; concerns about egocentricity and adaptability are less safety‑critical. | Could change if evidence shows C’s egocentric behavior or lack of adaptability leads to safety concerns, or if B’s cooperation issue is mitigated. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate C (three votes)
+- **Strongest alternative:** Candidate B
+- **Main reason supporting the leading candidate:** Strong crew‑cooperation (positive atmosphere), 100 % reliability, rapid correct decision‑making, calmness under pressure, and excellent attention skills address core safety‑critical criteria.
+- **Main concern about the leading candidate:** Egocentric attitude, difficulty communicating ideas, and limited willingness for further education (adaptability).
+- **Main unresolved comparison:** How Candidate C’s technical competence and broader responsibility judgment compare to Candidate B’s high operational reliability and technical strengths, given B’s crew‑cooperation weakness.
+- **Candidates that still need discussion:** Candidate A, Candidate D
+- **Important criteria still unclear:** Operational reliability (A, D), technical competence (A, C, D), decision quality (A, B, D), professional communication (A, D), responsibility (A, D), stress resilience depth (A, D), crew‑cooperation for A and D, adaptability/feedback orientation (A, B, D).
+- **Ready for convergence?** No
