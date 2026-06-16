@@ -1,0 +1,103 @@
+{
+  "agent_tool_calls": 13,
+  "agent_tool_messages": 26,
+  "agent_turns": 15,
+  "completed_at": "2026-06-12T12:57:33+0200",
+  "context_consistency": {
+    "embedding_input_characters": {
+      "agent_1": 8133,
+      "agent_2": 8490,
+      "agent_3": 8027
+    },
+    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+    "embedding_raw_characters": {
+      "agent_1": 8265,
+      "agent_2": 8622,
+      "agent_3": 8159
+    },
+    "embedding_removed_adjacent_duplicate_lines": {
+      "agent_1": 5,
+      "agent_2": 5,
+      "agent_3": 5
+    },
+    "embedding_text_normalization": "collapse_adjacent_duplicate_lines",
+    "max_pairwise_similarity": 0.932689,
+    "mean_pairwise_similarity": 0.928826,
+    "method": "embedding_cosine",
+    "min_pairwise_similarity": 0.92169,
+    "pairwise": [
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_2",
+        "similarity": 0.932689
+      },
+      {
+        "agent_a": "agent_1",
+        "agent_b": "agent_3",
+        "similarity": 0.92169
+      },
+      {
+        "agent_a": "agent_2",
+        "agent_b": "agent_3",
+        "similarity": 0.932098
+      }
+    ]
+  },
+  "context_transparency_condition": "low",
+  "correct_candidate": "Candidate C",
+  "decision_correct": 1,
+  "decision_method": "consensus",
+  "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
+  "final_candidate": "Candidate C",
+  "input_tokens": 273619,
+  "mean_pairwise_memory_similarity": 0.928826,
+  "memory_similarity_method": "embedding_cosine",
+  "memory_updates": 42,
+  "output_tokens": 146079,
+  "pairwise_memory_similarity": [
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_2",
+      "similarity": 0.932689
+    },
+    {
+      "agent_a": "agent_1",
+      "agent_b": "agent_3",
+      "similarity": 0.92169
+    },
+    {
+      "agent_a": "agent_2",
+      "agent_b": "agent_3",
+      "similarity": 0.932098
+    }
+  ],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/shared_mental_models"
+  },
+  "rounds": 5,
+  "run_id": "low_treatment_20260612_090103_023",
+  "runtime_seconds": 800.9523,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_20260612_090103_023/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_evidence_share": 0.888889,
+  "smm_mode": "treatment",
+  "smm_quality": 0.825623,
+  "smm_quality_method": "c_decisive_evidence_coverage_x_memory_similarity",
+  "smm_similarity": 0.928826,
+  "speaker_order_seed": "low_treatment_023",
+  "status": "completed",
+  "timestamp": "20260612_124412",
+  "tokens_per_correct_decision": 310644.35,
+  "total_messages": 41,
+  "total_tokens": 419698,
+  "vote_count": {
+    "Candidate C": 3
+  }
+}

@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | (none) | - Can be unorganized (mentioned) <br> - Sometimes not good at taking criticism (mentioned) | - Anticipates dangerous situations <br> - Sees complex connections <br> - Excellent spatial vision <br> - Very good leadership qualities | Operational reliability, stress resilience, technical competence, decision quality, attention and information accuracy, crew cooperation, professional communication, responsibility, adaptability/feedback orientation, leadership depth | Elicit observations on A’s reliability, stress resilience, technical competence, decision quality, attention to detail, crew cooperation, professional communication, responsibility, adaptability, and depth of leadership |
+| Candidate B | - Very conscientious (operational reliability) | - Uncooperative <br> - Grumpy <br> - Makes nasty remarks toward colleagues <br> - Weak memory for numbers | - Handles stress very well <br> - Good at assessing weather conditions <br> - Excellent computer skills | Decision quality, technical competence (weather assessment, computer skills), attention and information accuracy beyond memory issue, leadership, adaptability, feedback orientation, responsibility, stress resilience (not yet discussed) | Probe B’s technical competence, decision quality, leadership, adaptability, feedback orientation, and any additional evidence of stress resilience and attention to detail |
+| Candidate C | - 100 % reliable <br> - Makes correct decisions quickly <br> - Creates a positive atmosphere with crew | - Difficulty communicating ideas <br> - Regarded as egocentric <br> - Not very willing to further his education | (none) | Stress resilience, technical competence, attention and information accuracy, adaptability/feedback orientation, leadership depth, professional communication impact, broader responsibility beyond reliability | Seek evidence on C’s stress resilience, technical competence, attention to detail, adaptability, leadership, professional communication, and responsibility in safety‑relevant contexts |
+| Candidate D | - Responds to unexpected events adequately (stress resilience) <br> - Can concentrate very well <br> - Solves problems extremely well (technical competence) <br> - Takes responsibility seriously | - Regarded as arrogant <br> - Relatively weak leadership skills <br> - Hot temper | (none) | Operational reliability, decision quality, crew cooperation, professional communication, adaptability/feedback orientation, deeper leadership assessment, stress‑resilience depth, responsibility confirmation | Elicit evidence on D’s operational reliability, decision‑quality performance, crew‑cooperation behavior, professional communication style, adaptability, feedback orientation, and any further observations on stress handling and leadership depth |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | No | Yes | No | Yes |
+| Candidate B | Yes | Yes | Yes | No | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with D) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (compared with C) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | - Candidate C: 100 % reliable, makes correct decisions quickly, creates a positive crew atmosphere.<br>- Candidate B: very conscientious (operational reliability).<br>- Candidate A: can be unorganized (mentioned as a hint). | - Any observations on Candidate B’s technical competence, decision quality, leadership, adaptability, feedback orientation, and stress resilience?<br>- Any observations on Candidate D’s operational reliability, decision quality, crew‑cooperation behavior, and professional communication style?<br>- Any evidence on Candidate A’s technical competence, decision quality, attention to detail, crew cooperation, professional communication, responsibility, adaptability, and leadership depth? |
+| Agent 2 | - Candidate C: 100 % reliable, rapid correct decisions, positive crew atmosphere (reaffirmed).<br>- Candidate B: uncooperative, grumpy, makes nasty remarks, weak memory for numbers (and very conscientious).<br>- Candidate D: responds to unexpected events adequately, solves problems extremely well, can concentrate very well, takes responsibility seriously, regarded as arrogant, weak leadership, hot temper. | - Any evidence on Candidate D’s operational reliability, decision quality, crew‑cooperation behavior, and professional communication?<br>- Any observations on Candidate B’s technical competence (weather assessment, computer skills), decision quality, leadership, adaptability, feedback orientation, and stress resilience?<br>- Any observations on Candidate A’s reliability, stress resilience, technical competence, or other safety‑relevant criteria? |
+| Agent 3 | (no candidate facts shared) | - Do you have any additional evidence on Candidate C’s stress resilience or technical competence?<br>- Do you have observations on Candidate D’s crew cooperation and professional communication?<br>- Any information on Candidate A’s reliability, stress resilience, technical competence, or other relevant criteria? |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate C | 100 % reliability, rapid correct decisions, and positive crew atmosphere outweigh communication difficulty and egocentric attitude. | If evidence shows C’s communication issues impair safety/teamwork, or another candidate demonstrates stronger evidence on missing criteria (stress resilience, technical competence, reliability, decision quality). |
+| Agent 2 | Candidate C | Same as Agent 1: reliability, decision‑making speed, and crew climate dominate; B’s reliability offset by uncooperative behavior; D lacks proven reliability and decision quality and has temperament concerns. | New evidence that C lacks stress resilience or technical competence, or that D shows strong reliability and decision quality, could shift the view. |
+| Agent 3 | Candidate C | C’s proven reliability, rapid correct decisions, and positive crew atmosphere are core safety pillars; D’s missing reliability/decision‑quality evidence and moody reputation keep C ahead despite gaps. | Evidence that C’s stress resilience or technical competence is insufficient, or that D’s reliability and decision quality are confirmed, could change the recommendation. |
+
+## Group Decision State
+## Group Decision State
+| Current leading candidate | Strongest alternative | Main reason supporting the leading candidate | Main concern about the leading candidate | Main unresolved comparison | Candidates that still need discussion | Important criteria still unclear | Ready for convergence? | Reason |
+|---|---|---|---|---|---|---|---|---|
+| Candidate C | Candidate D | 100 % reliability, rapid correct decision‑making, and positive crew atmosphere (crew cooperation). | No documented evidence on stress resilience and technical competence; communication difficulty and egocentric attitude could affect teamwork. | C vs D on stress resilience, technical competence, operational reliability, decision quality, crew cooperation, professional communication, and related safety‑relevant criteria. | All candidates (A, B, C, D) still have missing evidence for a full evaluation. | Stress resilience (C, D), technical competence (C, D), operational reliability (D, A, B), decision quality (D, B, A), attention and information accuracy (B, C), crew cooperation (D, A, B), professional communication (D, A, B, C), adaptability/feedback orientation (all), leadership depth (A, D), responsibility (A, B, C beyond reliability). | No | Not all candidates have been fully evaluated and C has not been compared with D on the missing safety‑relevant criteria.

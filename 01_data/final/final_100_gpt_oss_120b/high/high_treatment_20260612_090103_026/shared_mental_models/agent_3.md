@@ -1,0 +1,42 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | *none yet discussed* | *none yet discussed* | - anticipates dangerous situations<br>- sees complex connections<br>- excellent spatial vision<br>- very good leadership qualities<br>- unfriendly<br>- eats unhealthily | - stress resilience<br>- decision quality<br>- attention & information accuracy<br>- crew cooperation<br>- professional communication<br>- responsibility & role maturity<br>- adaptability & feedback orientation<br>- technical & cognitive competence | Elicit evidence on stress resilience, decision quality, crew cooperation, communication style, and technical competence. |
+| Candidate B | - very conscientious<br>- handles stress very well<br>- good at assessing weather conditions<br>- excellent computer skills | - pretentious<br>- sometimes adopts wrong tone when communicating<br>- makes nasty remarks about colleagues<br>- relatively weak memory for numbers | *none (all known facts have been discussed)* | - decision quality in safety‑critical moments<br>- adaptability & feedback orientation<br>- responsibility & role maturity | Seek evidence on decision quality under pressure, adaptability, and broader responsibility. |
+| Candidate C | - 100 % reliable<br>- creates positive atmosphere with crew<br>- can make correct decisions quickly<br>- excellent attention skills<br>- puts concern for others above everything | - difficulty communicating ideas<br>- regarded as egocentric<br>- not very willing to further his education | - stress resilience<br>- technical & cognitive competence beyond decision speed<br>- responsibility & role maturity<br>- adaptability & feedback orientation<br>- deeper professional communication style<br>- crew‑cooperation impact of egocentric trait<br>- decision quality under pressure | - stress resilience<br>- technical competence beyond decision speed<br>- responsibility & role maturity<br>- adaptability & feedback orientation<br>- professional communication depth<br>- decision quality under pressure | Obtain evidence on stress resilience, technical competence, responsibility, adaptability, deeper communication style, and decision quality under pressure. |
+| Candidate D | - responds to unexpected events adequately<br>- can concentrate very well<br>- solves problems extremely well<br>- takes responsibility seriously | - hot temper (no concrete examples of impact on crew or safety)<br>- moody<br>- loner | - concrete examples of hot temper impact on crew cooperation and safety (none available)<br>- decision quality in crisis situations<br>- stress resilience beyond adequacy<br>- adaptability & feedback orientation<br>- professional communication depth<br>- leadership | - concrete evidence of temper impact on crew cooperation and safety<br>- decision quality in crisis situations<br>- stress resilience beyond adequacy<br>- adaptability & feedback orientation<br>- professional communication depth<br>- leadership | Ask for specific incidents showing temper impact, decision quality in crises, stress resilience, and adaptability. |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | No | No | No | No | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with D and C) | Yes |
+| Candidate C | Yes | Yes | Yes | No (not yet directly compared) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (compared with B) | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 (Anna Keller) | - Candidate B: very conscientious, handles stress very well, good at assessing weather conditions, excellent computer skills, pretentious, sometimes adopts wrong tone, makes nasty remarks about colleagues, relatively weak memory for numbers<br>- Candidate C: 100 % reliable, creates positive atmosphere with crew, can make correct decisions quickly, excellent attention skills, puts concern for others above everything, difficulty communicating ideas, regarded as egocentric, not very willing to further his education<br>- Candidate D: hot temper (no concrete examples), moody, loner | - Do you have any observations on Candidate A’s stress resilience and crew cooperation?<br>- Do you have any observations on Candidate C’s stress resilience or adaptability? |
+| Agent 2 (Markus Weber) | - Candidate D: responds to unexpected events adequately, can concentrate very well, solves problems extremely well, takes responsibility seriously, hot temper (no concrete examples)<br>- Candidate B: very conscientious, handles stress very well, good at assessing weather conditions, excellent computer skills, pretentious, sometimes adopts wrong tone, makes nasty remarks about colleagues, relatively weak memory for numbers | - Do you have any observations on Candidate D’s decision quality in crisis situations?<br>- Do you have any observations on Candidate C’s stress resilience? |
+| Agent 3 (Sofia Brandt) | - Candidate B: very conscientious, handles stress very well, good at assessing weather conditions, excellent computer skills, pretentious, sometimes adopts wrong tone, makes nasty remarks about colleagues, relatively weak memory for numbers<br>- Candidate D: responds to unexpected events adequately, can concentrate very well, solves problems extremely well, takes responsibility seriously, hot temper (no concrete examples)
+- Candidate C: 100 % reliable, creates positive atmosphere with crew, can make correct decisions quickly, excellent attention skills, puts concern for others above everything | - Do you have any observations on Candidate A’s stress resilience and crew cooperation?<br>- Can you provide any evidence on Candidate C’s adaptability and feedback orientation?<br>- Do you have any examples of Candidate D’s decision quality in crisis situations? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 (Anna Keller) | Candidate B | High operational reliability, stress resilience, weather assessment and computer skills outweigh communication concerns | Additional evidence on D’s temper impact or C’s stress handling could shift view |
+| Agent 2 (Markus Weber) | Candidate D | Strong responsibility, problem solving, concentration and ability to handle unexpected events outweigh communication concerns | D’s moody and loner traits could affect crew cooperation; further evidence on crew cooperation and communication could shift view |
+| Agent 3 (Sofia Brandt) | Candidate B | Operational reliability, stress handling, weather assessment, and computer skills outweigh communication concerns | Additional evidence on crew cooperation, adaptability, decision quality could shift view |
+
+## Group Decision State
+- Current leading candidate: **Candidate B** (two votes)
+- Strongest alternative: **Candidate D** (one vote)
+- Main reason supporting leading candidate: high operational reliability, stress resilience, weather assessment, and computer skills
+- Main concern about leading candidate: pretentiousness, wrong tone, nasty remarks, weak memory for numbers (crew‑cooperation and attention issues)
+- Main unresolved comparison: How Candidate D’s crew‑cooperation and communication compare to Candidate B’s communication issues, and which candidate demonstrates better decision quality under pressure; also need to compare Candidate C (and A) regarding stress resilience, decision quality, and crew cooperation.
+- Candidates still need discussion: Candidate A (not discussed), deeper aspects of Candidate C (stress resilience, adaptability, responsibility, decision quality), deeper aspects of Candidate D (decision quality, concrete temper impact, stress resilience, adaptability).
+- Important criteria still unclear: stress resilience for A, C, D; decision quality under pressure for A, C, D; crew cooperation for all; professional communication depth for B, D, C; adaptability & feedback orientation for C, D; attention & information accuracy for B (memory); responsibility & role maturity for A, C, D; technical & cognitive competence for A, C, D.
+- Ready for convergence? **No**

@@ -32,7 +32,7 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260606_092841.csv",
+  "01_data/processed/simulation_metrics_20260612_090103.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
