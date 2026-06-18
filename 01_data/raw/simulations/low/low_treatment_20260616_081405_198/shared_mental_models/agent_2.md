@@ -1,0 +1,39 @@
+# Shared Mental Model (Agent 2)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | - Anticipates dangerous situations (decision quality)\n- Excellent spatial vision (technical competence) | - Regarded as a show‑off (professional communication)\n- Not open to new ideas (adaptability) | - Sees complex connections\n- Very good leadership qualities | Operational reliability, stress resilience, attention/accuracy, crew cooperation, professional communication, responsibility, adaptability/feedback orientation | Ask panel to evaluate reliability, stress handling, crew cooperation, professional communication, adaptability, and attention/accuracy |
+| Candidate B | - Very conscientious (operational reliability)\n- Handles stress very well (stress resilience)\n- Good at assessing weather conditions (technical competence)\n- Excellent computer skills (technical competence) | - Relatively weak memory for numbers (attention/accuracy)\n- Makes nasty remarks about colleagues (crew cooperation, professional communication)\n- Pretentious tone (professional communication) | *None* | Decision quality, responsibility, adaptability/feedback orientation | Explore impact of numeric memory weakness on operational tasks, assess adaptability, probe depth of professional communication, evaluate decision quality and responsibility |
+| Candidate C | - Makes correct decisions quickly (decision quality)\n- Keeps calm in a crisis (stress resilience)\n- Understands complicated technology (technical competence)\n- Creates a positive crew atmosphere (crew cooperation)\n- Regarded as 100 % reliable (operational reliability)\n- Excellent attention skills (attention/accuracy)\n- Puts concern for others above everything (responsibility) | - Difficulty communicating ideas (professional communication)\n- Regarded as egocentric (crew cooperation)\n- Not very willing to further his education (adaptability/feedback orientation)\n- Communication style needs monitoring (professional communication) | *None* | *None* (all core criteria have at least one observation) | Probe depth of communication issues, assess willingness to accept feedback, evaluate impact of egocentric attitude on crew dynamics |
+| Candidate D | - Responds to unexpected events adequately (stress resilience)\n- Can concentrate very well (attention/accuracy)\n- Solves problems extremely well (decision quality)\n- Takes responsibility seriously (responsibility) | - Hot temper (crew cooperation, professional communication)\n- Regarded as a know‑it‑all (professional communication) | *None* | Operational reliability, technical competence, adaptability/feedback orientation | Assess operational reliability, technical competence, impact of hot temper on crew dynamics, adaptability, and professional communication |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate D | Yes | Yes | Yes | No (not yet compared with others) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | - Prefers Candidate C citing reliability, positive crew atmosphere, quick correct decisions, calmness in crisis\n- Highlights Candidate B’s weak memory for numbers and pretentious/nasty remarks as concerns | Do you have observations on Candidates A and D, especially regarding reliability, stress resilience, and crew cooperation? |
+| Agent 2 | - Candidate A: anticipates dangerous situations, excellent spatial vision, show‑off attitude, not open to new ideas, sees complex connections, very good leadership qualities\n- Candidate B: very conscientious, handles stress well, good at assessing weather, excellent computer skills, weak memory for numbers, makes nasty remarks, pretentious tone\n- Candidate C: makes correct decisions quickly, keeps calm in crisis, understands complicated technology, difficulty communicating ideas, egocentric, not willing to further education, creates a positive crew atmosphere, regarded as 100 % reliable\n- Candidate D: responds to unexpected events adequately, concentrates well, solves problems extremely well, takes responsibility seriously, hot temper, know‑it‑all perception | Do you have any additional details on candidates that have not yet been mentioned, such as evidence of adaptability, feedback orientation, or further examples of crew‑cooperation behavior? |
+| Agent 3 | - Strengths of Candidate B: very conscientious, handles stress well, good at assessing weather, excellent computer skills\n- Concerns of Candidate B: communication tone issues, makes nasty remarks about colleagues\n- Reason for shifting vote to Candidate C: high reliability, positive crew atmosphere, quick correct decisions, calmness, attention skills; notes communication style needs monitoring | Could you provide any further observations on Candidates A and D (reliability, stress handling, crew dynamics) or deeper insight into Candidate C’s communication challenges? |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate C | Reliability, positive crew atmosphere, quick correct decisions, calmness in crisis outweigh B’s technical edge; concerns about B’s weak memory for numbers and nasty remarks indicating attention‑to‑detail risk and crew‑cooperation problem | If another candidate shows a markedly stronger overall safety profile or if C’s communication challenges prove more severe |
+| Agent 2 | - | - | Further evidence on memory for numbers, adaptability, and crew‑cooperation could influence a vote |
+| Agent 3 | Candidate C | Strong operational reliability, stress resilience, technical competence; communication issues seen as manageable; B’s numeric memory weakness and nasty remarks threaten safety‑critical criteria | If communication problems prove more severe or another candidate demonstrates a stronger overall safety profile |
+
+## Group Decision State
+## Group Decision State
+- Current leading candidate: Candidate C (provisional votes by Agents 1 and 3)\n- Strongest alternative: Candidate B\n- Main reason supporting the leading candidate: High operational reliability, positive crew atmosphere, quick and correct decision‑making, calmness under pressure, strong attention skills, and demonstrated concern for others.\n- Main concern about the leading candidate: Communication challenges (difficulty communicating ideas, egocentric attitude, limited willingness to further education) may affect crew dynamics.\n- Main unresolved comparison: Need a full cross‑criteria comparison of Candidate C vs Candidate B on professional communication, adaptability/feedback orientation, responsibility, attention/accuracy (numeric memory), and overall decision quality.\n- Candidates that still need discussion: Candidate A, Candidate D (and deeper probing of Candidate C’s communication issues and Candidate B’s memory/adaptability).\n- Important criteria still unclear: Operational reliability (A, D), stress resilience (A, D), attention and information accuracy (B, D), crew cooperation (A, D), professional communication (A, D), responsibility (B), adaptability and feedback orientation (A, B, D, C).\n- Ready for convergence? **No**

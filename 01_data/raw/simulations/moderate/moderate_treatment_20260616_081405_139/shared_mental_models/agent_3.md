@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Unfriendly; eats unhealthily; not open to new ideas (show‑off) | Stress resilience; decision quality under pressure; attention & information accuracy; crew‑cooperation depth; professional communication depth; adaptability; responsibility; memory for numbers | Same as above | Probe stress‑resilience examples; request decision‑making evidence; explore crew‑cooperation and communication style; assess adaptability, responsibility, memory for numbers |
+| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Pretentious; sometimes adopts wrong tone | Decision quality under pressure; attention to detail; memory for numbers; crew‑cooperation depth; adaptability; responsibility | Same as above | Ask for concrete examples of decision‑making under pressure; explore attention to detail and memory for numbers; assess crew‑cooperation behaviors; inquire about adaptability and responsibility |
+| Candidate C | 100 % reliable; keeps calm in a crisis; can make correct decisions quickly; excellent attention skills; puts concern for others above everything; creates positive crew atmosphere | Difficulty communicating ideas; regarded as egocentric; not very willing to further education | Technical competence (weather assessment, computer skills); responsibility depth; adaptability beyond education willingness; memory for numbers | Same as above | Probe technical competence (weather assessment, computer‑skill proficiency); clarify responsibility in safety‑critical situations; assess adaptability beyond education; inquire about memory for numbers |
+| Candidate D | Responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | Moody; regarded as a loner; hot temper | Decision quality under high‑stress; attention & information accuracy; crew‑cooperation depth; professional communication style; adaptability; stress‑resilience in high‑stress crises; memory for numbers | Same as above | Explore decision‑making quality under high‑stress; assess crew‑cooperation and communication style; discuss adaptability and temperament management; inquire about memory for numbers; probe stress‑resilience in crisis |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | No | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate D | Yes | Yes | Yes | No | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; pretentious; sometimes adopts wrong tone. C: can make correct decisions quickly. | • B: decision‑making quality under pressure? • B: attention to detail? • B: memory for numbers? • B: crew‑cooperation depth? • B: adaptability? • B: responsibility? • A: stress resilience? • A: decision quality under pressure? • C: weather‑assessment ability? • C: computer‑skill proficiency? • C: responsibility depth? • C: adaptability? • C: memory for numbers? |
+| Agent 2 | D: responds to unexpected events adequately; solves problems extremely well; concentrates very well; takes responsibility seriously; moody; loner; hot temper. C: keeps calm in a crisis. | • B: decision‑making quality under pressure? • B: attention to detail? • B: memory for numbers? • B: crew‑cooperation depth? • B: adaptability? • B: responsibility? • D: decision‑quality under high stress? • D: attention to detail? • D: memory for numbers? • D: crew‑cooperation and professional communication style? • D: adaptability? • D: stress‑resilience in high‑stress crises? • A: stress resilience? • A: decision quality under pressure? • C: weather‑assessment ability? • C: computer‑skill proficiency? • C: responsibility depth? • C: adaptability? • C: memory for numbers? |
+| Agent 3 | B: very conscientious; handles stress very well; good at assessing weather; excellent computer skills; pretentious tone. D: responds to unexpected events adequately; solves problems extremely well; concentrates very well; takes responsibility seriously; moody; loner; hot temper. C: keeps calm in a crisis; can make correct decisions quickly; 100 % reliable; excellent attention skills; creates positive crew atmosphere; difficulty communicating ideas; egocentric; not willing to further education. A: anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities; unfriendly; eats unhealthily; not open to new ideas (show‑off). | • B: decision‑making quality under pressure? • B: attention to detail? • B: memory for numbers? • B: crew‑cooperation depth? • B: adaptability? • B: responsibility? • D: decision‑quality under high stress? • D: attention to detail? • D: memory for numbers? • D: crew‑cooperation and professional communication style? • D: adaptability? • D: stress‑resilience in high‑stress crises? • A: stress resilience? • A: decision quality under pressure? • A: crew‑cooperation and communication style? • A: adaptability? • A: responsibility? • A: memory for numbers? • C: weather‑assessment ability? • C: computer‑skill proficiency? • C: responsibility depth? • C: adaptability? • C: memory for numbers? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate B | B’s strong stress handling, technical skills, and conscientiousness outweigh the pretentious tone. | Could shift if evidence shows stronger crew‑cooperation or decision‑quality/attention issues for B, or if C’s technical competence is superior. |
+| Agent 2 | Candidate B | B’s proven technical strengths and stress resilience; pretentious tone seen as less risky than D’s hot temper. | New evidence of significant crew‑cooperation problems for B or a stronger overall fit of another candidate could change view. |
+| Agent 3 | Candidate B | B’s documented technical strengths and stress resilience outweigh C’s unknown technical competence; pretentious tone less risky than C’s egocentric communication. | Could change if B’s decision quality/attention shown weak, or C’s technical competence proven strong. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate B
+- **Strongest alternative:** Candidate C
+- **Main reason supporting the leading candidate:** Documented technical competence (weather assessment, computer skills) combined with strong stress resilience and high conscientiousness.
+- **Main concern about the leading candidate:** Pretentious communication tone that may affect crew cooperation.
+- **Main unresolved comparison:** Decision quality and attention to detail under pressure for B versus C’s quick correct decisions and calmness; plus C’s unknown technical competence.
+- **Candidates that still need discussion:** Candidates A and D, and deeper aspects of B, C, and D (decision quality, attention, crew cooperation, professionalism, adaptability, responsibility, memory for numbers, stress resilience high‑stress for D, technical competence for C, etc.).
+- **Important criteria still unclear:** Decision quality under pressure (B, D); attention & information accuracy (B, D); crew cooperation depth (B, D, A); professional communication depth (B, D, A); adaptability (B, C, D); responsibility (C, D); stress resilience in high‑stress crises (A, D); memory for numbers (B, D, C); technical competence for C (weather assessment, computer skills); responsibility depth for C; memory for numbers for C.
+- **Ready for convergence?** No
