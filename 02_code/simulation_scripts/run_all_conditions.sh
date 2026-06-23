@@ -63,6 +63,7 @@ else
     "moderate:baseline"
   )
 fi
+TASK_VARIANTS=(1 2 3)
 
 cd "$CODE_DIR"
 
@@ -71,36 +72,41 @@ for run_spec in "${RUN_MATRIX[@]}"; do
   echo "Running condition: $condition ($smm_mode)"
 
   for i in $(seq -f "%03g" 1 "$COUNT"); do
-    run_id="${condition}_${smm_mode}_${BATCH_ID}_${i}"
+    index_decimal=$((10#$i))
     run_seed="${condition}_${smm_mode}_${i}"
-    metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
-    if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
-      && grep -q '"status": "completed"' "$metadata_file"; then
-      echo "Skipping completed simulation $i/$COUNT: $run_id"
-      continue
-    fi
-
-    for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-      echo "Starting simulation $i/$COUNT: $run_id (seed $run_seed, attempt $attempt/$MAX_ATTEMPTS)"
-
-      if SIM_CONDITION="$condition" \
-        SIM_SMM_MODE="$smm_mode" \
-        SIM_RUN_ID="$run_id" \
-        SIM_RANDOM_SEED="$run_seed" \
-        SIM_RUN_TAG="$RUN_TAG" \
-        adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
-        echo "Finished simulation $i/$COUNT: $run_id"
-        break
-      else
-        status=$?
+    for offset in 0 1 2; do
+      task_variant="${TASK_VARIANTS[$(((index_decimal - 1 + offset) % 3))]}"
+      run_id="${condition}_${smm_mode}_task${task_variant}_${BATCH_ID}_${i}"
+      metadata_file="$REPO_ROOT/01_data/raw/simulations/$condition/$run_id/metadata.json"
+      if [[ "$SKIP_COMPLETED" == "1" && -f "$metadata_file" ]] \
+        && grep -q '"status": "completed"' "$metadata_file"; then
+        echo "Skipping completed simulation $i/$COUNT (task $task_variant): $run_id"
+        continue
       fi
 
-      if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
-        echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
-        exit "$status"
-      fi
+      for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+        echo "Starting simulation $i/$COUNT (task $task_variant): $run_id (seed $run_seed, attempt $attempt/$MAX_ATTEMPTS)"
 
-      echo "Simulation failed: $run_id. Retrying..." >&2
+        if SIM_CONDITION="$condition" \
+          SIM_SMM_MODE="$smm_mode" \
+          SIM_TASK_VARIANT="$task_variant" \
+          SIM_RUN_ID="$run_id" \
+          SIM_RANDOM_SEED="$run_seed" \
+          SIM_RUN_TAG="$RUN_TAG" \
+          adk run multi_agent_system --replay multi_agent_system/config/replay.json; then
+          echo "Finished simulation $i/$COUNT (task $task_variant): $run_id"
+          break
+        else
+          status=$?
+        fi
+
+        if [[ "$attempt" -ge "$MAX_ATTEMPTS" ]]; then
+          echo "Simulation failed after $MAX_ATTEMPTS attempts: $run_id" >&2
+          exit "$status"
+        fi
+
+        echo "Simulation failed: $run_id. Retrying..." >&2
+      done
     done
   done
 

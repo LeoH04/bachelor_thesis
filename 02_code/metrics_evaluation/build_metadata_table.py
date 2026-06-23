@@ -19,6 +19,7 @@ BASE_COLUMNS = [
     "run_id",
     "context_transparency_condition",
     "smm_mode",
+    "task_variant",
     "speaker_order_seed",
     "status",
     "timestamp",
@@ -81,6 +82,7 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
             metadata.get("condition"),
         ),
         "smm_mode": metadata.get("smm_mode", "treatment"),
+        "task_variant": metadata.get("task_variant"),
         "speaker_order_seed": metadata.get("speaker_order_seed"),
         "status": metadata.get("status"),
         "timestamp": metadata.get("timestamp"),
@@ -180,9 +182,14 @@ def infer_output_id(rows: list[dict]) -> str | None:
     batch_ids = set()
     for run_id in run_ids:
         match = re.fullmatch(
-            r"(?:low|moderate|high)_(?:baseline|treatment)_(.+)_\d+",
+            r"(?:low|moderate|high)_(?:baseline|treatment)_task[123]_(.+)_\d+",
             run_id,
         )
+        if not match:
+            match = re.fullmatch(
+                r"(?:low|moderate|high)_(?:baseline|treatment)_(.+)_\d+",
+                run_id,
+            )
         if not match:
             match = re.fullmatch(r"(?:low|moderate|high)_(.+)_\d+", run_id)
         if not match:

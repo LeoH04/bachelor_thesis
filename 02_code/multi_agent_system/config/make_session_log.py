@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .context_transparency import context_transparency_metadata
 from .smm import smm_metadata, smm_mode
+from .task import TASK_VARIANT
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RAW_SIMULATIONS_DIR = REPO_ROOT / "01_data" / "raw" / "simulations"
@@ -52,6 +53,7 @@ def _base_metadata() -> dict:
     metadata = {
         "status": "initialized",
         "run_id": RUN_ID,
+        "task_variant": TASK_VARIANT,
         **context_transparency_metadata(),
         **smm_metadata(),
         "timestamp": TIMESTAMP,

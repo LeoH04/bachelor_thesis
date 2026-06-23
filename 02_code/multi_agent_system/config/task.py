@@ -1,17 +1,34 @@
 """Load task context and expose task-level constants."""
 
 import json
+import os
 from pathlib import Path
 from typing import Iterable
 
-TASK_PATH = Path(__file__).parent / "hidden_profile_task.json"
+TASK_VARIANT_RAW = os.getenv("SIM_TASK_VARIANT", "1").strip()
+if TASK_VARIANT_RAW not in {"1", "2", "3"}:
+    raise ValueError(
+        f"Unsupported SIM_TASK_VARIANT={TASK_VARIANT_RAW!r}. Expected one of: 1, 2, 3."
+    )
+
+TASK_VARIANT = int(TASK_VARIANT_RAW)
+TASK_PATH = Path(__file__).parent / "hidden_profile_task_1.json"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_task() -> dict:
-    """Load the hidden-profile task definition from the local JSON file."""
+    """Load the shared task definition and selected private-fact allocation."""
     with TASK_PATH.open("r", encoding="utf-8") as f:
-        return json.load(f)
+        task = json.load(f)
+
+    if TASK_VARIANT != 1:
+        allocation_path = TASK_PATH.with_name(
+            f"hidden_profile_task_{TASK_VARIANT}.json"
+        )
+        with allocation_path.open("r", encoding="utf-8") as f:
+            task["private_information"] = json.load(f)
+
+    return task
 
 
 TASK = load_task()
