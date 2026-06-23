@@ -1,0 +1,36 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | unfriendly; eats unhealthily; show‑off attitude; not open to new ideas; difficulty taking criticism; unorganized; mixed crew‑cooperation profile | *none* (all known facts have been mentioned) | stress‑resilience (no evidence); crew‑cooperation specifics (how leadership translates to teamwork); professional communication impact of unfriendly demeanor; reliability under health concerns (eating habits); adaptability to feedback | Obtain concrete examples of A’s stress resilience under pressure; evidence of crew interaction and communication style; assess impact of health habits on reliability; explore adaptability to criticism and feedback |
+| Candidate B | very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | pretentious; sometimes adopts wrong tone; grumpy; uncooperative; weak memory for numbers | *none* | impact of weak memory for numbers on safety‑critical tasks; adaptability; professional communication specifics; mitigation strategies for memory weakness | Seek concrete examples of how memory weakness manifests in operational tasks; explore mitigation measures; assess communication style in crew contexts |
+| Candidate C | can make correct decisions quickly; excellent attention skills; puts concern for others above everything | difficulty communicating ideas; regarded as egocentric; not very willing to further education | *none* | stress‑resilience; adaptability; crew‑cooperation beyond concern for others; decision quality under limited training; concrete teamwork examples | Obtain evidence of C’s stress handling in crisis; examples of crew collaboration; willingness for further training |
+| Candidate D | responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | considered moody; regarded as a loner; arrogant; relatively weak leadership skills | *none* | crew‑cooperation; professional communication; stress‑resilience in unexpected events; adaptability | Obtain concrete examples of D’s teamwork behavior and communication style; assess stress resilience in unexpected events; explore adaptability |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes | Yes |
+| Candidate B | Yes | Yes | Yes | Yes | Yes |
+| Candidate C | Yes | Yes | Yes | Yes | Yes |
+| Candidate D | Yes | Yes | Yes | Yes | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | Candidate B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; pretentious; sometimes adopts wrong tone; grumpy; uncooperative; weak memory for numbers. Candidate A: unfriendly; eats unhealthily; show‑off attitude; not open to new ideas; difficulty taking criticism; unorganized. Candidate C: difficulty communicating ideas; regarded as egocentric; not very willing to further education; puts concern for others above everything; excellent attention skills. Candidate D: considered moody; regarded as a loner; arrogant; relatively weak leadership skills. | Do you have any documented incidents showing how Candidate B’s weak memory for numbers affected operational tasks? |
+| Agent 2 | (no candidate facts shared) | Do you have any observations of Candidate D’s teamwork behavior? |
+| Agent 3 | Candidate A: can anticipate dangerous situations; see complex connections; excellent spatial vision; very good leadership qualities; unfriendly; eats unhealthily; show‑off attitude; not open to new ideas; difficulty taking criticism; unorganized. Candidate B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; pretentious; sometimes adopts wrong tone; grumpy; uncooperative; weak memory for numbers. Candidate C: can make correct decisions quickly; excellent attention skills; puts concern for others above everything; difficulty communicating ideas; regarded as egocentric; not very willing to further education. Candidate D: responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously; considered moody; regarded as a loner; arrogant; relatively weak leadership skills. | Do you have any observations of Candidate A’s stress resilience? Do you have any observations of Candidate C’s stress resilience? Do you have any observations of Candidate D’s stress resilience in unexpected events? Do you have any observations of Candidate B’s memory‑weakness impact on safety? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate A | Strong operational foresight (anticipating danger, complex‑system insight, spatial vision) and very good leadership outweigh B’s memory weakness; crew‑cooperation issues seen as manageable with training. | If concrete evidence shows A lacks stress resilience or health‑habit issues prove detrimental. |
+| Agent 2 | Candidate A | A’s operational foresight and leadership are most compelling for long‑haul safety; concerns are manageable. | If evidence emerges that A lacks stress resilience or crew‑cooperation proves problematic. |
+| Agent 3 | Candidate B | B demonstrates proven stress handling and solid reliability; communication style issues are manageable; memory weakness considered mitigable. | If B’s weak memory for numbers is shown to impact safety significantly, or if A’s stress resilience is demonstrated strong. |
+
+## Group Decision State
+| Current leading candidate | Strongest alternative | Main reason supporting the leading candidate | Main concern about the leading candidate | Main unresolved comparison | Candidates that still need discussion | Important criteria still unclear | Ready for convergence? |
+|---|---|---|---|---|---|---|---|
+| Candidate A | Candidate B | Operational foresight (anticipating danger, complex‑system insight, spatial vision) and very good leadership, crucial for long‑haul safety and decision quality. | No concrete evidence of stress resilience and mixed crew‑cooperation profile (attitude, criticism handling, organization, health habits). | How A’s stress resilience compares to B’s weak memory for numbers impact on safety. | Candidate C, Candidate D (and further evidence for A and B) | A: stress resilience, crew cooperation, professional communication, reliability under health concerns, adaptability; B: impact of memory weakness on safety, adaptability, professional communication specifics, mitigation; C: stress resilience, adaptability, crew cooperation; D: crew cooperation, professional communication, stress resilience, adaptability | No |

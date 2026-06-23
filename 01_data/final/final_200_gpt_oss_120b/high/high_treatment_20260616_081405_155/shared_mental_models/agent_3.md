@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Unfriendly (show‑off); eats unhealthily; difficulty taking criticism; unorganized; not open to new ideas | *none* | Operational reliability; stress resilience; decision quality; attention to detail; adaptability; crew cooperation; professional communication; responsibility | Request concrete evidence of operational reliability, stress resilience, decision quality, attention to detail, adaptability, crew cooperation, professional communication, and responsibility |
+| Candidate B | Very conscientious; handles stress well; good at assessing weather conditions; excellent computer skills | Grumpy; uncooperative; pretentious; sometimes adopts wrong tone (no documented instance) | *none* | Decision quality; attention to detail; adaptability; crew cooperation (beyond general concerns); professional communication (no documented incidents); responsibility; operational reliability | Request concrete examples of decision‑making quality, attention to detail, adaptability, crew cooperation, professional communication, responsibility, and operational reliability |
+| Candidate C | Keeps calm in crisis; makes correct decisions quickly; understands complicated technology; excellent attention skills; 100 % reliable; creates positive crew atmosphere; puts concern for others above everything | Difficulty communicating ideas; regarded as egocentric; not very willing to further his education | *none* | Adaptability (evidence of willingness to develop); concrete impact of communication difficulties on crew cooperation and safety | Seek concrete examples of communication impact on crew cooperation and evidence of adaptability |
+| Candidate D | Responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | Considered moody; regarded as a loner; arrogant; weak leadership | *none* | Stress resilience (detailed evidence); decision quality; attention to detail; adaptability; crew cooperation; professional communication; operational reliability | Request concrete evidence of stress‑resilience, decision‑quality, attention to detail, adaptability, crew cooperation, professional communication, and operational reliability |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | No (not directly compared) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate D | Yes | Yes | Yes | No (not directly compared) | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 (Anna Keller) | • Provisional vote for Candidate C with reasoning (100 % reliability, calmness in crisis, correct decisions quickly, positive crew atmosphere).<br>• Stated no documented instances of Candidate B using the wrong tone; only that B can be grumpy and uncooperative.<br>• Stated no documented observations of Candidate A’s stress‑resilience, crew‑cooperation, or professional communication.<br>• Stated no documented observations of Candidate D’s stress‑resilience, crew‑cooperation, or professional communication.<br>• In tool answers: confirmed lack of documented observations for B’s communication style, A’s stress/crew/communication, D’s stress/crew/communication, and noted related traits (leadership, show‑off, arrogance, weak leadership). | • Provide concrete examples of Candidate B’s decision‑making quality, attention to detail, and adaptability in operational contexts. |
+| Agent 2 (Markus Weber) | • Provisional vote for Candidate C with reasoning (calmness in crisis, correct decision‑making, technical competence, reliability, positive crew atmosphere).<br>• Stated no documented concrete examples of Candidate C’s communication difficulties impacting crew cooperation or safety.<br>• In tool answers: confirmed lack of documented observations for Candidate D’s crew cooperation and professional communication; also confirmed lack of documented observations for Candidate A’s stress‑resilience, crew‑cooperation, and professional communication. | *None* (all previously raised questions have been answered) |
+| Agent 3 (Sofia Brandt) | • Initial provisional vote for Candidate B with reasoning (conscientiousness, stress handling, weather‑assessment, computer skills).<br>• Later changed provisional vote to Candidate C, citing calmness, reliability, rapid correct decisions, positive crew atmosphere.<br>• Requested concrete examples of Candidate B’s decision‑making quality, attention to detail, and adaptability.<br>• Requested concrete examples of how Candidate C’s communication difficulties affect crew cooperation or safety.<br>• Requested concrete examples of Candidate A’s stress resilience, crew cooperation, and professional communication.<br>• Requested concrete examples of Candidate D’s stress resilience, crew cooperation, and professional communication.<br>• After discussion, provisional vote for Candidate C with updated reasoning. | *None* (all previously raised questions have been answered) |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 (Anna Keller) | Candidate C | 100 % reliability, calmness in crisis, correct decisions quickly, positive crew atmosphere; communication concerns are theoretical. | Would shift if concrete evidence shows his communication style impairs teamwork or if adaptability concerns become critical |
+| Agent 2 (Markus Weber) | Candidate C | Calmness in crisis, correct decision‑making, technical competence, reliability, positive crew atmosphere. | Needs evidence that communication difficulties do not impair teamwork or that he can develop adaptability |
+| Agent 3 (Sofia Brandt) | Candidate C | Documented calmness in crisis, 100 % reliability, rapid correct decisions, positive crew atmosphere; outweighs theoretical communication concerns. | Would change if solid evidence emerges that Candidate C’s communication issues or lack of further education materially affect crew cooperation or safety |
+
+## Group Decision State
+## Group Decision State
+| Current leading candidate | Strongest alternative | Main reason supporting the leading candidate | Main concern about the leading candidate | Main unresolved comparison | Candidates that still need discussion | Important criteria still unclear | Ready for convergence? | Reason |
+|---|---|---|---|---|---|---|---|---|
+| Candidate C | Candidate B | Documented calmness in crisis, rapid correct decision‑making, 100 % reliability, and positive crew atmosphere – core safety‑critical criteria for long‑distance flights. | Communication difficulties (difficulty communicating ideas, egocentric attitude) and limited willingness to pursue further education – theoretical, no incidents recorded. | How Candidate B’s stress‑resilience, decision‑quality, attention‑to‑detail, adaptability, and crew‑cooperation compare to Candidate C’s proven calm‑in‑crisis and decision quality, given the lack of concrete evidence for B. | Candidates A and D (and deeper evidence for B and C on communication impact and adaptability) | Operational reliability (A, D); stress resilience (A, D); decision quality (B, D); attention to detail (A, B, D); adaptability (B, C, D); professional communication (A, B, C, D); crew cooperation (A, B, D); responsibility (A, C, D). | No | Not all candidates have been fully evaluated; A and D lack evidence on key safety‑critical criteria, B still lacks concrete examples for several critical criteria, while C’s communication concerns remain theoretical rather than evidenced.

@@ -1,0 +1,286 @@
+{
+  "agent_tool_calls": 3,
+  "agent_tool_messages": 6,
+  "agent_turns": 6,
+  "completed_at": "2026-06-19T20:25:04+0200",
+  "context_consistency": {
+    "max_pairwise_similarity": null,
+    "mean_pairwise_similarity": null,
+    "min_pairwise_similarity": null,
+    "pairwise": [],
+    "reason": "explicit_smm_memory_disabled"
+  },
+  "context_transparency_condition": "moderate",
+  "correct_candidate": "Candidate C",
+  "decision_correct": 1,
+  "decision_method": "consensus",
+  "final_candidate": "Candidate C",
+  "input_tokens": 31811,
+  "mean_pairwise_memory_similarity": null,
+  "memory_updates": 0,
+  "output_tokens": 5862,
+  "pairwise_memory_similarity": [],
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_115/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_115",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_115/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_115/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "moderate_baseline_20260616_081405_115",
+  "runtime_seconds": 43.4873,
+  "shared_mental_model_files": [],
+  "shared_mental_models_archived": false,
+  "smm_mode": "baseline",
+  "speaker_order_seed": "moderate_baseline_115",
+  "status": "completed",
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 3,
+      "transcript_message_count": 9,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 2,
+      "score": 0.4
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 3,
+      "completed_turns": [
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "fact_reuse:d_hot_temper"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:c_100_percent_reliable"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:d_problem_solving,d_unexpected_events"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.5,
+      "tool_turn_count": 3
+    },
+    "dimensions": {
+      "communication": 0.208333,
+      "cooperation": 0.4,
+      "coordination": 0.5
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_not_open_to_new_ideas",
+        "a_takes_criticism_poorly",
+        "a_unorganized",
+        "b_grumpy",
+        "b_nasty_remarks",
+        "b_pretentious",
+        "b_uncooperative",
+        "b_wrong_tone",
+        "c_100_percent_reliable",
+        "c_concern_for_others",
+        "c_excellent_attention",
+        "c_positive_crew_atmosphere",
+        "d_hot_temper",
+        "d_loner"
+      ],
+      "matched_disclosed_facts": 14,
+      "matched_uptake_facts": 5,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          }
+        ],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          }
+        ],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "b_grumpy": [
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          }
+        ],
+        "b_pretentious": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          }
+        ],
+        "b_uncooperative": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          }
+        ],
+        "c_100_percent_reliable": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "c_calm_in_crisis": [],
+        "c_concern_for_others": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 9
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "c_excellent_attention": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 9
+          }
+        ],
+        "c_positive_crew_atmosphere": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [],
+        "d_hot_temper": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          }
+        ],
+        "d_know_it_all": [],
+        "d_loner": [
+          {
+            "agent": "agent_3",
+            "sequence": 9
+          }
+        ],
+        "d_moody": [],
+        "d_weak_leadership": []
+      },
+      "score": 0.208333,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "a_unorganized",
+        "b_pretentious",
+        "c_100_percent_reliable",
+        "c_concern_for_others",
+        "d_hot_temper"
+      ]
+    },
+    "score": 0.369444
+  },
+  "team_process_communication": 0.208333,
+  "team_process_cooperation": 0.4,
+  "team_process_coordination": 0.5,
+  "team_process_score": 0.369444,
+  "timestamp": "20260619_202420",
+  "total_messages": 12,
+  "total_tokens": 37673,
+  "vote_count": {
+    "Candidate C": 3
+  }
+}

@@ -93,6 +93,152 @@
   "smm_similarity": 0.948201,
   "speaker_order_seed": "low_treatment_038",
   "status": "completed",
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 4,
+      "transcript_message_count": 10,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 3,
+      "score": 0.6
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 2,
+      "completed_turns": [
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:b_conscientious,b_handles_stress"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:A"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.333333,
+      "tool_turn_count": 2
+    },
+    "dimensions": {
+      "communication": 0.0,
+      "cooperation": 0.6,
+      "coordination": 0.333333
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_unfriendly",
+        "a_unhealthy_eating",
+        "a_unorganized",
+        "b_nasty_remarks",
+        "b_pretentious",
+        "b_uncooperative",
+        "d_arrogant",
+        "d_loner",
+        "d_moody",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 10,
+      "matched_uptake_facts": 0,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "a_unhealthy_eating": [
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "a_unorganized": [
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "b_grumpy": [],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "b_pretentious": [
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "b_uncooperative": [
+          {
+            "agent": "agent_1",
+            "sequence": 12
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          }
+        ],
+        "d_hot_temper": [],
+        "d_know_it_all": [],
+        "d_loner": [
+          {
+            "agent": "agent_3",
+            "sequence": 9
+          }
+        ],
+        "d_moody": [
+          {
+            "agent": "agent_3",
+            "sequence": 9
+          }
+        ],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          }
+        ]
+      },
+      "score": 0.0,
+      "total_private_facts": 24,
+      "uptake_fact_ids": []
+    },
+    "score": 0.311111
+  },
+  "team_process_communication": 0.0,
+  "team_process_cooperation": 0.6,
+  "team_process_coordination": 0.333333,
+  "team_process_score": 0.311111,
   "timestamp": "20260612_144949",
   "tokens_per_correct_decision": 310644.35,
   "total_messages": 14,

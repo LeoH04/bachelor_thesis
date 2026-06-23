@@ -45,6 +45,10 @@ BASE_COLUMNS = [
     "smm_evidence_share",
     "smm_quality",
     "smm_quality_method",
+    "team_process_score",
+    "team_process_communication",
+    "team_process_coordination",
+    "team_process_cooperation",
     "metadata_file",
 ]
 
@@ -109,7 +113,11 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         "smm_evidence_share": metadata.get("smm_evidence_share"),
         "smm_quality": metadata.get("smm_quality"),
         "smm_quality_method": metadata.get("smm_quality_method"),
-        "metadata_file": str(path.relative_to(REPO_ROOT)),
+        "team_process_score": metadata.get("team_process_score"),
+        "team_process_communication": metadata.get("team_process_communication"),
+        "team_process_coordination": metadata.get("team_process_coordination"),
+        "team_process_cooperation": metadata.get("team_process_cooperation"),
+        "metadata_file": str(path.resolve().relative_to(REPO_ROOT)),
     }
 
     vote_columns = set()

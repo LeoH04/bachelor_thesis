@@ -32,7 +32,7 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # )
 
 simulation_metrics <- read.csv(
-  "01_data/processed/simulation_metrics_20260612_090103.csv",
+  "01_data/processed/simulation_metrics_final_100_gpt_oss_120b.csv",
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -99,6 +99,10 @@ numeric_columns <- c(
   "smm_similarity",
   "smm_evidence_share",
   "smm_quality",
+  "team_process_score",
+  "team_process_communication",
+  "team_process_coordination",
+  "team_process_cooperation",
   grep("^similarity_", names(simulation_metrics), value = TRUE)
 )
 
@@ -143,6 +147,8 @@ costs <- calculate_costs(
 )
 
 print(costs)
+
+output_token_weight <- 5
 
 # ------------------------------------------------------------
 # PLOT THEME
@@ -413,6 +419,26 @@ if (nrow(treatment_metrics) > 0) {
     digits = 3,
     y_limits = c(0, 1)
   )
+
+  smm_evidence_share_overview <- treatment_metrics %>%
+    group_by(context_transparency_condition) %>%
+    summarise(
+      total_runs = n(),
+      mean_smm_evidence_share = mean(smm_evidence_share, na.rm = TRUE),
+      .groups = "drop"
+    )
+  
+  print(smm_evidence_share_overview)
+  
+  save_single_mode_plot(
+    plot_data = smm_evidence_share_overview,
+    y_var = "mean_smm_evidence_share",
+    y_label = "Mean Candidate C evidence share",
+    title = "Mean Candidate C evidence share by condition",
+    filename = "smm_evidence_share_overview_plot.pdf",
+    digits = 3,
+    y_limits = c(0, 1)
+  )
   
   smm_quality_overview <- treatment_metrics %>%
     group_by(context_transparency_condition) %>%
@@ -434,6 +460,88 @@ if (nrow(treatment_metrics) > 0) {
     y_limits = c(0, 1)
   )
 }
+
+# ------------------------------------------------------------
+# 4a. Team process
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+team_process_overview <- simulation_metrics %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_team_process = mean(team_process_score, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(team_process_overview)
+
+save_four_column_plot(
+  plot_data = team_process_overview,
+  y_var = "mean_team_process",
+  y_label = "Mean team process score",
+  title = "Mean team process score by condition",
+  filename = "team_process_overview_plot.pdf",
+  digits = 3,
+  y_limits = c(0, 1)
+)
+
+# ------------------------------------------------------------
+# 4b. Team process communication
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+team_process_dimensions_overview <- simulation_metrics %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_team_process_communication = mean(team_process_communication, na.rm = TRUE),
+    mean_team_process_coordination = mean(team_process_coordination, na.rm = TRUE),
+    mean_team_process_cooperation = mean(team_process_cooperation, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(team_process_dimensions_overview)
+
+save_four_column_plot(
+  plot_data = team_process_dimensions_overview,
+  y_var = "mean_team_process_communication",
+  y_label = "Mean communication score",
+  title = "Mean team process communication by condition",
+  filename = "team_process_communication_overview_plot.pdf",
+  digits = 3,
+  y_limits = c(0, 1)
+)
+
+# ------------------------------------------------------------
+# 4c. Team process coordination
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+save_four_column_plot(
+  plot_data = team_process_dimensions_overview,
+  y_var = "mean_team_process_coordination",
+  y_label = "Mean coordination score",
+  title = "Mean team process coordination by condition",
+  filename = "team_process_coordination_overview_plot.pdf",
+  digits = 3,
+  y_limits = c(0, 1)
+)
+
+# ------------------------------------------------------------
+# 4d. Team process cooperation: response integration
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+save_four_column_plot(
+  plot_data = team_process_dimensions_overview,
+  y_var = "mean_team_process_cooperation",
+  y_label = "Mean response integration score",
+  title = "Mean team process response integration by condition",
+  filename = "team_process_cooperation_overview_plot.pdf",
+  digits = 3,
+  y_limits = c(0, 1)
+)
 
 # ------------------------------------------------------------
 # 5. Interaction rounds
@@ -484,6 +592,30 @@ save_four_column_plot(
 )
 
 # ------------------------------------------------------------
+# 6a. Tool calls
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+tool_calls_overview <- simulation_metrics %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_tool_calls = mean(agent_tool_calls, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(tool_calls_overview)
+
+save_four_column_plot(
+  plot_data = tool_calls_overview,
+  y_var = "mean_tool_calls",
+  y_label = "Mean tool calls",
+  title = "Mean tool calls by condition",
+  filename = "tool_calls_overview_plot.pdf",
+  digits = 2
+)
+
+# ------------------------------------------------------------
 # 7. Tokens
 # Baseline | Low | Moderate | High
 # ------------------------------------------------------------
@@ -504,6 +636,79 @@ save_four_column_plot(
   y_label = "Mean tokens",
   title = "Mean tokens by condition",
   filename = "tokens_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 7a. Input tokens
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+input_tokens_overview <- simulation_metrics %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_input_tokens = mean(input_tokens, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(input_tokens_overview)
+
+save_four_column_plot(
+  plot_data = input_tokens_overview,
+  y_var = "mean_input_tokens",
+  y_label = "Mean input tokens",
+  title = "Mean input tokens by condition",
+  filename = "input_tokens_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 7b. Output tokens
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+output_tokens_overview <- simulation_metrics %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_output_tokens = mean(output_tokens, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(output_tokens_overview)
+
+save_four_column_plot(
+  plot_data = output_tokens_overview,
+  y_var = "mean_output_tokens",
+  y_label = "Mean output tokens",
+  title = "Mean output tokens by condition",
+  filename = "output_tokens_overview_plot.pdf",
+  digits = 0
+)
+
+# ------------------------------------------------------------
+# 7c. Weighted tokens
+# Baseline | Low | Moderate | High
+# ------------------------------------------------------------
+
+weighted_tokens_overview <- simulation_metrics %>%
+  mutate(weighted_total_tokens = input_tokens + output_token_weight * output_tokens) %>%
+  group_by(plot_condition) %>%
+  summarise(
+    total_runs = n(),
+    mean_weighted_tokens = mean(weighted_total_tokens, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(weighted_tokens_overview)
+
+save_four_column_plot(
+  plot_data = weighted_tokens_overview,
+  y_var = "mean_weighted_tokens",
+  y_label = "Mean weighted tokens",
+  title = "Mean weighted tokens by condition",
+  filename = "weighted_tokens_overview_plot.pdf",
   digits = 0
 )
 

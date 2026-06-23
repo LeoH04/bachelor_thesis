@@ -34,6 +34,212 @@
   "smm_mode": "baseline",
   "speaker_order_seed": "moderate_baseline_045",
   "status": "completed",
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 8,
+      "transcript_message_count": 14,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 3,
+      "score": 0.6
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 5,
+      "completed_turns": [
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "explicit_attribution:agent_2"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "fact_reuse:d_moody"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:C",
+            "no_evidence_reuse:A"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "no_evidence_reuse:A"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:c_egocentric",
+            "fact_reuse:d_problem_solving"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.833333,
+      "tool_turn_count": 5
+    },
+    "dimensions": {
+      "communication": 0.166667,
+      "cooperation": 0.6,
+      "coordination": 0.833333
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_unorganized",
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "c_positive_crew_atmosphere",
+        "d_arrogant",
+        "d_hot_temper",
+        "d_know_it_all",
+        "d_loner",
+        "d_moody",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 10,
+      "matched_uptake_facts": 4,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          }
+        ],
+        "b_grumpy": [],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [
+          {
+            "agent": "agent_1",
+            "sequence": 1
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [
+          {
+            "agent": "agent_1",
+            "sequence": 13
+          }
+        ],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          }
+        ],
+        "d_hot_temper": [
+          {
+            "agent": "agent_2",
+            "sequence": 4
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 16
+          }
+        ],
+        "d_know_it_all": [
+          {
+            "agent": "agent_2",
+            "sequence": 4
+          }
+        ],
+        "d_loner": [
+          {
+            "agent": "agent_3",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 21
+          }
+        ],
+        "d_moody": [
+          {
+            "agent": "agent_3",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 21
+          }
+        ],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_1",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ]
+      },
+      "score": 0.166667,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "d_hot_temper",
+        "d_moody"
+      ]
+    },
+    "score": 0.533333
+  },
+  "team_process_communication": 0.166667,
+  "team_process_cooperation": 0.6,
+  "team_process_coordination": 0.833333,
+  "team_process_score": 0.533333,
   "timestamp": "20260614_010521",
   "tokens_per_correct_decision": 76224.6,
   "total_messages": 22,
