@@ -43,7 +43,7 @@ data_file <- file.path(
   path,
   "01_data",
   "processed",
-  "simulation_metrics_final_100_gpt_oss_120b.csv"
+  "simulation_metrics_final_200_gpt_oss_120b.csv"
 )
 
 output_dir <- file.path(
@@ -105,7 +105,7 @@ if (length(missing_variables) > 0) {
 
 
 # ------------------------------------------------------------
-# 4. H1a/H1b: Average SMM treatment communication/cooperation versus baseline
+# 4. H1a/H1b: SMM configurations versus baseline
 # ------------------------------------------------------------
 
 h1a_data <- subset(
@@ -115,13 +115,20 @@ h1a_data <- subset(
     !is.na(team_process_cooperation)
 )
 
-h1a_data$smm_treatment <- factor(
-  ifelse(
-    h1a_data$smm_mode == "treatment",
-    "treatment",
-    "baseline"
-  ),
-  levels = c("baseline", "treatment")
+h1a_data$baseline <- as.numeric(
+  h1a_data$smm_mode == "baseline"
+)
+h1a_data$low <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "low"
+)
+h1a_data$moderate <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "moderate"
+)
+h1a_data$high <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "high"
 )
 
 h1a_data$team_process_communication <- as.numeric(
@@ -133,12 +140,12 @@ h1a_data$team_process_cooperation <- as.numeric(
 )
 
 h1a <- lm(
-  team_process_communication ~ smm_treatment,
+  team_process_communication ~ low + moderate + high,
   data = h1a_data
 )
 
 h1b <- lm(
-  team_process_cooperation ~ smm_treatment,
+  team_process_cooperation ~ low + moderate + high,
   data = h1a_data
 )
 
@@ -159,6 +166,12 @@ treatment_data$condition <- factor(
     "low",
     "high"
   )
+)
+treatment_data$low <- as.numeric(
+  treatment_data$context_transparency_condition == "low"
+)
+treatment_data$high <- as.numeric(
+  treatment_data$context_transparency_condition == "high"
 )
 
 treatment_data$team_process_communication <- as.numeric(
@@ -239,12 +252,12 @@ if (
 # ------------------------------------------------------------
 
 h2a_h3a <- lm(
-  team_process_communication ~ condition,
+  team_process_communication ~ low + high,
   data = treatment_data
 )
 
 h2b_h3b <- lm(
-  team_process_cooperation ~ condition,
+  team_process_cooperation ~ low + high,
   data = treatment_data
 )
 
@@ -293,14 +306,12 @@ names(robust_vcov) <- names(models)
 
 coefficient_map <- c(
   "(Intercept)" = "Intercept",
-  "smm_treatmenttreatment" = "SMM\u00A0treatment",
-  "conditionlow" = "Low\u00A0transparency",
-  "conditionhigh" = "High\u00A0transparency",
-  "team_process_communication" = "Communication",
-  "team_process_cooperation" = "Cooperation",
   "baseline" = "Baseline",
   "low" = "Low\u00A0transparency",
-  "high" = "High\u00A0transparency"
+  "moderate" = "Moderate\u00A0transparency",
+  "high" = "High\u00A0transparency",
+  "team_process_communication" = "Communication",
+  "team_process_cooperation" = "Cooperation"
 )
 
 goodness_of_fit_map <- data.frame(
@@ -396,7 +407,7 @@ regression_table <- set_header_df(
 regression_table <- add_footer_lines(
   regression_table,
   values = paste0(
-    "Note:\u00A0Standard\u00A0errors\u00A0in\u00A0parentheses.\u00A0",
+    "Note:\u00A0Heteroskedasticity-robust\u00A0HC3\u00A0standard\u00A0errors\u00A0in\u00A0parentheses.\u00A0",
     "+\u00A0p\u00A0<\u00A0.10,\u00A0",
     "*\u00A0p\u00A0<\u00A0.05,\u00A0",
     "**\u00A0p\u00A0<\u00A0.01,\u00A0",

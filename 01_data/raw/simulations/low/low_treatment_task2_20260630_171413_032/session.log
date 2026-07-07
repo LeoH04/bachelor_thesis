@@ -1,0 +1,135 @@
+2026-07-01 07:04:34,933 - INFO - Metrics tracker initialized
+{"id": 1, "ts": 1782882274.9621289, "event": "memory_initialized"}
+{"id": 2, "ts": 1782882274.96599, "event": "discussion_order", "round": 1, "order": ["agent_2", "agent_1", "agent_3"]}
+2026-07-01 07:04:38,888 - INFO - Tokens - Input: 2757, Output: 284, Total: 3041
+{"id": 3, "ts": 1782882278.8890789, "event": "public_discussion_message", "round": 1, "agent": "agent_2", "message": "I\u2019d like to start by putting Candidate\u202fB forward as the leading option.\u202fB is described as very conscientious, handles stress very well, and is good at assessing weather conditions\u2014key for long\u2011distance flights where reliability, stress resilience, and sound operational judgment are critical. Their excellent computer skills also support the technical competence needed for modern avionics and flight\u2011planning systems. While B can be grumpy and sometimes adopts the wrong tone, these communication issues appear less severe than the strengths they bring in reliability and stress management. Therefore, I recommend we consider Candidate\u202fB as our current top choice, while we continue to evaluate the other candidates for any comparable or superior fit."}
+2026-07-01 07:04:38,889 - INFO - Agent turns: 1
+2026-07-01 07:05:08,391 - INFO - Tokens - Input: 1825, Output: 2582, Total: 4407
+2026-07-01 07:05:08,393 - INFO - Memory updates: 1
+{"id": 4, "ts": 1782882308.3935795, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-07-01 07:05:09,331 - INFO - Tokens - Input: 1828, Output: 2693, Total: 4521
+2026-07-01 07:05:09,333 - INFO - Memory updates: 2
+{"id": 5, "ts": 1782882309.333448, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-07-01 07:05:09,756 - INFO - Tokens - Input: 1827, Output: 2757, Total: 4584
+2026-07-01 07:05:09,758 - INFO - Memory updates: 3
+{"id": 6, "ts": 1782882309.7585578, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-07-01 07:05:15,400 - INFO - Tokens - Input: 3332, Output: 760, Total: 4092
+2026-07-01 07:05:15,411 - INFO - Agent tool calls: 1
+{"id": 7, "ts": 1782882315.4114661, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-8085b46f7fa322b3", "args_preview": "{'request': \"Do you have observations on Candidate D's crew cooperation and professional communication?\"}"}
+2026-07-01 07:05:16,552 - INFO - Tokens - Input: 987, Output: 153, Total: 1140
+{"id": 8, "ts": 1782882316.5547705, "event": "public_tool_exchange", "round": 1, "caller": "agent_1", "callee": "agent_3", "question": "request: Do you have observations on Candidate D's crew cooperation and professional communication?", "answer": "I do not have observations on Candidate\u202fD\u2019s crew cooperation or professional communication.", "message": "Question and answer: Agent 1 asked Agent 3.\nQuestion: request: Do you have observations on Candidate D's crew cooperation and professional communication?\nAnswer: I do not have observations on Candidate\u202fD\u2019s crew cooperation or professional communication."}
+{"id": 9, "ts": 1782882316.5549135, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-8085b46f7fa322b3", "result_preview": "I do not have observations on Candidate\u202fD\u2019s crew cooperation or professional communication."}
+2026-07-01 07:05:17,282 - INFO - Tokens - Input: 4111, Output: 79, Total: 4190
+2026-07-01 07:05:17,291 - INFO - Agent tool calls: 2
+{"id": 10, "ts": 1782882317.29163, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-bf83c158f46648a2", "args_preview": "{'request': \"Can you provide details on Candidate B's memory for numbers and how it might affect flight operations?\"}"}
+2026-07-01 07:05:18,415 - INFO - Tokens - Input: 989, Output: 150, Total: 1139
+{"id": 11, "ts": 1782882318.41794, "event": "public_tool_exchange", "round": 1, "caller": "agent_1", "callee": "agent_2", "question": "request: Can you provide details on Candidate B's memory for numbers and how it might affect flight operations?", "answer": "I don\u2019t have any information on Candidate\u202fB\u2019s memory for numbers, so I can\u2019t assess how that specific ability might affect flight operations.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Can you provide details on Candidate B's memory for numbers and how it might affect flight operations?\nAnswer: I don\u2019t have any information on Candidate\u202fB\u2019s memory for numbers, so I can\u2019t assess how that specific ability might affect flight operations."}
+{"id": 12, "ts": 1782882318.4180963, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-bf83c158f46648a2", "result_preview": "I don\u2019t have any information on Candidate\u202fB\u2019s memory for numbers, so I can\u2019t assess how that specific ability might affect flight operations."}
+2026-07-01 07:05:21,996 - INFO - Tokens - Input: 4238, Output: 506, Total: 4744
+{"id": 13, "ts": 1782882321.9984553, "event": "public_discussion_message", "round": 1, "agent": "agent_1", "message": "I agree with Agent\u202f2 that Candidate\u202fB remains our strongest option at this stage.\u202fB\u2019s very conscientious nature speaks directly to operational reliability, and their proven ability to handle stress and assess weather conditions aligns with the stress\u2011resilience and decision\u2011quality demands of long\u2011distance flights. Their excellent computer skills further support the technical competence required for modern avionics and flight\u2011planning systems. While the grumpy tone and pretentious perception raise some concerns about professional communication, we have no concrete evidence that these issues would outweigh the core safety\u2011critical strengths. The noted weak memory for numbers is still unquantified, but without specific incidents it does not yet outweigh B\u2019s overall fit. Compared with the other candidates\u2014A\u2019s leadership but unfriendly demeanor, C\u2019s calmness and quick decisions but egocentric communication, and D\u2019s responsibility yet moodiness and know\u2011it\u2011all attitude\u2014B offers the most balanced profile across the key criteria. Therefore, I maintain my provisional recommendation for Candidate\u202fB, pending any further evidence that might shift the balance."}
+2026-07-01 07:05:21,998 - INFO - Agent turns: 2
+2026-07-01 07:05:46,026 - INFO - Tokens - Input: 2410, Output: 2064, Total: 4474
+2026-07-01 07:05:46,028 - INFO - Memory updates: 4
+{"id": 14, "ts": 1782882346.0284264, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-07-01 07:05:48,577 - INFO - Tokens - Input: 2407, Output: 2361, Total: 4768
+2026-07-01 07:05:48,579 - INFO - Memory updates: 5
+{"id": 15, "ts": 1782882348.579641, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-07-01 07:05:59,416 - INFO - Tokens - Input: 2474, Output: 3903, Total: 6377
+2026-07-01 07:05:59,418 - INFO - Memory updates: 6
+{"id": 16, "ts": 1782882359.4189565, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-07-01 07:06:04,171 - INFO - Tokens - Input: 3641, Output: 617, Total: 4258
+{"id": 17, "ts": 1782882364.173193, "event": "public_discussion_message", "round": 1, "agent": "agent_3", "message": "I agree with Agent\u202f1 that Candidate\u202fB remains our strongest option at this point.\u202fB\u2019s very conscientious nature and proven ability to handle stress directly address operational reliability and stress\u2011resilience, while their skill in assessing weather conditions and excellent computer abilities support the technical and decision\u2011quality demands of long\u2011distance flights.\u202fThe concerns about B\u2019s uncooperative attitude and occasional nasty remarks are real, but they do not outweigh the core safety\u2011critical strengths we have observed.\u202fBy contrast, Candidate\u202fA brings impressive leadership, the ability to anticipate dangerous situations, and strong spatial vision, yet the notes on A being unorganized and not open to new ideas raise serious doubts about consistent reliability and adaptability\u2014key for international routes.\u202fGiven the current evidence, I keep my provisional recommendation for Candidate\u202fB, pending any new information that might shift the balance."}
+2026-07-01 07:06:04,173 - INFO - Agent turns: 3
+2026-07-01 07:06:30,864 - INFO - Tokens - Input: 2473, Output: 2303, Total: 4776
+2026-07-01 07:06:30,866 - INFO - Memory updates: 7
+{"id": 18, "ts": 1782882390.8663037, "event": "memory_updated", "agent": "agent_1", "round": 1}
+2026-07-01 07:06:31,394 - INFO - Tokens - Input: 2338, Output: 2365, Total: 4703
+2026-07-01 07:06:31,396 - INFO - Memory updates: 8
+{"id": 19, "ts": 1782882391.3965862, "event": "memory_updated", "agent": "agent_2", "round": 1}
+2026-07-01 07:06:32,436 - INFO - Tokens - Input: 2407, Output: 2514, Total: 4921
+2026-07-01 07:06:32,438 - INFO - Memory updates: 9
+{"id": 20, "ts": 1782882392.4386592, "event": "memory_updated", "agent": "agent_3", "round": 1}
+2026-07-01 07:06:32,448 - INFO - Loop 1 completed
+{"id": 21, "ts": 1782882392.454831, "event": "discussion_order", "round": 2, "order": ["agent_1", "agent_2", "agent_3"]}
+2026-07-01 07:06:35,312 - INFO - Tokens - Input: 3727, Output: 345, Total: 4072
+2026-07-01 07:06:35,321 - INFO - Agent tool calls: 3
+{"id": 22, "ts": 1782882395.3221123, "event": "agent_tool_call_start", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-809517e4773bef70", "args_preview": "{'request': 'Do you have any observations on Candidate B\u2019s crew cooperation and professional communication style, especially regarding teamwork and respectful interaction?'}"}
+2026-07-01 07:06:37,416 - INFO - Tokens - Input: 1031, Output: 305, Total: 1336
+{"id": 23, "ts": 1782882397.4189653, "event": "public_tool_exchange", "round": 2, "caller": "agent_1", "callee": "agent_2", "question": "request: Do you have any observations on Candidate B\u2019s crew cooperation and professional communication style, especially regarding teamwork and respectful interaction?", "answer": "Candidate\u202fB\u2019s record shows some concerns in this area.\u202fThe notes indicate that B can be grumpy and sometimes adopts the wrong tone when communicating, and the panel discussion has highlighted \u201cuncooperative attitude\u201d and \u201coccasional nasty remarks\u201d as observed issues.\u202fThere are no positive observations in the available material regarding strong teamwork or consistently respectful interaction.", "message": "Question and answer: Agent 1 asked Agent 2.\nQuestion: request: Do you have any observations on Candidate B\u2019s crew cooperation and professional communication style, especially regarding teamwork and respectful interaction?\nAnswer: Candidate\u202fB\u2019s record shows some concerns in this area.\u202fThe notes indicate that B can be grumpy and sometimes adopts the wrong tone when communicating, and the panel discussion has highlighted \u201cuncooperative attitude\u201d and \u201coccasional nasty remarks\u201d as observed issues.\u202fThere are no positive observations in the available material regarding strong teamwork or consistently respectful interaction."}
+{"id": 24, "ts": 1782882397.4191272, "event": "agent_tool_call_end", "caller": "agent_1", "callee": "agent_2_tool", "function_call_id": "chatcmpl-tool-809517e4773bef70", "result_preview": "Candidate\u202fB\u2019s record shows some concerns in this area.\u202fThe notes indicate that B can be grumpy and sometimes adopts the wrong tone when communicating, and the panel discussion has highlighted \u201cuncooperative attitude\u201d and \u201coccasional nasty remarks\u201d as observed issues.\u202fThere are no positive observations in the available material regarding strong teamwork or consistently respectful interaction."}
+2026-07-01 07:06:39,412 - INFO - Tokens - Input: 4148, Output: 210, Total: 4358
+{"id": 25, "ts": 1782882399.4146607, "event": "public_discussion_message", "round": 2, "agent": "agent_1", "message": "I remain inclined to recommend Candidate\u202fB, but the lack of clear evidence on crew cooperation and professional communication gives me pause.\u202fWhile we have strong support for B\u2019s operational reliability (very conscientious), stress resilience (handles stress very well), and technical competence (excellent computer skills, good weather assessment), the feedback you just shared confirms that B\u2019s \u201cgrumpy tone,\u201d \u201cuncooperative attitude,\u201d and \u201coccasional nasty remarks\u201d are the only observations we have regarding teamwork and communication.\u202fSince crew cooperation and respectful communication are critical for long\u2011distance flights, this weakness could offset B\u2019s technical strengths.\u202fTherefore, I will keep my provisional vote for Candidate\u202fB, conditional on confirming that these interpersonal issues are manageable, and I suggest we now compare B\u2019s overall profile with Candidate\u202fD, whose strong responsibility and problem\u2011solving may offer a more balanced fit if B\u2019s cooperation concerns prove significant."}
+2026-07-01 07:06:39,414 - INFO - Agent turns: 4
+2026-07-01 07:06:59,214 - INFO - Tokens - Input: 2515, Output: 1692, Total: 4207
+2026-07-01 07:06:59,216 - INFO - Memory updates: 10
+{"id": 26, "ts": 1782882419.2165785, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-07-01 07:07:06,435 - INFO - Tokens - Input: 2560, Output: 2530, Total: 5090
+2026-07-01 07:07:06,439 - INFO - Memory updates: 11
+{"id": 27, "ts": 1782882426.4398088, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-07-01 07:07:08,164 - INFO - Tokens - Input: 2793, Output: 2777, Total: 5570
+2026-07-01 07:07:08,166 - INFO - Memory updates: 12
+{"id": 28, "ts": 1782882428.1667194, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-07-01 07:07:10,316 - INFO - Tokens - Input: 3594, Output: 244, Total: 3838
+2026-07-01 07:07:10,326 - INFO - Agent tool calls: 4
+{"id": 29, "ts": 1782882430.3266969, "event": "agent_tool_call_start", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-956b700936c7bd91", "args_preview": "{'request': 'Do you have any observations on Candidate D\u2019s crew cooperation and professional communication style, especially regarding teamwork, respect, and interaction with crew?'}"}
+2026-07-01 07:07:12,389 - INFO - Tokens - Input: 1171, Output: 298, Total: 1469
+{"id": 30, "ts": 1782882432.3915718, "event": "public_tool_exchange", "round": 2, "caller": "agent_2", "callee": "agent_3", "question": "request: Do you have any observations on Candidate D\u2019s crew cooperation and professional communication style, especially regarding teamwork, respect, and interaction with crew?", "answer": "I do not have any observations on Candidate\u202fD\u2019s crew\u2011cooperation or professional\u2011communication style. The available notes mention that D has relatively weak leadership skills and a hot temper, but there are no explicit records regarding teamwork, respect, or interaction with crew.", "message": "Question and answer: Agent 2 asked Agent 3.\nQuestion: request: Do you have any observations on Candidate D\u2019s crew cooperation and professional communication style, especially regarding teamwork, respect, and interaction with crew?\nAnswer: I do not have any observations on Candidate\u202fD\u2019s crew\u2011cooperation or professional\u2011communication style. The available notes mention that D has relatively weak leadership skills and a hot temper, but there are no explicit records regarding teamwork, respect, or interaction with crew."}
+{"id": 31, "ts": 1782882432.3917212, "event": "agent_tool_call_end", "caller": "agent_2", "callee": "agent_3_tool", "function_call_id": "chatcmpl-tool-956b700936c7bd91", "result_preview": "I do not have any observations on Candidate\u202fD\u2019s crew\u2011cooperation or professional\u2011communication style. The available notes mention that D has relatively weak leadership skills and a hot temper, but there are no explicit records regarding teamwork, respect, or interaction with crew."}
+2026-07-01 07:07:15,739 - INFO - Tokens - Input: 3894, Output: 469, Total: 4363
+{"id": 32, "ts": 1782882435.7415361, "event": "public_discussion_message", "round": 2, "agent": "agent_2", "message": "I agree with the need to compare B and D, but the additional insight on D reinforces my provisional vote for Candidate\u202fB. While D takes responsibility seriously, concentrates well, and solves problems exceptionally, the feedback we now have indicates D also has weak leadership skills, a hot temper, and is viewed as arrogant and a loner. Those traits suggest significant challenges for crew cooperation and professional communication\u2014perhaps even more severe than B\u2019s \u201cgrumpy\u201d tone and occasional uncooperative remarks. Moreover, B\u2019s record shows strong operational reliability (very conscientious), excellent stress resilience, and solid technical competence (weather assessment, computer skills), which D\u2019s profile does not demonstrate. Given that both candidates have interpersonal concerns, B\u2019s strengths in the core safety\u2011critical criteria tip the balance in his favor, provided we can manage his communication style through coaching."}
+2026-07-01 07:07:15,741 - INFO - Agent turns: 5
+2026-07-01 07:07:44,226 - INFO - Tokens - Input: 2673, Output: 2417, Total: 5090
+2026-07-01 07:07:44,228 - INFO - Memory updates: 13
+{"id": 33, "ts": 1782882464.2286344, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-07-01 07:07:45,809 - INFO - Tokens - Input: 3687, Output: 2600, Total: 6287
+2026-07-01 07:07:45,811 - INFO - Memory updates: 14
+{"id": 34, "ts": 1782882465.8115938, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-07-01 07:07:49,083 - INFO - Tokens - Input: 2492, Output: 3064, Total: 5556
+2026-07-01 07:07:49,085 - INFO - Memory updates: 15
+{"id": 35, "ts": 1782882469.0857837, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-07-01 07:07:52,234 - INFO - Tokens - Input: 3773, Output: 383, Total: 4156
+2026-07-01 07:07:52,244 - INFO - Agent tool calls: 5
+{"id": 36, "ts": 1782882472.2447217, "event": "agent_tool_call_start", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a44b6894024e3055", "args_preview": "{'request': \"Do you have any observations on Candidate C's operational reliability and stress resilience, especially regarding consistency, dependability, and performance under pressure?\"}"}
+2026-07-01 07:07:54,173 - INFO - Tokens - Input: 1139, Output: 270, Total: 1409
+{"id": 37, "ts": 1782882474.175804, "event": "public_tool_exchange", "round": 2, "caller": "agent_3", "callee": "agent_1", "question": "request: Do you have any observations on Candidate C's operational reliability and stress resilience, especially regarding consistency, dependability, and performance under pressure?", "answer": "I have no observations on Candidate\u202fC\u2019s operational reliability (consistency or dependability). Regarding stress resilience, the notes indicate that Candidate\u202fC \u201ckeeps calm in a crisis,\u201d which suggests good performance under pressure.", "message": "Question and answer: Agent 3 asked Agent 1.\nQuestion: request: Do you have any observations on Candidate C's operational reliability and stress resilience, especially regarding consistency, dependability, and performance under pressure?\nAnswer: I have no observations on Candidate\u202fC\u2019s operational reliability (consistency or dependability). Regarding stress resilience, the notes indicate that Candidate\u202fC \u201ckeeps calm in a crisis,\u201d which suggests good performance under pressure."}
+{"id": 38, "ts": 1782882474.1759446, "event": "agent_tool_call_end", "caller": "agent_3", "callee": "agent_1_tool", "function_call_id": "chatcmpl-tool-a44b6894024e3055", "result_preview": "I have no observations on Candidate\u202fC\u2019s operational reliability (consistency or dependability). Regarding stress resilience, the notes indicate that Candidate\u202fC \u201ckeeps calm in a crisis,\u201d which suggests good performance under pressure."}
+2026-07-01 07:07:55,593 - INFO - Tokens - Input: 4203, Output: 185, Total: 4388
+{"id": 39, "ts": 1782882475.5947852, "event": "public_discussion_message", "round": 2, "agent": "agent_3", "message": "I appreciate the thorough comparison of B and D; their interpersonal issues are indeed concerning, but B\u2019s core safety strengths remain compelling. However, we still lack a full picture of Candidate\u202fC, who brings strong decision\u2011making (\u201ccan make correct decisions quickly\u201d), solid technical understanding, and a positive crew atmosphere\u2014attributes directly relevant to the long\u2011distance pilot role. The new input that C \u201ckeeps calm in a crisis\u201d adds evidence of stress resilience, a key safety criterion. What we still do not know is C\u2019s operational reliability (consistency, dependability). If C also demonstrates reliable, conscientious behavior, his balanced profile could rival B\u2019s, especially given B\u2019s noted communication challenges. Therefore, I suggest we obtain any available observations on C\u2019s reliability before finalizing our recommendation."}
+2026-07-01 07:07:55,594 - INFO - Agent turns: 6
+2026-07-01 07:08:14,572 - INFO - Tokens - Input: 2522, Output: 1608, Total: 4130
+2026-07-01 07:08:14,574 - INFO - Memory updates: 16
+{"id": 40, "ts": 1782882494.5745275, "event": "memory_updated", "agent": "agent_2", "round": 2}
+2026-07-01 07:08:27,078 - INFO - Tokens - Input: 2691, Output: 3062, Total: 5753
+2026-07-01 07:08:27,080 - INFO - Memory updates: 17
+{"id": 41, "ts": 1782882507.0805514, "event": "memory_updated", "agent": "agent_3", "round": 2}
+2026-07-01 07:08:31,660 - INFO - Tokens - Input: 2917, Output: 3707, Total: 6624
+2026-07-01 07:08:31,662 - INFO - Memory updates: 18
+{"id": 42, "ts": 1782882511.6626582, "event": "memory_updated", "agent": "agent_1", "round": 2}
+2026-07-01 07:08:31,672 - INFO - Loop 2 completed
+2026-07-01 07:08:31,672 - INFO - Final Chosen Candidate: Candidate B
+2026-07-01 07:08:31,673 - INFO - Final Decision Method: consensus
+2026-07-01 07:08:31,673 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-07-01 07:08:31,673 - INFO - Correct Candidate: Candidate C
+2026-07-01 07:08:31,673 - INFO - Decision Correct: 0
+{"id": 43, "ts": 1782882511.6747699, "event": "context_consistency_deferred", "reason": "memory_similarity_calculated_post_run"}
+{"id": 44, "ts": 1782882511.6749194, "event": "agent_memories_archived", "directory": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/low/low_treatment_task2_20260630_171413_032/shared_mental_models", "round": 2}
+{"id": 45, "ts": 1782882511.6750066, "event": "final_decision", "candidate": "Candidate B", "method": "consensus", "vote_count": {"Candidate B": 3}, "correct_candidate": "Candidate C", "decision_correct": 0, "round": 2}
+2026-07-01 07:08:31,683 - INFO - ======================================================================
+2026-07-01 07:08:31,684 - INFO - SIMULATION METRICS
+2026-07-01 07:08:31,684 - INFO - ======================================================================
+2026-07-01 07:08:31,684 - INFO - Total Loops: 2
+2026-07-01 07:08:31,684 - INFO - Agent Turns (no vote checker): 6
+2026-07-01 07:08:31,684 - INFO - Agent Tool Calls: 5
+2026-07-01 07:08:31,684 - INFO - Agent Tool Messages: 10
+2026-07-01 07:08:31,684 - INFO - Memory Updates: 18
+2026-07-01 07:08:31,684 - INFO - Total Messages (no vote checker): 16
+2026-07-01 07:08:31,684 - INFO - Input Tokens: 91574
+2026-07-01 07:08:31,684 - INFO - Output Tokens: 52257
+2026-07-01 07:08:31,684 - INFO - Total Tokens: 143831
+2026-07-01 07:08:31,684 - INFO - Final Chosen Candidate: Candidate B
+2026-07-01 07:08:31,684 - INFO - Final Decision Method: consensus
+2026-07-01 07:08:31,685 - INFO - Final Vote Count: {'Candidate B': 3}
+2026-07-01 07:08:31,685 - INFO - Correct Candidate: Candidate C
+2026-07-01 07:08:31,685 - INFO - Decision Correct: 0
+2026-07-01 07:08:31,685 - INFO - Runtime: 236.75s
+2026-07-01 07:08:31,685 - INFO - ======================================================================

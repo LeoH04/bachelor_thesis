@@ -20,7 +20,7 @@ project_path <- getwd()
 
 data_path <- file.path(
   project_path,
-  "01_data/processed/simulation_metrics_final_100_gpt_oss_120b.csv"
+  "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"
 )
 
 output_dir <- file.path(project_path, "03_report/graphs")
@@ -56,11 +56,11 @@ weighted_tokens_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ndiscussion context",
+        context_transparency_condition == "low" ~ "Low\ndiscussion\ncontext",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion context",
+        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion\ncontext",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ndiscussion context",
+        context_transparency_condition == "high" ~ "High\ndiscussion\ncontext",
       TRUE ~ NA_character_
     ),
     
@@ -68,9 +68,9 @@ weighted_tokens_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ndiscussion context",
-        "Moderate\ndiscussion context",
-        "High\ndiscussion context"
+        "Low\ndiscussion\ncontext",
+        "Moderate\ndiscussion\ncontext",
+        "High\ndiscussion\ncontext"
       )
     )
   ) %>%
@@ -154,18 +154,29 @@ weighted_tokens_plot <- ggplot(
   )
 ) +
   geom_col(
-    width = 0.62,
+    width = 0.56,
     colour = "black",
     linewidth = 0.35
+  ) +
+  geom_line(
+    aes(group = 1),
+    colour = "black",
+    linewidth = 0.65
   ) +
   geom_errorbar(
     aes(
       ymin = ci_lower,
       ymax = ci_upper
     ),
-    width = 0.10,
+    width = 0.08,
     linewidth = 0.7,
     colour = "black"
+  ) +
+  geom_point(
+    shape = 21,
+    size = 4.6,
+    colour = "black",
+    stroke = 0.65
   ) +
   geom_text(
     aes(
@@ -174,14 +185,14 @@ weighted_tokens_plot <- ggplot(
     ),
     fontface = "bold",
     colour = "black",
-    size = 4
+    size = 3.9
   ) +
   scale_fill_manual(
     values = c(
       "Baseline" = "#B0B0B0",
-      "Low\ndiscussion context" = "#D8E5EE",
-      "Moderate\ndiscussion context" = "#7FA9C4",
-      "High\ndiscussion context" = "#315F7D"
+      "Low\ndiscussion\ncontext" = "#D8E5EE",
+      "Moderate\ndiscussion\ncontext" = "#7FA9C4",
+      "High\ndiscussion\ncontext" = "#315F7D"
     ),
     guide = "none"
   ) +
@@ -206,12 +217,12 @@ weighted_tokens_plot <- ggplot(
     axis.title.y = element_text(margin = margin(r = 12)),
     axis.title.x = element_text(margin = margin(t = 12)),
     axis.text.x = ggtext::element_markdown(
-      size = 11,
-      margin = margin(t = 7),
-      lineheight = 1.1
+      size = 10.5,
+      margin = margin(t = 8),
+      lineheight = 1.12
     ),
     axis.text.y = element_text(colour = "black"),
-    plot.margin = margin(t = 60, r = 25, b = 10, l = 15)
+    plot.margin = margin(t = 25, r = 15, b = 10, l = 15)
   )
 
 print(weighted_tokens_plot)
@@ -226,7 +237,7 @@ ggsave(
     "thesis_figure_weighted_tokens_by_condition.pdf"
   ),
   plot = weighted_tokens_plot,
-  width = 8,
+  width = 5.5,
   height = 4.8,
   units = "in"
 )

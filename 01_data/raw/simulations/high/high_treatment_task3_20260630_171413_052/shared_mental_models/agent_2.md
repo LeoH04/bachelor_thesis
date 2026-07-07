@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 2)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | can anticipate dangerous situations; can see complex connections; excellent spatial vision; very good leadership qualities | can be unorganized; unfriendly; not open to new ideas; eats unhealthily | – | operational reliability; stress resilience; decision quality; attention to detail; crew cooperation; professional communication; adaptability; feedback orientation; responsibility; leadership impact | Seek evidence on A’s operational reliability, stress resilience, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation, responsibility, and leadership impact. |
+| Candidate B | very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | uncooperative; pretentious | – | decision quality; attention to detail; adaptability; feedback orientation; performance in unexpected events; responsibility | Seek evidence on B’s decision quality, attention to detail, adaptability, feedback orientation, performance in unexpected events, and responsibility. |
+| Candidate C | 100 % reliable; keeps calm in a crisis; can make correct decisions quickly; creates positive atmosphere with crew; puts concern for others above everything | difficulty communicating ideas; regarded as egocentric; not very willing to further his education | understands complicated technology; excellent attention skills | responsibility; adaptability; feedback orientation; leadership impact | Probe C’s responsibility, adaptability, feedback orientation, and leadership impact. |
+| Candidate D | responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | relatively weak leadership skills; considered moody | – | operational reliability; decision quality; attention to detail; crew cooperation; professional communication; adaptability; feedback orientation | Seek evidence on D’s operational reliability, decision quality, attention to detail, crew cooperation, professional communication, adaptability, and feedback orientation. |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes | Yes |
+| Candidate B | Yes | Yes | Yes | Yes | Yes |
+| Candidate C | Yes | Yes | Yes | Yes | Yes |
+| Candidate D | Yes | Yes | Yes | Yes | Yes |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | Candidate A: can anticipate dangerous situations; can see complex connections; excellent spatial vision; very good leadership qualities; not open to new ideas; eats unhealthily. Candidate B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; uncooperative; pretentious. Candidate D: responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously; relatively weak leadership skills; considered moody. | – For Candidate A: operational reliability, stress resilience, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation, responsibility, leadership impact. – For Candidate B: decision quality, attention to detail, adaptability, feedback orientation, performance in unexpected events, responsibility. – For Candidate C: responsibility, adaptability, feedback orientation, leadership impact. – For Candidate D: operational reliability, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation. |
+| Agent 2 | Candidate B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; uncooperative; pretentious. Candidate C: 100 % reliable; keeps calm in a crisis; can make correct decisions quickly; creates positive atmosphere with crew; puts concern for others above everything; difficulty communicating ideas; regarded as egocentric; not very willing to further his education. | – For Candidate A: operational reliability, stress resilience, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation, responsibility, leadership impact. – For Candidate B: decision quality, attention to detail, adaptability, feedback orientation, performance in unexpected events, responsibility. – For Candidate C: responsibility, adaptability, feedback orientation, leadership impact. – For Candidate D: operational reliability, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation. |
+| Agent 3 | Candidate C: 100 % reliable; keeps calm in a crisis; can make correct decisions quickly; difficulty communicating ideas; regarded as egocentric. | – For Candidate A: operational reliability, stress resilience, decision quality, attention to detail, crew cooperation, professional communication, adaptability, feedback orientation, responsibility, leadership impact. – For Candidate B: decision quality, attention to detail, adaptability, feedback orientation, performance in unexpected events, responsibility. – For Candidate D: operational reliability, stress resilience, decision quality, crew cooperation, professional communication, adaptability, feedback orientation. |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate D | Responsibility, problem‑solving, concentration, and adequate stress response; D takes responsibility seriously and solves problems extremely well. | Any concrete evidence of operational reliability for D, or stronger evidence of A’s reliability/crew‑cooperation, could shift the view. |
+| Agent 2 | Candidate C | 100 % reliability, calm in crisis, quick correct decisions, positive crew atmosphere; communication issues seen as manageable. | Serious crew‑cooperation deficit, or evidence of poor responsibility, adaptability, feedback orientation, or leadership impact for C could change the view. |
+| Agent 3 | Candidate C | 100 % reliability, calmness in crisis, quick correct decisions, positive crew atmosphere; communication concerns considered less safety‑critical than B’s uncooperative behavior. | New evidence of a crew‑cooperation problem, or lack of responsibility/adaptability for C, could affect the assessment. |
+
+## Group Decision State
+## Group Decision State
+| Current leading candidate | Strongest alternative | Main reason supporting the leading candidate | Main concern about the leading candidate | Main unresolved comparison | Candidates that still need discussion | Important criteria still unclear | Ready for convergence? |
+|---|---|---|---|---|---|---|---|
+| Candidate C | Candidate D | 100 % reliability, calmness in crisis, quick correct decisions, and positive crew atmosphere satisfy core safety criteria. | Communication difficulties (difficulty communicating ideas, egocentric) and lack of evidence on responsibility, adaptability, feedback orientation, and leadership impact. | How C’s responsibility, adaptability, feedback orientation, and leadership impact compare with D’s problem‑solving, concentration, responsibility, and with B’s technical strengths and reliability. | Candidate A (insufficient evidence on reliability and teamwork) | operational reliability (A, D); stress resilience (A, D); decision quality (B, D); attention to detail (A, B, C, D); crew cooperation (A, B, D); professional communication (A, B, D); adaptability (A, B, C, D); feedback orientation (A, B, C, D); responsibility (C, D); leadership impact (C, D) | No |

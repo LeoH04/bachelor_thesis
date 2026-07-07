@@ -1,0 +1,42 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | can anticipate dangerous situations; can see complex connections; excellent spatial vision; very good leadership qualities | regarded as a show‑off; unfriendly; sometimes not good at taking criticism | *none* | reliability; stress resilience; crew cooperation; professional communication; responsibility; adaptability; decision quality; attention to detail; operational reliability | Obtain observations on reliability, stress resilience, crew cooperation, professional communication, responsibility, adaptability, decision quality, attention to detail, and operational reliability. |
+| Candidate B | very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | can be grumpy; sometimes adopts the wrong tone when communicating | *none* | decision quality; attention to detail; responsibility; adaptability; crew cooperation; professional communication; operational reliability | Seek observations on decision quality, attention to detail, responsibility, adaptability, crew cooperation, professional communication, and operational reliability. |
+| Candidate C | makes correct decisions quickly; keeps calm in a crisis; puts concern for others above everything; solid technical competence (understands complicated technology); creates positive crew atmosphere | difficulty communicating ideas; regarded as egocentric; not very willing to further his education | *none* | reliability; attention to detail; responsibility; adaptability (beyond willingness to further education); professional communication (beyond difficulty) |
+| Candidate D | responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously | regarded as a know‑it‑all; considered moody; weak leadership skills; hot temper; arrogant; loner | *none* | operational reliability; stress resilience; crew cooperation; professional communication; decision quality (explicit); attention to detail (explicit); adaptability (needs more evidence) |
+|   |   |   |   |   | Gather observations on operational reliability, stress resilience, crew cooperation, professional communication, decision quality, attention to detail, and adaptability. |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | No | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate D | Yes | Yes | Yes | No | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 (Anna Keller) | Provisional recommendation for Candidate C; answered that she has no specific observations on Candidate A’s stress resilience, responsibility, or adaptability; no observations on Candidate B’s crew cooperation, responsibility, decision quality, attention to detail, or adaptability; no observations on Candidate D’s operational reliability, stress resilience, crew cooperation, or professional communication; answered tool questions indicating no observations on Candidate A’s reliability, crew cooperation, professional communication, or adaptability; no observations on Candidate D’s operational reliability, stress resilience, crew cooperation, or professional communication. | Do you have any observations on Candidate A’s reliability, crew cooperation, professional communication, or adaptability? Do you have any observations on Candidate B’s decision quality, attention to detail, responsibility, or adaptability? Do you have any observations on Candidate D’s operational reliability, stress resilience, crew cooperation, or professional communication? |
+| Agent 2 (Markus Weber) | Initially provisional recommendation for Candidate B, later shifted to Candidate C with detailed reasoning; answered that she has no specific observations on Candidate A’s stress resilience, responsibility, or adaptability; no observations on Candidate D’s operational reliability, stress resilience, crew cooperation, or professional communication; no observations on Candidate B’s decision quality, attention to detail, responsibility, or adaptability; answered tool questions indicating no observations on Candidate D’s operational reliability, stress resilience, crew cooperation, or professional communication. | Do you have any observations on Candidate A’s reliability, crew cooperation, professional communication, or adaptability? Do you have any observations on Candidate B’s decision quality, attention to detail, responsibility, or adaptability? Do you have any observations on Candidate D’s operational reliability, stress resilience, crew cooperation, professional communication, or adaptability? |
+| Agent 3 (Sofia Brandt) | Provisional recommendation for Candidate C; answered that she has no specific observations on Candidate D’s stress resilience or crew cooperation; answered that she has no observations on Candidate A’s reliability, stress resilience, crew cooperation, professional communication, or responsibility; answered that she has no observations on Candidate B’s crew cooperation, responsibility, decision quality, attention to detail, or adaptability; answered tool questions indicating no observations on Candidate D’s operational reliability, stress resilience, crew cooperation, professional communication, or adaptability. | Do you have any observations on Candidate A’s reliability, crew cooperation, professional communication, or adaptability? Do you have any observations on Candidate B’s decision quality, attention to detail, responsibility, or adaptability? Do you have any observations on Candidate D’s operational reliability, stress resilience, crew cooperation, professional communication, or adaptability? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 (Anna Keller) | Candidate C | Quick correct decisions, calm in crisis, crew‑first attitude, documented decision quality and stress resilience. | New evidence of stronger crew‑cooperation, responsibility, or adaptability for Candidate B or concrete reliability/crew‑cooperation data for Candidates A or D could shift view. |
+| Agent 2 (Markus Weber) | Candidate C | B’s gaps are critical; C’s strengths are documented; C’s weaknesses are manageable through training. | Any new evidence showing B’s decision quality, attention to detail, responsibility, adaptability, or crew‑cooperation could shift view. |
+| Agent 3 (Sofia Brandt) | Candidate C | Quick correct decisions, calm in crisis, crew‑first attitude, solid technical competence; concerns about communication difficulty, egocentric reputation, limited willingness for further education. | New observations on B’s decision quality, crew‑cooperation, responsibility, or adaptability could change the recommendation. |
+
+## Group Decision State
+- Current leading candidate: **Candidate C** (three votes)
+- Strongest alternative: **Candidate B**
+- Main reason supporting the leading candidate: documented quick correct decisions, calmness under pressure, and crew‑first attitude covering decision quality, stress resilience, crew cooperation, and technical competence.
+- Main concern about the leading candidate: communication difficulty, egocentric reputation, and limited willingness for further education (affecting professional communication and adaptability).
+- Main unresolved comparison: How Candidate B’s proven reliability and stress handling stack against Candidate C’s communication and adaptability gaps.
+- Candidates that still need discussion: **Candidate A**, **Candidate D**
+- Important criteria still unclear: reliability (A, B, C); stress resilience (A, D); crew cooperation (A, B, D); professional communication (A, B, D); responsibility (A, B, D, C); adaptability (A, B, D, C); decision quality (B, D); attention to detail (B, D); operational reliability (D); decision quality for D (explicit); attention to detail for D (explicit).
+- Ready for convergence? **No**

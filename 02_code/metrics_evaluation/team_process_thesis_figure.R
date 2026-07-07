@@ -20,7 +20,7 @@ project_path <- getwd()
 
 data_path <- file.path(
   project_path,
-  "01_data/processed/simulation_metrics_final_100_gpt_oss_120b.csv"
+  "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"
 )
 
 output_dir <- file.path(project_path, "03_report/graphs")

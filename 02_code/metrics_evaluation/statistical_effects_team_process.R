@@ -23,7 +23,7 @@ output_token_weight <- 5
 # ------------------------------------------------------------
 
 simulation_metrics <- read.csv(paste0(path,
-  "/01_data/processed/simulation_metrics_final_100_gpt_oss_120b.csv"),
+  "/01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"),
   na.strings = c("", "NA"),
   stringsAsFactors = FALSE
 )
@@ -47,7 +47,7 @@ if (length(missing_variables) > 0) {
 }
 
 # ------------------------------------------------------------
-# 2. H1a/H1b: Average SMM treatment communication/cooperation versus baseline
+# 2. H1a/H1b: SMM configurations versus baseline
 # ------------------------------------------------------------
 
 h1a_data <- subset(
@@ -57,9 +57,18 @@ h1a_data <- subset(
     !is.na(team_process_cooperation)
 )
 
-h1a_data$smm_treatment <- factor(
-  ifelse(h1a_data$smm_mode == "treatment", "treatment", "baseline"),
-  levels = c("baseline", "treatment")
+h1a_data$baseline <- as.numeric(h1a_data$smm_mode == "baseline")
+h1a_data$low <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "low"
+)
+h1a_data$moderate <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "moderate"
+)
+h1a_data$high <- as.numeric(
+  h1a_data$smm_mode == "treatment" &
+    h1a_data$context_transparency_condition == "high"
 )
 
 h1a_data$team_process_communication <- as.numeric(
@@ -70,12 +79,12 @@ h1a_data$team_process_cooperation <- as.numeric(
 )
 
 h1a <- lm(
-  team_process_communication ~ smm_treatment,
+  team_process_communication ~ low + moderate + high,
   data = h1a_data
 )
 
 h1b <- lm(
-  team_process_cooperation ~ smm_treatment,
+  team_process_cooperation ~ low + moderate + high,
   data = h1a_data
 )
 
@@ -92,6 +101,12 @@ treatment_data <- subset(
 treatment_data$condition <- factor(
   treatment_data$context_transparency_condition,
   levels = c("moderate", "low", "high")
+)
+treatment_data$low <- as.numeric(
+  treatment_data$context_transparency_condition == "low"
+)
+treatment_data$high <- as.numeric(
+  treatment_data$context_transparency_condition == "high"
 )
 
 treatment_data$team_process_communication <- as.numeric(
@@ -147,12 +162,12 @@ if (!all(d$Effectiveness %in% c(0, 1))) {
 
 # H2a/H3a and H2b/H3b: transparency -> communication/cooperation within SMM treatment.
 h2a_h3a <- lm(
-  team_process_communication ~ condition,
+  team_process_communication ~ low + high,
   data = treatment_data
 )
 
 h2b_h3b <- lm(
-  team_process_cooperation ~ condition,
+  team_process_cooperation ~ low + high,
   data = treatment_data
 )
 
@@ -202,10 +217,10 @@ robust_results <- Map(
   robust_vcov
 )
 
-cat("\nH1a regression: average SMM treatment -> communication (HC3 robust standard errors)\n")
+cat("\nH1a regression: SMM configurations -> communication (HC3 robust standard errors)\n")
 print(robust_results[[1]])
 
-cat("\nH1b regression: average SMM treatment -> cooperation (HC3 robust standard errors)\n")
+cat("\nH1b regression: SMM configurations -> cooperation (HC3 robust standard errors)\n")
 print(robust_results[[2]])
 
 cat("\nH2a/H3a regression: transparency -> communication (HC3 robust standard errors)\n")
@@ -341,14 +356,12 @@ dir.create("03_report/tables", recursive = TRUE, showWarnings = FALSE)
 
 coef_map <- c(
   "(Intercept)" = "Intercept",
-  "smm_treatmenttreatment" = "SMM treatment",
-  "conditionlow" = "Low transparency",
-  "conditionhigh" = "High transparency",
-  "team_process_communication" = "Communication",
-  "team_process_cooperation" = "Cooperation",
   "baseline" = "Baseline",
   "low" = "Low transparency",
-  "high" = "High transparency"
+  "moderate" = "Moderate transparency",
+  "high" = "High transparency",
+  "team_process_communication" = "Communication",
+  "team_process_cooperation" = "Cooperation"
 )
 
 regression_rows <- data.frame(
@@ -403,11 +416,11 @@ regression_rows <- rbind(
 )
 
 render_table(
-  title = "Regression Results: Team Process H1-H5",
-  subtitle = "Efficiency is weighted-token cost in millions; HC3 standard errors",
+  title = "Regression results",
+  subtitle = "",
   rows = regression_rows,
   filename = "03_report/tables/regression_results_team_process_h1_h5.pdf",
-  source_note = "+p < .10, *p < .05, **p < .01, ***p < .001",
+  source_note = "Heteroskedasticity-robust HC3 standard errors in parentheses. +p < .10, *p < .05, **p < .01, ***p < .001",
   column_x = c(0.03, 0.21, 0.36, 0.51, 0.66, 0.81, 0.94),
   width = 2000,
   min_height = 860
