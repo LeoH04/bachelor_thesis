@@ -3,11 +3,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
-CALLER_SIM_REMOTE_REPO="${SIM_REMOTE_REPO:-}"
-CALLER_SIM_BATCH_ID="${SIM_BATCH_ID:-}"
-CALLER_SIM_COUNT="${SIM_COUNT:-}"
-CALLER_SIM_SMM_MODE="${SIM_SMM_MODE:-}"
-CALLER_SIM_RESUME="${SIM_RESUME:-}"
 
 if [[ -f "$SCRIPT_DIR/.env" ]]; then
   set -a
@@ -15,16 +10,11 @@ if [[ -f "$SCRIPT_DIR/.env" ]]; then
   set +a
 fi
 
-if [[ -n "$CALLER_SIM_REMOTE_REPO" ]]; then SIM_REMOTE_REPO="$CALLER_SIM_REMOTE_REPO"; fi
-if [[ -n "$CALLER_SIM_BATCH_ID" ]]; then SIM_BATCH_ID="$CALLER_SIM_BATCH_ID"; fi
-if [[ -n "$CALLER_SIM_COUNT" ]]; then SIM_COUNT="$CALLER_SIM_COUNT"; fi
-if [[ -n "$CALLER_SIM_SMM_MODE" ]]; then SIM_SMM_MODE="$CALLER_SIM_SMM_MODE"; fi
-if [[ -n "$CALLER_SIM_RESUME" ]]; then SIM_RESUME="$CALLER_SIM_RESUME"; fi
-
 REMOTE_REPO="${SIM_REMOTE_REPO:-$HOME/git/bachelor_thesis}"
 BATCH_ID="${SIM_BATCH_ID:-$(date +%Y%m%d_%H%M%S)}"
 COUNT="${SIM_COUNT:-10}"
 SMM_MODE="${SIM_SMM_MODE:-}"
+TASK_FILE="${SIM_TASK_FILE:-}"
 SMM_LABEL="${SMM_MODE:-treatment+moderate-baseline}"
 RESUME="${SIM_RESUME:-1}"
 
@@ -58,6 +48,9 @@ mkdir -p "$BATCH_LOG_DIR"
 RUN_CMD="SIM_BATCH_ID=$BATCH_ID SIM_COUNT=$COUNT"
 if [[ -n "$SMM_MODE" ]]; then
   RUN_CMD="$RUN_CMD SIM_SMM_MODE=$SMM_MODE"
+fi
+if [[ -n "$TASK_FILE" ]]; then
+  RUN_CMD="$RUN_CMD SIM_TASK_FILE=$TASK_FILE"
 fi
 RUN_CMD="$RUN_CMD ./02_code/simulation_scripts/run_all_conditions.sh"
 

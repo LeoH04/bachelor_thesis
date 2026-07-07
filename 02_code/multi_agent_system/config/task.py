@@ -5,30 +5,22 @@ import os
 from pathlib import Path
 from typing import Iterable
 
-TASK_VARIANT_RAW = os.getenv("SIM_TASK_VARIANT", "1").strip()
-if TASK_VARIANT_RAW not in {"1", "2", "3"}:
-    raise ValueError(
-        f"Unsupported SIM_TASK_VARIANT={TASK_VARIANT_RAW!r}. Expected one of: 1, 2, 3."
-    )
-
-TASK_VARIANT = int(TASK_VARIANT_RAW)
-TASK_PATH = Path(__file__).parent / "hidden_profile_task_1.json"
+DEFAULT_TASK_FILE = "hidden_profile_task.json"
+CONFIG_DIR = Path(__file__).parent.resolve()
+TASK_FILE = os.getenv("SIM_TASK_FILE", DEFAULT_TASK_FILE).strip() or DEFAULT_TASK_FILE
+TASK_PATH = (CONFIG_DIR / TASK_FILE).resolve()
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_task() -> dict:
-    """Load the shared task definition and selected private-fact allocation."""
-    with TASK_PATH.open("r", encoding="utf-8") as f:
-        task = json.load(f)
-
-    if TASK_VARIANT != 1:
-        allocation_path = TASK_PATH.with_name(
-            f"hidden_profile_task_{TASK_VARIANT}.json"
+    """Load the hidden-profile task definition from the local JSON file."""
+    if TASK_PATH.parent != CONFIG_DIR or not TASK_PATH.is_file():
+        raise ValueError(
+            f"Unsupported SIM_TASK_FILE={TASK_FILE!r}. Expected a task JSON file "
+            f"inside {CONFIG_DIR}."
         )
-        with allocation_path.open("r", encoding="utf-8") as f:
-            task["private_information"] = json.load(f)
-
-    return task
+    with TASK_PATH.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 TASK = load_task()
@@ -95,3 +87,12 @@ def _as_bullets(items: Iterable[str]) -> str:
 def get_correct_candidate() -> str:
     """Return the task's required ground-truth candidate."""
     return CORRECT_CANDIDATE
+
+
+def task_metadata() -> dict[str, str]:
+    """Return metadata describing the active task file."""
+    label_version = str(TASK.get("label_version") or "unrotated")
+    return {
+        "task_file": TASK_PATH.name,
+        "label_version": label_version,
+    }
