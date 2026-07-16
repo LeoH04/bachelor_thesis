@@ -145,6 +145,15 @@ condition_axis_labels <- setNames(
 
 y_upper_limit <- max(weighted_tokens_summary$ci_upper) * 1.15
 
+weighted_tokens_summary <- weighted_tokens_summary %>%
+  mutate(
+    label_y = ci_upper + y_upper_limit * if_else(
+      plot_condition == "Baseline",
+      0.20,
+      0.035
+    )
+  )
+
 weighted_tokens_plot <- ggplot(
   weighted_tokens_summary,
   aes(
@@ -180,7 +189,7 @@ weighted_tokens_plot <- ggplot(
   ) +
   geom_text(
     aes(
-      y = ci_upper + y_upper_limit * 0.035,
+      y = label_y,
       label = weighted_token_label
     ),
     fontface = "bold",
@@ -235,6 +244,17 @@ ggsave(
   filename = file.path(
     output_dir,
     "thesis_figure_weighted_tokens_by_condition.pdf"
+  ),
+  plot = weighted_tokens_plot,
+  width = 5.5,
+  height = 4.8,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_weighted_tokens_by_condition.svg"
   ),
   plot = weighted_tokens_plot,
   width = 5.5,

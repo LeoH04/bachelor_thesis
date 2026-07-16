@@ -116,7 +116,7 @@ team_process_summary <- team_process_data %>%
     ci_lower = pmax(0, mean_score - t_value * standard_error),
     ci_upper = pmin(1, mean_score + t_value * standard_error),
     label_y = pmin(1.10, ci_upper + 0.06),
-    percentage_label = percent(mean_score, accuracy = 1)
+    score_label = number(mean_score, accuracy = 0.01)
   )
 
 print(team_process_summary)
@@ -160,6 +160,8 @@ condition_axis_labels <- setNames(
 # 5. Create figure
 # ------------------------------------------------------------
 
+y_upper_limit <- max(team_process_summary$label_y, na.rm = TRUE) * 1.03
+
 team_process_plot <- ggplot(
   team_process_summary,
   aes(
@@ -196,7 +198,7 @@ team_process_plot <- ggplot(
   geom_text(
     aes(
       y = label_y,
-      label = percentage_label
+      label = score_label
     ),
     fontface = "bold",
     colour = "black",
@@ -215,9 +217,9 @@ team_process_plot <- ggplot(
     labels = condition_axis_labels
   ) +
   scale_y_continuous(
-    limits = c(0, 1.13),
-    breaks = seq(0, 1, by = 0.25),
-    labels = percent_format(accuracy = 1),
+    limits = c(0, y_upper_limit),
+    breaks = pretty_breaks(n = 5),
+    labels = number_format(accuracy = 0.1),
     expand = expansion(mult = c(0, 0))
   ) +
   facet_wrap(
@@ -281,6 +283,17 @@ ggsave(
   filename = file.path(
     output_dir,
     "thesis_figure_communication_cooperation_by_condition.pdf"
+  ),
+  plot = team_process_plot,
+  width = 16,
+  height = 5.6,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_communication_cooperation_by_condition.svg"
   ),
   plot = team_process_plot,
   width = 16,

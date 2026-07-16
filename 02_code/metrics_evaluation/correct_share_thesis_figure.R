@@ -200,7 +200,7 @@ correct_decision_plot <- ggplot(
   ) +
   labs(
     x = "Experimental condition",
-    y = "Share of simulations selecting\nthe correct candidate"
+    y = "Share of simulations selecting\nthe correct candidate (%)"
   ) +
   theme_classic(base_size = 12) +
   theme(
@@ -226,6 +226,17 @@ ggsave(
   filename = file.path(
     output_dir,
     "thesis_figure_correct_decisions_by_condition.pdf"
+  ),
+  plot = correct_decision_plot,
+  width = 5.5,
+  height = 4.8,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_correct_decisions_by_condition.svg"
   ),
   plot = correct_decision_plot,
   width = 5.5,

@@ -1,0 +1,186 @@
+{
+  "agent_tool_calls": 3,
+  "agent_tool_messages": 6,
+  "agent_turns": 6,
+  "completed_at": "2026-07-13T19:10:24+0200",
+  "context_transparency_condition": "high",
+  "correct_candidate": "Candidate A",
+  "decision_correct": 0,
+  "decision_method": "consensus",
+  "final_candidate": "Candidate B",
+  "input_tokens": 150519,
+  "label_version": "rotated_ac",
+  "memory_updates": 16,
+  "output_tokens": 66999,
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_treatment_20260711_111242_009",
+  "runtime_seconds": 315.8067,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260711_111242_009/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_mode": "treatment",
+  "speaker_order_seed": "high_treatment_009",
+  "status": "completed",
+  "task_file": "hidden_profile_task_rotation.json",
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 3,
+      "transcript_message_count": 9,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 2,
+      "score": 0.4
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 2,
+      "completed_turns": [
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:c_education"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "no_evidence_reuse:B"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.333333,
+      "tool_turn_count": 3
+    },
+    "dimensions": {
+      "communication": 0.125,
+      "cooperation": 0.4,
+      "coordination": 0.333333
+    },
+    "method": "rotated_ac_private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_takes_criticism_poorly",
+        "a_unorganized",
+        "b_grumpy",
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 6,
+      "matched_uptake_facts": 3,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [
+          {
+            "agent": "agent_1",
+            "sequence": 2
+          }
+        ],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 3
+          }
+        ],
+        "b_grumpy": [
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 8
+          }
+        ],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_2",
+            "sequence": 3
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 8
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [],
+        "d_hot_temper": [],
+        "d_know_it_all": [],
+        "d_loner": [],
+        "d_moody": [],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          }
+        ]
+      },
+      "score": 0.125,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "a_unorganized",
+        "b_grumpy",
+        "b_uncooperative"
+      ]
+    },
+    "score": 0.286111
+  },
+  "team_process_communication": 0.125,
+  "team_process_cooperation": 0.4,
+  "team_process_coordination": 0.333333,
+  "team_process_score": 0.286111,
+  "timestamp": "20260713_190508",
+  "total_messages": 12,
+  "total_tokens": 217518,
+  "vote_count": {
+    "Candidate B": 3
+  }
+}

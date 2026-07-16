@@ -30,6 +30,159 @@
   "speaker_order_seed": "high_treatment_036",
   "status": "completed",
   "task_variant": 3,
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 3,
+      "transcript_message_count": 9,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 2,
+      "score": 0.4
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 3,
+      "completed_turns": [
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "fact_reuse:a_unorganized"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "fact_reuse:c_egocentric"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:c_communication_difficulty,c_egocentric"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.5,
+      "tool_turn_count": 3
+    },
+    "dimensions": {
+      "communication": 0.125,
+      "cooperation": 0.4,
+      "coordination": 0.5
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_unorganized",
+        "b_nasty_remarks",
+        "c_100_percent_reliable",
+        "c_calm_in_crisis",
+        "d_hot_temper",
+        "d_loner"
+      ],
+      "matched_disclosed_facts": 6,
+      "matched_uptake_facts": 3,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [
+          {
+            "agent": "agent_2",
+            "sequence": 1
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 3
+          }
+        ],
+        "b_grumpy": [],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [],
+        "c_100_percent_reliable": [
+          {
+            "agent": "agent_3",
+            "sequence": 4
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 8
+          }
+        ],
+        "c_calm_in_crisis": [
+          {
+            "agent": "agent_3",
+            "sequence": 4
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 8
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 11
+          }
+        ],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [],
+        "d_hot_temper": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          }
+        ],
+        "d_know_it_all": [],
+        "d_loner": [
+          {
+            "agent": "agent_1",
+            "sequence": 0
+          }
+        ],
+        "d_moody": [],
+        "d_weak_leadership": []
+      },
+      "score": 0.125,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "a_unorganized",
+        "c_100_percent_reliable",
+        "c_calm_in_crisis"
+      ]
+    },
+    "score": 0.341667
+  },
+  "team_process_communication": 0.125,
+  "team_process_cooperation": 0.4,
+  "team_process_coordination": 0.5,
+  "team_process_score": 0.341667,
   "timestamp": "20260703_135215",
   "total_messages": 12,
   "total_tokens": 202227,

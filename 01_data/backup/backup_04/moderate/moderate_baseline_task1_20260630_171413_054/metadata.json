@@ -35,6 +35,174 @@
   "speaker_order_seed": "moderate_baseline_054",
   "status": "completed",
   "task_variant": 1,
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 2,
+      "transcript_message_count": 8,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 2,
+      "score": 0.4
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 6,
+      "completed_turn_count": 2,
+      "completed_turns": [
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "fact_reuse:d_hot_temper"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:b_weak_numeric_memory"
+          ],
+          "round": 2
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.333333,
+      "tool_turn_count": 2
+    },
+    "dimensions": {
+      "communication": 0.125,
+      "cooperation": 0.4,
+      "coordination": 0.333333
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "b_nasty_remarks",
+        "b_weak_numeric_memory",
+        "d_arrogant",
+        "d_hot_temper",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 5,
+      "matched_uptake_facts": 3,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [],
+        "b_grumpy": [],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 4
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 9
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [],
+        "b_weak_numeric_memory": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          }
+        ],
+        "b_wrong_tone": [],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [
+          {
+            "agent": "agent_1",
+            "sequence": 4
+          }
+        ],
+        "d_hot_temper": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 4
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 8
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 9
+          }
+        ],
+        "d_know_it_all": [],
+        "d_loner": [],
+        "d_moody": [],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_1",
+            "sequence": 1
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 4
+          }
+        ]
+      },
+      "score": 0.125,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "b_nasty_remarks",
+        "b_weak_numeric_memory",
+        "d_hot_temper"
+      ]
+    },
+    "score": 0.286111
+  },
+  "team_process_communication": 0.125,
+  "team_process_cooperation": 0.4,
+  "team_process_coordination": 0.333333,
+  "team_process_score": 0.286111,
   "timestamp": "20260704_043739",
   "total_messages": 10,
   "total_tokens": 31541,

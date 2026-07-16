@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | • 100 % reliable<br>• Creates a positive atmosphere with crew<br>• Can make correct decisions quickly<br>• Excellent attention skills<br>• Puts concern for others above everything | • Difficulty communicating ideas<br>• Regarded as egocentric<br>• Not very willing to further his education<br>• No documented evidence of stress resilience or crew‑cooperation in high‑pressure situations | *None* | • Stress resilience (no evidence of performance under pressure)<br>• Crew‑cooperation details (no concrete examples)<br>• Professional communication depth<br>• Responsibility/maturity<br>• Adaptability & feedback orientation<br>• Decision quality under pressure | • Request concrete examples of A’s stress handling and decision‑making under pressure<br>• Ask for observations of A’s interaction with crew and communication style in the cockpit<br>• Probe evidence of responsibility and openness to feedback |
+| Candidate B | • Very conscientious<br>• Handles stress very well<br>• Good at assessing weather conditions<br>• Reliable (noted by Agent 3)<br>• Excellent computer skills | • Can be grumpy<br>• Can be uncooperative<br>• Sometimes adopts a pretentious or wrong tone | *None* | • Concrete decision‑making examples in high‑pressure situations<br>• Crew‑cooperation specifics (how uncooperative attitude manifests)<br>• Professional communication beyond attitude notes<br>• Responsibility/maturity depth<br>• Adaptability & feedback orientation<br>• Leadership depth | • Seek concrete examples of B’s decision‑making under pressure<br>• Explore B’s leadership actions and responsibility in crew settings<br>• Ask for evidence of B’s adaptability and response to feedback<br>• Probe professional communication examples |
+| Candidate C | • Anticipates dangerous situations<br>• Sees complex connections<br>• Excellent spatial vision<br>• Very good leadership qualities | • Sometimes not good at taking criticism<br>• Can be unorganized<br>• Unfriendly / perceived as a “show‑off”<br>• Not open to new ideas | *None* | • Operational reliability (consistent, dependable performance not documented)<br>• Stress resilience (no examples of handling crisis)<br>• Crew‑cooperation beyond leadership<br>• Professional communication<br>• Responsibility/maturity<br>• Adaptability & feedback orientation<br>• Decision quality under pressure | • Request evidence of C’s reliable operational record<br>• Ask for concrete instances of C handling high‑stress or crisis situations<br>• Probe C’s response to criticism and willingness to incorporate feedback<br>• Explore crew‑cooperation examples |
+| Candidate D | • Responds adequately to unexpected events<br>• Concentrates very well<br>• Solves problems extremely well<br>• Takes responsibility seriously | • Regarded as arrogant<br>• Relatively weak leadership skills | *None* | • Operational reliability<br>• Stress resilience<br>• Crew‑cooperation<br>• Professional communication<br>• Adaptability & feedback orientation<br>• Decision quality under pressure<br>• Depth of responsibility/maturity<br>• Leadership depth | • Seek examples of D’s reliable performance over time<br>• Ask for observations of D’s stress handling in demanding scenarios<br>• Explore how D’s attitude impacts crew dynamics and communication<br>• Probe decision‑making under pressure and leadership actions |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | No | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with C) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B) | Yes |
+| Candidate D | No | No | No | No | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | • No direct observations of Candidate B’s decision‑making under high‑pressure situations or crew‑cooperation.<br>• No direct observations of Candidate A’s stress resilience or crew interaction. | • What evidence exists for Candidate C’s operational reliability?<br>• How does Candidate C handle stress and crisis situations?<br>• Can you provide examples of Candidate C’s feedback orientation?<br>• What reliability data do we have for Candidates A, B, D?<br>• Do you have observations on Candidate A’s stress resilience or crew cooperation?<br>• Any insights on Candidate D’s reliability and attitude impact?<br>• Do you have examples of Candidate B’s leadership or decision‑making under pressure?<br>• How does Candidate B demonstrate responsibility/maturity? |
+| Agent 2 | • Aligns provisional vote with Candidate B (no new factual details). | • Do you have any observations of Candidate B’s leadership actions or decision‑making under pressure?<br>• How does Candidate B demonstrate responsibility/maturity?<br>• Can you provide examples of Candidate B’s adaptability and response to feedback?<br>• Any evidence of Candidate B’s professional communication beyond attitude? |
+| Agent 3 | • Aligns provisional vote with Candidate B (no new factual details). | • Do you have any information on Candidate A’s operational reliability or stress handling?<br>• Any observations on Candidate D’s reliability, stress resilience, or crew‑cooperation?<br>• Can you provide examples of how Candidate B’s interpersonal style impacts crew dynamics?<br>• Do you have any evidence of Candidate D’s attitude affecting crew environment? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate B | B shows strong reliability, stress resilience, conscientiousness, and good weather‑assessment; despite lack of concrete decision‑making examples, these traits outweigh A’s unknown stress performance. | Would reconsider if solid evidence of B’s poor decision‑quality under pressure or detrimental crew‑cooperation emerges, or if A’s stress resilience is proven superior. |
+| Agent 2 | Candidate B | Documented as very conscientious, handles stress well, reliably assesses weather; interpersonal issues appear manageable; C lacks reliability and stress evidence. | Would change with strong evidence of C’s reliability or stress‑resilience, or if B’s attitude issues prove critical to safety. |
+| Agent 3 | Candidate B | Strong reliability, stress resilience, conscientiousness, good weather‑assessment; interpersonal issues seem coachable compared to C’s attitude gaps. | Could change if serious deficiencies in B’s decision‑making under pressure or crew‑cooperation are revealed, or if C’s reliability and stress performance are demonstrated. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate B (unanimous provisional vote)
+- **Strongest alternative:** Candidate C
+- **Main reason supporting the leading candidate:** Demonstrated reliability, stress resilience, conscientiousness, and solid weather‑assessment ability, despite missing concrete decision‑making examples.
+- **Main concern about the leading candidate:** Interpersonal attitude (grumpy, uncooperative, pretentious) and lack of documented decision‑quality under pressure and crew‑cooperation evidence.
+- **Main unresolved comparison:** How Candidate B’s crew‑cooperation and decision quality under pressure compare to Candidate C’s technical strengths and leadership, given the missing reliability and stress‑resilience evidence for C.
+- **Candidates that still need discussion:** Candidate A, Candidate D (and deeper aspects of B’s decision‑making, crew‑cooperation, C’s reliability/stress handling, etc.)
+- **Important criteria still unclear:** Operational reliability (A, C, D), stress resilience (A, C, D), crew‑cooperation (A, B, C, D), professional communication (A, B, C, D), responsibility/maturity (all), adaptability & feedback orientation (A, B, C, D), decision quality under pressure (A, B, D), leadership depth (B, D).
+- **Ready for convergence?** No

@@ -148,7 +148,12 @@ figure_summary <- bind_rows(
   group_by(figure_dimension) %>%
   mutate(
     panel_upper_limit = max(ci_upper) * 1.15,
-    label_y = ci_upper + panel_upper_limit * 0.035
+    label_y = ci_upper + panel_upper_limit * if_else(
+      figure_dimension == "Weighted tokens" &
+        plot_condition == "Baseline",
+      0.20,
+      0.035
+    )
   ) %>%
   ungroup()
 
@@ -284,7 +289,7 @@ correct_decision_plot <- create_panel(
   ),
   panel_title = "Correct decisions",
   y_axis_title =
-    "Share of simulations selecting the correct candidate",
+    "Share of simulations selecting the correct candidate (%)",
   y_axis_labels = label_percent(scale = 1, accuracy = 1)
 )
 
@@ -329,6 +334,17 @@ ggsave(
   filename = file.path(
     output_dir,
     "thesis_figure_correct_decisions_weighted_tokens_by_condition.pdf"
+  ),
+  plot = combined_plot,
+  width = 16,
+  height = 5.6,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_correct_decisions_weighted_tokens_by_condition.svg"
   ),
   plot = combined_plot,
   width = 16,

@@ -53,6 +53,27 @@ output_file <- file.path(
   "regression_results_h2_h4.docx"
 )
 
+cm_to_in <- function(x) {
+  x / 2.54
+}
+
+thesis_section <- prop_section(
+  page_size = page_size(
+    width = cm_to_in(21.0),
+    height = cm_to_in(29.7),
+    orient = "portrait",
+    unit = "in"
+  ),
+  page_margins = page_mar(
+    top = cm_to_in(3.0),
+    bottom = cm_to_in(2.0),
+    left = cm_to_in(2.5),
+    right = cm_to_in(2.5),
+    header = cm_to_in(1.5),
+    footer = cm_to_in(1.25)
+  )
+)
+
 dir.create(
   output_dir,
   recursive = TRUE,
@@ -403,7 +424,7 @@ regression_table <- font(
 
 regression_table <- fontsize(
   regression_table,
-  size = 10,
+  size = 9,
   part = "all"
 )
 
@@ -444,7 +465,7 @@ regression_table <- align(
 
 regression_table <- fontsize(
   regression_table,
-  size = 9,
+  size = 8,
   part = "footer"
 )
 
@@ -464,7 +485,11 @@ regression_table <- autofit(
 regression_table <- set_table_properties(
   regression_table,
   layout = "autofit",
-  width = 1
+  width = 1,
+  opts_word = list(
+    split = TRUE,
+    repeat_headers = FALSE
+  )
 )
 
 
@@ -474,7 +499,9 @@ regression_table <- set_table_properties(
 
 save_as_docx(
   regression_table,
-  path = output_file
+  path = output_file,
+  pr_section = thesis_section,
+  align = "center"
 )
 
 cat(

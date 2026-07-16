@@ -1,0 +1,49 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | quick correct decisions (decision quality); 100 % reliable (operational reliability); creates positive crew atmosphere (crew cooperation); excellent attention skills (attention/accuracy); puts concern for others above everything (crew cooperation/responsibility) | difficulty communicating ideas (professional communication); regarded as egocentric (crew cooperation/attitude); not very willing to further his education (adaptability) | technical competence (no explicit evidence); stress resilience (no explicit evidence); deeper responsibility evidence beyond “concern for others”; broader crew‑cooperation nuance beyond positive atmosphere; additional decision‑quality examples | stress resilience; technical competence; responsibility depth; adaptability; crew‑cooperation nuance; decision‑quality depth | Probe technical competence, stress resilience, responsibility, adaptability, deeper decision‑quality examples, and detailed crew‑cooperation behavior |
+| Candidate B | very conscientious (operational reliability); handles stress very well (stress resilience); good at assessing weather conditions (technical competence); excellent computer skills (technical competence) | weak memory for numbers (attention/accuracy); makes nasty remarks about colleagues (crew cooperation); regarded as pretentious (crew cooperation); sometimes adopts wrong tone when communicating (professional communication) | decision quality in safety‑critical situations (no evidence); responsibility level in high‑risk scenarios; adaptability to feedback; broader crew‑cooperation beyond remarks; technical competence depth beyond computer skills; attention accuracy beyond number memory | decision quality; responsibility; adaptability; broader crew‑cooperation; technical competence depth; attention accuracy | Seek concrete examples of decision quality, responsibility, adaptability, broader crew‑cooperation, technical competence details, and attention‑accuracy evidence |
+| Candidate C | anticipates dangerous situations (decision quality / situational awareness); sees complex connections (technical competence); excellent spatial vision (technical competence); very good leadership qualities (crew cooperation/leadership) | unfriendly (professional communication/crew cooperation); eats unhealthily (health/ stamina) | stress resilience (no explicit evidence); responsibility (no explicit evidence); adaptability (no explicit evidence); attention and information accuracy (no explicit evidence); professional communication beyond “unfriendly”; crew‑cooperation behavior details | stress resilience; responsibility; adaptability; attention accuracy; professional communication; decision‑quality depth; technical competence depth | Probe stress resilience, responsibility, adaptability, attention accuracy, professional communication, crew‑cooperation behavior, and decision‑quality evidence |
+| Candidate D | responds to unexpected events adequately (stress resilience / decision quality); can concentrate very well (attention); solves problems extremely well (technical competence/problem solving); takes responsibility seriously (responsibility) | considered moody (crew cooperation/communication); regarded as a loner (crew cooperation); described as arrogant (professional communication/crew attitude) | decision quality (no explicit evidence beyond “responds adequately”); technical competence depth beyond problem solving; stress resilience depth; professional communication (beyond arrogance); adaptability (no evidence); crew‑cooperation nuance | decision quality; technical competence depth; stress resilience depth; professional communication; adaptability; crew‑cooperation nuance | Seek evidence of decision quality, technical competence depth, stress resilience, professional communication, adaptability, and detailed crew‑cooperation behavior |
+
+## Candidate Coverage Checklist
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with B, C, D) | Yes (technical competence, stress resilience, responsibility, deeper decision‑quality, crew‑cooperation nuance, adaptability) |
+| Candidate B | Yes | Yes | Yes | Yes (compared with A, C, D) | Yes (decision quality, responsibility, adaptability, broader crew‑cooperation, technical competence depth, attention accuracy) |
+| Candidate C | Yes | Yes | Yes | Yes (compared with A, B, D) | Yes (stress resilience, responsibility, adaptability, attention accuracy, professional communication, decision‑quality depth, technical competence depth) |
+| Candidate D | Yes | Yes | Yes | Yes (compared with A, B, C) | Yes (decision quality, technical competence depth, stress resilience depth, professional communication, adaptability, crew‑cooperation nuance) |
+
+## Information Distribution
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 (Anna Keller) | Voted for Candidate A; highlighted A’s quick correct decisions, 100 % reliability, positive crew atmosphere, excellent attention, concern for others; noted A’s communication difficulty, egocentric attitude, limited willingness to further education; described B’s nasty remarks as crew‑cooperation issue; described C as unfriendly; described D as arrogant and a loner; now votes for Candidate A. | Do you have any observations on Candidate D’s decision quality or technical competence? |
+| Agent 2 (Markus Weber) | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; weak memory for numbers; makes nasty remarks about colleagues; regarded as pretentious; sometimes adopts the wrong tone when communicating; initially voted for B, now votes for A; stated no explicit decision‑quality evidence for B. | Do you have any observations on Candidate A’s stress resilience or technical competence? Do you have any observations on Candidate C’s adaptability or attention accuracy? Do you have any observations on Candidate D’s decision quality or technical competence? |
+| Agent 3 (Sofia Brandt) | Initially voted for B, later shifted to A; argued A’s documented quick correct decisions satisfy decision‑quality, reliability, positive atmosphere; noted B’s missing decision‑quality evidence and interpersonal issues; currently votes for A. | Do you have any observations on Candidate C’s stress resilience or responsibility? Do you have any observations on Candidate D’s decision quality or technical competence? Do you have any observations on Candidate B’s decision quality in safety‑critical situations? |
+
+## Current Positions
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate A | Quick correct decisions, 100 % reliability, positive crew atmosphere, excellent attention, concern for others; concerns: communication difficulty, egocentric, limited willingness to further education. | New evidence of strong stress resilience, technical competence, or responsibility for A would reinforce vote; serious crew‑cooperation issues could weaken it |
+| Agent 2 | Candidate A | Decision‑quality (quick correct decisions), reliability, positive atmosphere, excellent attention; concerns: communication difficulty, egocentric, limited willingness to further education. | Evidence of stress resilience, technical competence, or responsibility for A could affect view; any new crew‑cooperation issues could shift vote |
+| Agent 3 | Candidate A | Concrete decision‑quality evidence, reliability, positive atmosphere; concerns: communication difficulty, egocentric, limited adaptability; missing technical competence, stress resilience, responsibility. | Evidence of technical competence, stress resilience, or responsibility for A could modify view |
+|---|---|---|---|
+
+## Group Decision State
+## Group Decision State
+| Item | Details |
+|---|---|
+| Current leading candidate | Candidate A |
+| Strongest alternative | Candidate B |
+| Main reason supporting the leading candidate | Documented quick correct decisions (decision quality), 100 % reliability, positive crew atmosphere |
+| Main concern about the leading candidate | Communication difficulty, egocentric attitude, limited willingness to further education (adaptability), missing technical competence, stress resilience, responsibility |
+| Main unresolved comparison | Decision‑quality evidence for B is absent versus A’s explicit evidence; stress resilience and technical competence for A remain unverified |
+| Candidates that still need discussion | All candidates still require further evidence on several criteria (A: stress resilience, technical competence, responsibility, deeper decision‑quality, crew‑cooperation nuance, adaptability; B: decision quality, responsibility, adaptability, broader crew‑cooperation, technical competence depth, attention accuracy; C: stress resilience, responsibility, adaptability, attention accuracy, professional communication, decision‑quality depth, technical competence depth; D: decision quality, technical competence depth, stress resilience depth, professional communication, adaptability, crew‑cooperation nuance) |
+| Important criteria still unclear | Stress resilience (A, C, D); technical competence (A, C, D); responsibility (A, B, C); adaptability (A, B, C, D); professional communication (A, B, D); attention and information accuracy (B); crew cooperation (C, D); decision quality for B |
+| Ready for convergence? | No |

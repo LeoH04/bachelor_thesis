@@ -30,6 +30,357 @@
   "speaker_order_seed": "moderate_treatment_040",
   "status": "completed",
   "task_variant": 2,
+  "team_process": {
+    "coding": {
+      "agent_message_count": 12,
+      "tool_exchange_count": 9,
+      "transcript_message_count": 21,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 11,
+      "integrated_message_count": 4,
+      "score": 0.363636
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 12,
+      "completed_turn_count": 8,
+      "completed_turns": [
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:a_anticipates_danger,a_leadership,a_unfriendly"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:B",
+            "no_evidence_reuse:D"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "fact_reuse:b_grumpy,b_uncooperative,b_wrong_tone"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "fact_reuse:c_concern_for_others"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:d_problem_solving"
+          ],
+          "round": 3
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:D"
+          ],
+          "round": 3
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "fact_reuse:c_understands_complicated_technology"
+          ],
+          "round": 4
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:c_calm_in_crisis,c_fast_decisions"
+          ],
+          "round": 4
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.666667,
+      "tool_turn_count": 8
+    },
+    "dimensions": {
+      "communication": 0.375,
+      "cooperation": 0.363636,
+      "coordination": 0.666667
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_unfriendly",
+        "b_grumpy",
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "b_wrong_tone",
+        "c_100_percent_reliable",
+        "c_calm_in_crisis",
+        "c_concern_for_others",
+        "c_positive_crew_atmosphere",
+        "c_understands_complicated_technology",
+        "d_hot_temper",
+        "d_loner",
+        "d_moody",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 14,
+      "matched_uptake_facts": 9,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [
+          {
+            "agent": "agent_1",
+            "sequence": 2
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 21
+          }
+        ],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [],
+        "b_grumpy": [
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_3",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [
+          {
+            "agent": "agent_3",
+            "sequence": 3
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 25
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [
+          {
+            "agent": "agent_2",
+            "sequence": 10
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          }
+        ],
+        "c_100_percent_reliable": [
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "c_calm_in_crisis": [
+          {
+            "agent": "agent_1",
+            "sequence": 8
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 11
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 21
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 27
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "c_concern_for_others": [
+          {
+            "agent": "agent_1",
+            "sequence": 8
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 15
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 21
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 18
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "c_understands_complicated_technology": [
+          {
+            "agent": "agent_3",
+            "sequence": 24
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 25
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 29
+          }
+        ],
+        "d_arrogant": [],
+        "d_hot_temper": [
+          {
+            "agent": "agent_3",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 18
+          }
+        ],
+        "d_know_it_all": [],
+        "d_loner": [
+          {
+            "agent": "agent_2",
+            "sequence": 0
+          }
+        ],
+        "d_moody": [
+          {
+            "agent": "agent_3",
+            "sequence": 18
+          }
+        ],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_3",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 18
+          }
+        ]
+      },
+      "score": 0.375,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "a_unfriendly",
+        "b_grumpy",
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "b_wrong_tone",
+        "c_calm_in_crisis",
+        "c_concern_for_others",
+        "c_positive_crew_atmosphere",
+        "c_understands_complicated_technology"
+      ]
+    },
+    "score": 0.468434
+  },
+  "team_process_communication": 0.375,
+  "team_process_cooperation": 0.363636,
+  "team_process_coordination": 0.666667,
+  "team_process_score": 0.468434,
   "timestamp": "20260702_134346",
   "total_messages": 30,
   "total_tokens": 452927,

@@ -421,7 +421,11 @@ regression_table <- autofit(
 regression_table <- set_table_properties(
   regression_table,
   layout = "autofit",
-  width = 1
+  width = 1,
+  opts_word = list(
+    split = TRUE,
+    repeat_headers = FALSE
+  )
 )
 
 

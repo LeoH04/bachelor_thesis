@@ -23,7 +23,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "final" / "final_100_gpt_oss_120b"
+DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
 
 AGENT_LABELS = ("agent_1", "agent_2", "agent_3")
 TEAM_PROCESS_METHOD = "private_uptake_completed_coordination_integration_v2"

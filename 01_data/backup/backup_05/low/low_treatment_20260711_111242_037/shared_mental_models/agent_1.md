@@ -1,0 +1,36 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | 100% reliable; creates positive atmosphere with crew; can make correct decisions quickly; keeps calm in crisis; understands complex technology | Egocentric; difficulty communicating ideas; not very willing to further his education; egocentric attitude noted by Agent 2 | (none) | Attention & information accuracy; responsibility; adaptability | Elicit evidence on attention to detail, responsibility, adaptability |
+| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Grumpy; uncooperative; makes nasty remarks (crew‑cooperation & professional communication issues) | Technical competence; decision quality; attention & information accuracy; responsibility; adaptability; crew cooperation depth beyond attitude | Technical competence; decision quality; attention & information accuracy; responsibility; adaptability; crew cooperation depth | Obtain observations on technical competence, decision quality, attention, responsibility, adaptability, crew cooperation, professional communication |
+| Candidate C | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Sometimes not good at taking criticism; can be unorganized | (none) | Stress resilience; decision quality; responsibility; crew cooperation; professional communication; adaptability (no observations available) | Seek concrete evidence on stress resilience, decision quality, responsibility, crew cooperation, professional communication, adaptability |
+| Candidate D | Responds adequately to unexpected events; concentrates very well; solves problems extremely well; takes responsibility seriously | Regarded as arrogant; relatively weak leadership skills; insufficient documented decision‑making speed in emergencies; lacking concrete stress‑resilience evidence; crew‑cooperation concerns due to arrogance/hot temper | Technical competence; decision quality (specific speed/precision); attention & information accuracy; professional communication; adaptability; stress resilience (concrete evidence); crew cooperation (behavioural evidence) | Technical competence; decision quality (speed/precision); attention & information accuracy; professional communication; adaptability; stress resilience; crew cooperation | Obtain concrete examples of decision speed/quality, stress‑resilience performance, crew‑interaction behaviour, technical competence, attention to detail, professional communication, adaptability |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | No | Yes |
+| Candidate B | Yes | Yes | Yes | No | Yes |
+| Candidate C | Yes | Yes | Yes | No | Yes |
+| Candidate D | Yes | Yes | Yes | No | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | - Candidate C can anticipate dangerous situations<br>- Candidate C sees complex connections<br>- Candidate C has excellent spatial vision<br>- Candidate C has very good leadership qualities<br>- Candidate C sometimes not good at taking criticism<br>- Candidate C can be unorganized | - Do you have information on Candidate C's stress resilience, adaptability, crew‑cooperation beyond leadership, professional communication, overall responsibility, and decision quality?<br>- Do you have any observations on Candidate D's technical competence, decision quality, attention to detail, professional communication, and adaptability? |
+| Agent 2 | - Candidate A: keeps calm in crisis; can make correct decisions quickly; understands complex technology<br>- Candidate B: handles stress very well; good at assessing weather conditions; excellent computer skills; very conscientious; can be grumpy; can be uncooperative; makes nasty remarks<br>- Candidate D: takes responsibility seriously; solves problems extremely well; responds adequately to unexpected events; lacks documented decision‑making speed in emergencies; crew‑cooperation concerns due to arrogance/hot temper | - Can you provide any observations on Candidate A’s technical competence, decision quality, attention & information accuracy, and responsibility?<br>- Can you share any information on Candidate B’s technical competence, decision quality, attention, responsibility, and adaptability?<br>- Do you have any insights on Candidate D’s technical competence, decision quality, attention, professional communication style, and adaptability? |
+| Agent 3 | (none) | - Do you have any observations on Candidate A, B, or D regarding the criteria of technical competence, decision quality, attention, or adaptability? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | None | Lack of evidence on decision quality and responsibility for Candidate C and missing data for other candidates; cannot endorse definitively | Additional evidence on decision quality, responsibility, and other safety‑critical criteria could shift the view |
+| Agent 2 | Candidate A | Decision quality (quick correct decisions), calmness in crisis, and technical competence (understands complex technology) give A a distinct edge; other candidates show teamwork or attitude issues | New evidence on technical competence, responsibility, adaptability, or other safety‑critical criteria for any candidate could affect assessment |
+| Agent 3 | - | - | Needs concrete evidence on decision quality and responsibility for Candidate C and comparable data for other candidates |
+
+## Group Decision State
+| Current leading candidate | Strongest alternative | Main reason supporting the leading candidate | Main concern about the leading candidate | Main unresolved comparison | Candidates that still need discussion | Important criteria still unclear | Ready for convergence? | Reason |
+|---|---|---|---|---|---|---|---|---|
+| Candidate A | Candidate C | Evidence of quick correct decisions, calmness under crisis, and technical competence (understands complex technology) | Egocentric attitude, difficulty communicating ideas, and gaps in responsibility and adaptability | Decision quality and responsibility across all candidates (also technical competence, attention & information accuracy, adaptability, crew cooperation depth, professional communication depth, decision quality for D) | Candidate A, Candidate B, Candidate C, Candidate D | Technical competence (full picture), attention & information accuracy, responsibility, adaptability, stress resilience (partial), crew cooperation depth, professional communication depth, decision quality for D and others | No | Insufficient evidence on key safety‑critical criteria for all candidates and no direct comparison between leading and alternative has been completed. |

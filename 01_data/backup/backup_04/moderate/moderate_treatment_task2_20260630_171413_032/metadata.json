@@ -30,6 +30,294 @@
   "speaker_order_seed": "moderate_treatment_032",
   "status": "completed",
   "task_variant": 2,
+  "team_process": {
+    "coding": {
+      "agent_message_count": 12,
+      "tool_exchange_count": 11,
+      "transcript_message_count": 23,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 11,
+      "integrated_message_count": 3,
+      "score": 0.272727
+    },
+    "completed_information_coordination": {
+      "agent_turn_count": 12,
+      "completed_turn_count": 4,
+      "completed_turns": [
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:B",
+            "fact_reuse:c_communication_difficulty,c_positive_crew_atmosphere"
+          ],
+          "round": 1
+        },
+        {
+          "agent": "agent_1",
+          "reasons": [
+            "no_evidence_reuse:B"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_3",
+          "reasons": [
+            "fact_reuse:d_concentration,d_problem_solving,d_unexpected_events"
+          ],
+          "round": 2
+        },
+        {
+          "agent": "agent_2",
+          "reasons": [
+            "no_evidence_reuse:B"
+          ],
+          "round": 3
+        }
+      ],
+      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
+      "score": 0.333333,
+      "tool_turn_count": 7
+    },
+    "dimensions": {
+      "communication": 0.083333,
+      "cooperation": 0.272727,
+      "coordination": 0.333333
+    },
+    "method": "private_uptake_completed_coordination_integration_v2",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_not_open_to_new_ideas",
+        "a_unfriendly",
+        "a_unorganized",
+        "b_grumpy",
+        "b_nasty_remarks",
+        "b_uncooperative",
+        "b_wrong_tone",
+        "c_calm_in_crisis",
+        "c_positive_crew_atmosphere",
+        "d_hot_temper",
+        "d_moody",
+        "d_weak_leadership"
+      ],
+      "matched_disclosed_facts": 12,
+      "matched_uptake_facts": 2,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [],
+        "a_unfriendly": [
+          {
+            "agent": "agent_1",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 31
+          }
+        ],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ],
+        "b_grumpy": [
+          {
+            "agent": "agent_2",
+            "sequence": 26
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 33
+          }
+        ],
+        "b_nasty_remarks": [
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 27
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ],
+        "b_pretentious": [],
+        "b_uncooperative": [
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 27
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [
+          {
+            "agent": "agent_2",
+            "sequence": 0
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 26
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 33
+          }
+        ],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 17
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 27
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 31
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 33
+          }
+        ],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [],
+        "c_positive_crew_atmosphere": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 7
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 17
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 23
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 26
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 27
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 31
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          },
+          {
+            "agent": "agent_2",
+            "sequence": 33
+          }
+        ],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [],
+        "d_hot_temper": [
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ],
+        "d_know_it_all": [],
+        "d_loner": [],
+        "d_moody": [
+          {
+            "agent": "agent_1",
+            "sequence": 28
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 31
+          }
+        ],
+        "d_weak_leadership": [
+          {
+            "agent": "agent_3",
+            "sequence": 14
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 32
+          }
+        ]
+      },
+      "score": 0.083333,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "c_calm_in_crisis",
+        "c_positive_crew_atmosphere"
+      ]
+    },
+    "score": 0.229798
+  },
+  "team_process_communication": 0.083333,
+  "team_process_cooperation": 0.272727,
+  "team_process_coordination": 0.333333,
+  "team_process_score": 0.229798,
   "timestamp": "20260702_100839",
   "total_messages": 34,
   "total_tokens": 424102,

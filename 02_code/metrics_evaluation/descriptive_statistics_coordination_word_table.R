@@ -46,6 +46,27 @@ output_file <- file.path(
   "descriptive_statistics_coordination.docx"
 )
 
+cm_to_in <- function(x) {
+  x / 2.54
+}
+
+thesis_section <- prop_section(
+  page_size = page_size(
+    width = cm_to_in(21.0),
+    height = cm_to_in(29.7),
+    orient = "portrait",
+    unit = "in"
+  ),
+  page_margins = page_mar(
+    top = cm_to_in(3.0),
+    bottom = cm_to_in(2.0),
+    left = cm_to_in(2.5),
+    right = cm_to_in(2.5),
+    header = cm_to_in(1.5),
+    footer = cm_to_in(1.25)
+  )
+)
+
 dir.create(
   output_dir,
   recursive = TRUE,
@@ -297,7 +318,7 @@ descriptive_table <- font(
 
 descriptive_table <- fontsize(
   descriptive_table,
-  size = 9,
+  size = 11,
   part = "all"
 )
 
@@ -346,7 +367,7 @@ descriptive_table <- align(
 
 descriptive_table <- fontsize(
   descriptive_table,
-  size = 8,
+  size = 10,
   part = "footer"
 )
 
@@ -392,8 +413,8 @@ descriptive_table <- set_table_properties(
   layout = "autofit",
   width = 1,
   opts_word = list(
-    split = FALSE,
-    repeat_headers = TRUE
+    split = TRUE,
+    repeat_headers = FALSE
   )
 )
 
@@ -402,27 +423,10 @@ descriptive_table <- set_table_properties(
 # 7. Export to Word
 # ------------------------------------------------------------
 
-portrait_section <- prop_section(
-  page_size = page_size(
-    width = 8.27,
-    height = 11.69,
-    orient = "portrait",
-    unit = "in"
-  ),
-  page_margins = page_mar(
-    top = 0.35,
-    bottom = 0.35,
-    left = 0.2,
-    right = 0.2,
-    header = 0.2,
-    footer = 0.2
-  )
-)
-
 save_as_docx(
   descriptive_table,
   path = output_file,
-  pr_section = portrait_section,
+  pr_section = thesis_section,
   align = "center"
 )
 
