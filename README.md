@@ -2,14 +2,14 @@
 
 This repository contains the simulation, data, and analysis code for the bachelor thesis **“Shared Mental Models in Generative AI-Based Multi-Agent Systems: A Simulation Study Grounded in Human Team Cognition Theory.”**
 
-The study examines whether an SMM-inspired structured memory mechanism improves collaboration in a generative AI-based multi-agent system, and whether its effects depend on agents’ access to prior discussion history. Three agents solve a hidden-profile personnel-selection task by combining shared and privately distributed information.
+The study examines whether an SMM-inspired structured memory mechanism improves efficiency and effectiveness in a generative AI-based multi-agent system, and whether its effects depend on agents’ access to prior discussion history. Three agents solve a hidden-profile personnel-selection task by combining shared and privately distributed information.
 
 The analysis covers 800 independent simulations (200 per configuration):
 
 | Configuration | Structured memory | Prior discussion available to agents |
 |---|---:|---|
 | Baseline | No | Full public history |
-| Low transparency | Yes | Latest speaker turn and its tool exchanges |
+| Low transparency | Yes | Latest speaker turn |
 | Moderate transparency | Yes | Full public history |
 | High transparency | Yes | Full public history and stored reasoning traces |
 
