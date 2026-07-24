@@ -52,8 +52,8 @@ def _record_final_decision(
         )
 
 
-# --- metrics tool ---
-def record_metrics(tool_context: ToolContext) -> dict:
+# --- metrics ---
+def record_metrics() -> dict:
     """Record metrics for current execution - increment loop counter
     
     Note: Token tracking is handled via runtime usage events.
@@ -130,7 +130,7 @@ class VoteCheckerAgent(BaseAgent):
         actions = EventActions()
         tool_context = ToolContext(ctx, event_actions=actions)
 
-        record_metrics(tool_context)
+        record_metrics()
         result = check_consensus(tool_context)
 
         yield Event(

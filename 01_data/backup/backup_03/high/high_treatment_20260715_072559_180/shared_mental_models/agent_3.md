@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | 100 % reliable; keeps calm in a crisis; makes correct decisions quickly; creates positive crew atmosphere; excellent attention skills | Difficulty communicating ideas; regarded as egocentric; not very willing to further his education | Puts concern for others above everything | Technical competence; Responsibility; Adaptability/feedback orientation | Ask for concrete examples of technical competence, responsibility actions, and adaptability/feedback orientation |
+| Candidate B | Very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills | Pretentious; sometimes adopts wrong tone when communicating; makes nasty remarks; weak memory for numbers | Decision quality not documented; Responsibility not documented; Adaptability not documented; Professional communication beyond tone not documented; Attention beyond memory issue not documented | Decision quality; Responsibility; Adaptability/feedback orientation; Professional communication (beyond tone); Attention (beyond memory issue) | Request specific examples of decision quality, responsibility actions, adaptability, professional communication style, and attention beyond memory |
+| Candidate C | Can anticipate dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Unfriendly; eats unhealthily; not good at taking criticism; unorganized | Operational reliability not documented; Stress resilience not documented; Decision quality not documented; Attention not documented; Responsibility not documented; Adaptability not documented; Health impact not quantified | Operational reliability; Stress resilience; Decision quality; Attention; Responsibility; Adaptability; Health impact | Seek observations of operational reliability, stress resilience, decision quality, attention, responsibility, adaptability, and health considerations |
+| Candidate D | (none discussed) | (none discussed) | Responds to unexpected events adequately; can concentrate very well; solves problems extremely well; takes responsibility seriously; considered moody; regarded as a loner; arrogant; weak leadership; hot temper | Operational reliability; Stress‑resilience depth; Technical competence; Decision quality; Crew cooperation; Professional communication; Adaptability; Attention (beyond concentration) | Ask for evidence of operational reliability, depth of stress‑resilience, technical competence, decision‑quality examples, crew‑cooperation behavior, professional communication style, and adaptability |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under‑discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with B and C) | Yes (technical competence, responsibility, adaptability still under‑discussed) |
+| Candidate B | Yes | Yes | Yes | Yes (compared with A, C, D) | Yes (decision quality, responsibility, adaptability, professional communication, attention still under‑discussed) |
+| Candidate C | Yes | Yes | Yes | Yes (compared with B and A) | Yes (operational reliability, stress resilience, decision quality, attention, responsibility, adaptability, health still under‑discussed) |
+| Candidate D | No | No | No | No | Yes (operational reliability, stress‑resilience depth, technical competence, decision quality, crew cooperation, professional communication, adaptability, attention still under‑discussed) |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | **Candidate A** – 100 % reliable, keeps calm in a crisis, makes correct decisions quickly, creates positive crew atmosphere, excellent attention skills, difficulty communicating ideas, egocentric, not very willing to further education, puts concern for others above everything. **Candidate C** – anticipates dangerous situations, sees complex connections, excellent spatial vision, very good leadership qualities, unfriendly, eats unhealthily, not good at taking criticism, unorganized. | Could you provide observations of Candidate D’s operational reliability, depth of stress‑resilience, crew‑cooperation behavior, and adaptability? |
+| Agent 2 | **Candidate B** – very conscientious, handles stress very well, good at assessing weather conditions, excellent computer skills, pretentious, sometimes adopts wrong tone when communicating, makes nasty remarks, weak memory for numbers. | Could you share evidence of Candidate D’s technical competence, decision‑quality examples, crew‑cooperation behavior, professional communication style, and adaptability? |
+| Agent 3 | **Candidate D** – responds to unexpected events adequately, can concentrate very well, solves problems extremely well, takes responsibility seriously, considered moody, regarded as a loner, arrogant, weak leadership, hot temper. **Candidate B** – same facts as Agent 2. | Could you share observations of Candidate D’s operational reliability, depth of stress‑resilience, technical competence, decision‑quality examples, crew‑cooperation behavior, professional communication style, and adaptability? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate A | Proven reliability, calmness in crisis, rapid correct decisions, positive crew atmosphere, excellent attention; concerns: difficulty communicating, egocentric, low adaptability (not willing to further education). | Could change if B’s stress resilience and weather‑assessment competence outweigh A’s communication issues, or if D shows stronger responsibility and problem solving, or if new evidence on A’s technical competence emerges. |
+| Agent 2 | Candidate B | Stress resilience, conscientiousness, weather‑assessment competence; concerns: pretentious demeanor, occasional wrong tone, weak memory for numbers. | Could change if A’s reliability and calmness outweigh B’s communication issues, or if D shows stronger overall fit. |
+| Agent 3 | Candidate B | Same as Agent 2: stress resilience, conscientiousness, weather‑assessment competence; concerns: communication style (pretentious, wrong tone) and weak memory for numbers; adaptability unknown. | Could change if A’s reliability and calmness outweigh B’s communication issues, or if D shows stronger overall fit. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate B (two votes)
+- **Strongest alternative:** Candidate A (one vote)
+- **Main reason supporting the leading candidate:** Proven stress performance, conscientiousness, and weather‑assessment competence essential for long‑distance flights.
+- **Main concern about the leading candidate:** Communication style (pretentious, wrong tone) and weak memory for numbers affecting attention.
+- **Main unresolved comparison:** Whether Candidate A’s reliability, calmness, rapid correct decision‑making, and positive crew atmosphere outweigh Candidate B’s communication shortcomings and attention deficit.
+- **Candidates that still need discussion:** Candidate D (needs evidence on operational reliability, stress‑resilience depth, technical competence, decision quality, crew cooperation, professional communication, adaptability, attention beyond concentration); also further evidence needed for C (operational reliability, stress resilience, decision quality, attention, responsibility, adaptability, health impact) and for A (technical competence, responsibility, adaptability) and for B (decision quality, responsibility, adaptability).
+- **Important criteria still unclear:** Technical competence (A, D); Decision quality (B, D); Responsibility (A, B, C, D); Adaptability/feedback orientation (A, B, C, D); Operational reliability (C, D); Stress resilience depth (C, D); Professional communication (B, D); Health impact (C); Attention (B, D) beyond known aspects.
+- **Ready for convergence?** No

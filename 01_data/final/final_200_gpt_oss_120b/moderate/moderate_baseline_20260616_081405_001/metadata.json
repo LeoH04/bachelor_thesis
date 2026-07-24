@@ -3,23 +3,14 @@
   "agent_tool_messages": 8,
   "agent_turns": 15,
   "completed_at": "2026-06-19T18:26:08+0200",
-  "context_consistency": {
-    "max_pairwise_similarity": null,
-    "mean_pairwise_similarity": null,
-    "min_pairwise_similarity": null,
-    "pairwise": [],
-    "reason": "explicit_smm_memory_disabled"
-  },
   "context_transparency_condition": "moderate",
   "correct_candidate": "Candidate C",
   "decision_correct": 1,
   "decision_method": "max_round_majority_vote",
   "final_candidate": "Candidate C",
   "input_tokens": 89711,
-  "mean_pairwise_memory_similarity": null,
   "memory_updates": 0,
   "output_tokens": 15958,
-  "pairwise_memory_similarity": [],
   "paths": {
     "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_001/chat.md",
     "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_001",
@@ -49,42 +40,11 @@
       "integrated_message_count": 8,
       "score": 0.571429
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 15,
-      "completed_turn_count": 3,
-      "completed_turns": [
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_calm_in_crisis,c_fast_decisions"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:b_pretentious"
-          ],
-          "round": 4
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:b_pretentious"
-          ],
-          "round": 5
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.2,
-      "tool_turn_count": 4
-    },
     "dimensions": {
       "communication": 0.375,
-      "cooperation": 0.571429,
-      "coordination": 0.2
+      "cooperation": 0.571429
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -475,12 +435,11 @@
         "d_hot_temper"
       ]
     },
-    "score": 0.382143
+    "score": 0.473214
   },
   "team_process_communication": 0.375,
   "team_process_cooperation": 0.571429,
-  "team_process_coordination": 0.2,
-  "team_process_score": 0.382143,
+  "team_process_score": 0.473214,
   "timestamp": "20260619_182406",
   "total_messages": 23,
   "total_tokens": 105669,

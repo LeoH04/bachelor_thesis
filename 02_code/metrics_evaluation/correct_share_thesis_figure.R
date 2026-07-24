@@ -7,7 +7,6 @@ rm(list = ls())
 
 library(tidyverse)
 library(scales)
-library(ggtext)
 
 options(scipen = 999)
 
@@ -24,6 +23,9 @@ data_path <- file.path(
 
 output_dir <- file.path(project_path, "03_report/graphs")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+figure_width <- 3.35
+figure_height <- 3.55
 
 simulation_metrics <- read_csv(
   data_path,
@@ -49,11 +51,11 @@ correct_decision_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ndiscussion\ncontext",
+        context_transparency_condition == "low" ~ "Low\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion\ncontext",
+        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ndiscussion\ncontext",
+        context_transparency_condition == "high" ~ "High\ntransparency",
       TRUE ~ NA_character_
     ),
     
@@ -61,9 +63,9 @@ correct_decision_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ndiscussion\ncontext",
-        "Moderate\ndiscussion\ncontext",
-        "High\ndiscussion\ncontext"
+        "Low\ntransparency",
+        "Moderate\ntransparency",
+        "High\ntransparency"
       )
     )
   ) %>%
@@ -104,24 +106,33 @@ correct_decision_summary <- correct_decision_data %>%
 print(correct_decision_summary)
 
 # Creates x-axis labels dynamically, so n is correct even if group sizes change
-# The invisible second line under Baseline aligns all n labels vertically
+# Invisible lines under Baseline align all n labels vertically
 condition_axis_labels <- setNames(
   vapply(
     as.character(correct_decision_summary$plot_condition),
     function(condition) {
       
       condition_label <- gsub("\n", "<br>", condition)
+      condition_label <- sub(
+        "transparency",
+        "trans-<br>parency",
+        condition_label,
+        fixed = TRUE
+      )
       
-      # Give Baseline an invisible second line to match the treatment labels
+      # Give Baseline invisible lines to match the treatment labels
       if (!grepl("<br>", condition_label)) {
-        condition_label <- paste0(condition_label, "<br>&nbsp;")
+        condition_label <- paste0(
+          condition_label,
+          "<br>&nbsp;<br>&nbsp;"
+        )
       }
       
       paste0(
         "<b>",
         condition_label,
         "</b><br><br>",
-        "<i><span style='font-size:9pt; color:#555555;'>",
+        "<i><span style='font-size:7pt; color:#555555;'>",
         "n = ",
         correct_decision_summary$n[
           as.character(correct_decision_summary$plot_condition) == condition
@@ -147,7 +158,7 @@ correct_decision_plot <- ggplot(
   )
 ) +
   geom_col(
-    width = 0.56,
+    width = 0.60,
     colour = "black",
     linewidth = 0.35
   ) +
@@ -164,7 +175,7 @@ correct_decision_plot <- ggplot(
   ) +
   geom_point(
     shape = 21,
-    size = 4.6,
+    size = 3.5,
     colour = "black",
     stroke = 0.65
   ) +
@@ -175,14 +186,14 @@ correct_decision_plot <- ggplot(
     ),
     fontface = "bold",
     colour = "black",
-    size = 3.9
+    size = 3.1
   ) +
   scale_fill_manual(
     values = c(
       "Baseline" = "#B0B0B0",
-      "Low\ndiscussion\ncontext" = "#D8E5EE",
-      "Moderate\ndiscussion\ncontext" = "#7FA9C4",
-      "High\ndiscussion\ncontext" = "#315F7D"
+      "Low\ntransparency" = "#D8E5EE",
+      "Moderate\ntransparency" = "#7FA9C4",
+      "High\ntransparency" = "#315F7D"
     ),
     guide = "none"
   ) +
@@ -202,18 +213,18 @@ correct_decision_plot <- ggplot(
     x = "Experimental condition",
     y = "Share of simulations selecting\nthe correct candidate (%)"
   ) +
-  theme_classic(base_size = 12) +
+  theme_classic(base_size = 10) +
   theme(
     axis.title = element_text(face = "bold"),
-    axis.title.y = element_text(margin = margin(r = 12)),
-    axis.title.x = element_text(margin = margin(t = 12)),
+    axis.title.y = element_text(margin = margin(r = 6)),
+    axis.title.x = element_text(margin = margin(t = 7)),
     axis.text.x = ggtext::element_markdown(
-      size = 10.5,
-      margin = margin(t = 8),
-      lineheight = 1.12
+      size = 7.2,
+      margin = margin(t = 5),
+      lineheight = 1.00
     ),
     axis.text.y = element_text(colour = "black"),
-    plot.margin = margin(t = 25, r = 15, b = 10, l = 15)
+    plot.margin = margin(t = 12, r = 5, b = 3, l = 5)
   )
 
 print(correct_decision_plot)
@@ -228,8 +239,8 @@ ggsave(
     "thesis_figure_correct_decisions_by_condition.pdf"
   ),
   plot = correct_decision_plot,
-  width = 5.5,
-  height = 4.8,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )
 
@@ -239,7 +250,7 @@ ggsave(
     "thesis_figure_correct_decisions_by_condition.svg"
   ),
   plot = correct_decision_plot,
-  width = 5.5,
-  height = 4.8,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )

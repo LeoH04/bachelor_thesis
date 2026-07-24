@@ -44,67 +44,11 @@
       "integrated_message_count": 3,
       "score": 0.375
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 9,
-      "completed_turn_count": 6,
-      "completed_turns": [
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:c_calm_in_crisis,c_fast_decisions"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "explicit_attribution:agent_1"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:d_concentration",
-            "no_evidence_reuse:D",
-            "fact_reuse:a_anticipates_danger,a_complex_connections,a_spatial_vision"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_100_percent_reliable,c_fast_decisions,c_positive_crew_atmosphere",
-            "fact_reuse:b_uncooperative"
-          ],
-          "round": 3
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:a_unorganized",
-            "fact_reuse:d_problem_solving,d_unexpected_events"
-          ],
-          "round": 3
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:c_understands_complicated_technology"
-          ],
-          "round": 3
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.666667,
-      "tool_turn_count": 6
-    },
     "dimensions": {
       "communication": 0.25,
-      "cooperation": 0.375,
-      "coordination": 0.666667
+      "cooperation": 0.375
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -302,12 +246,11 @@
         "c_understands_complicated_technology"
       ]
     },
-    "score": 0.430556
+    "score": 0.3125
   },
   "team_process_communication": 0.25,
   "team_process_cooperation": 0.375,
-  "team_process_coordination": 0.666667,
-  "team_process_score": 0.430556,
+  "team_process_score": 0.3125,
   "timestamp": "20260616_102805",
   "total_messages": 33,
   "total_tokens": 267910,

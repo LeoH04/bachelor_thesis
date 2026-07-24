@@ -41,7 +41,6 @@ DEFAULT_RUN_ID = (
 RUN_ID = _safe_path_part(_get_config_value("SIM_RUN_ID", DEFAULT_RUN_ID), DEFAULT_RUN_ID)
 
 RUN_DIR = RAW_SIMULATIONS_DIR / SIM_CONDITION / RUN_ID
-LOG_DIR = RUN_DIR
 SESSION_LOG_FILE = RUN_DIR / "session.log"
 METADATA_FILE = RUN_DIR / "metadata.json"
 CHAT_LOG_FILE = RUN_DIR / "chat.md"

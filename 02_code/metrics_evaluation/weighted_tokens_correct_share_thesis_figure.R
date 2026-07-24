@@ -1,6 +1,6 @@
 # ============================================================
 # Figure: Decision quality and weighted tokens by condition
-# Baseline | Low discussion context | Moderate discussion context | High discussion context
+# Baseline | Low transparency | Moderate transparency | High transparency
 # Bars + trend line + 95% confidence intervals
 # ============================================================
 
@@ -8,7 +8,6 @@ rm(list = ls())
 
 library(tidyverse)
 library(scales)
-library(ggtext)
 library(cowplot)
 
 options(scipen = 999)
@@ -38,6 +37,7 @@ simulation_metrics <- read_csv(
 # ------------------------------------------------------------
 
 output_token_weight <- 5
+weighted_token_scale <- 1000000
 
 figure_data <- simulation_metrics %>%
   mutate(
@@ -45,32 +45,33 @@ figure_data <- simulation_metrics %>%
     input_tokens = as.numeric(input_tokens),
     output_tokens = as.numeric(output_tokens),
     decision_correct = as.integer(decision_correct),
-    weighted_total_tokens =
-      input_tokens + output_token_weight * output_tokens,
+    weighted_total_tokens_million =
+      (input_tokens + output_token_weight * output_tokens) /
+        weighted_token_scale,
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ndiscussion context",
+        context_transparency_condition == "low" ~ "Low\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion context",
+        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ndiscussion context",
+        context_transparency_condition == "high" ~ "High\ntransparency",
       TRUE ~ NA_character_
     ),
     plot_condition = factor(
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ndiscussion context",
-        "Moderate\ndiscussion context",
-        "High\ndiscussion context"
+        "Low\ntransparency",
+        "Moderate\ntransparency",
+        "High\ntransparency"
       )
     )
   ) %>%
   filter(
     !is.na(plot_condition),
     !is.na(decision_correct),
-    !is.na(weighted_total_tokens)
+    !is.na(weighted_total_tokens_million)
   )
 
 # ------------------------------------------------------------
@@ -105,15 +106,15 @@ weighted_tokens_summary <- figure_data %>%
   group_by(plot_condition) %>%
   summarise(
     n = n(),
-    mean_value = mean(weighted_total_tokens),
-    standard_error = sd(weighted_total_tokens) / sqrt(n),
+    mean_value = mean(weighted_total_tokens_million),
+    standard_error = sd(weighted_total_tokens_million) / sqrt(n),
     .groups = "drop"
   ) %>%
   mutate(
     t_value = qt(0.975, df = n - 1),
     ci_lower = pmax(0, mean_value - t_value * standard_error),
     ci_upper = mean_value + t_value * standard_error,
-    value_label = comma(mean_value, accuracy = 1),
+    value_label = number(mean_value, accuracy = 0.001),
     figure_dimension = "Weighted tokens"
   )
 
@@ -200,9 +201,9 @@ condition_axis_labels <- setNames(
 
 condition_colours <- c(
   "Baseline" = "#B0B0B0",
-  "Low\ndiscussion context" = "#D8E5EE",
-  "Moderate\ndiscussion context" = "#7FA9C4",
-  "High\ndiscussion context" = "#315F7D"
+  "Low\ntransparency" = "#D8E5EE",
+  "Moderate\ntransparency" = "#7FA9C4",
+  "High\ntransparency" = "#315F7D"
 )
 
 create_panel <- function(
@@ -299,8 +300,8 @@ weighted_tokens_plot <- create_panel(
     figure_dimension == "Weighted tokens"
   ),
   panel_title = "Weighted tokens",
-  y_axis_title = "Mean weighted tokens per simulation",
-  y_axis_labels = label_comma(accuracy = 1)
+  y_axis_title = "Mean weighted tokens per simulation (millions)",
+  y_axis_labels = label_number(accuracy = 0.1)
 )
 
 combined_panels <- plot_grid(

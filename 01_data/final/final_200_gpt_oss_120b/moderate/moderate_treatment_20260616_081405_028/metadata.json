@@ -44,59 +44,11 @@
       "integrated_message_count": 3,
       "score": 0.6
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 6,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:c_100_percent_reliable",
-            "fact_reuse:b_pretentious,b_wrong_tone"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:a_leadership",
-            "fact_reuse:b_weak_numeric_memory",
-            "fact_reuse:c_egocentric"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "no_evidence_reuse:A"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:d_responsibility"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:c_education"
-          ],
-          "round": 2
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.833333,
-      "tool_turn_count": 5
-    },
     "dimensions": {
       "communication": 0.333333,
-      "cooperation": 0.6,
-      "coordination": 0.833333
+      "cooperation": 0.6
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -324,12 +276,11 @@
         "d_arrogant"
       ]
     },
-    "score": 0.588889
+    "score": 0.466667
   },
   "team_process_communication": 0.333333,
   "team_process_cooperation": 0.6,
-  "team_process_coordination": 0.833333,
-  "team_process_score": 0.588889,
+  "team_process_score": 0.466667,
   "timestamp": "20260617_124330",
   "total_messages": 22,
   "total_tokens": 187574,

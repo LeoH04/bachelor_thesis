@@ -40,11 +40,6 @@ def input_history_scope() -> str:
     return "current_round" if current_round_history_enabled() else "full_history"
 
 
-def smm_memory_scope() -> str:
-    """Return a stable metadata label for the treatment memory scope."""
-    return "full_meeting"
-
-
 def context_transparency_metadata() -> dict[str, object]:
     """Return stable metadata fields for the input-transparency manipulation."""
     return {

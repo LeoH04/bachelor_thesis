@@ -161,7 +161,7 @@ def write_agent_memory(agent_key: str, content: str) -> None:
 
 
 def archive_agent_memories() -> Path | None:
-    """Finalize run-local agent memory markdown files and calculate metrics."""
+    """Finalize run-local agent memory markdown files."""
     global _AGENT_MEMORIES_ARCHIVED
 
     destination = SHARED_MENTAL_MODELS_DIR
@@ -169,26 +169,12 @@ def archive_agent_memories() -> Path | None:
         return None
 
     if not explicit_smm_memory_enabled():
-        similarity = {
-            "reason": "explicit_smm_memory_disabled",
-            "pairwise": [],
-            "mean_pairwise_similarity": None,
-            "min_pairwise_similarity": None,
-            "max_pairwise_similarity": None,
-        }
         _AGENT_MEMORIES_ARCHIVED = True
         update_run_metadata(
             {
                 "shared_mental_models_archived": False,
                 "shared_mental_model_files": [],
-                "context_consistency": similarity,
-                "pairwise_memory_similarity": [],
-                "mean_pairwise_memory_similarity": None,
             }
-        )
-        log_event(
-            "context_consistency_not_applicable",
-            reason=similarity["reason"],
         )
         return None
 
@@ -206,10 +192,6 @@ def archive_agent_memories() -> Path | None:
             "shared_mental_models_archived": True,
             "shared_mental_model_files": memory_files,
         }
-    )
-    log_event(
-        "context_consistency_deferred",
-        reason="memory_similarity_calculated_post_run",
     )
     return destination
 

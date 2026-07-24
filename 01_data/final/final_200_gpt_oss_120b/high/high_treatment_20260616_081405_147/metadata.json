@@ -44,57 +44,11 @@
       "integrated_message_count": 0,
       "score": 0.0
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 6,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:b_handles_stress,b_nasty_remarks"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_communication_difficulty,c_egocentric,c_positive_crew_atmosphere,d_weak_leadership"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "no_evidence_reuse:A"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_calm_in_crisis"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "no_evidence_reuse:B",
-            "fact_reuse:d_loner,d_moody"
-          ],
-          "round": 2
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.833333,
-      "tool_turn_count": 6
-    },
     "dimensions": {
       "communication": 0.25,
-      "cooperation": 0.0,
-      "coordination": 0.833333
+      "cooperation": 0.0
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -236,12 +190,11 @@
         "d_weak_leadership"
       ]
     },
-    "score": 0.361111
+    "score": 0.125
   },
   "team_process_communication": 0.25,
   "team_process_cooperation": 0.0,
-  "team_process_coordination": 0.833333,
-  "team_process_score": 0.361111,
+  "team_process_score": 0.125,
   "timestamp": "20260623_025448",
   "total_messages": 20,
   "total_tokens": 258874,

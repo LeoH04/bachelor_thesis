@@ -8,7 +8,6 @@ rm(list = ls())
 
 library(tidyverse)
 library(scales)
-library(ggtext)
 
 options(scipen = 999)
 
@@ -26,6 +25,9 @@ data_path <- file.path(
 output_dir <- file.path(project_path, "03_report/graphs")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
+figure_width <- 3.35
+figure_height <- 3.55
+
 simulation_metrics <- read_csv(
   data_path,
   na = c("", "NA"),
@@ -37,6 +39,7 @@ simulation_metrics <- read_csv(
 # ------------------------------------------------------------
 
 output_token_weight <- 5
+weighted_token_scale <- 1000000
 
 weighted_tokens_data <- simulation_metrics %>%
   mutate(
@@ -50,17 +53,18 @@ weighted_tokens_data <- simulation_metrics %>%
     input_tokens = as.numeric(input_tokens),
     output_tokens = as.numeric(output_tokens),
     
-    weighted_total_tokens =
-      input_tokens + output_token_weight * output_tokens,
+    weighted_total_tokens_million =
+      (input_tokens + output_token_weight * output_tokens) /
+        weighted_token_scale,
     
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ndiscussion\ncontext",
+        context_transparency_condition == "low" ~ "Low\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion\ncontext",
+        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ndiscussion\ncontext",
+        context_transparency_condition == "high" ~ "High\ntransparency",
       TRUE ~ NA_character_
     ),
     
@@ -68,15 +72,15 @@ weighted_tokens_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ndiscussion\ncontext",
-        "Moderate\ndiscussion\ncontext",
-        "High\ndiscussion\ncontext"
+        "Low\ntransparency",
+        "Moderate\ntransparency",
+        "High\ntransparency"
       )
     )
   ) %>%
   filter(
     !is.na(plot_condition),
-    !is.na(weighted_total_tokens)
+    !is.na(weighted_total_tokens_million)
   )
 
 # ------------------------------------------------------------
@@ -87,8 +91,8 @@ weighted_tokens_summary <- weighted_tokens_data %>%
   group_by(plot_condition) %>%
   summarise(
     n = n(),
-    mean_weighted_tokens = mean(weighted_total_tokens),
-    standard_deviation = sd(weighted_total_tokens),
+    mean_weighted_tokens = mean(weighted_total_tokens_million),
+    standard_deviation = sd(weighted_total_tokens_million),
     standard_error = standard_deviation / sqrt(n),
     .groups = "drop"
   ) %>%
@@ -100,33 +104,42 @@ weighted_tokens_summary <- weighted_tokens_data %>%
     ),
     ci_upper =
       mean_weighted_tokens + t_value * standard_error,
-    weighted_token_label = comma(
+    weighted_token_label = number(
       mean_weighted_tokens,
-      accuracy = 1
+      accuracy = 0.001
     )
   )
 
 print(weighted_tokens_summary)
 
 # Creates x-axis labels dynamically, so n is correct even if group sizes change
-# The invisible second line under Baseline aligns all n labels vertically
+# Invisible lines under Baseline align all n labels vertically
 condition_axis_labels <- setNames(
   vapply(
     as.character(weighted_tokens_summary$plot_condition),
     function(condition) {
       
       condition_label <- gsub("\n", "<br>", condition)
+      condition_label <- sub(
+        "transparency",
+        "trans-<br>parency",
+        condition_label,
+        fixed = TRUE
+      )
       
-      # Give Baseline an invisible second line to match treatment labels
+      # Give Baseline invisible lines to match treatment labels
       if (!grepl("<br>", condition_label)) {
-        condition_label <- paste0(condition_label, "<br>&nbsp;")
+        condition_label <- paste0(
+          condition_label,
+          "<br>&nbsp;<br>&nbsp;"
+        )
       }
       
       paste0(
         "<b>",
         condition_label,
         "</b><br><br>",
-        "<i><span style='font-size:9pt; color:#555555;'>",
+        "<i><span style='font-size:7pt; color:#555555;'>",
         "n = ",
         weighted_tokens_summary$n[
           as.character(weighted_tokens_summary$plot_condition) == condition
@@ -149,7 +162,7 @@ weighted_tokens_summary <- weighted_tokens_summary %>%
   mutate(
     label_y = ci_upper + y_upper_limit * if_else(
       plot_condition == "Baseline",
-      0.20,
+      0.23,
       0.035
     )
   )
@@ -163,7 +176,7 @@ weighted_tokens_plot <- ggplot(
   )
 ) +
   geom_col(
-    width = 0.56,
+    width = 0.60,
     colour = "black",
     linewidth = 0.35
   ) +
@@ -183,7 +196,7 @@ weighted_tokens_plot <- ggplot(
   ) +
   geom_point(
     shape = 21,
-    size = 4.6,
+    size = 3.5,
     colour = "black",
     stroke = 0.65
   ) +
@@ -194,14 +207,14 @@ weighted_tokens_plot <- ggplot(
     ),
     fontface = "bold",
     colour = "black",
-    size = 3.9
+    size = 3.1
   ) +
   scale_fill_manual(
     values = c(
       "Baseline" = "#B0B0B0",
-      "Low\ndiscussion\ncontext" = "#D8E5EE",
-      "Moderate\ndiscussion\ncontext" = "#7FA9C4",
-      "High\ndiscussion\ncontext" = "#315F7D"
+      "Low\ntransparency" = "#D8E5EE",
+      "Moderate\ntransparency" = "#7FA9C4",
+      "High\ntransparency" = "#315F7D"
     ),
     guide = "none"
   ) +
@@ -210,7 +223,7 @@ weighted_tokens_plot <- ggplot(
   ) +
   scale_y_continuous(
     limits = c(0, y_upper_limit),
-    labels = comma_format(accuracy = 1),
+    labels = label_number(accuracy = 0.1),
     expand = expansion(mult = c(0, 0))
   ) +
   coord_cartesian(
@@ -218,20 +231,20 @@ weighted_tokens_plot <- ggplot(
   ) +
   labs(
     x = "Experimental condition",
-    y = "Mean weighted tokens per simulation"
+    y = "Mean weighted tokens per\nsimulation (millions)"
   ) +
-  theme_classic(base_size = 12) +
+  theme_classic(base_size = 10) +
   theme(
     axis.title = element_text(face = "bold"),
-    axis.title.y = element_text(margin = margin(r = 12)),
-    axis.title.x = element_text(margin = margin(t = 12)),
+    axis.title.y = element_text(margin = margin(r = 6)),
+    axis.title.x = element_text(margin = margin(t = 7)),
     axis.text.x = ggtext::element_markdown(
-      size = 10.5,
-      margin = margin(t = 8),
-      lineheight = 1.12
+      size = 7.2,
+      margin = margin(t = 5),
+      lineheight = 1.00
     ),
     axis.text.y = element_text(colour = "black"),
-    plot.margin = margin(t = 25, r = 15, b = 10, l = 15)
+    plot.margin = margin(t = 12, r = 5, b = 3, l = 5)
   )
 
 print(weighted_tokens_plot)
@@ -246,8 +259,8 @@ ggsave(
     "thesis_figure_weighted_tokens_by_condition.pdf"
   ),
   plot = weighted_tokens_plot,
-  width = 5.5,
-  height = 4.8,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )
 
@@ -257,7 +270,7 @@ ggsave(
     "thesis_figure_weighted_tokens_by_condition.svg"
   ),
   plot = weighted_tokens_plot,
-  width = 5.5,
-  height = 4.8,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )

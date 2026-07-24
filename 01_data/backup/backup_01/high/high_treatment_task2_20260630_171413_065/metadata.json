@@ -1,0 +1,160 @@
+{
+  "agent_tool_calls": 5,
+  "agent_tool_messages": 10,
+  "agent_turns": 6,
+  "completed_at": "2026-07-04T00:49:15+0200",
+  "context_transparency_condition": "high",
+  "correct_candidate": "Candidate C",
+  "decision_correct": 0,
+  "decision_method": "consensus",
+  "final_candidate": "Candidate B",
+  "input_tokens": 165265,
+  "memory_updates": 18,
+  "output_tokens": 79108,
+  "paths": {
+    "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/chat.md",
+    "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065",
+    "session_log": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/session.log",
+    "shared_mental_models": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/shared_mental_models"
+  },
+  "rounds": 2,
+  "run_id": "high_treatment_task2_20260630_171413_065",
+  "runtime_seconds": 371.8845,
+  "shared_mental_model_files": [
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/shared_mental_models/agent_1.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/shared_mental_models/agent_2.md",
+    "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_task2_20260630_171413_065/shared_mental_models/agent_3.md"
+  ],
+  "shared_mental_models_archived": true,
+  "smm_mode": "treatment",
+  "speaker_order_seed": "high_treatment_065",
+  "status": "completed",
+  "task_variant": 2,
+  "team_process": {
+    "coding": {
+      "agent_message_count": 6,
+      "tool_exchange_count": 5,
+      "transcript_message_count": 11,
+      "transcript_source": "chat.md",
+      "uses_efficiency_variables": false,
+      "uses_outcome_variables": false
+    },
+    "collaborative_integration": {
+      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "eligible_message_count": 5,
+      "integrated_message_count": 2,
+      "score": 0.4
+    },
+    "dimensions": {
+      "communication": 0.125,
+      "cooperation": 0.4
+    },
+    "method": "private_uptake_integration_v3",
+    "private_information_uptake": {
+      "definition": "share of all initially private candidate facts subsequently used by a different agent",
+      "disclosed_fact_ids": [
+        "a_takes_criticism_poorly",
+        "b_grumpy",
+        "b_wrong_tone",
+        "c_calm_in_crisis",
+        "c_excellent_attention",
+        "d_moody"
+      ],
+      "matched_disclosed_facts": 6,
+      "matched_uptake_facts": 3,
+      "mentions_by_fact": {
+        "a_not_open_to_new_ideas": [],
+        "a_show_off": [],
+        "a_takes_criticism_poorly": [
+          {
+            "agent": "agent_2",
+            "sequence": 2
+          }
+        ],
+        "a_unfriendly": [],
+        "a_unhealthy_eating": [],
+        "a_unorganized": [],
+        "b_grumpy": [
+          {
+            "agent": "agent_2",
+            "sequence": 11
+          }
+        ],
+        "b_nasty_remarks": [],
+        "b_pretentious": [],
+        "b_uncooperative": [],
+        "b_weak_numeric_memory": [],
+        "b_wrong_tone": [
+          {
+            "agent": "agent_2",
+            "sequence": 11
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 15
+          }
+        ],
+        "c_100_percent_reliable": [],
+        "c_calm_in_crisis": [
+          {
+            "agent": "agent_1",
+            "sequence": 5
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          }
+        ],
+        "c_concern_for_others": [],
+        "c_excellent_attention": [
+          {
+            "agent": "agent_3",
+            "sequence": 6
+          }
+        ],
+        "c_positive_crew_atmosphere": [],
+        "c_understands_complicated_technology": [],
+        "d_arrogant": [],
+        "d_hot_temper": [],
+        "d_know_it_all": [],
+        "d_loner": [],
+        "d_moody": [
+          {
+            "agent": "agent_2",
+            "sequence": 9
+          },
+          {
+            "agent": "agent_3",
+            "sequence": 12
+          },
+          {
+            "agent": "agent_1",
+            "sequence": 15
+          }
+        ],
+        "d_weak_leadership": []
+      },
+      "score": 0.125,
+      "total_private_facts": 24,
+      "uptake_fact_ids": [
+        "b_wrong_tone",
+        "c_calm_in_crisis",
+        "d_moody"
+      ]
+    },
+    "score": 0.2625
+  },
+  "team_process_communication": 0.125,
+  "team_process_cooperation": 0.4,
+  "team_process_score": 0.2625,
+  "timestamp": "20260704_004303",
+  "total_messages": 16,
+  "total_tokens": 244373,
+  "vote_count": {
+    "Candidate B": 3
+  }
+}

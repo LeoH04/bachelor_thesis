@@ -3,46 +3,6 @@
   "agent_tool_messages": 6,
   "agent_turns": 6,
   "completed_at": "2026-06-12T23:56:18+0200",
-  "context_consistency": {
-    "embedding_input_characters": {
-      "agent_1": 7598,
-      "agent_2": 6942,
-      "agent_3": 7930
-    },
-    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
-    "embedding_raw_characters": {
-      "agent_1": 7730,
-      "agent_2": 7074,
-      "agent_3": 7930
-    },
-    "embedding_removed_adjacent_duplicate_lines": {
-      "agent_1": 5,
-      "agent_2": 5,
-      "agent_3": 0
-    },
-    "embedding_text_normalization": "collapse_adjacent_duplicate_lines",
-    "max_pairwise_similarity": 0.959285,
-    "mean_pairwise_similarity": 0.949405,
-    "method": "embedding_cosine",
-    "min_pairwise_similarity": 0.93952,
-    "pairwise": [
-      {
-        "agent_a": "agent_1",
-        "agent_b": "agent_2",
-        "similarity": 0.93952
-      },
-      {
-        "agent_a": "agent_1",
-        "agent_b": "agent_3",
-        "similarity": 0.959285
-      },
-      {
-        "agent_a": "agent_2",
-        "agent_b": "agent_3",
-        "similarity": 0.949411
-      }
-    ]
-  },
   "context_transparency_condition": "moderate",
   "correct_candidate": "Candidate C",
   "decision_correct": 1,
@@ -50,27 +10,8 @@
   "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
   "final_candidate": "Candidate C",
   "input_tokens": 99640,
-  "mean_pairwise_memory_similarity": 0.949405,
-  "memory_similarity_method": "embedding_cosine",
   "memory_updates": 18,
   "output_tokens": 58638,
-  "pairwise_memory_similarity": [
-    {
-      "agent_a": "agent_1",
-      "agent_b": "agent_2",
-      "similarity": 0.93952
-    },
-    {
-      "agent_a": "agent_1",
-      "agent_b": "agent_3",
-      "similarity": 0.959285
-    },
-    {
-      "agent_a": "agent_2",
-      "agent_b": "agent_3",
-      "similarity": 0.949411
-    }
-  ],
   "paths": {
     "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260612_090103_009/chat.md",
     "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260612_090103_009",
@@ -86,11 +27,7 @@
     "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_treatment_20260612_090103_009/shared_mental_models/agent_3.md"
   ],
   "shared_mental_models_archived": true,
-  "smm_evidence_share": 0.888889,
   "smm_mode": "treatment",
-  "smm_quality": 0.843916,
-  "smm_quality_method": "c_decisive_evidence_coverage_x_memory_similarity",
-  "smm_similarity": 0.949405,
   "speaker_order_seed": "moderate_treatment_009",
   "status": "completed",
   "team_process": {
@@ -108,35 +45,11 @@
       "integrated_message_count": 3,
       "score": 0.6
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 6,
-      "completed_turn_count": 2,
-      "completed_turns": [
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "explicit_attribution:agent_3"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:b_pretentious,b_uncooperative"
-          ],
-          "round": 1
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.333333,
-      "tool_turn_count": 2
-    },
     "dimensions": {
       "communication": 0.25,
-      "cooperation": 0.6,
-      "coordination": 0.333333
+      "cooperation": 0.6
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -300,14 +213,12 @@
         "c_understands_complicated_technology"
       ]
     },
-    "score": 0.394444
+    "score": 0.425
   },
   "team_process_communication": 0.25,
   "team_process_cooperation": 0.6,
-  "team_process_coordination": 0.333333,
-  "team_process_score": 0.394444,
+  "team_process_score": 0.425,
   "timestamp": "20260612_235105",
-  "tokens_per_correct_decision": 310437.49,
   "total_messages": 12,
   "total_tokens": 158278,
   "vote_count": {

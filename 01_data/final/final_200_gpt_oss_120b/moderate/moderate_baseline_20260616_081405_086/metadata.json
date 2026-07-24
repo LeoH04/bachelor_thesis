@@ -3,23 +3,14 @@
   "agent_tool_messages": 16,
   "agent_turns": 15,
   "completed_at": "2026-06-19T19:55:55+0200",
-  "context_consistency": {
-    "max_pairwise_similarity": null,
-    "mean_pairwise_similarity": null,
-    "min_pairwise_similarity": null,
-    "pairwise": [],
-    "reason": "explicit_smm_memory_disabled"
-  },
   "context_transparency_condition": "moderate",
   "correct_candidate": "Candidate C",
   "decision_correct": 1,
   "decision_method": "max_round_majority_vote",
   "final_candidate": "Candidate C",
   "input_tokens": 111156,
-  "mean_pairwise_memory_similarity": null,
   "memory_updates": 0,
   "output_tokens": 18712,
-  "pairwise_memory_similarity": [],
   "paths": {
     "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_086/chat.md",
     "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260616_081405_086",
@@ -49,58 +40,11 @@
       "integrated_message_count": 3,
       "score": 0.214286
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 15,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "explicit_attribution:agent_3"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:c_calm_in_crisis,c_fast_decisions"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_100_percent_reliable"
-          ],
-          "round": 3
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:b_uncooperative",
-            "fact_reuse:c_communication_difficulty,c_egocentric"
-          ],
-          "round": 3
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "no_evidence_reuse:D",
-            "no_evidence_reuse:A"
-          ],
-          "round": 4
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.333333,
-      "tool_turn_count": 5
-    },
     "dimensions": {
       "communication": 0.291667,
-      "cooperation": 0.214286,
-      "coordination": 0.333333
+      "cooperation": 0.214286
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -421,12 +365,11 @@
         "d_hot_temper"
       ]
     },
-    "score": 0.279762
+    "score": 0.252976
   },
   "team_process_communication": 0.291667,
   "team_process_cooperation": 0.214286,
-  "team_process_coordination": 0.333333,
-  "team_process_score": 0.279762,
+  "team_process_score": 0.252976,
   "timestamp": "20260619_195335",
   "total_messages": 31,
   "total_tokens": 129868,

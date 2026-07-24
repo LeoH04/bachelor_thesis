@@ -34,22 +34,13 @@ BASE_COLUMNS = [
     "input_tokens",
     "output_tokens",
     "total_tokens",
-    "tokens_per_correct_decision",
     "runtime_seconds",
     "final_candidate",
     "decision_method",
     "correct_candidate",
     "decision_correct",
-    "mean_pairwise_memory_similarity",
-    "min_pairwise_memory_similarity",
-    "max_pairwise_memory_similarity",
-    "smm_similarity",
-    "smm_evidence_share",
-    "smm_quality",
-    "smm_quality_method",
     "team_process_score",
     "team_process_communication",
-    "team_process_coordination",
     "team_process_cooperation",
     "metadata_file",
 ]
@@ -73,9 +64,8 @@ def read_metadata(path: Path) -> dict:
         raise ValueError(f"Invalid JSON in {path}: {exc}") from exc
 
 
-def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[str]]:
+def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str]]:
     """Convert nested run metadata into one flat CSV row."""
-    context = metadata.get("context_consistency") or {}
     row = {
         "run_id": metadata.get("run_id"),
         "task_file": metadata.get("task_file"),
@@ -98,28 +88,13 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         "input_tokens": metadata.get("input_tokens"),
         "output_tokens": metadata.get("output_tokens"),
         "total_tokens": metadata.get("total_tokens"),
-        "tokens_per_correct_decision": metadata.get("tokens_per_correct_decision"),
         "runtime_seconds": metadata.get("runtime_seconds"),
         "final_candidate": metadata.get("final_candidate"),
         "decision_method": metadata.get("decision_method"),
         "correct_candidate": metadata.get("correct_candidate"),
         "decision_correct": metadata.get("decision_correct"),
-        "mean_pairwise_memory_similarity": metadata.get(
-            "mean_pairwise_memory_similarity",
-            context.get("mean_pairwise_similarity"),
-        ),
-        "min_pairwise_memory_similarity": context.get("min_pairwise_similarity"),
-        "max_pairwise_memory_similarity": context.get("max_pairwise_similarity"),
-        "smm_similarity": metadata.get(
-            "smm_similarity",
-            metadata.get("mean_pairwise_memory_similarity"),
-        ),
-        "smm_evidence_share": metadata.get("smm_evidence_share"),
-        "smm_quality": metadata.get("smm_quality"),
-        "smm_quality_method": metadata.get("smm_quality_method"),
         "team_process_score": metadata.get("team_process_score"),
         "team_process_communication": metadata.get("team_process_communication"),
-        "team_process_coordination": metadata.get("team_process_coordination"),
         "team_process_cooperation": metadata.get("team_process_cooperation"),
         "metadata_file": str(path.resolve().relative_to(REPO_ROOT)),
     }
@@ -130,41 +105,28 @@ def flatten_metadata(path: Path, metadata: dict) -> tuple[dict, set[str], set[st
         row[column] = count
         vote_columns.add(column)
 
-    similarity_columns = set()
-    pairwise = metadata.get("pairwise_memory_similarity") or context.get("pairwise") or []
-    for item in pairwise:
-        agent_a = slug(item.get("agent_a"))
-        agent_b = slug(item.get("agent_b"))
-        column = f"similarity_{agent_a}_{agent_b}"
-        row[column] = item.get("similarity")
-        similarity_columns.add(column)
-
-    return row, vote_columns, similarity_columns
+    return row, vote_columns
 
 
 def build_rows(input_root: Path, include_incomplete: bool) -> tuple[list[dict], list[str]]:
     """Collect metadata rows and derive the final CSV column order."""
     rows = []
     vote_columns = set()
-    similarity_columns = set()
 
     for path in sorted(input_root.glob("**/metadata.json")):
         metadata = read_metadata(path)
         if not include_incomplete and metadata.get("status") != "completed":
             continue
 
-        row, row_vote_columns, row_similarity_columns = flatten_metadata(path, metadata)
+        row, row_vote_columns = flatten_metadata(path, metadata)
         rows.append(row)
         vote_columns.update(row_vote_columns)
-        similarity_columns.update(row_similarity_columns)
 
     for row in rows:
         for column in vote_columns:
             row.setdefault(column, 0)
-        for column in similarity_columns:
-            row.setdefault(column, "")
 
-    columns = BASE_COLUMNS + sorted(vote_columns) + sorted(similarity_columns)
+    columns = BASE_COLUMNS + sorted(vote_columns)
     rows.sort(
         key=lambda row: (
             CONDITION_ORDER.get(str(row.get("context_transparency_condition")), 99),

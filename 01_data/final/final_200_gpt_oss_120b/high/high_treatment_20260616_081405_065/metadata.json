@@ -44,56 +44,11 @@
       "integrated_message_count": 1,
       "score": 0.2
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 6,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:a_anticipates_danger"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "no_evidence_reuse:A"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "no_evidence_reuse:B"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "no_evidence_reuse:A"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:d_weak_leadership"
-          ],
-          "round": 2
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.833333,
-      "tool_turn_count": 6
-    },
     "dimensions": {
       "communication": 0.083333,
-      "cooperation": 0.2,
-      "coordination": 0.833333
+      "cooperation": 0.2
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -195,12 +150,11 @@
         "d_weak_leadership"
       ]
     },
-    "score": 0.372222
+    "score": 0.141667
   },
   "team_process_communication": 0.083333,
   "team_process_cooperation": 0.2,
-  "team_process_coordination": 0.833333,
-  "team_process_score": 0.372222,
+  "team_process_score": 0.141667,
   "timestamp": "20260622_155956",
   "total_messages": 20,
   "total_tokens": 260788,

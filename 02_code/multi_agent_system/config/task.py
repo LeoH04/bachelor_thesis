@@ -9,7 +9,6 @@ DEFAULT_TASK_FILE = "hidden_profile_task.json"
 CONFIG_DIR = Path(__file__).parent.resolve()
 TASK_FILE = os.getenv("SIM_TASK_FILE", DEFAULT_TASK_FILE).strip() or DEFAULT_TASK_FILE
 TASK_PATH = (CONFIG_DIR / TASK_FILE).resolve()
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_task() -> dict:

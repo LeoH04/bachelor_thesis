@@ -19,11 +19,6 @@ Agents should not dump all facts at once, but the panel should gradually cover
 all candidates before final convergence.
 """
 
-from .context_transparency import (
-    context_transparency_condition,
-    input_history_scope,
-    thought_history_enabled,
-)
 from .history import _get_state, _round_number, build_public_discussion_history
 from .memory import read_agent_memory
 from .response_text import (

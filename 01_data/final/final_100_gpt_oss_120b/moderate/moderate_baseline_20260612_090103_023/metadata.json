@@ -3,23 +3,14 @@
   "agent_tool_messages": 4,
   "agent_turns": 9,
   "completed_at": "2026-06-14T00:40:52+0200",
-  "context_consistency": {
-    "max_pairwise_similarity": null,
-    "mean_pairwise_similarity": null,
-    "min_pairwise_similarity": null,
-    "pairwise": [],
-    "reason": "explicit_smm_memory_disabled"
-  },
   "context_transparency_condition": "moderate",
   "correct_candidate": "Candidate C",
   "decision_correct": 0,
   "decision_method": "consensus",
   "final_candidate": "Candidate B",
   "input_tokens": 36205,
-  "mean_pairwise_memory_similarity": null,
   "memory_updates": 0,
   "output_tokens": 8651,
-  "pairwise_memory_similarity": [],
   "paths": {
     "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260612_090103_023/chat.md",
     "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/moderate/moderate_baseline_20260612_090103_023",
@@ -49,35 +40,11 @@
       "integrated_message_count": 4,
       "score": 0.5
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 9,
-      "completed_turn_count": 2,
-      "completed_turns": [
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:b_grumpy,b_wrong_tone"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:d_arrogant,d_weak_leadership"
-          ],
-          "round": 2
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.222222,
-      "tool_turn_count": 2
-    },
     "dimensions": {
       "communication": 0.25,
-      "cooperation": 0.5,
-      "coordination": 0.222222
+      "cooperation": 0.5
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -281,14 +248,12 @@
         "d_weak_leadership"
       ]
     },
-    "score": 0.324074
+    "score": 0.375
   },
   "team_process_communication": 0.25,
   "team_process_cooperation": 0.5,
-  "team_process_coordination": 0.222222,
-  "team_process_score": 0.324074,
+  "team_process_score": 0.375,
   "timestamp": "20260614_003940",
-  "tokens_per_correct_decision": 76224.6,
   "total_messages": 13,
   "total_tokens": 44856,
   "vote_count": {

@@ -8,7 +8,7 @@ options(width = 220, scipen = 999)
 # 1. Load data
 # ------------------------------------------------------------
 
-input_file <- "01_data/processed/simulation_metrics_20260530_091120.csv"
+input_file <- "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"
 
 if (!file.exists(input_file)) {
   stop(paste("Metrics file not found:", input_file))
@@ -52,8 +52,7 @@ metrics_to_check <- c(
   "rounds",
   "total_messages",
   "total_tokens",
-  "runtime_seconds",
-  "mean_pairwise_memory_similarity"
+  "runtime_seconds"
 )
 
 metrics_to_check <- intersect(metrics_to_check, names(simulation_metrics))

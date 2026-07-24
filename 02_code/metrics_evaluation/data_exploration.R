@@ -18,19 +18,6 @@ source(paste0(path, "/02_code/metrics_evaluation/price_calculator.R"))
 # 1. LOAD DATA
 # ------------------------------------------------------------
 
-# simulation_metric_files <- list.files(
-#   "01_data/processed",
-#   pattern = "^simulation_metrics_.*\\.csv$",
-#   full.names = TRUE
-# )
-# latest_simulation_metric_file <- sort(simulation_metric_files, decreasing = TRUE)[1]
-#
-# simulation_metrics <- read.csv(
-#   latest_simulation_metric_file,
-#   na.strings = c("", "NA"),
-#   stringsAsFactors = FALSE
-# )
-
 simulation_metrics <- read.csv(
   "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv",
   na.strings = c("", "NA"),
@@ -92,18 +79,9 @@ simulation_metrics[integer_columns] <- lapply(
 
 numeric_columns <- c(
   "runtime_seconds",
-  "tokens_per_correct_decision",
-  "mean_pairwise_memory_similarity",
-  "min_pairwise_memory_similarity",
-  "max_pairwise_memory_similarity",
-  "smm_similarity",
-  "smm_evidence_share",
-  "smm_quality",
   "team_process_score",
   "team_process_communication",
-  "team_process_coordination",
-  "team_process_cooperation",
-  grep("^similarity_", names(simulation_metrics), value = TRUE)
+  "team_process_cooperation"
 )
 
 numeric_columns <- intersect(numeric_columns, names(simulation_metrics))
@@ -275,65 +253,6 @@ save_four_column_plot <- function(
 }
 
 # ------------------------------------------------------------
-# Helper function for treatment-only plots
-# ------------------------------------------------------------
-
-save_single_mode_plot <- function(
-    plot_data,
-    y_var,
-    y_label,
-    title,
-    filename,
-    digits = 3,
-    y_limits = NULL
-) {
-  
-  if (is.null(y_limits)) {
-    y_max <- max(plot_data[[y_var]], na.rm = TRUE)
-    
-    if (!is.finite(y_max) || y_max == 0) {
-      y_max <- 1
-    }
-    
-    y_limits <- c(0, y_max * 1.15)
-  }
-  
-  single_mode_plot <- ggplot(
-    plot_data,
-    aes(x = context_transparency_condition, y = .data[[y_var]])
-  ) +
-    geom_col(
-      width = 0.65,
-      fill = "grey35"
-    ) +
-    geom_text(
-      aes(label = round(.data[[y_var]], digits)),
-      vjust = -0.4,
-      size = 3.6
-    ) +
-    scale_y_continuous(
-      limits = y_limits,
-      expand = expansion(mult = c(0, 0))
-    ) +
-    labs(
-      x = "Condition",
-      y = y_label,
-      title = title,
-      subtitle = "Treatment condition only"
-    ) +
-    plot_theme
-  
-  if (interactive()) print(single_mode_plot)
-  
-  ggsave(
-    filename = paste0(path, "/03_report/graphs/", filename),
-    plot = single_mode_plot,
-    width = 8,
-    height = 5
-  )
-}
-
-# ------------------------------------------------------------
 # 3a. Correct candidate choices
 # Baseline | Low | Moderate | High
 # ------------------------------------------------------------
@@ -391,77 +310,6 @@ save_four_column_plot(
 )
 
 # ------------------------------------------------------------
-# 4. Treatment-only SMM metrics
-# These cannot be meaningfully compared to baseline unless baseline has values.
-# ------------------------------------------------------------
-
-treatment_metrics <- simulation_metrics %>%
-  filter(smm_mode == "treatment")
-
-if (nrow(treatment_metrics) > 0) {
-  
-  semantic_similarity_overview <- treatment_metrics %>%
-    group_by(context_transparency_condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_semantic_similarity = mean(mean_pairwise_memory_similarity, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(semantic_similarity_overview)
-  
-  save_single_mode_plot(
-    plot_data = semantic_similarity_overview,
-    y_var = "mean_semantic_similarity",
-    y_label = "Mean semantic similarity",
-    title = "Mean semantic similarity by condition",
-    filename = "semantic_similarity_overview_plot.pdf",
-    digits = 3,
-    y_limits = c(0, 1)
-  )
-
-  smm_evidence_share_overview <- treatment_metrics %>%
-    group_by(context_transparency_condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_smm_evidence_share = mean(smm_evidence_share, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(smm_evidence_share_overview)
-  
-  save_single_mode_plot(
-    plot_data = smm_evidence_share_overview,
-    y_var = "mean_smm_evidence_share",
-    y_label = "Mean Candidate C evidence share",
-    title = "Mean Candidate C evidence share by condition",
-    filename = "smm_evidence_share_overview_plot.pdf",
-    digits = 3,
-    y_limits = c(0, 1)
-  )
-  
-  smm_quality_overview <- treatment_metrics %>%
-    group_by(context_transparency_condition) %>%
-    summarise(
-      total_runs = n(),
-      mean_smm_quality = mean(smm_quality, na.rm = TRUE),
-      .groups = "drop"
-    )
-  
-  print(smm_quality_overview)
-  
-  save_single_mode_plot(
-    plot_data = smm_quality_overview,
-    y_var = "mean_smm_quality",
-    y_label = "Mean SMM quality",
-    title = "Mean SMM quality by condition",
-    filename = "smm_quality_overview_plot.pdf",
-    digits = 3,
-    y_limits = c(0, 1)
-  )
-}
-
-# ------------------------------------------------------------
 # 4a. Team process
 # Baseline | Low | Moderate | High
 # ------------------------------------------------------------
@@ -496,7 +344,6 @@ team_process_dimensions_overview <- simulation_metrics %>%
   summarise(
     total_runs = n(),
     mean_team_process_communication = mean(team_process_communication, na.rm = TRUE),
-    mean_team_process_coordination = mean(team_process_coordination, na.rm = TRUE),
     mean_team_process_cooperation = mean(team_process_cooperation, na.rm = TRUE),
     .groups = "drop"
   )
@@ -514,22 +361,7 @@ save_four_column_plot(
 )
 
 # ------------------------------------------------------------
-# 4c. Team process coordination
-# Baseline | Low | Moderate | High
-# ------------------------------------------------------------
-
-save_four_column_plot(
-  plot_data = team_process_dimensions_overview,
-  y_var = "mean_team_process_coordination",
-  y_label = "Mean coordination score",
-  title = "Mean team process coordination by condition",
-  filename = "team_process_coordination_overview_plot.pdf",
-  digits = 3,
-  y_limits = c(0, 1)
-)
-
-# ------------------------------------------------------------
-# 4d. Team process cooperation: response integration
+# 4c. Team process cooperation: response integration
 # Baseline | Low | Moderate | High
 # ------------------------------------------------------------
 
@@ -709,26 +541,6 @@ save_four_column_plot(
   y_label = "Mean weighted tokens",
   title = "Mean weighted tokens by condition",
   filename = "weighted_tokens_overview_plot.pdf",
-  digits = 0
-)
-
-# ------------------------------------------------------------
-# 8. Efficiency
-# Baseline | Low | Moderate | High
-# ------------------------------------------------------------
-
-efficiency_overview <- simulation_metrics %>%
-  filter(!is.na(tokens_per_correct_decision)) %>%
-  distinct(plot_condition, tokens_per_correct_decision)
-
-print(efficiency_overview)
-
-save_four_column_plot(
-  plot_data = efficiency_overview,
-  y_var = "tokens_per_correct_decision",
-  y_label = "Tokens per correct decision",
-  title = "Tokens per correct decision by condition",
-  filename = "efficiency_overview_plot.pdf",
   digits = 0
 )
 

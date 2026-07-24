@@ -23,10 +23,8 @@ def _swap_ac_candidate_labels(facts: list[dict[str, Any]]) -> list[dict[str, Any
     return swapped
 
 
-base.TEAM_PROCESS_METHOD = "rotated_ac_private_uptake_completed_coordination_integration_v2"
+base.TEAM_PROCESS_METHOD = "rotated_ac_private_uptake_integration_v3"
 base.PRIVATE_FACTS = _swap_ac_candidate_labels(base.PRIVATE_FACTS)
-base.PUBLIC_FACTS = _swap_ac_candidate_labels(base.PUBLIC_FACTS)
-base.ALL_CANDIDATE_FACTS = base.PRIVATE_FACTS + base.PUBLIC_FACTS
 
 
 def main() -> int:

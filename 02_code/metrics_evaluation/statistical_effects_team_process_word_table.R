@@ -25,7 +25,6 @@ rm(list = ls())
 #   "officer"
 # ))
 
-library(lmtest)
 library(sandwich)
 library(modelsummary)
 library(flextable)
@@ -282,13 +281,13 @@ h2b_h3b <- lm(
   data = treatment_data
 )
 
-h4a_h5a <- lm(
+h4a_h4b <- lm(
   Efficiency ~ team_process_communication + team_process_cooperation +
     baseline + low + high,
   data = d
 )
 
-h4b_h5b <- glm(
+h5a_h5b <- glm(
   Effectiveness ~ team_process_communication + team_process_cooperation +
     baseline + low + high,
   data = d,
@@ -300,8 +299,8 @@ models <- list(
   "H1b: Cooperation" = h1b,
   "H2a/H3a: Communication" = h2a_h3a,
   "H2b/H3b: Cooperation" = h2b_h3b,
-  "H4a/H5a: Efficiency" = h4a_h5a,
-  "H4b/H5b: Effectiveness" = h4b_h5b
+  "H4a/H4b: Efficiency" = h4a_h4b,
+  "H5a/H5b: Effectiveness" = h5a_h5b
 )
 
 
@@ -314,8 +313,8 @@ robust_vcov <- list(
   vcovHC(h1b, type = "HC3"),
   vcovHC(h2a_h3a, type = "HC3"),
   vcovHC(h2b_h3b, type = "HC3"),
-  vcovHC(h4a_h5a, type = "HC3"),
-  vcovHC(h4b_h5b, type = "HC3")
+  vcovHC(h4a_h4b, type = "HC3"),
+  vcovHC(h5a_h5b, type = "HC3")
 )
 
 names(robust_vcov) <- names(models)
@@ -335,21 +334,21 @@ coefficient_map <- c(
   "team_process_cooperation" = "Cooperation"
 )
 
-goodness_of_fit_map <- data.frame(
-  raw = c(
-    "nobs",
-    "r.squared",
-    "adj.r.squared"
-  ),
-  clean = c(
-    "Observations",
-    "R²",
-    "Adjusted\u00A0R²"
-  ),
-  fmt = c(
-    0,
-    3,
-    3
+format_r_squared <- function(x) {
+  sub(
+    pattern = "^(-?)0\\.",
+    replacement = "\\1.",
+    x = sprintf("%.3f", x)
+  )
+}
+
+goodness_of_fit_map <- list(
+  list(raw = "nobs", clean = "Observations", fmt = 0),
+  list(raw = "r.squared", clean = "R²", fmt = format_r_squared),
+  list(
+    raw = "adj.r.squared",
+    clean = "Adjusted\u00A0R²",
+    fmt = format_r_squared
   )
 )
 
@@ -376,6 +375,19 @@ regression_table <- modelsummary(
   output = "flextable"
 )
 
+r_squared_rows <- which(
+  regression_table$body$dataset[[1]] %in%
+    c("R²", "Adjusted\u00A0R²")
+)
+
+regression_table <- compose(
+  regression_table,
+  i = r_squared_rows,
+  j = "H5a/H5b: Effectiveness",
+  value = as_paragraph("-"),
+  part = "body"
+)
+
 
 # Replace the modelsummary header with the four-row structure used in the
 # report table. Fixed labels and column widths below keep every header on one
@@ -398,8 +410,8 @@ header_map <- data.frame(
     "H1b",
     "H2a/H3a",
     "H2b/H3b",
-    "H4a/H5a",
-    "H4b/H5b"
+    "H4a/H4b",
+    "H5a/H5b"
   ),
   estimator = c(
     "Estimator",
@@ -441,7 +453,7 @@ regression_table <- add_footer_lines(
     "+\u00A0p\u00A0<\u00A0.10,\u00A0",
     "*\u00A0p\u00A0<\u00A0.05,\u00A0",
     "**\u00A0p\u00A0<\u00A0.01,\u00A0",
-    "***\u00A0p\u00A0<\u00A0.001"
+    "***\u00A0p\u00A0<\u00A0.001."
   )
 )
 

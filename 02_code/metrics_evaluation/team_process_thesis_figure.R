@@ -1,6 +1,6 @@
 # ============================================================
 # Figure: Communication and cooperation by experimental condition
-# Baseline | Low discussion context | Moderate discussion context | High discussion context
+# Baseline | Low transparency | Moderate transparency | High transparency
 # Bars + trend line + 95% confidence intervals
 # ============================================================
 
@@ -8,7 +8,6 @@ rm(list = ls())
 
 library(tidyverse)
 library(scales)
-library(ggtext)
 
 options(scipen = 999)
 
@@ -25,6 +24,9 @@ data_path <- file.path(
 
 output_dir <- file.path(project_path, "03_report/graphs")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+figure_width <- 3.35
+figure_height <- 3.55
 
 simulation_metrics <- read_csv(
   data_path,
@@ -48,11 +50,11 @@ team_process_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ndiscussion context",
+        context_transparency_condition == "low" ~ "Low\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ndiscussion context",
+        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ndiscussion context",
+        context_transparency_condition == "high" ~ "High\ntransparency",
       TRUE ~ NA_character_
     ),
     
@@ -60,9 +62,9 @@ team_process_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ndiscussion context",
-        "Moderate\ndiscussion context",
-        "High\ndiscussion context"
+        "Low\ntransparency",
+        "Moderate\ntransparency",
+        "High\ntransparency"
       )
     )
   ) %>%
@@ -134,18 +136,27 @@ condition_axis_labels <- setNames(
     as.character(condition_n$plot_condition),
     function(condition) {
       
-      # Ensure every condition title occupies exactly two lines
+      # Wrap the treatment labels compactly and align Baseline to their height
       condition_label <- gsub("\n", "<br>", condition)
+      condition_label <- sub(
+        "transparency",
+        "trans-<br>parency",
+        condition_label,
+        fixed = TRUE
+      )
       
       if (!grepl("<br>", condition_label)) {
-        condition_label <- paste0(condition_label, "<br>&nbsp;")
+        condition_label <- paste0(
+          condition_label,
+          "<br>&nbsp;<br>&nbsp;"
+        )
       }
       
       paste0(
         "<b>",
         condition_label,
         "</b><br><br>",
-        "<i><span style='font-size:9pt; color:#555555;'>",
+        "<i><span style='font-size:7pt; color:#555555;'>",
         "n = ",
         condition_n$n[as.character(condition_n$plot_condition) == condition],
         "</span></i>"
@@ -157,146 +168,162 @@ condition_axis_labels <- setNames(
 )
 
 # ------------------------------------------------------------
-# 5. Create figure
+# 5. Create separate figures
 # ------------------------------------------------------------
 
-y_upper_limit <- max(team_process_summary$label_y, na.rm = TRUE) * 1.03
+create_team_process_plot <- function(process_name) {
+  plot_data <- team_process_summary %>%
+    filter(process_dimension == process_name)
+  if (process_name == "Communication") {
+    plot_data <- plot_data %>%
+      mutate(plot_label_y = ci_upper + 0.012)
+  } else {
+    plot_data <- plot_data %>%
+      mutate(plot_label_y = label_y)
+  }
+  y_upper_limit <- if (process_name == "Communication") {
+    0.6
+  } else {
+    max(plot_data$plot_label_y, na.rm = TRUE) * 1.12
+  }
+  y_breaks <- if (process_name == "Communication") {
+    seq(0, 0.6, by = 0.2)
+  } else {
+    pretty_breaks(n = 4)
+  }
 
-team_process_plot <- ggplot(
-  team_process_summary,
-  aes(
-    x = plot_condition,
-    y = mean_score,
-    fill = plot_condition
-  )
-) +
-  geom_col(
-    width = 0.56,
-    colour = "black",
-    linewidth = 0.35
-  ) +
-  geom_line(
-    aes(group = 1),
-    colour = "black",
-    linewidth = 0.65
-  ) +
-  geom_errorbar(
+  ggplot(
+    plot_data,
     aes(
-      ymin = ci_lower,
-      ymax = ci_upper
-    ),
-    width = 0.08,
-    linewidth = 0.7,
-    colour = "black"
-  ) +
-  geom_point(
-    shape = 21,
-    size = 4.6,
-    colour = "black",
-    stroke = 0.65
-  ) +
-  geom_text(
-    aes(
-      y = label_y,
-      label = score_label
-    ),
-    fontface = "bold",
-    colour = "black",
-    size = 3.9
-  ) +
-  scale_fill_manual(
-    values = c(
-      "Baseline" = "#B0B0B0",
-      "Low\ndiscussion context" = "#D8E5EE",
-      "Moderate\ndiscussion context" = "#7FA9C4",
-      "High\ndiscussion context" = "#315F7D"
-    ),
-    guide = "none"
-  ) +
-  scale_x_discrete(
-    labels = condition_axis_labels
-  ) +
-  scale_y_continuous(
-    limits = c(0, y_upper_limit),
-    breaks = pretty_breaks(n = 5),
-    labels = number_format(accuracy = 0.1),
-    expand = expansion(mult = c(0, 0))
-  ) +
-  facet_wrap(
-    ~ process_dimension,
-    ncol = 2
-  ) +
-  coord_cartesian(
-    clip = "off"
-  ) +
-  labs(
-    x = "Experimental condition",
-    y = "Mean score per simulation"
-  ) +
-  theme_classic(base_size = 12) +
-  theme(
-    axis.title = element_text(face = "bold"),
-    
-    axis.title.y = element_text(
-      margin = margin(r = 12)
-    ),
-    
-    axis.title.x = element_text(
-      margin = margin(t = 12)
-    ),
-    
-    axis.text.x = ggtext::element_markdown(
-      size = 10.5,
-      margin = margin(t = 8),
-      lineheight = 1.12
-    ),
-    
-    axis.text.y = element_text(
-      colour = "black"
-    ),
-    
-    strip.background = element_blank(),
-    
-    strip.text = element_text(
-      face = "bold",
-      size = 12,
-      margin = margin(t = 4, b = 8)
-    ),
-    
-    panel.spacing.x = grid::unit(1.8, "lines"),
-    
-    plot.margin = margin(
-      t = 25,
-      r = 30,
-      b = 10,
-      l = 15
+      x = plot_condition,
+      y = mean_score,
+      fill = plot_condition
     )
-  )
+  ) +
+    geom_col(
+      width = 0.60,
+      colour = "black",
+      linewidth = 0.35
+    ) +
+    geom_line(
+      aes(group = 1),
+      colour = "black",
+      linewidth = 0.65
+    ) +
+    geom_errorbar(
+      aes(
+        ymin = ci_lower,
+        ymax = ci_upper
+      ),
+      width = 0.08,
+      linewidth = 0.7,
+      colour = "black"
+    ) +
+    geom_point(
+      shape = 21,
+      size = 3.5,
+      colour = "black",
+      stroke = 0.65
+    ) +
+    geom_text(
+      aes(
+        y = plot_label_y,
+        label = score_label
+      ),
+      fontface = "bold",
+      colour = "black",
+      size = 3.1
+    ) +
+    scale_fill_manual(
+      values = c(
+        "Baseline" = "#B0B0B0",
+        "Low\ntransparency" = "#D8E5EE",
+        "Moderate\ntransparency" = "#7FA9C4",
+        "High\ntransparency" = "#315F7D"
+      ),
+      guide = "none"
+    ) +
+    scale_x_discrete(
+      labels = condition_axis_labels
+    ) +
+    scale_y_continuous(
+      limits = c(0, y_upper_limit),
+      breaks = y_breaks,
+      labels = number_format(accuracy = 0.1),
+      expand = expansion(mult = c(0, 0))
+    ) +
+    coord_cartesian(
+      clip = "off"
+    ) +
+    labs(
+      x = "Experimental condition",
+      y = paste0("Mean ", tolower(process_name), " score\nper simulation")
+    ) +
+    theme_classic(base_size = 10) +
+    theme(
+      axis.title = element_text(face = "bold"),
+      axis.title.y = element_text(margin = margin(r = 6)),
+      axis.title.x = element_text(margin = margin(t = 7)),
+      axis.text.x = ggtext::element_markdown(
+        size = 7.2,
+        margin = margin(t = 5),
+        lineheight = 1.00
+      ),
+      axis.text.y = element_text(colour = "black"),
+      plot.margin = margin(t = 12, r = 5, b = 3, l = 5)
+    )
+}
 
-print(team_process_plot)
+communication_plot <- create_team_process_plot("Communication")
+cooperation_plot <- create_team_process_plot("Cooperation")
+
+print(communication_plot)
+print(cooperation_plot)
 
 # ------------------------------------------------------------
-# 6. Save figure
+# 6. Save figures
 # ------------------------------------------------------------
 
 ggsave(
   filename = file.path(
     output_dir,
-    "thesis_figure_communication_cooperation_by_condition.pdf"
+    "thesis_figure_communication_by_condition.pdf"
   ),
-  plot = team_process_plot,
-  width = 16,
-  height = 5.6,
+  plot = communication_plot,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )
 
 ggsave(
   filename = file.path(
     output_dir,
-    "thesis_figure_communication_cooperation_by_condition.svg"
+    "thesis_figure_communication_by_condition.svg"
   ),
-  plot = team_process_plot,
-  width = 16,
-  height = 5.6,
+  plot = communication_plot,
+  width = figure_width,
+  height = figure_height,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_cooperation_by_condition.pdf"
+  ),
+  plot = cooperation_plot,
+  width = figure_width,
+  height = figure_height,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_cooperation_by_condition.svg"
+  ),
+  plot = cooperation_plot,
+  width = figure_width,
+  height = figure_height,
   units = "in"
 )

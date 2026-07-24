@@ -3,46 +3,6 @@
   "agent_tool_messages": 2,
   "agent_turns": 6,
   "completed_at": "2026-06-13T17:53:31+0200",
-  "context_consistency": {
-    "embedding_input_characters": {
-      "agent_1": 6581,
-      "agent_2": 7334,
-      "agent_3": 6924
-    },
-    "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
-    "embedding_raw_characters": {
-      "agent_1": 6713,
-      "agent_2": 7334,
-      "agent_3": 6938
-    },
-    "embedding_removed_adjacent_duplicate_lines": {
-      "agent_1": 5,
-      "agent_2": 0,
-      "agent_3": 0
-    },
-    "embedding_text_normalization": "collapse_adjacent_duplicate_lines",
-    "max_pairwise_similarity": 0.96594,
-    "mean_pairwise_similarity": 0.952434,
-    "method": "embedding_cosine",
-    "min_pairwise_similarity": 0.945315,
-    "pairwise": [
-      {
-        "agent_a": "agent_1",
-        "agent_b": "agent_2",
-        "similarity": 0.946046
-      },
-      {
-        "agent_a": "agent_1",
-        "agent_b": "agent_3",
-        "similarity": 0.96594
-      },
-      {
-        "agent_a": "agent_2",
-        "agent_b": "agent_3",
-        "similarity": 0.945315
-      }
-    ]
-  },
   "context_transparency_condition": "high",
   "correct_candidate": "Candidate C",
   "decision_correct": 0,
@@ -50,27 +10,8 @@
   "embedding_model": "nvidia/llama-nemotron-embed-1b-v2",
   "final_candidate": "Candidate A",
   "input_tokens": 130366,
-  "mean_pairwise_memory_similarity": 0.952434,
-  "memory_similarity_method": "embedding_cosine",
   "memory_updates": 17,
   "output_tokens": 67451,
-  "pairwise_memory_similarity": [
-    {
-      "agent_a": "agent_1",
-      "agent_b": "agent_2",
-      "similarity": 0.946046
-    },
-    {
-      "agent_a": "agent_1",
-      "agent_b": "agent_3",
-      "similarity": 0.96594
-    },
-    {
-      "agent_a": "agent_2",
-      "agent_b": "agent_3",
-      "similarity": 0.945315
-    }
-  ],
   "paths": {
     "chat": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260612_090103_050/chat.md",
     "run_dir": "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260612_090103_050",
@@ -86,11 +27,7 @@
     "/home/lhegemann/git/bachelor_thesis/01_data/raw/simulations/high/high_treatment_20260612_090103_050/shared_mental_models/agent_3.md"
   ],
   "shared_mental_models_archived": true,
-  "smm_evidence_share": 0.666667,
   "smm_mode": "treatment",
-  "smm_quality": 0.634956,
-  "smm_quality_method": "c_decisive_evidence_coverage_x_memory_similarity",
-  "smm_similarity": 0.952434,
   "speaker_order_seed": "high_treatment_050",
   "status": "completed",
   "team_process": {
@@ -108,20 +45,11 @@
       "integrated_message_count": 0,
       "score": 0.0
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 6,
-      "completed_turn_count": 0,
-      "completed_turns": [],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.0,
-      "tool_turn_count": 1
-    },
     "dimensions": {
       "communication": 0.125,
-      "cooperation": 0.0,
-      "coordination": 0.0
+      "cooperation": 0.0
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -220,14 +148,12 @@
         "b_weak_numeric_memory"
       ]
     },
-    "score": 0.041667
+    "score": 0.0625
   },
   "team_process_communication": 0.125,
   "team_process_cooperation": 0.0,
-  "team_process_coordination": 0.0,
-  "team_process_score": 0.041667,
+  "team_process_score": 0.0625,
   "timestamp": "20260613_174705",
-  "tokens_per_correct_decision": 434622.72,
   "total_messages": 8,
   "total_tokens": 197817,
   "vote_count": {

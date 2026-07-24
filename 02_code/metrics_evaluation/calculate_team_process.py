@@ -4,7 +4,6 @@
 Each dimension is represented by one public-transcript indicator:
 
 - communication: uptake of initially private candidate facts
-- coordination: completed question-answer-use sequences
 - cooperation: substantive integration of another agent's contribution
 
 The calculation uses only public transcript behavior, not correctness, runtime,
@@ -26,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
 
 AGENT_LABELS = ("agent_1", "agent_2", "agent_3")
-TEAM_PROCESS_METHOD = "private_uptake_completed_coordination_integration_v2"
+TEAM_PROCESS_METHOD = "private_uptake_integration_v3"
 
 PRIVATE_FACTS: list[dict[str, Any]] = [
     {
@@ -167,31 +166,6 @@ PRIVATE_FACTS: list[dict[str, Any]] = [
     },
 ]
 
-PUBLIC_FACTS: list[dict[str, Any]] = [
-    {"id": "a_anticipates_danger", "candidate": "A", "patterns": [r"anticipat(?:e|es|ing) dangerous situations"]},
-    {"id": "a_complex_connections", "candidate": "A", "patterns": [r"(?:see|sees|understands?) complex connections"]},
-    {"id": "a_spatial_vision", "candidate": "A", "patterns": [r"excellent spatial vision"]},
-    {"id": "a_leadership", "candidate": "A", "patterns": [r"very good leadership"]},
-    {"id": "b_conscientious", "candidate": "B", "patterns": [r"very conscientious"]},
-    {
-        "id": "b_handles_stress",
-        "candidate": "B",
-        "patterns": [r"handles? stress very well"],
-    },
-    {"id": "b_weather", "candidate": "B", "patterns": [r"good at assessing weather", r"assess(?:es|ing)? weather (?:conditions )?(?:well|accurately)"]},
-    {"id": "b_computer_skills", "candidate": "B", "patterns": [r"excellent computer skills"]},
-    {"id": "c_fast_decisions", "candidate": "C", "patterns": [r"(?:make|makes|making) correct decisions quick(?:ly)?"]},
-    {"id": "c_communication_difficulty", "candidate": "C", "patterns": [r"difficulty communicating ideas"]},
-    {"id": "c_egocentric", "candidate": "C", "patterns": [r"egocentric"]},
-    {"id": "c_education", "candidate": "C", "patterns": [r"not (?:very )?willing to further (?:his )?education", r"lack of willingness to further"]},
-    {"id": "d_unexpected_events", "candidate": "D", "patterns": [r"responds? to unexpected events adequately"]},
-    {"id": "d_concentration", "candidate": "D", "patterns": [r"concentrat(?:e|es|ion) very well", r"strong concentration"]},
-    {"id": "d_problem_solving", "candidate": "D", "patterns": [r"solves? problems? extremely well", r"strong problem.solving"]},
-    {"id": "d_responsibility", "candidate": "D", "patterns": [r"takes? responsibility seriously"]},
-]
-
-ALL_CANDIDATE_FACTS = PRIVATE_FACTS + PUBLIC_FACTS
-
 METADATA_BLOCK_RE = re.compile(r"\**METADATA_JSON:\**\s*\{.*?\}", re.DOTALL)
 HEADING_RE = re.compile(
     r"^## Round (?P<round>\d+) - (?P<label>.+?)\s*$",
@@ -227,34 +201,6 @@ RESPONSE_INTEGRATION_RE = re.compile(
     )\b""",
     re.IGNORECASE | re.VERBOSE,
 )
-
-NO_EVIDENCE_RE = re.compile(
-    r"\b(?:do not have|does not have|have no|has no|"
-    r"no (?:direct|specific|documented|clear|concrete|explicit)?\s*"
-    r"(?:evidence|information|data|observations?|examples?)|"
-    r"lack(?:s|ing)? (?:of )?(?:direct |specific |concrete )?"
-    r"(?:evidence|information|data|observations?))\b",
-    re.IGNORECASE,
-)
-
-OBSOLETE_TEAM_PROCESS_KEYS = (
-    "team_process_method",
-    "team_process_strategy_coordination",
-    "team_process_private_fact_coverage",
-    "team_process_criterion_coverage",
-    "team_process_participation_balance",
-    "team_process_evidence_integration",
-    "team_process_decisive_evidence_uptake",
-    "team_process_focused_question_share",
-    "team_process_inquiry_network_coverage",
-    "team_process_discussion_structure",
-    "team_process_candidate_coverage",
-    "team_process_responsiveness",
-    "team_process_constructive_challenge",
-    "team_process_agreement_building",
-    "team_process_consensus_quality",
-)
-
 
 def read_json(path: Path) -> dict[str, Any]:
     """Read one metadata file."""
@@ -444,110 +390,6 @@ def private_information_uptake(messages: list[dict[str, Any]]) -> dict[str, Any]
     }
 
 
-def candidate_labels(text: str) -> set[str]:
-    """Return explicitly named candidate letters."""
-    labels = set(
-        match.group(1).upper()
-        for match in re.finditer(r"\bCandidates?\s*([A-D])\b", text, re.IGNORECASE)
-    )
-    labels.update(
-        match.group(1).upper()
-        for match in re.finditer(r"\b([A-D])['’]s\b", text, re.IGNORECASE)
-    )
-    labels.update(match.group(1) for match in re.finditer(r"\b([B-D])\b", text))
-    for match in re.finditer(r"\bCandidates\b([^.!?;:]*)", text, re.IGNORECASE):
-        labels.update(re.findall(r"\b[A-D]\b", match.group(1)))
-    return labels
-
-
-def tool_answer_use_reason(
-    tool_message: dict[str, Any],
-    agent_message: dict[str, Any],
-) -> str | None:
-    """Return why a caller's public message uses one tool answer."""
-    question = str(tool_message.get("question") or "")
-    answer = str(tool_message.get("answer") or "")
-    public_text = str(agent_message["text"])
-    relevant_candidates = candidate_labels(question) & candidate_labels(public_text)
-    if not relevant_candidates:
-        return None
-
-    reused_facts = sorted(
-        str(fact["id"])
-        for fact in ALL_CANDIDATE_FACTS
-        if str(fact["candidate"]) in relevant_candidates
-        and fact_matches(answer, fact)
-        and fact_matches(public_text, fact)
-    )
-    if reused_facts:
-        return "fact_reuse:" + ",".join(reused_facts)
-
-    for candidate in relevant_candidates:
-        if candidate_scoped_match(answer, candidate, NO_EVIDENCE_RE) and candidate_scoped_match(
-            public_text,
-            candidate,
-            NO_EVIDENCE_RE,
-        ):
-            return f"no_evidence_reuse:{candidate}"
-
-    target = tool_message.get("target")
-    if isinstance(target, str) and target.startswith("agent_"):
-        target_number = target.rsplit("_", 1)[-1]
-        if re.search(rf"\bAgent\s*{re.escape(target_number)}\b", public_text, re.IGNORECASE) and re.search(
-            r"\b(?:confirm|clarif|report|provide|answer|response|input|information|according)\w*\b",
-            public_text,
-            re.IGNORECASE,
-        ):
-            return f"explicit_attribution:{target}"
-    return None
-
-
-def completed_information_coordination(messages: list[dict[str, Any]]) -> dict[str, Any]:
-    """Measure agent turns containing a completed question-answer-use sequence."""
-    agent_messages = [
-        message
-        for message in messages
-        if not message["is_tool_exchange"] and message["speaker"] in AGENT_LABELS
-    ]
-    tools_by_turn: dict[tuple[int, str], list[dict[str, Any]]] = {}
-    for message in messages:
-        caller = message.get("caller")
-        if not message["is_tool_exchange"] or caller not in AGENT_LABELS:
-            continue
-        key = (int(message["round"]), str(caller))
-        tools_by_turn.setdefault(key, []).append(message)
-
-    completed_turns: list[dict[str, Any]] = []
-    tool_turn_count = 0
-    for message in agent_messages:
-        key = (int(message["round"]), str(message["speaker"]))
-        tool_messages = tools_by_turn.get(key, [])
-        if not tool_messages:
-            continue
-        tool_turn_count += 1
-        reasons = [
-            reason
-            for tool_message in tool_messages
-            if (reason := tool_answer_use_reason(tool_message, message)) is not None
-        ]
-        if reasons:
-            completed_turns.append(
-                {
-                    "round": message["round"],
-                    "agent": message["speaker"],
-                    "reasons": reasons,
-                }
-            )
-
-    return {
-        "score": ratio(len(completed_turns), len(agent_messages)),
-        "completed_turn_count": len(completed_turns),
-        "tool_turn_count": tool_turn_count,
-        "agent_turn_count": len(agent_messages),
-        "completed_turns": completed_turns,
-    }
-
-
 def collaborative_integration(messages: list[dict[str, Any]]) -> dict[str, Any]:
     """Measure substantive integration of another agent's contribution."""
     agent_messages = [
@@ -580,20 +422,17 @@ def calculate_team_process(
         if not message["is_tool_exchange"] and message["speaker"] in AGENT_LABELS
     ]
     communication_detail = private_information_uptake(messages)
-    coordination_detail = completed_information_coordination(messages)
     cooperation_detail = collaborative_integration(messages)
 
     communication = float(communication_detail["score"])
-    coordination = float(coordination_detail["score"])
     cooperation = float(cooperation_detail["score"])
-    score = (communication + coordination + cooperation) / 3
+    score = (communication + cooperation) / 2
 
     return {
         "method": TEAM_PROCESS_METHOD,
         "score": round(score, 6),
         "dimensions": {
             "communication": round(communication, 6),
-            "coordination": round(coordination, 6),
             "cooperation": round(cooperation, 6),
         },
         "private_information_uptake": {
@@ -602,14 +441,6 @@ def calculate_team_process(
             "definition": (
                 "share of all initially private candidate facts subsequently "
                 "used by a different agent"
-            ),
-        },
-        "completed_information_coordination": {
-            "score": round(coordination, 6),
-            **{key: value for key, value in coordination_detail.items() if key != "score"},
-            "definition": (
-                "share of scheduled agent turns containing at least one "
-                "completed question-answer-use sequence"
             ),
         },
         "collaborative_integration": {
@@ -639,16 +470,9 @@ def has_current_team_process(metadata: dict[str, Any]) -> bool:
     return (
         metadata.get("team_process_score") is not None
         and isinstance(dimensions, dict)
-        and set(dimensions) == {"communication", "coordination", "cooperation"}
+        and set(dimensions) == {"communication", "cooperation"}
         and method == TEAM_PROCESS_METHOD
-        and not any(key in metadata for key in OBSOLETE_TEAM_PROCESS_KEYS)
     )
-
-
-def remove_obsolete_team_process_fields(metadata: dict[str, Any]) -> None:
-    """Remove fields from the old many-indicator team-process metric."""
-    for key in OBSOLETE_TEAM_PROCESS_KEYS:
-        metadata.pop(key, None)
 
 
 def update_metadata(metadata_path: Path, force: bool, verbose: bool) -> str:
@@ -667,12 +491,10 @@ def update_metadata(metadata_path: Path, force: bool, verbose: bool) -> str:
 
     team_process = calculate_team_process(messages, transcript_source)
     dimensions = team_process["dimensions"]
-    remove_obsolete_team_process_fields(metadata)
     metadata.update(
         {
             "team_process_score": team_process["score"],
             "team_process_communication": dimensions["communication"],
-            "team_process_coordination": dimensions["coordination"],
             "team_process_cooperation": dimensions["cooperation"],
             "team_process": team_process,
         }
@@ -684,7 +506,6 @@ def update_metadata(metadata_path: Path, force: bool, verbose: bool) -> str:
             f"{metadata_path.parent.name}: "
             f"score={team_process['score']:.3f}, "
             f"communication={dimensions['communication']:.3f}, "
-            f"coordination={dimensions['coordination']:.3f}, "
             f"cooperation={dimensions['cooperation']:.3f}"
         )
     return "updated"

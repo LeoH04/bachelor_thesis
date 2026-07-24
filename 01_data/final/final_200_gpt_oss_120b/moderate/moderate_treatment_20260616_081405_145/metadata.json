@@ -44,58 +44,11 @@
       "integrated_message_count": 5,
       "score": 0.625
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 9,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "fact_reuse:b_weak_numeric_memory",
-            "fact_reuse:c_positive_crew_atmosphere"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:c_100_percent_reliable,c_positive_crew_atmosphere",
-            "fact_reuse:d_hot_temper"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:c_egocentric"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "no_evidence_reuse:A"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:d_hot_temper"
-          ],
-          "round": 2
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.555556,
-      "tool_turn_count": 5
-    },
     "dimensions": {
       "communication": 0.208333,
-      "cooperation": 0.625,
-      "coordination": 0.555556
+      "cooperation": 0.625
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -332,12 +285,11 @@
         "d_hot_temper"
       ]
     },
-    "score": 0.462963
+    "score": 0.416667
   },
   "team_process_communication": 0.208333,
   "team_process_cooperation": 0.625,
-  "team_process_coordination": 0.555556,
-  "team_process_score": 0.462963,
+  "team_process_score": 0.416667,
   "timestamp": "20260618_024156",
   "total_messages": 23,
   "total_tokens": 297351,

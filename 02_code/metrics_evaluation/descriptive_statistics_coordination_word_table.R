@@ -227,7 +227,7 @@ descriptive_table <- flextable(table_data)
 header_map <- data.frame(
   col_keys = descriptive_table$col_keys,
   condition = c(
-    "Condition",
+    "Context configuration",
     "Baseline",
     "Low",
     "Moderate",

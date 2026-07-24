@@ -44,58 +44,11 @@
       "integrated_message_count": 6,
       "score": 0.75
     },
-    "completed_information_coordination": {
-      "agent_turn_count": 9,
-      "completed_turn_count": 5,
-      "completed_turns": [
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "fact_reuse:d_hot_temper"
-          ],
-          "round": 1
-        },
-        {
-          "agent": "agent_1",
-          "reasons": [
-            "no_evidence_reuse:A",
-            "fact_reuse:d_unexpected_events"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "no_evidence_reuse:B"
-          ],
-          "round": 2
-        },
-        {
-          "agent": "agent_3",
-          "reasons": [
-            "no_evidence_reuse:B",
-            "no_evidence_reuse:D"
-          ],
-          "round": 3
-        },
-        {
-          "agent": "agent_2",
-          "reasons": [
-            "fact_reuse:c_communication_difficulty,c_egocentric"
-          ],
-          "round": 3
-        }
-      ],
-      "definition": "share of scheduled agent turns containing at least one completed question-answer-use sequence",
-      "score": 0.555556,
-      "tool_turn_count": 5
-    },
     "dimensions": {
       "communication": 0.125,
-      "cooperation": 0.75,
-      "coordination": 0.555556
+      "cooperation": 0.75
     },
-    "method": "private_uptake_completed_coordination_integration_v2",
+    "method": "private_uptake_integration_v3",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -260,12 +213,11 @@
         "d_hot_temper"
       ]
     },
-    "score": 0.476852
+    "score": 0.4375
   },
   "team_process_communication": 0.125,
   "team_process_cooperation": 0.75,
-  "team_process_coordination": 0.555556,
-  "team_process_score": 0.476852,
+  "team_process_score": 0.4375,
   "timestamp": "20260618_052557",
   "total_messages": 23,
   "total_tokens": 294492,

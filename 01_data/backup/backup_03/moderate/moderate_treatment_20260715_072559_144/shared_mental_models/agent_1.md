@@ -1,0 +1,41 @@
+# Shared Mental Model (Agent 1)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | 100 % reliability; creates positive crew atmosphere; makes correct decisions quickly; keeps calm in a crisis | Difficulty communicating ideas; regarded as egocentric; not very willing to further education | Technical competence; attention‑to‑detail; adaptability/feedback orientation; responsibility/maturity | Technical competence; attention‑to‑detail; adaptability/feedback orientation; professional communication impact; responsibility/maturity | Request concrete examples of technical tasks performed, attention‑to‑detail incidents, adaptability to feedback, and evidence of responsibility/maturity |
+| Candidate B | Very conscientious (reliability); handles stress very well (stress resilience); good at assessing weather conditions; excellent computer skills (technical competence) | Weak memory for numbers (attention); grumpy; uncooperative; pretentious/wrong tone; occasional nasty remarks (crew cooperation, professional communication) | Decision‑quality under high‑pressure; broader attention‑to‑detail; adaptability/feedback orientation; responsibility/maturity | Decision‑quality under pressure; attention‑to‑detail (overall); adaptability/feedback orientation; professional communication depth; responsibility/maturity | Ask for specific high‑pressure decision examples, feedback‑orientation incidents, broader attention‑to‑detail evidence, and observations of responsibility/maturity |
+| Candidate C | Anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities | Not good at taking criticism; can be unorganized; unfriendly (crew cooperation, professional communication) | Stress resilience; decision‑quality under pressure; technical competence beyond spatial vision; attention‑to‑detail; adaptability/feedback orientation; responsibility/maturity | Stress resilience; decision‑quality; technical competence; attention‑to‑detail; adaptability/feedback orientation; professional communication; responsibility/maturity | Seek evidence of performance under stress, safety‑critical decision making, attention‑to‑detail examples, feedback orientation, and crew‑cooperation behaviours |
+| Candidate D | Responds to unexpected events adequately; concentrates very well; solves problems extremely well; takes responsibility seriously | Regarded as arrogant; relatively weak leadership skills (crew cooperation, professional communication) | Stress resilience; decision‑quality under pressure; technical competence; attention‑to‑detail; adaptability/feedback orientation; professional communication; crew‑cooperation depth | Stress resilience; decision‑quality; technical competence; attention‑to‑detail; adaptability/feedback orientation; professional communication; crew‑cooperation; responsibility maturity (beyond taking responsibility) | Request observations of stress handling and decision quality in high‑pressure situations, technical task performance, attention‑to‑detail incidents, adaptability to feedback, communication style, and crew‑cooperation examples |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with B and C) | No |
+| Candidate B | Yes | Yes | Yes | Yes (compared with A) | Yes |
+| Candidate C | Yes | Yes | Yes | Yes (compared with A) | Yes |
+| Candidate D | Yes | Yes | Yes | No (not yet directly compared) | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | • Candidate A: 100 % reliable; creates positive crew atmosphere; makes correct decisions quickly; keeps calm in a crisis; difficulty communicating ideas; regarded as egocentric; not very willing to further education. • Candidate C: anticipates dangerous situations; sees complex connections; excellent spatial vision; very good leadership qualities; not good at taking criticism; can be unorganized; unfriendly. | • Do you have observations on Candidate B’s decision‑quality under high‑pressure situations? • Do you have evidence of Candidate B’s adaptability/feedback orientation? • Can you provide examples of Candidate B’s attention‑to‑detail beyond memory for numbers? • Do you have observations on Candidate B’s responsibility/maturity? • Do you have any observations on Candidate D’s stress resilience and decision quality under pressure? |
+| Agent 2 | • Candidate B: very conscientious; handles stress very well; good at assessing weather conditions; excellent computer skills; weak memory for numbers; grumpy; uncooperative; pretentious/wrong tone; occasional nasty remarks. • Confirmed Candidate A keeps calm in a crisis. | • Do you have observations on Candidate B’s decision‑quality under high‑pressure situations? • Any examples of Candidate B’s adaptability to feedback? • Do you have evidence of Candidate B’s broader attention‑to‑detail? • Do you have observations on Candidate B’s responsibility/maturity? |
+| Agent 3 | • Candidate B: grumpy; uncooperative; pretentious/wrong tone. • Candidate C: unfriendly. • No observations on Candidate D’s stress resilience. • No observations on Candidate C’s stress resilience. | • Do you have observations on Candidate D’s stress resilience and decision‑quality under high‑pressure situations? • Do you have observations on Candidate D’s crew‑cooperation and communication style? • Any evidence of Candidate B’s decision‑quality under pressure? • Can you share any feedback‑orientation incidents for Candidate B? • Do you have observations on Candidate C’s stress resilience, decision quality, technical competence, or attention to detail? |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate A | 100 % reliability, calmness in crisis, quick correct decisions, positive crew atmosphere – core safety pillars. | New evidence of weak technical competence, attention‑to‑detail issues, poor adaptability/feedback orientation, or insufficient responsibility could shift view. |
+| Agent 2 | Candidate A | Documented calmness in a crisis, ability to make correct decisions quickly, positive crew atmosphere; communication difficulty not observed to impair safety. | Evidence of gaps in technical competence, attention accuracy, adaptability, or responsibility/maturity could change stance. |
+| Agent 3 | Candidate A | Proven decision quality under pressure and calmness, positive crew atmosphere; communication issue not shown to affect safety. | New information on technical competence, attention‑to‑detail, adaptability/feedback orientation, or responsibility could alter recommendation. |
+
+## Group Decision State
+- **Current leading candidate:** Candidate A (unanimous)
+- **Strongest alternative:** Candidate B
+- **Main reason supporting the leading candidate:** Documented calmness in crisis, quick correct decisions, 100 % reliability, and a positive crew atmosphere – core safety‑critical criteria for long‑haul flights.
+- **Main concern about the leading candidate:** Communication difficulty, egocentric attitude, limited willingness to further education raise questions about adaptability, feedback orientation, technical competence, and long‑term responsibility.
+- **Main unresolved comparison:** Decision‑quality under high‑pressure (A has evidence, B lacks), technical competence and attention‑to‑detail (A unknown, B partially evidenced), adaptability/feedback orientation for both.
+- **Candidates that still need discussion:** Candidate C and Candidate D (many criteria remain unevaluated).
+- **Important criteria still unclear:** Technical competence, attention and information accuracy, adaptability/feedback orientation, responsibility and role maturity, decision quality under pressure for B/C/D, stress resilience for C/D, crew‑cooperation depth for B/C/D, professional communication depth for all.
+- **Ready for convergence?** No

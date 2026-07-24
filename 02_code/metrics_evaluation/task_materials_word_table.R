@@ -8,7 +8,7 @@
 #   02_code/multi_agent_system/config/hidden_profile_task.json
 #
 # Output:
-#   03_report/appendix/appendix_A_experimental_task_materials.docx
+#   03_report/tables/appendix_A_experimental_task_materials.docx
 # ============================================================
 
 # ------------------------------------------------------------
@@ -37,7 +37,7 @@ json_file <- file.path(
 output_dir <- file.path(
   path,
   "03_report",
-  "appendix"
+  "tables"
 )
 
 output_file <- file.path(
@@ -120,22 +120,13 @@ if (length(candidates) == 0) {
   stop("The task-materials JSON file does not define any candidates.")
 }
 
-agent_labels <- c(
-  "agent_1" = "Sarah Mitchell\nHR Selection Specialist\nFlight Operations",
-  "agent_2" = "James Carter\nPilot Assessment Specialist",
-  "agent_3" = "Emily Brooks\nRecruiting Specialist\nCockpit Personnel",
-  "sarah_mitchell" = "Sarah Mitchell\nHR Selection Specialist\nFlight Operations",
-  "james_carter" = "James Carter\nPilot Assessment Specialist",
-  "emily_brooks" = "Emily Brooks\nRecruiting Specialist\nCockpit Personnel"
-)
-
 agent_short_labels <- c(
-  "agent_1" = "Sarah Mitchell - Agent 1",
-  "agent_2" = "James Carter - Agent 2",
-  "agent_3" = "Emily Brooks - Agent 3",
-  "sarah_mitchell" = "Sarah Mitchell - Agent 1",
-  "james_carter" = "James Carter - Agent 2",
-  "emily_brooks" = "Emily Brooks - Agent 3"
+  "agent_1" = "Anna Keller - Agent 1",
+  "agent_2" = "Markus Weber - Agent 2",
+  "agent_3" = "Sofia Brandt - Agent 3",
+  "anna_keller" = "Anna Keller - Agent 1",
+  "markus_weber" = "Markus Weber - Agent 2",
+  "sofia_brandt" = "Sofia Brandt - Agent 3"
 )
 
 # ------------------------------------------------------------
@@ -158,19 +149,6 @@ facts_for_candidate <- function(facts, candidate) {
   facts[grepl(candidate_pattern, facts)]
 }
 
-bullet_cell <- function(items) {
-  
-  if (length(items) == 0) {
-    return("")
-  }
-  
-  paste0(
-    "- ",
-    items,
-    collapse = "\n"
-  )
-}
-
 no_break_text <- function(items) {
   
   gsub(
@@ -178,64 +156,6 @@ no_break_text <- function(items) {
     intToUtf8(160),
     items,
     fixed = TRUE
-  )
-}
-
-candidate_fact_cells <- function(candidates, facts) {
-  
-  unname(
-    vapply(
-      candidates,
-      function(candidate) {
-        bullet_cell(
-          facts_for_candidate(
-            facts,
-            candidate
-          )
-        )
-      },
-      FUN.VALUE = character(1)
-    )
-  )
-}
-
-candidate_fact_half_cells <- function(candidates, facts, half) {
-  
-  if (!half %in% c("first", "second")) {
-    stop("half must be either 'first' or 'second'.")
-  }
-  
-  unname(
-    vapply(
-      candidates,
-      function(candidate) {
-        candidate_facts <- facts_for_candidate(
-          facts,
-          candidate
-        )
-        
-        split_index <- ceiling(length(candidate_facts) / 2)
-        
-        if (length(candidate_facts) == 0) {
-          selected_facts <- character(0)
-        } else if (half == "first") {
-          selected_facts <- candidate_facts[seq_len(split_index)]
-        } else if (split_index < length(candidate_facts)) {
-          selected_facts <- candidate_facts[
-            seq.int(split_index + 1, length(candidate_facts))
-          ]
-        } else {
-          selected_facts <- character(0)
-        }
-        
-        selected_facts <- selected_facts[
-          !is.na(selected_facts)
-        ]
-        
-        bullet_cell(selected_facts)
-      },
-      FUN.VALUE = character(1)
-    )
   )
 }
 
@@ -251,28 +171,6 @@ strip_candidate_prefix <- function(facts, candidate) {
     candidate_pattern,
     "",
     facts
-  )
-}
-
-all_facts_for_candidate <- function(materials, candidate) {
-  
-  shared_facts <- facts_for_candidate(
-    materials$public_information,
-    candidate
-  )
-  
-  private_facts <- unlist(
-    lapply(
-      materials$private_information,
-      facts_for_candidate,
-      candidate = candidate
-    ),
-    use.names = FALSE
-  )
-  
-  strip_candidate_prefix(
-    c(shared_facts, private_facts),
-    candidate
   )
 }
 

@@ -1,0 +1,44 @@
+# Shared Mental Model (Agent 3)
+
+## Candidate Review Status
+| Candidate | Discussed strengths | Discussed concerns | Relevant own facts not yet discussed | Unclear or missing criteria | Next useful discussion move |
+|---|---|---|---|---|---|
+| Candidate A | • 100 % reliability<br>• Creates a positive crew atmosphere<br>• Stays calm in crises<br>• Makes correct decisions quickly<br>• Excellent attention skills<br>• Puts concern for others above everything | • Difficulty communicating ideas<br>• Regarded as egocentric<br>• Not very willing to further his education<br>• Communication difficulties (tone, clarity)<br>• Lack of concrete interview evidence of crew‑cooperation | • Decision‑quality under pressure (beyond quick decisions)<br>• Responsibility and role maturity<br>• Adaptability/feedback orientation<br>• Professional communication specifics (examples)<br>• Concrete crew‑cooperation evidence (examples) | • Decision quality under pressure<br>• Responsibility/maturity<br>• Adaptability/feedback orientation<br>• Professional communication specifics<br>• Concrete crew‑cooperation evidence | • Request concrete interview examples of crew‑cooperation and professional communication for Candidate A; probe decision‑quality under pressure, responsibility, adaptability. |
+| Candidate B | • Very conscientious (operational reliability)<br>• Handles stress very well (stress resilience)<br>• Good at assessing weather conditions (technical competence)<br>• Excellent computer skills (technical competence) | • Can be uncooperative<br>• Makes nasty remarks about colleagues<br>• Grumpy<br>• Relatively weak memory for numbers (attention) | • Decision quality in safety‑critical situations<br>• Attention and information accuracy beyond memory note<br>• Responsibility and role maturity<br>• Adaptability/feedback orientation<br>• Concrete crew‑cooperation behavior<br>• Professional communication specifics | • Decision quality under pressure<br>• Attention and information accuracy<br>• Responsibility/maturity<br>• Adaptability/feedback orientation<br>• Concrete crew‑cooperation evidence<br>• Professional communication specifics | • Obtain concrete interview evidence on decision quality, attention accuracy, responsibility, adaptability, crew‑cooperation, and professional communication for Candidate B. |
+| Candidate C | • Can anticipate dangerous situations<br>• Able to see complex connections<br>• Excellent spatial vision<br>• Very good leadership qualities | • Unfriendly (crew‑cooperation)<br>• Eats unhealthily (personal habit)<br>• Unorganized and resistant to criticism | • Stress resilience (no interview observations)<br>• Decision quality under pressure (no interview observations)<br>• Attention and information accuracy<br>• Responsibility and role maturity<br>• Adaptability/feedback orientation<br>• Concrete crew‑cooperation evidence | • Stress resilience<br>• Decision quality under pressure<br>• Attention and information accuracy<br>• Responsibility/maturity<br>• Adaptability/feedback orientation<br>• Crew‑cooperation specifics | • Seek interview evidence on stress resilience, decision quality, attention accuracy, responsibility, adaptability, and concrete crew‑cooperation behavior. |
+| Candidate D | • Takes responsibility seriously<br>• Responds to unexpected events adequately<br>• Can concentrate very well<br>• Solves problems extremely well | • Arrogant, weak leadership<br>• Regarded as a know‑it‑all<br>• Hot temper, moody<br>• Regarded as a loner (crew‑cooperation) | • Professional communication style and its impact on crew dynamics (no interview observations)<br>• Decision quality under pressure (no interview observations)<br>• Adaptability/feedback orientation<br>• Concrete crew‑cooperation specifics | • Decision quality under pressure<br>• Professional communication specifics<br>• Adaptability/feedback orientation<br>• Crew‑cooperation specifics | • Gather interview evidence on decision quality under pressure, professional communication style, adaptability, and concrete crew‑cooperation behavior. |
+
+## Candidate Coverage Checklist
+| Candidate | Has been discussed? | Strengths discussed? | Concerns discussed? | Compared with another candidate? | Still under-discussed? |
+|---|---|---|---|---|---|
+| Candidate A | Yes | Yes | Yes | Yes (compared with B and D) | Yes |
+| Candidate B | Yes | Yes | Yes | Yes (compared with A and D) | Yes |
+| Candidate C | Yes | Yes | Yes | No (not yet directly compared with A, B, or D) | Yes |
+| Candidate D | Yes | Yes | Yes | Yes (compared with A and B) | Yes |
+
+## Information Distribution
+| Agent | Candidate facts they have shared | Relevant open questions for this agent |
+|---|---|---|
+| Agent 1 | • Candidate A: 100 % reliability, creates positive crew atmosphere, stays calm in crises, makes quick correct decisions, excellent attention, puts concern for others above everything.<br>• Candidate A concerns: difficulty communicating ideas, egocentric, not willing to further education, lack of concrete crew‑cooperation evidence.<br>• Candidate B: can be uncooperative, makes nasty remarks, grumpy.<br>• Candidate C: unfriendly, eats unhealthily, unorganized and resistant to criticism.<br>• Candidate D: arrogant, weak leadership, know‑it‑all, hot temper, moody, loner. | • Provide concrete interview examples of crew‑cooperation and professional communication for Candidate A. |
+| Agent 2 | • Candidate B strengths: very conscientious, handles stress very well, good at assessing weather, excellent computer skills.<br>• Candidate B concerns: can be uncooperative, makes nasty remarks, grumpy, weak memory for numbers.<br>• Candidate D strengths: takes responsibility seriously, responds to unexpected events adequately, concentrates well, solves problems extremely well.<br>• Candidate D concerns: arrogant, weak leadership, know‑it‑all, hot temper, moody, loner. | • None (no further open questions identified for Agent 2 at this stage). |
+| Agent 3 | • Summarized panel status, highlighted documented strengths of Candidate B and documented concerns for all candidates.<br>• Vote: Candidate B – reason: strongest documented safety‑critical profile; crew‑cooperation concerns lack interview evidence. | • None (no pending questions for Agent 3). |
+
+## Current Positions
+| Agent | Current vote | Stated reason | Uncertainty or what could change their view |
+|---|---|---|---|
+| Agent 1 | Candidate A | 100 % reliability and documented positive crew atmosphere; sees B’s negative notes as concrete concerns. | Lack of concrete interview evidence of crew‑cooperation for A; any strong crew‑cooperation evidence for B could shift view. |
+| Agent 2 | Candidate B | Documented strengths in operational reliability, stress resilience, and technical competence; concerns about teamwork are unsubstantiated by interview data. | Concrete crew‑cooperation or professional communication examples for A or B could change view. |
+| Agent 3 | Candidate B | Strongest documented safety‑critical profile (very conscientious, handles stress well, solid technical skills); crew‑cooperation concerns lack interview evidence. | Any concrete crew‑cooperation examples for A, B, or D (or evidence of D’s communication style) could affect the recommendation. |
+
+## Group Decision State
+| Item | Detail |
+|---|---|
+| Current leading candidate | Candidate B |
+| Strongest alternative | Candidate A |
+| Main reason supporting the leading candidate | Documented strengths in operational reliability (very conscientious), stress resilience (handles stress very well), and technical competence (accurate weather assessment, excellent computer skills) – core safety‑critical criteria for long‑distance flights. |
+| Main concern about the leading candidate | Negative notes on crew‑cooperation (can be uncooperative, makes nasty remarks, grumpy) and relatively weak memory for numbers; lack of concrete interview evidence of positive teamwork. |
+| Main unresolved comparison | Candidate B vs Candidate A on decision quality under pressure, attention and information accuracy, professional communication specifics, adaptability/feedback orientation, responsibility/maturity, and concrete crew‑cooperation behavior. |
+| Candidates that still need discussion | Candidate C, Candidate D |
+| Important criteria still unclear | • Decision quality under pressure (A, B, C, D) • Attention and information accuracy (B, C) • Professional communication specifics (A, B, D) • Adaptability/feedback orientation (A, B, C, D) • Responsibility/maturity (A, B, C, D) • Stress resilience (C) • Crew‑cooperation specifics (A, B, C, D) |
+| Ready for convergence? | No |
+| Reason | Not all safety‑relevant criteria have been fully evaluated for each candidate, and the leading candidate (B) still lacks concrete evidence of crew‑cooperation and professional communication; C and D remain largely unevaluated on several key criteria. |
