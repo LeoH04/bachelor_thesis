@@ -181,12 +181,12 @@ correct_decision_plot <- ggplot(
   ) +
   geom_text(
     aes(
-      y = ci_upper + 0.06,
       label = percentage_label
     ),
     fontface = "bold",
     colour = "black",
-    size = 3.1
+    size = 3.1,
+    vjust = -2.5
   ) +
   scale_fill_manual(
     values = c(
@@ -210,7 +210,8 @@ correct_decision_plot <- ggplot(
     clip = "off"
   ) +
   labs(
-    x = "Experimental condition",
+    title = "Correct decisions",
+    x = "Context configuration",
     y = "Share of simulations selecting\nthe correct candidate (%)"
   ) +
   theme_classic(base_size = 10) +
@@ -218,6 +219,12 @@ correct_decision_plot <- ggplot(
     axis.title = element_text(face = "bold"),
     axis.title.y = element_text(margin = margin(r = 6)),
     axis.title.x = element_text(margin = margin(t = 7)),
+    plot.title = element_text(
+      face = "bold",
+      size = 12,
+      hjust = 0.5,
+      margin = margin(t = 4, b = 8)
+    ),
     axis.text.x = ggtext::element_markdown(
       size = 7.2,
       margin = margin(t = 5),

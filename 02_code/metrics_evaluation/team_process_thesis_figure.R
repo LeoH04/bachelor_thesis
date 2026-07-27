@@ -8,6 +8,7 @@ rm(list = ls())
 
 library(tidyverse)
 library(scales)
+library(cowplot)
 
 options(scipen = 999)
 
@@ -173,14 +174,8 @@ condition_axis_labels <- setNames(
 
 create_team_process_plot <- function(process_name) {
   plot_data <- team_process_summary %>%
-    filter(process_dimension == process_name)
-  if (process_name == "Communication") {
-    plot_data <- plot_data %>%
-      mutate(plot_label_y = ci_upper + 0.012)
-  } else {
-    plot_data <- plot_data %>%
-      mutate(plot_label_y = label_y)
-  }
+    filter(process_dimension == process_name) %>%
+    mutate(plot_label_y = label_y)
   y_upper_limit <- if (process_name == "Communication") {
     0.6
   } else {
@@ -227,12 +222,12 @@ create_team_process_plot <- function(process_name) {
     ) +
     geom_text(
       aes(
-        y = plot_label_y,
         label = score_label
       ),
       fontface = "bold",
       colour = "black",
-      size = 3.1
+      size = 3.1,
+      vjust = -2.5
     ) +
     scale_fill_manual(
       values = c(
@@ -256,14 +251,25 @@ create_team_process_plot <- function(process_name) {
       clip = "off"
     ) +
     labs(
-      x = "Experimental condition",
-      y = paste0("Mean ", tolower(process_name), " score\nper simulation")
+      title = paste0(process_name, " quality"),
+      x = "Context configuration",
+      y = paste0(
+        "Mean ",
+        tolower(process_name),
+        " quality score\nper simulation"
+      )
     ) +
     theme_classic(base_size = 10) +
     theme(
       axis.title = element_text(face = "bold"),
       axis.title.y = element_text(margin = margin(r = 6)),
       axis.title.x = element_text(margin = margin(t = 7)),
+      plot.title = element_text(
+        face = "bold",
+        size = 12,
+        hjust = 0.5,
+        margin = margin(t = 4, b = 8)
+      ),
       axis.text.x = ggtext::element_markdown(
         size = 7.2,
         margin = margin(t = 5),
@@ -277,8 +283,30 @@ create_team_process_plot <- function(process_name) {
 communication_plot <- create_team_process_plot("Communication")
 cooperation_plot <- create_team_process_plot("Cooperation")
 
+combined_panels <- plot_grid(
+  communication_plot + labs(x = NULL),
+  cooperation_plot + labs(x = NULL),
+  ncol = 2,
+  align = "h",
+  axis = "tb",
+  rel_widths = c(1, 1)
+)
+
+combined_plot <- plot_grid(
+  combined_panels,
+  ggdraw() +
+    draw_label(
+      "Context configuration",
+      fontface = "bold",
+      size = 12
+    ),
+  ncol = 1,
+  rel_heights = c(1, 0.07)
+)
+
 print(communication_plot)
 print(cooperation_plot)
+print(combined_plot)
 
 # ------------------------------------------------------------
 # 6. Save figures
@@ -292,6 +320,28 @@ ggsave(
   plot = communication_plot,
   width = figure_width,
   height = figure_height,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_communication_cooperation_by_condition.pdf"
+  ),
+  plot = combined_plot,
+  width = 16,
+  height = 5.6,
+  units = "in"
+)
+
+ggsave(
+  filename = file.path(
+    output_dir,
+    "thesis_figure_communication_cooperation_by_condition.svg"
+  ),
+  plot = combined_plot,
+  width = 16,
+  height = 5.6,
   units = "in"
 )
 

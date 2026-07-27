@@ -202,8 +202,8 @@ weighted_tokens_plot <- ggplot(
   ) +
   geom_text(
     aes(
-      y = label_y,
-      label = weighted_token_label
+      label = weighted_token_label,
+      vjust = if_else(plot_condition == "Baseline", -4.0, -2.5)
     ),
     fontface = "bold",
     colour = "black",
@@ -230,14 +230,21 @@ weighted_tokens_plot <- ggplot(
     clip = "off"
   ) +
   labs(
-    x = "Experimental condition",
-    y = "Mean weighted tokens per\nsimulation (millions)"
+    title = "Weighted token usage",
+    x = "Context configuration",
+    y = "Mean weighted token usage per\nsimulation (millions)"
   ) +
   theme_classic(base_size = 10) +
   theme(
     axis.title = element_text(face = "bold"),
     axis.title.y = element_text(margin = margin(r = 6)),
     axis.title.x = element_text(margin = margin(t = 7)),
+    plot.title = element_text(
+      face = "bold",
+      size = 12,
+      hjust = 0.5,
+      margin = margin(t = 4, b = 8)
+    ),
     axis.text.x = ggtext::element_markdown(
       size = 7.2,
       margin = margin(t = 5),

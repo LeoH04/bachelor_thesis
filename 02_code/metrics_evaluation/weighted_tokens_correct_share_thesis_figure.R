@@ -243,7 +243,15 @@ create_panel <- function(
       stroke = 0.65
     ) +
     geom_text(
-      aes(y = label_y, label = value_label),
+      aes(
+        label = value_label,
+        vjust = if_else(
+          figure_dimension == "Weighted tokens" &
+            plot_condition == "Baseline",
+          -3.2,
+          -2.5
+        )
+      ),
       fontface = "bold",
       colour = "black",
       size = 3.9
@@ -299,8 +307,8 @@ weighted_tokens_plot <- create_panel(
     figure_summary,
     figure_dimension == "Weighted tokens"
   ),
-  panel_title = "Weighted tokens",
-  y_axis_title = "Mean weighted tokens per simulation (millions)",
+  panel_title = "Weighted token usage",
+  y_axis_title = "Mean weighted token usage per simulation (millions)",
   y_axis_labels = label_number(accuracy = 0.1)
 )
 
@@ -317,7 +325,7 @@ combined_plot <- plot_grid(
   combined_panels,
   ggdraw() +
     draw_label(
-      "Experimental condition",
+      "Context configuration",
       fontface = "bold",
       size = 12
     ),
