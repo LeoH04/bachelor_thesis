@@ -53,7 +53,7 @@ if [[ -n "${SIM_SMM_MODE:-}" ]]; then
       RUN_MATRIX=("low:treatment" "moderate:treatment" "high:treatment")
       ;;
     baseline)
-      RUN_MATRIX=("moderate:baseline")
+      RUN_MATRIX=("low:baseline" "high:baseline")
       ;;
     *)
       echo "Unsupported SIM_SMM_MODE: $SIM_SMM_MODE" >&2

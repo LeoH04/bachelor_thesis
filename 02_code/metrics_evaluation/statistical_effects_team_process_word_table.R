@@ -29,6 +29,7 @@ library(sandwich)
 library(modelsummary)
 library(flextable)
 library(officer)
+library(performance)
 
 path <- getwd()
 output_token_weight <- 5
@@ -327,9 +328,9 @@ names(robust_vcov) <- names(models)
 coefficient_map <- c(
   "(Intercept)" = "Intercept",
   "baseline" = "Baseline",
-  "low" = "Low\u00A0transparency",
-  "moderate" = "Moderate\u00A0transparency",
-  "high" = "High\u00A0transparency",
+  "low" = "Low\u00A0access",
+  "moderate" = "Moderate\u00A0access",
+  "high" = "High\u00A0access",
   "team_process_communication" = "Communication",
   "team_process_cooperation" = "Cooperation"
 )
@@ -349,6 +350,11 @@ goodness_of_fit_map <- list(
     raw = "adj.r.squared",
     clean = "Adjusted\u00A0R²",
     fmt = format_r_squared
+  ),
+  list(
+    raw = "mcfadden_r2",
+    clean = "McFadden\u00A0R²",
+    fmt = format_r_squared
   )
 )
 
@@ -362,6 +368,18 @@ regression_table <- modelsummary(
   vcov = robust_vcov,
   coef_map = coefficient_map,
   gof_map = goodness_of_fit_map,
+  gof_function = function(model) {
+    data.frame(
+      mcfadden_r2 = if (
+        inherits(model, "glm") &&
+          family(model)$family == "binomial"
+      ) {
+        as.numeric(performance::r2_mcfadden(model)$R2)
+      } else {
+        NA_real_
+      }
+    )
+  },
   fmt = 3,
   estimate = "{estimate}{stars}\n({std.error})",
   statistic = NULL,
@@ -378,6 +396,21 @@ regression_table <- modelsummary(
 r_squared_rows <- which(
   regression_table$body$dataset[[1]] %in%
     c("R²", "Adjusted\u00A0R²")
+)
+
+mcfadden_r2_row <- which(
+  regression_table$body$dataset[[1]] == "McFadden\u00A0R²"
+)
+
+regression_table <- compose(
+  regression_table,
+  i = mcfadden_r2_row,
+  j = setdiff(
+    regression_table$col_keys,
+    c(regression_table$col_keys[[1]], "H5a/H5b: Effectiveness")
+  ),
+  value = as_paragraph("-"),
+  part = "body"
 )
 
 regression_table <- compose(
@@ -428,8 +461,8 @@ header_map <- data.frame(
     "Cooperation",
     "Communication",
     "Cooperation",
-    "Efficiency",
-    "Effectiveness"
+    "Computational\neffort",
+    "Decision\neffectiveness"
   ),
   check.names = FALSE,
   stringsAsFactors = FALSE
@@ -468,10 +501,10 @@ thin_line <- fp_border(
   width = 0.75
 )
 
-double_line <- fp_border(
+thick_line <- fp_border(
   color = "black",
-  style = "double",
-  width = 1
+  style = "solid",
+  width = 1.5
 )
 
 regression_table <- border_remove(
@@ -480,7 +513,7 @@ regression_table <- border_remove(
 
 regression_table <- hline_top(
   regression_table,
-  border = double_line,
+  border = thick_line,
   part = "header"
 )
 
@@ -522,12 +555,13 @@ regression_table <- font(
 
 regression_table <- fontsize(
   regression_table,
-  size = 9,
+  size = 10,
   part = "all"
 )
 
 regression_table <- bold(
   regression_table,
+  i = 1:3,
   part = "header"
 )
 
@@ -571,14 +605,14 @@ regression_table <- align(
 
 regression_table <- fontsize(
   regression_table,
-  size = 8,
+  size = 10,
   part = "footer"
 )
 
 regression_table <- padding(
   regression_table,
-  padding.top = 2,
-  padding.bottom = 2,
+  padding.top = 0,
+  padding.bottom = 0,
   padding.left = 2,
   padding.right = 2,
   part = "header"
@@ -586,8 +620,8 @@ regression_table <- padding(
 
 regression_table <- padding(
   regression_table,
-  padding.top = 3,
-  padding.bottom = 3,
+  padding.top = 0,
+  padding.bottom = 0,
   padding.left = 2,
   padding.right = 2,
   part = "body"
@@ -596,8 +630,8 @@ regression_table <- padding(
 regression_table <- padding(
   regression_table,
   i = observations_row:nrow(regression_table$body$dataset),
-  padding.top = 2,
-  padding.bottom = 2,
+  padding.top = 0,
+  padding.bottom = 0,
   padding.left = 2,
   padding.right = 2,
   part = "body"
@@ -605,11 +639,17 @@ regression_table <- padding(
 
 regression_table <- padding(
   regression_table,
-  padding.top = 2,
-  padding.bottom = 2,
+  padding.top = 0,
+  padding.bottom = 0,
   padding.left = 2,
   padding.right = 2,
   part = "footer"
+)
+
+regression_table <- line_spacing(
+  regression_table,
+  space = 0.9,
+  part = "all"
 )
 
 regression_table <- set_table_properties(

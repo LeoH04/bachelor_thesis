@@ -1,6 +1,6 @@
 # ============================================================
 # Figure: Communication and cooperation by experimental condition
-# Baseline | Low transparency | Moderate transparency | High transparency
+# Baseline | Low access | Moderate access | High access
 # Bars + trend line + 95% confidence intervals
 # ============================================================
 
@@ -51,11 +51,11 @@ team_process_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ntransparency",
+        context_transparency_condition == "low" ~ "Low\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
+        context_transparency_condition == "moderate" ~ "Moderate\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ntransparency",
+        context_transparency_condition == "high" ~ "High\naccess",
       TRUE ~ NA_character_
     ),
     
@@ -63,9 +63,9 @@ team_process_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ntransparency",
-        "Moderate\ntransparency",
-        "High\ntransparency"
+        "Low\naccess",
+        "Moderate\naccess",
+        "High\naccess"
       )
     )
   ) %>%
@@ -140,8 +140,8 @@ condition_axis_labels <- setNames(
       # Wrap the treatment labels compactly and align Baseline to their height
       condition_label <- gsub("\n", "<br>", condition)
       condition_label <- sub(
-        "transparency",
-        "trans-<br>parency",
+        "access",
+        "access",
         condition_label,
         fixed = TRUE
       )
@@ -149,7 +149,7 @@ condition_axis_labels <- setNames(
       if (!grepl("<br>", condition_label)) {
         condition_label <- paste0(
           condition_label,
-          "<br>&nbsp;<br>&nbsp;"
+          "<br>&nbsp;"
         )
       }
       
@@ -157,7 +157,7 @@ condition_axis_labels <- setNames(
         "<b>",
         condition_label,
         "</b><br><br>",
-        "<i><span style='font-size:7pt; color:#555555;'>",
+        "<i><span style='font-size:9pt; color:#555555;'>",
         "n = ",
         condition_n$n[as.character(condition_n$plot_condition) == condition],
         "</span></i>"
@@ -226,15 +226,15 @@ create_team_process_plot <- function(process_name) {
       ),
       fontface = "bold",
       colour = "black",
-      size = 3.1,
+      size = 4.5,
       vjust = -2.5
     ) +
     scale_fill_manual(
       values = c(
         "Baseline" = "#B0B0B0",
-        "Low\ntransparency" = "#D8E5EE",
-        "Moderate\ntransparency" = "#7FA9C4",
-        "High\ntransparency" = "#315F7D"
+        "Low\naccess" = "#D8E5EE",
+        "Moderate\naccess" = "#7FA9C4",
+        "High\naccess" = "#315F7D"
       ),
       guide = "none"
     ) +
@@ -259,7 +259,7 @@ create_team_process_plot <- function(process_name) {
         " quality score\nper simulation"
       )
     ) +
-    theme_classic(base_size = 10) +
+    theme_classic(base_size = 11) +
     theme(
       axis.title = element_text(face = "bold"),
       axis.title.y = element_text(margin = margin(r = 6)),
@@ -271,7 +271,7 @@ create_team_process_plot <- function(process_name) {
         margin = margin(t = 4, b = 8)
       ),
       axis.text.x = ggtext::element_markdown(
-        size = 7.2,
+        size = 8.2,
         margin = margin(t = 5),
         lineheight = 1.00
       ),
@@ -284,8 +284,24 @@ communication_plot <- create_team_process_plot("Communication")
 cooperation_plot <- create_team_process_plot("Cooperation")
 
 combined_panels <- plot_grid(
-  communication_plot + labs(x = NULL),
-  cooperation_plot + labs(x = NULL),
+  communication_plot +
+    labs(x = NULL) +
+    theme(
+      plot.title = element_text(size = 16),
+      axis.title.y = element_text(size = 14),
+      axis.text.y = element_text(size = 13),
+      axis.text.x = ggtext::element_markdown(size = 12.5),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 25)
+    ),
+  cooperation_plot +
+    labs(x = NULL) +
+    theme(
+      plot.title = element_text(size = 16),
+      axis.title.y = element_text(size = 14),
+      axis.text.y = element_text(size = 13),
+      axis.text.x = ggtext::element_markdown(size = 12.5),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 25)
+    ),
   ncol = 2,
   align = "h",
   axis = "tb",
@@ -298,7 +314,7 @@ combined_plot <- plot_grid(
     draw_label(
       "Context configuration",
       fontface = "bold",
-      size = 12
+      size = 16
     ),
   ncol = 1,
   rel_heights = c(1, 0.07)
@@ -330,7 +346,7 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 5.6,
+  height = 5.8,
   units = "in"
 )
 
@@ -341,7 +357,7 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 5.6,
+  height = 5.8,
   units = "in"
 )
 

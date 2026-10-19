@@ -60,11 +60,11 @@ weighted_tokens_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ntransparency",
+        context_transparency_condition == "low" ~ "Low\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
+        context_transparency_condition == "moderate" ~ "Moderate\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ntransparency",
+        context_transparency_condition == "high" ~ "High\naccess",
       TRUE ~ NA_character_
     ),
     
@@ -72,9 +72,9 @@ weighted_tokens_data <- simulation_metrics %>%
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ntransparency",
-        "Moderate\ntransparency",
-        "High\ntransparency"
+        "Low\naccess",
+        "Moderate\naccess",
+        "High\naccess"
       )
     )
   ) %>%
@@ -121,8 +121,8 @@ condition_axis_labels <- setNames(
       
       condition_label <- gsub("\n", "<br>", condition)
       condition_label <- sub(
-        "transparency",
-        "trans-<br>parency",
+        "access",
+        "access",
         condition_label,
         fixed = TRUE
       )
@@ -139,7 +139,7 @@ condition_axis_labels <- setNames(
         "<b>",
         condition_label,
         "</b><br><br>",
-        "<i><span style='font-size:7pt; color:#555555;'>",
+        "<i><span style='font-size:8pt; color:#555555;'>",
         "n = ",
         weighted_tokens_summary$n[
           as.character(weighted_tokens_summary$plot_condition) == condition
@@ -207,14 +207,14 @@ weighted_tokens_plot <- ggplot(
     ),
     fontface = "bold",
     colour = "black",
-    size = 3.1
+      size = 3.4
   ) +
   scale_fill_manual(
     values = c(
       "Baseline" = "#B0B0B0",
-      "Low\ntransparency" = "#D8E5EE",
-      "Moderate\ntransparency" = "#7FA9C4",
-      "High\ntransparency" = "#315F7D"
+      "Low\naccess" = "#D8E5EE",
+      "Moderate\naccess" = "#7FA9C4",
+      "High\naccess" = "#315F7D"
     ),
     guide = "none"
   ) +
@@ -234,7 +234,7 @@ weighted_tokens_plot <- ggplot(
     x = "Context configuration",
     y = "Mean weighted token usage per\nsimulation (millions)"
   ) +
-  theme_classic(base_size = 10) +
+  theme_classic(base_size = 11) +
   theme(
     axis.title = element_text(face = "bold"),
     axis.title.y = element_text(margin = margin(r = 6)),
@@ -246,7 +246,7 @@ weighted_tokens_plot <- ggplot(
       margin = margin(t = 4, b = 8)
     ),
     axis.text.x = ggtext::element_markdown(
-      size = 7.2,
+        size = 8.2,
       margin = margin(t = 5),
       lineheight = 1.00
     ),

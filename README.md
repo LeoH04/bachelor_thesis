@@ -9,11 +9,11 @@ The analysis covers 800 independent simulations (200 per configuration):
 | Configuration | Structured memory | Prior discussion available to agents |
 |---|---:|---|
 | Baseline | No | Full public history |
-| Low transparency | Yes | Latest speaker turn |
-| Moderate transparency | Yes | Full public history |
-| High transparency | Yes | Full public history and stored reasoning traces |
+| Low access | Yes | Latest speaker turn |
+| Moderate access | Yes | Full public history |
+| High access | Yes | Full public history and stored reasoning traces |
 
-Transparency changes the agents’ input context, not their public-output format. Tool questions and answers are public; stored reasoning traces are never included in `chat.md`.
+Access changes the agents’ input context, not their public-output format. Tool questions and answers are public; stored reasoning traces are never included in `chat.md`.
 
 The submitted thesis is available at [`03_report/thesis/Bachelor_Arbeit_Hegemann.pdf`](03_report/thesis/Bachelor_Arbeit_Hegemann.pdf).
 
@@ -78,6 +78,7 @@ Rscript 02_code/metrics_evaluation/statistical_effects_team_process_word_table.R
 
 # Appendix A and Appendix E source tables
 Rscript 02_code/metrics_evaluation/task_materials_word_table.R
+Rscript 02_code/metrics_evaluation/context_configurations_word_table.R
 Rscript 02_code/metrics_evaluation/descriptive_statistics_coordination_word_table.R
 Rscript 02_code/metrics_evaluation/descriptive_standard_errors.R
 ```

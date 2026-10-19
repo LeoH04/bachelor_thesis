@@ -1,7 +1,7 @@
-# Multi-Agent Simulation: Input Context Transparency Study
+# Multi-Agent Simulation: Input Context Access Study
 
 ## 1. Objective
-This simulation studies how different levels of input context transparency affect
+This simulation studies how different levels of input context access affect
 multi-agent hidden-profile decision making.
 
 The main outcomes are:
@@ -11,7 +11,7 @@ The main outcomes are:
 - Decision quality, measured by whether the group selects the correct candidate
 
 The current experimental setup compares three treatment conditions against one
-moderate baseline. Transparency now changes what agents can see as input, not
+moderate baseline. Access now changes what agents can see as input, not
 what agents are asked to disclose in their public output.
 
 ## 2. Task Design
@@ -76,7 +76,7 @@ The passive memory updater receives:
 - The target agent's current structured memory
 - Shared public candidate information
 - The target agent's own private notes
-- The prompt-visible discussion history for the active transparency condition
+- The prompt-visible discussion history for the active access condition
 
 Memory updates are private. They are not added to the public transcript.
 
@@ -88,8 +88,8 @@ prompt context and the prompt-visible discussion history.
 
 The current run matrix includes only the moderate baseline.
 
-## 6. Input Context Transparency Conditions
-The transparency condition is controlled by `SIM_CONDITION`.
+## 6. Input Context Access Conditions
+The access condition is controlled by `SIM_CONDITION`.
 
 The implementation lives in
 `02_code/multi_agent_system/config/context_transparency.py`.
@@ -261,7 +261,7 @@ Important outputs include:
   and high-condition thought entries when available
 - Archived SMM memory files for treatment runs
 
-Metadata includes the active context-transparency field:
+Metadata includes the active context-access field:
 - `context_transparency_condition`
 
 Related history-scope behavior is derived in
@@ -291,7 +291,7 @@ Decision quality:
 ## 13. Design Boundary
 The most important design boundary is:
 
-Transparency changes prompt-visible input context only.
+Access changes prompt-visible input context only.
 
 It should not change:
 - The public-output template
@@ -300,5 +300,5 @@ It should not change:
 - The rule that tool questions and answers are public
 - The rule that model thoughts are not public transcript content
 
-This keeps the experiment focused on input context transparency and explicit SMM
+This keeps the experiment focused on input context access and explicit SMM
 memory rather than output-style differences.

@@ -1,6 +1,6 @@
 # ============================================================
 # Figure: Decision quality and weighted tokens by condition
-# Baseline | Low transparency | Moderate transparency | High transparency
+# Baseline | Low access | Moderate access | High access
 # Bars + trend line + 95% confidence intervals
 # ============================================================
 
@@ -51,20 +51,20 @@ figure_data <- simulation_metrics %>%
     plot_condition = case_when(
       smm_mode == "baseline" ~ "Baseline",
       smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\ntransparency",
+        context_transparency_condition == "low" ~ "Low\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\ntransparency",
+        context_transparency_condition == "moderate" ~ "Moderate\naccess",
       smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\ntransparency",
+        context_transparency_condition == "high" ~ "High\naccess",
       TRUE ~ NA_character_
     ),
     plot_condition = factor(
       plot_condition,
       levels = c(
         "Baseline",
-        "Low\ntransparency",
-        "Moderate\ntransparency",
-        "High\ntransparency"
+        "Low\naccess",
+        "Moderate\naccess",
+        "High\naccess"
       )
     )
   ) %>%
@@ -201,9 +201,9 @@ condition_axis_labels <- setNames(
 
 condition_colours <- c(
   "Baseline" = "#B0B0B0",
-  "Low\ntransparency" = "#D8E5EE",
-  "Moderate\ntransparency" = "#7FA9C4",
-  "High\ntransparency" = "#315F7D"
+  "Low\naccess" = "#D8E5EE",
+  "Moderate\naccess" = "#7FA9C4",
+  "High\naccess" = "#315F7D"
 )
 
 create_panel <- function(
@@ -254,7 +254,7 @@ create_panel <- function(
       ),
       fontface = "bold",
       colour = "black",
-      size = 3.9
+      size = 4.5
     ) +
     scale_fill_manual(
       values = condition_colours,
@@ -271,19 +271,19 @@ create_panel <- function(
       x = NULL,
       y = y_axis_title
     ) +
-    theme_classic(base_size = 12) +
+  theme_classic(base_size = 14) +
     theme(
       axis.title = element_text(face = "bold"),
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.text.x = ggtext::element_markdown(
-        size = 10.5,
+        size = 12.5,
         margin = margin(t = 8),
         lineheight = 1.12
       ),
       axis.text.y = element_text(colour = "black"),
       plot.title = element_text(
         face = "bold",
-        size = 12,
+        size = 16,
         hjust = 0.5,
         margin = margin(t = 4, b = 8)
       ),
@@ -296,7 +296,7 @@ correct_decision_plot <- create_panel(
     figure_summary,
     figure_dimension == "Correct decisions"
   ),
-  panel_title = "Correct decisions",
+  panel_title = "Decision effectiveness",
   y_axis_title =
     "Share of simulations selecting the correct candidate (%)",
   y_axis_labels = label_percent(scale = 1, accuracy = 1)
@@ -313,8 +313,18 @@ weighted_tokens_plot <- create_panel(
 )
 
 combined_panels <- plot_grid(
-  correct_decision_plot,
-  weighted_tokens_plot,
+  correct_decision_plot +
+    theme(
+      axis.title.y = element_text(size = 14),
+      axis.text.y = element_text(size = 13),
+      plot.margin = margin(t = 25, r = 22, b = 14, l = 28)
+    ),
+  weighted_tokens_plot +
+    theme(
+      axis.title.y = element_text(size = 14),
+      axis.text.y = element_text(size = 13),
+      plot.margin = margin(t = 25, r = 22, b = 14, l = 28)
+    ),
   ncol = 2,
   align = "h",
   axis = "tb",
@@ -327,7 +337,7 @@ combined_plot <- plot_grid(
     draw_label(
       "Context configuration",
       fontface = "bold",
-      size = 12
+      size = 16
     ),
   ncol = 1,
   rel_heights = c(1, 0.07)
@@ -346,7 +356,7 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 5.6,
+  height = 6.2,
   units = "in"
 )
 
@@ -357,6 +367,6 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 5.6,
+  height = 6.2,
   units = "in"
 )

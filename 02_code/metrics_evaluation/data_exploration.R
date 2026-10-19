@@ -95,7 +95,7 @@ simulation_metrics[numeric_columns] <- lapply(
 # 1b. Create plotting condition
 # ------------------------------------------------------------
 # This collapses all baseline runs into one reference condition.
-# Treatment runs remain separated by context transparency condition.
+# Treatment runs remain separated by context access condition.
 
 simulation_metrics <- simulation_metrics %>%
   mutate(
