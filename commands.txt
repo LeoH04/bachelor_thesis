@@ -40,7 +40,7 @@ python -m pip freeze > requirements.txt
 
 # Build the venv on the server
 sudo apt update
-sudo apt install -y python3.12-venv
+sudo apt install -y python3.14-venv
 rm -rf adk
 python3 -m venv adk
 source adk/bin/activate
@@ -69,3 +69,17 @@ SIM_CONDITION=low \
 SIM_SMM_MODE=treatment \
 SIM_RUN_ID=low_web_$(date +%Y%m%d_%H%M%S) \
 adk web
+
+# Check progress with:
+ssh HohServer 'tail -f ~/git/bachelor_thesis/01_data/raw/simulations/simulation_20261020_150831.log'
+
+curl -i https://ollama.fit.fraunhofer.de/api/chat/completions \
+  -H "Authorization: Bearer sk-03ddcb07baff43b592e3300524b82b0f" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-oss-120b",
+    "messages": [
+      {"role": "user", "content": "Say hello in one sentence."}
+    ],
+    "stream": false
+  }'
