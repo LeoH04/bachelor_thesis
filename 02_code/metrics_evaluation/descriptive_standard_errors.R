@@ -16,7 +16,7 @@ data_file <- file.path(
   project_path,
   "01_data",
   "processed",
-  "simulation_metrics_final_200_gpt_oss_120b.csv"
+  "simulation_metrics_final_200_plus_low_high_baseline.csv"
 )
 
 output_dir <- file.path(project_path, "03_report", "tables")
@@ -87,6 +87,8 @@ analysis_data <- simulation_metrics %>%
 # it is used to construct the 95% confidence intervals in Figures 3 and 4.
 continuous_summary <- analysis_data %>%
   select(
+    smm_mode,
+    context_transparency_condition,
     condition,
     team_process_communication,
     team_process_cooperation,
@@ -97,11 +99,24 @@ continuous_summary <- analysis_data %>%
     runtime_seconds
   ) %>%
   pivot_longer(
-    cols = -condition,
+    cols = c(
+      team_process_communication,
+      team_process_cooperation,
+      weighted_total_tokens_million,
+      rounds,
+      total_messages,
+      agent_tool_calls,
+      runtime_seconds
+    ),
     names_to = "measure",
     values_to = "value"
   ) %>%
-  group_by(measure, condition) %>%
+  group_by(
+    measure,
+    smm_mode,
+    context_transparency_condition,
+    condition
+  ) %>%
   summarise(
     n = sum(!is.na(value)),
     mean = mean(value, na.rm = TRUE),
@@ -118,7 +133,11 @@ decision_summary <- analysis_data %>%
     !is.na(decision_correct),
     !is.na(weighted_total_tokens_million)
   ) %>%
-  group_by(condition) %>%
+  group_by(
+    smm_mode,
+    context_transparency_condition,
+    condition
+  ) %>%
   summarise(
     n = n(),
     proportion = mean(decision_correct),
@@ -127,6 +146,8 @@ decision_summary <- analysis_data %>%
   ) %>%
   transmute(
     measure = "correct_decision_percent",
+    smm_mode,
+    context_transparency_condition,
     condition,
     n,
     mean = 100 * proportion,

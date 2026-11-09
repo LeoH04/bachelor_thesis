@@ -1,7 +1,7 @@
 # ============================================================
-# Figure: Decision quality and weighted tokens by condition
-# Baseline | Low access | Moderate access | High access
-# Bars + trend line + 95% confidence intervals
+# Figure: Decision quality and weighted tokens by access and memory condition
+# Low | Moderate | High access, split by explicit SMM memory
+# Bars with mean-value labels
 # ============================================================
 
 rm(list = ls())
@@ -20,7 +20,7 @@ project_path <- getwd()
 
 data_path <- file.path(
   project_path,
-  "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"
+  "01_data/processed/simulation_metrics_final_200_plus_low_high_baseline.csv"
 )
 
 output_dir <- file.path(project_path, "03_report/graphs")
@@ -42,34 +42,31 @@ weighted_token_scale <- 1000000
 figure_data <- simulation_metrics %>%
   mutate(
     smm_mode = tolower(trimws(as.character(smm_mode))),
+    memory_condition = recode(
+      smm_mode,
+      "baseline" = "No memory",
+      "treatment" = "Memory",
+      .default = NA_character_
+    ),
+    memory_condition = factor(
+      memory_condition,
+      levels = c("No memory", "Memory")
+    ),
     input_tokens = as.numeric(input_tokens),
     output_tokens = as.numeric(output_tokens),
     decision_correct = as.integer(decision_correct),
     weighted_total_tokens_million =
       (input_tokens + output_token_weight * output_tokens) /
         weighted_token_scale,
-    plot_condition = case_when(
-      smm_mode == "baseline" ~ "Baseline",
-      smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\naccess",
-      smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\naccess",
-      smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\naccess",
-      TRUE ~ NA_character_
-    ),
     plot_condition = factor(
-      plot_condition,
-      levels = c(
-        "Baseline",
-        "Low\naccess",
-        "Moderate\naccess",
-        "High\naccess"
-      )
+      context_transparency_condition,
+      levels = c("low", "moderate", "high"),
+      labels = c("Low\naccess", "Moderate\naccess", "High\naccess")
     )
   ) %>%
   filter(
     !is.na(plot_condition),
+    !is.na(memory_condition),
     !is.na(decision_correct),
     !is.na(weighted_total_tokens_million)
   )
@@ -81,7 +78,7 @@ figure_data <- simulation_metrics %>%
 z_value <- qnorm(0.975)
 
 correct_share_summary <- figure_data %>%
-  group_by(plot_condition) %>%
+  group_by(plot_condition, memory_condition) %>%
   summarise(
     n = n(),
     correct_share = mean(decision_correct),
@@ -103,7 +100,7 @@ correct_share_summary <- figure_data %>%
   )
 
 weighted_tokens_summary <- figure_data %>%
-  group_by(plot_condition) %>%
+  group_by(plot_condition, memory_condition) %>%
   summarise(
     n = n(),
     mean_value = mean(weighted_total_tokens_million),
@@ -123,6 +120,7 @@ figure_summary <- bind_rows(
     select(
       figure_dimension,
       plot_condition,
+      memory_condition,
       n,
       mean_value,
       ci_lower,
@@ -133,6 +131,7 @@ figure_summary <- bind_rows(
     select(
       figure_dimension,
       plot_condition,
+      memory_condition,
       n,
       mean_value,
       ci_lower,
@@ -145,65 +144,17 @@ figure_summary <- bind_rows(
       figure_dimension,
       levels = c("Correct decisions", "Weighted tokens")
     )
-  ) %>%
-  group_by(figure_dimension) %>%
-  mutate(
-    panel_upper_limit = max(ci_upper) * 1.15,
-    label_y = ci_upper + panel_upper_limit * if_else(
-      figure_dimension == "Weighted tokens" &
-        plot_condition == "Baseline",
-      0.20,
-      0.035
-    )
-  ) %>%
-  ungroup()
+  )
 
 print(figure_summary)
-
-# ------------------------------------------------------------
-# 4. Create dynamic x-axis labels
-# ------------------------------------------------------------
-
-condition_n <- figure_summary %>%
-  distinct(plot_condition, n) %>%
-  arrange(plot_condition)
-
-condition_axis_labels <- setNames(
-  vapply(
-    as.character(condition_n$plot_condition),
-    function(condition) {
-      condition_label <- gsub("\n", "<br>", condition)
-
-      if (!grepl("<br>", condition_label)) {
-        condition_label <- paste0(condition_label, "<br>&nbsp;")
-      }
-
-      paste0(
-        "<b>",
-        condition_label,
-        "</b><br><br>",
-        "<i><span style='font-size:9pt; color:#555555;'>",
-        "n = ",
-        condition_n$n[
-          as.character(condition_n$plot_condition) == condition
-        ],
-        "</span></i>"
-      )
-    },
-    character(1)
-  ),
-  as.character(condition_n$plot_condition)
-)
 
 # ------------------------------------------------------------
 # 5. Create figure
 # ------------------------------------------------------------
 
 condition_colours <- c(
-  "Baseline" = "#B0B0B0",
-  "Low\naccess" = "#D8E5EE",
-  "Moderate\naccess" = "#7FA9C4",
-  "High\naccess" = "#315F7D"
+  "No memory" = "#B0B0B0",
+  "Memory" = "#4F83A3"
 )
 
 create_panel <- function(
@@ -217,53 +168,57 @@ create_panel <- function(
     aes(
       x = plot_condition,
       y = mean_value,
-      fill = plot_condition
+      fill = memory_condition,
+      group = memory_condition
     )
   ) +
     geom_col(
-      width = 0.56,
+      width = 0.42,
+      position = position_dodge(width = 0.72),
       colour = "black",
-      linewidth = 0.35
-    ) +
-    geom_line(
-      aes(group = 1),
-      colour = "black",
-      linewidth = 0.65
+      linewidth = 0.5
     ) +
     geom_errorbar(
       aes(ymin = ci_lower, ymax = ci_upper),
+      position = position_dodge(width = 0.72),
       width = 0.08,
-      linewidth = 0.7,
+      linewidth = 0.9,
       colour = "black"
     ) +
     geom_point(
       shape = 21,
-      size = 4.6,
+      size = 5.8,
       colour = "black",
-      stroke = 0.65
+      stroke = 0.8,
+      position = position_dodge(width = 0.72)
     ) +
     geom_text(
       aes(
         label = value_label,
         vjust = if_else(
           figure_dimension == "Weighted tokens" &
-            plot_condition == "Baseline",
+            memory_condition == "No memory",
           -3.2,
           -2.5
         )
       ),
       fontface = "bold",
       colour = "black",
-      size = 4.5
+      size = 4.8,
+      position = position_dodge(width = 0.72)
     ) +
     scale_fill_manual(
       values = condition_colours,
-      guide = "none"
+      name = NULL
     ) +
-    scale_x_discrete(labels = condition_axis_labels) +
+    scale_x_discrete(
+      labels = function(x) {
+        gsub("\n", "<br>", x)
+      }
+    ) +
     scale_y_continuous(
       labels = y_axis_labels,
-      expand = expansion(mult = c(0, 0.14))
+      expand = expansion(mult = c(0, 0.22))
     ) +
     coord_cartesian(clip = "off") +
     labs(
@@ -271,23 +226,28 @@ create_panel <- function(
       x = NULL,
       y = y_axis_title
     ) +
-  theme_classic(base_size = 14) +
+  theme_classic(base_size = 18) +
     theme(
       axis.title = element_text(face = "bold"),
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.text.x = ggtext::element_markdown(
-        size = 12.5,
+        size = 16,
         margin = margin(t = 8),
         lineheight = 1.12
       ),
       axis.text.y = element_text(colour = "black"),
       plot.title = element_text(
         face = "bold",
-        size = 16,
+        size = 20,
         hjust = 0.5,
         margin = margin(t = 4, b = 8)
       ),
-      plot.margin = margin(t = 25, r = 15, b = 10, l = 15)
+      plot.margin = margin(t = 25, r = 15, b = 10, l = 15),
+      legend.position = "bottom",
+      legend.title = element_blank(),
+      legend.text = element_text(size = 18),
+      legend.key.size = grid::unit(0.8, "lines"),
+      legend.spacing.x = grid::unit(0.6, "cm")
     )
 }
 
@@ -298,7 +258,7 @@ correct_decision_plot <- create_panel(
   ),
   panel_title = "Decision effectiveness",
   y_axis_title =
-    "Share of simulations selecting the correct candidate (%)",
+    "Share selecting the correct\ncandidate (%)",
   y_axis_labels = label_percent(scale = 1, accuracy = 1)
 )
 
@@ -308,22 +268,28 @@ weighted_tokens_plot <- create_panel(
     figure_dimension == "Weighted tokens"
   ),
   panel_title = "Weighted token usage",
-  y_axis_title = "Mean weighted token usage per simulation (millions)",
+  y_axis_title = "Weighted tokens per\nsimulation (millions)",
   y_axis_labels = label_number(accuracy = 0.1)
 )
+
+figure_legend <- get_legend(correct_decision_plot)
+correct_decision_plot <- correct_decision_plot + theme(legend.position = "none")
+weighted_tokens_plot <- weighted_tokens_plot + theme(legend.position = "none")
 
 combined_panels <- plot_grid(
   correct_decision_plot +
     theme(
-      axis.title.y = element_text(size = 14),
-      axis.text.y = element_text(size = 13),
-      plot.margin = margin(t = 25, r = 22, b = 14, l = 28)
+      axis.title.y = element_text(size = 18, margin = margin(r = 12)),
+      axis.text.y = element_text(size = 16),
+      axis.text.x = ggtext::element_markdown(size = 16),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 40)
     ),
   weighted_tokens_plot +
     theme(
-      axis.title.y = element_text(size = 14),
-      axis.text.y = element_text(size = 13),
-      plot.margin = margin(t = 25, r = 22, b = 14, l = 28)
+      axis.title.y = element_text(size = 18, margin = margin(r = 12)),
+      axis.text.y = element_text(size = 16),
+      axis.text.x = ggtext::element_markdown(size = 16),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 40)
     ),
   ncol = 2,
   align = "h",
@@ -335,12 +301,19 @@ combined_plot <- plot_grid(
   combined_panels,
   ggdraw() +
     draw_label(
+      "n = 200 per condition",
+      colour = "#555555",
+      size = 14
+    ),
+  figure_legend,
+  ggdraw() +
+    draw_label(
       "Context configuration",
       fontface = "bold",
-      size = 16
+      size = 20
     ),
   ncol = 1,
-  rel_heights = c(1, 0.07)
+  rel_heights = c(1, 0.06, 0.10, 0.07)
 )
 
 print(combined_plot)
@@ -356,7 +329,7 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 6.2,
+  height = 5.8,
   units = "in"
 )
 
@@ -367,6 +340,6 @@ ggsave(
   ),
   plot = combined_plot,
   width = 16,
-  height = 6.2,
+  height = 5.8,
   units = "in"
 )

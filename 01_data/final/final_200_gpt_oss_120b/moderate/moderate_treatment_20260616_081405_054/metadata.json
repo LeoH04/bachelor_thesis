@@ -39,16 +39,18 @@
       "uses_outcome_variables": false
     },
     "collaborative_integration": {
-      "definition": "share of eligible agent messages that substantively integrate another agent's contribution",
+      "definition": "share of eligible agent messages that both engage with another agent's contribution and transform candidate-related information through comparison, synthesis, inference, qualification, or recommendation updating",
       "eligible_message_count": 8,
-      "integrated_message_count": 5,
-      "score": 0.625
+      "engaged_message_count": 6,
+      "integrated_message_count": 6,
+      "score": 0.75,
+      "transformative_message_count": 8
     },
     "dimensions": {
       "communication": 0.25,
-      "cooperation": 0.625
+      "cooperation": 0.75
     },
-    "method": "private_uptake_integration_v3",
+    "method": "private_uptake_integration_v5",
     "private_information_uptake": {
       "definition": "share of all initially private candidate facts subsequently used by a different agent",
       "disclosed_fact_ids": [
@@ -240,11 +242,11 @@
         "d_moody"
       ]
     },
-    "score": 0.4375
+    "score": 0.5
   },
   "team_process_communication": 0.25,
-  "team_process_cooperation": 0.625,
-  "team_process_score": 0.4375,
+  "team_process_cooperation": 0.75,
+  "team_process_score": 0.5,
   "timestamp": "20260617_153413",
   "total_messages": 21,
   "total_tokens": 270927,

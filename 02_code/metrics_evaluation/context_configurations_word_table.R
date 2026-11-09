@@ -1,8 +1,8 @@
 # ============================================================
 # Context configurations Word table
 #
-# Creates a Word document describing the four input-context
-# configurations used in the multi-agent simulation.
+# Creates a Word document describing the three input-context
+# access conditions used in the multi-agent simulation.
 #
 # Output:
 #   03_report/tables/context_configurations.docx
@@ -61,31 +61,16 @@ dir.create(
 )
 
 # The wording describes prompt-visible input context. It does not imply that
-# reasoning traces are public transcript content.
+# stored model thoughts are public transcript content.
 context_configurations <- data.frame(
-  Configuration = c(
-    "Baseline",
-    "Low access",
-    "Moderate access",
-    "High access"
+  `Low access` = c(
+    "Interaction history of immediately preceding agent only including targeted Q&A"
   ),
-  `Structured memory mechanism` = c(
-    "No",
-    "Yes",
-    "Yes",
-    "Yes"
+  `Moderate access` = c(
+    "Complete interaction history including targeted Q&A"
   ),
-  `Interaction history (including targeted Q&A)` = c(
-    "Complete history",
-    "Immediately preceding agent only",
-    "Complete history",
-    "Complete history"
-  ),
-  `Prior reasoning traces` = c(
-    "No",
-    "No",
-    "No",
-    "All previous turns"
+  `High access` = c(
+    "Complete interaction history including targeted Q&A plus prior reasoning traces"
   ),
   check.names = FALSE,
   stringsAsFactors = FALSE
@@ -97,10 +82,10 @@ thin_line <- fp_border(
   width = 0.75
 )
 
-double_line <- fp_border(
+thick_line <- fp_border(
   color = "black",
-  style = "double",
-  width = 1
+  style = "solid",
+  width = 1.5
 )
 
 configuration_table <- flextable(context_configurations)
@@ -112,7 +97,7 @@ configuration_table <- border_outer(
 )
 configuration_table <- hline_top(
   configuration_table,
-  border = double_line,
+  border = thick_line,
   part = "header"
 )
 configuration_table <- border_inner_h(
@@ -146,13 +131,7 @@ configuration_table <- align(
 )
 configuration_table <- align(
   configuration_table,
-  j = 1,
-  align = "left",
-  part = "body"
-)
-configuration_table <- align(
-  configuration_table,
-  j = 2:4,
+  j = 1:3,
   align = "center",
   part = "body"
 )
@@ -180,22 +159,17 @@ configuration_table <- set_table_properties(
 configuration_table <- width(
   configuration_table,
   j = 1,
-  width = 1.35
+  width = 2.1
 )
 configuration_table <- width(
   configuration_table,
   j = 2,
-  width = 1.55
+  width = 2.1
 )
 configuration_table <- width(
   configuration_table,
   j = 3,
-  width = 2.05
-)
-configuration_table <- width(
-  configuration_table,
-  j = 4,
-  width = 1.35
+  width = 2.1
 )
 
 doc <- read_docx()

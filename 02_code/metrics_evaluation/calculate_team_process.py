@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_INPUT_ROOT = REPO_ROOT / "01_data" / "raw" / "simulations"
 
 AGENT_LABELS = ("agent_1", "agent_2", "agent_3")
-TEAM_PROCESS_METHOD = "private_uptake_integration_v3"
+TEAM_PROCESS_METHOD = "private_uptake_integration_v5"
 
 PRIVATE_FACTS: list[dict[str, Any]] = [
     {
@@ -185,6 +185,17 @@ RESPONSE_INTEGRATION_RE = re.compile(
         )|
         I\s+appreciate\s+(?:{AGENT_REFERENCE}['’]s|the|your|these|those)\s+
             (?:assessment|point|input|information|clarification|contribution|argument|evidence)s?|
+        I\s+(?:appreciate|understand|acknowledge|recognize|respect)\s+
+            (?:the|this|that|your|their|our)\s+
+            (?:(?:initial|earlier|previous|recent)\s+)?
+            (?:recommendation|focus|emphasis|point|argument|concern|assessment|position|case|view|shift|evidence|reasoning)s?|
+        I\s+(?:agree|concur|support|accept|share)\s+with\s+
+            (?:(?:the|this|that|your|their|our|recent|earlier)\s+)?
+            (?:recommendation|focus|emphasis|point|argument|concern|assessment|position|case|view|shift|evidence|reasoning)s?|
+        (?:recent\s+shift|earlier\s+recommendation|concern\s+raised|argument\s+presented|
+            point\s+made|emphasis\s+on|focus\s+on) |
+        (?:in\s+response\s+to|based\s+on|following|after\s+hearing)\s+
+            (?:the\s+)?(?:discussion|input|evidence|points?|arguments?|assessment|recommendation)s?|
         (?:building|builds?|drawing)\s+on|
         (?:as|like)\s+{AGENT_REFERENCE}\s+
             (?:noted|mentioned|confirmed|highlighted|pointed\s+out|reported|provided|argued)|
@@ -200,6 +211,38 @@ RESPONSE_INTEGRATION_RE = re.compile(
         points?\s+raised
     )\b""",
     re.IGNORECASE | re.VERBOSE,
+)
+COOPERATION_COMPARISON_RE = re.compile(
+    r"\b(?:while|however|in\s+contrast|compared\s+with|whereas|"
+    r"on\s+the\s+other\s+hand|outweighs?|weigh(?:ing)?|"
+    r"balance|alternative)\b",
+    re.IGNORECASE,
+)
+COOPERATION_SYNTHESIS_RE = re.compile(
+    r"\b(?:combined\s+with|together\s+with|in\s+combination\s+with|"
+    r"alongside)\b",
+    re.IGNORECASE,
+)
+COOPERATION_INFERENCE_RE = re.compile(
+    r"\b(?:because|therefore|thus|hence|which\s+means|meaning\s+that|"
+    r"suggests?|indicates?|supports?|undermines?|mitigates?|offsets?|"
+    r"raises?\s+(?:a\s+)?(?:concern|risk|question))\b",
+    re.IGNORECASE,
+)
+COOPERATION_QUALIFICATION_RE = re.compile(
+    r"\b(?:although|despite|lack\s+of|no\s+(?:concrete|direct|documented)|"
+    r"gap\s+in\s+evidence|limitation|caveat|concern|risk)\b",
+    re.IGNORECASE,
+)
+COOPERATION_UPDATE_RE = re.compile(
+    r"\b(?:reconsider|revise\s+my\s+(?:recommendation|vote|assessment|position)|"
+    r"change\s+my\s+(?:recommendation|vote|assessment|position)|"
+    r"switch\s+my\s+(?:recommendation|vote|position)|persuaded)\b",
+    re.IGNORECASE,
+)
+CANDIDATE_LABEL_RE = re.compile(
+    r"\b(?:candidate\s*)?([A-D])(?:['’]s)?\b",
+    re.IGNORECASE,
 )
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -390,22 +433,60 @@ def private_information_uptake(messages: list[dict[str, Any]]) -> dict[str, Any]
     }
 
 
+def distinct_candidate_labels(text: str) -> set[str]:
+    """Return distinct candidate labels explicitly present in a message."""
+    return {match.group(1).upper() for match in CANDIDATE_LABEL_RE.finditer(text)}
+
+
+def transformative_candidate_reference(text: str) -> bool:
+    """Return whether a message transforms candidate-related information."""
+    candidate_count = len(distinct_candidate_labels(text))
+    has_candidate_reference = bool(CANDIDATE_REFERENCE_RE.search(text))
+
+    comparison = candidate_count >= 2 and bool(COOPERATION_COMPARISON_RE.search(text))
+    synthesis = candidate_count >= 2 and bool(COOPERATION_SYNTHESIS_RE.search(text))
+    inference = has_candidate_reference and bool(COOPERATION_INFERENCE_RE.search(text))
+    qualification = has_candidate_reference and bool(
+        COOPERATION_QUALIFICATION_RE.search(text)
+    )
+    update = has_candidate_reference and bool(COOPERATION_UPDATE_RE.search(text))
+
+    return comparison or synthesis or inference or qualification or update
+
+
 def collaborative_integration(messages: list[dict[str, Any]]) -> dict[str, Any]:
-    """Measure substantive integration of another agent's contribution."""
+    """Measure message-level collaborative integration.
+
+    An eligible message must both engage with another agent's contribution and
+    transform candidate-related information through comparison, synthesis,
+    inference, qualification, or recommendation updating.
+    """
     agent_messages = [
         message
         for message in messages
         if not message["is_tool_exchange"] and message["speaker"] in AGENT_LABELS
     ]
     eligible_messages = agent_messages[1:]
+    engaged_messages = sum(
+        1
+        for message in eligible_messages
+        if RESPONSE_INTEGRATION_RE.search(message["text"])
+    )
+    transformative_messages = sum(
+        1
+        for message in eligible_messages
+        if transformative_candidate_reference(message["text"])
+    )
     integrated_messages = sum(
         1
         for message in eligible_messages
         if RESPONSE_INTEGRATION_RE.search(message["text"])
-        and CANDIDATE_REFERENCE_RE.search(message["text"])
+        and transformative_candidate_reference(message["text"])
     )
     return {
         "score": ratio(integrated_messages, len(eligible_messages)),
+        "engaged_message_count": engaged_messages,
+        "transformative_message_count": transformative_messages,
         "integrated_message_count": integrated_messages,
         "eligible_message_count": len(eligible_messages),
     }
@@ -447,8 +528,10 @@ def calculate_team_process(
             "score": round(cooperation, 6),
             **{key: value for key, value in cooperation_detail.items() if key != "score"},
             "definition": (
-                "share of eligible agent messages that substantively integrate "
-                "another agent's contribution"
+                "share of eligible agent messages that both engage with another "
+                "agent's contribution and transform candidate-related information "
+                "through comparison, synthesis, inference, qualification, or "
+                "recommendation updating"
             ),
         },
         "coding": {

@@ -1,7 +1,7 @@
 # ============================================================
-# Figure: Communication and cooperation by experimental condition
-# Baseline | Low access | Moderate access | High access
-# Bars + trend line + 95% confidence intervals
+# Figure: Communication and cooperation by access and memory condition
+# Low | Moderate | High access, split by explicit SMM memory
+# Bars with mean-value labels
 # ============================================================
 
 rm(list = ls())
@@ -20,7 +20,7 @@ project_path <- getwd()
 
 data_path <- file.path(
   project_path,
-  "01_data/processed/simulation_metrics_final_200_gpt_oss_120b.csv"
+  "01_data/processed/simulation_metrics_final_200_plus_low_high_baseline.csv"
 )
 
 output_dir <- file.path(project_path, "03_report/graphs")
@@ -42,31 +42,26 @@ simulation_metrics <- read_csv(
 team_process_data <- simulation_metrics %>%
   mutate(
     smm_mode = tolower(trimws(as.character(smm_mode))),
+    memory_condition = recode(
+      smm_mode,
+      "baseline" = "No memory",
+      "treatment" = "Memory",
+      .default = NA_character_
+    ),
+    memory_condition = factor(
+      memory_condition,
+      levels = c("No memory", "Memory")
+    ),
     
     context_transparency_condition = factor(
       context_transparency_condition,
       levels = c("low", "moderate", "high")
     ),
     
-    plot_condition = case_when(
-      smm_mode == "baseline" ~ "Baseline",
-      smm_mode == "treatment" &
-        context_transparency_condition == "low" ~ "Low\naccess",
-      smm_mode == "treatment" &
-        context_transparency_condition == "moderate" ~ "Moderate\naccess",
-      smm_mode == "treatment" &
-        context_transparency_condition == "high" ~ "High\naccess",
-      TRUE ~ NA_character_
-    ),
-    
     plot_condition = factor(
-      plot_condition,
-      levels = c(
-        "Baseline",
-        "Low\naccess",
-        "Moderate\naccess",
-        "High\naccess"
-      )
+      context_transparency_condition,
+      levels = c("low", "moderate", "high"),
+      labels = c("Low\naccess", "Moderate\naccess", "High\naccess")
     )
   ) %>%
   pivot_longer(
@@ -90,6 +85,7 @@ team_process_data <- simulation_metrics %>%
   ) %>%
   filter(
     !is.na(plot_condition),
+    !is.na(memory_condition),
     !is.na(score)
   )
 
@@ -107,7 +103,7 @@ if (any(
 # ------------------------------------------------------------
 
 team_process_summary <- team_process_data %>%
-  group_by(process_dimension, plot_condition) %>%
+  group_by(process_dimension, plot_condition, memory_condition) %>%
   summarise(
     n = n(),
     mean_score = mean(score),
@@ -125,50 +121,6 @@ team_process_summary <- team_process_data %>%
 print(team_process_summary)
 
 # ------------------------------------------------------------
-# 4. Create dynamic x-axis labels
-# ------------------------------------------------------------
-
-condition_n <- team_process_summary %>%
-  distinct(plot_condition, n) %>%
-  arrange(plot_condition)
-
-condition_axis_labels <- setNames(
-  vapply(
-    as.character(condition_n$plot_condition),
-    function(condition) {
-      
-      # Wrap the treatment labels compactly and align Baseline to their height
-      condition_label <- gsub("\n", "<br>", condition)
-      condition_label <- sub(
-        "access",
-        "access",
-        condition_label,
-        fixed = TRUE
-      )
-      
-      if (!grepl("<br>", condition_label)) {
-        condition_label <- paste0(
-          condition_label,
-          "<br>&nbsp;"
-        )
-      }
-      
-      paste0(
-        "<b>",
-        condition_label,
-        "</b><br><br>",
-        "<i><span style='font-size:9pt; color:#555555;'>",
-        "n = ",
-        condition_n$n[as.character(condition_n$plot_condition) == condition],
-        "</span></i>"
-      )
-    },
-    character(1)
-  ),
-  as.character(condition_n$plot_condition)
-)
-
-# ------------------------------------------------------------
 # 5. Create separate figures
 # ------------------------------------------------------------
 
@@ -176,49 +128,40 @@ create_team_process_plot <- function(process_name) {
   plot_data <- team_process_summary %>%
     filter(process_dimension == process_name) %>%
     mutate(plot_label_y = label_y)
-  y_upper_limit <- if (process_name == "Communication") {
-    0.6
-  } else {
-    max(plot_data$plot_label_y, na.rm = TRUE) * 1.12
-  }
-  y_breaks <- if (process_name == "Communication") {
-    seq(0, 0.6, by = 0.2)
-  } else {
-    pretty_breaks(n = 4)
-  }
+  y_upper_limit <- 0.8
+  y_breaks <- seq(0, 0.8, by = 0.2)
 
   ggplot(
     plot_data,
     aes(
       x = plot_condition,
       y = mean_score,
-      fill = plot_condition
+      fill = memory_condition,
+      group = memory_condition
     )
   ) +
     geom_col(
-      width = 0.60,
+      width = 0.42,
+      position = position_dodge(width = 0.72),
       colour = "black",
-      linewidth = 0.35
-    ) +
-    geom_line(
-      aes(group = 1),
-      colour = "black",
-      linewidth = 0.65
+      linewidth = 0.5
     ) +
     geom_errorbar(
       aes(
         ymin = ci_lower,
         ymax = ci_upper
       ),
+      position = position_dodge(width = 0.72),
       width = 0.08,
-      linewidth = 0.7,
+      linewidth = 0.9,
       colour = "black"
     ) +
     geom_point(
       shape = 21,
-      size = 3.5,
+      size = 5.8,
       colour = "black",
-      stroke = 0.65
+      stroke = 0.8,
+      position = position_dodge(width = 0.72)
     ) +
     geom_text(
       aes(
@@ -226,20 +169,21 @@ create_team_process_plot <- function(process_name) {
       ),
       fontface = "bold",
       colour = "black",
-      size = 4.5,
-      vjust = -2.5
+      size = 4.8,
+      vjust = -2.5,
+      position = position_dodge(width = 0.72)
     ) +
     scale_fill_manual(
       values = c(
-        "Baseline" = "#B0B0B0",
-        "Low\naccess" = "#D8E5EE",
-        "Moderate\naccess" = "#7FA9C4",
-        "High\naccess" = "#315F7D"
+        "No memory" = "#B0B0B0",
+        "Memory" = "#4F83A3"
       ),
-      guide = "none"
+      name = NULL
     ) +
     scale_x_discrete(
-      labels = condition_axis_labels
+      labels = function(x) {
+        gsub("\n", "<br>", x)
+      }
     ) +
     scale_y_continuous(
       limits = c(0, y_upper_limit),
@@ -257,50 +201,68 @@ create_team_process_plot <- function(process_name) {
         "Mean ",
         tolower(process_name),
         " quality score\nper simulation"
-      )
+      ),
+      caption = "n = 200 per condition"
     ) +
-    theme_classic(base_size = 11) +
+    theme_classic(base_size = 18) +
     theme(
       axis.title = element_text(face = "bold"),
-      axis.title.y = element_text(margin = margin(r = 6)),
+      axis.title.y = element_text(margin = margin(r = 12)),
       axis.title.x = element_text(margin = margin(t = 7)),
       plot.title = element_text(
         face = "bold",
-        size = 12,
+        size = 20,
         hjust = 0.5,
         margin = margin(t = 4, b = 8)
       ),
       axis.text.x = ggtext::element_markdown(
-        size = 8.2,
-        margin = margin(t = 5),
-        lineheight = 1.00
+        size = 16,
+        margin = margin(t = 8),
+        lineheight = 1.12
       ),
       axis.text.y = element_text(colour = "black"),
-      plot.margin = margin(t = 12, r = 5, b = 3, l = 5)
+      plot.caption = element_text(
+        hjust = 0.5,
+        colour = "#555555",
+        size = 12,
+        margin = margin(t = 8)
+      ),
+      plot.margin = margin(t = 25, r = 15, b = 10, l = 15),
+      legend.position = "bottom",
+      legend.title = element_blank(),
+      legend.text = element_text(size = 18),
+      legend.key.size = grid::unit(0.8, "lines"),
+      legend.spacing.x = grid::unit(0.6, "cm")
     )
 }
 
 communication_plot <- create_team_process_plot("Communication")
 cooperation_plot <- create_team_process_plot("Cooperation")
 
+figure_legend <- get_legend(communication_plot)
+communication_plot <- communication_plot + theme(legend.position = "none")
+cooperation_plot <- cooperation_plot + theme(legend.position = "none")
+
 combined_panels <- plot_grid(
   communication_plot +
     labs(x = NULL) +
     theme(
-      plot.title = element_text(size = 16),
-      axis.title.y = element_text(size = 14),
-      axis.text.y = element_text(size = 13),
-      axis.text.x = ggtext::element_markdown(size = 12.5),
-      plot.margin = margin(t = 18, r = 18, b = 12, l = 25)
+      plot.title = element_text(size = 20),
+      axis.title.y = element_text(size = 18, margin = margin(r = 12)),
+      axis.text.y = element_text(size = 16),
+      axis.text.x = ggtext::element_markdown(size = 16),
+      plot.caption = element_blank(),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 40)
     ),
   cooperation_plot +
     labs(x = NULL) +
     theme(
-      plot.title = element_text(size = 16),
-      axis.title.y = element_text(size = 14),
-      axis.text.y = element_text(size = 13),
-      axis.text.x = ggtext::element_markdown(size = 12.5),
-      plot.margin = margin(t = 18, r = 18, b = 12, l = 25)
+      plot.title = element_text(size = 20),
+      axis.title.y = element_text(size = 18, margin = margin(r = 12)),
+      axis.text.y = element_text(size = 16),
+      axis.text.x = ggtext::element_markdown(size = 16),
+      plot.caption = element_blank(),
+      plot.margin = margin(t = 18, r = 18, b = 12, l = 40)
     ),
   ncol = 2,
   align = "h",
@@ -312,12 +274,19 @@ combined_plot <- plot_grid(
   combined_panels,
   ggdraw() +
     draw_label(
+      "n = 200 per condition",
+      colour = "#555555",
+      size = 14
+    ),
+  figure_legend,
+  ggdraw() +
+    draw_label(
       "Context configuration",
       fontface = "bold",
-      size = 16
+      size = 20
     ),
   ncol = 1,
-  rel_heights = c(1, 0.07)
+  rel_heights = c(1, 0.06, 0.10, 0.07)
 )
 
 print(communication_plot)
